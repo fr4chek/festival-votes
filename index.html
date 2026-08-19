@@ -354,37 +354,50 @@
     // ПРАВИЛЬНОЕ КОДИРОВАНИЕ В BASE64 ДЛЯ РУССКИХ БУКВ
     // ================================================================
     function utf8ToBase64(str) {
-        // 1. Кодируем строку в UTF-8 байты
         var encoder = new TextEncoder();
         var bytes = encoder.encode(str);
-        
-        // 2. Превращаем байты в бинарную строку
         var binary = '';
         for (var i = 0; i < bytes.length; i++) {
             binary += String.fromCharCode(bytes[i]);
         }
-        
-        // 3. Кодируем в Base64
         return btoa(binary);
     }
 
     function base64ToUtf8(base64) {
-        // 1. Декодируем Base64 в бинарную строку
         var binary = atob(base64);
-        
-        // 2. Превращаем в Uint8Array
         var bytes = new Uint8Array(binary.length);
         for (var i = 0; i < binary.length; i++) {
             bytes[i] = binary.charCodeAt(i);
         }
-        
-        // 3. Декодируем из UTF-8
         var decoder = new TextDecoder('utf-8');
         return decoder.decode(bytes);
     }
 
     // ================================================================
-    // СОХРАНЕНИЕ В GITHUB
+    // ПОЛУЧЕНИЕ ТЕКУЩЕГО SHA (версия файла)
+    // ================================================================
+    async function getFileSha() {
+        if (!githubToken) return null;
+        try {
+            var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
+            var response = await fetch(url, {
+                headers: {
+                    'Authorization': 'token ' + githubToken,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+            if (response.ok) {
+                var data = await response.json();
+                return data.sha;
+            }
+            return null;
+        } catch(e) {
+            return null;
+        }
+    }
+
+    // ================================================================
+    // СОХРАНЕНИЕ В GITHUB (с обновлением SHA)
     // ================================================================
     async function saveToGitHub() {
         if (isSaving || !githubToken) return false;
@@ -393,6 +406,12 @@
             isSaving = true;
             setStatusBar('saving', '💾 Сохранение в GitHub...');
             setStatus('⏳ Сохранение...', '#856404');
+
+            // Сначала получаем актуальный SHA (версию файла)
+            var currentSha = await getFileSha();
+            if (currentSha) {
+                dataSha = currentSha;
+            }
 
             var data = {
                 votes: votes,
@@ -421,9 +440,28 @@
                 body: JSON.stringify(body)
             });
 
+            if (response.status === 409) {
+                // Конфликт версий — получаем новый SHA и пробуем ещё раз
+                console.log('Конфликт SHA, обновляем...');
+                var newSha = await getFileSha();
+                if (newSha) {
+                    dataSha = newSha;
+                    body.sha = dataSha;
+                    response = await fetch(url, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': 'token ' + githubToken,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/vnd.github.v3+json'
+                        },
+                        body: JSON.stringify(body)
+                    });
+                }
+            }
+
             if (!response.ok) {
                 var errorText = await response.text();
-                throw new Error('Ошибка сохранения: ' + response.status + ' ' + errorText);
+                throw new Error(errorText);
             }
 
             var result = await response.json();
