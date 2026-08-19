@@ -27,89 +27,17 @@
         }
         h1 { text-align: center; color: #333; margin-bottom: 4px; font-size: 24px; }
         .subtitle { text-align: center; color: #666; margin-bottom: 20px; font-size: 14px; }
-
-        /* === ВХОД === */
-        .login-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 9999;
-            backdrop-filter: blur(5px);
-            -webkit-backdrop-filter: blur(5px);
-        }
-        .login-box {
-            background: white;
-            padding: 36px 30px;
+        .role-badge {
+            display: inline-block;
+            padding: 4px 14px;
             border-radius: 20px;
-            max-width: 420px;
-            width: 92%;
-            text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
-        }
-        .login-box h2 { margin-bottom: 6px; color: #333; font-size: 22px; }
-        .login-box p { color: #666; margin-bottom: 20px; font-size: 14px; }
-        .login-box .role-btn {
-            width: 100%;
-            padding: 14px;
-            font-size: 18px;
-            border: none;
-            border-radius: 12px;
+            font-size: 13px;
             font-weight: 600;
-            cursor: pointer;
-            color: white;
             background: #667eea;
-            margin-bottom: 10px;
-            transition: 0.2s;
-        }
-        .login-box .role-btn:active { transform: scale(0.97); }
-        .login-box .role-btn.guest { background: #28a745; }
-        .login-box .role-btn.guest:hover { background: #218838; }
-        .login-box .password-input {
-            display: none;
-            margin-top: 10px;
-        }
-        .login-box .password-input input {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #ddd;
-            border-radius: 12px;
-            font-size: 18px;
-            text-align: center;
-            letter-spacing: 4px;
-            margin-bottom: 10px;
-            background: white;
-        }
-        .login-box .password-input input:focus {
-            border-color: #667eea;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-        }
-        .login-box .password-input .btn {
-            width: 100%;
-            padding: 12px;
-            font-size: 16px;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
             color: white;
-            background: #667eea;
+            margin-left: 8px;
         }
-        .login-box .error {
-            color: #dc3545;
-            font-size: 14px;
-            margin-top: 10px;
-            display: none;
-        }
-        .login-box .error.show { display: block; }
 
-        /* === ВКЛАДКИ === */
         .tabs {
             display: flex;
             gap: 6px;
@@ -137,7 +65,6 @@
             color: white;
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
-        .tab-btn.active .tab-emoji { filter: none; }
         .tab-emoji { margin-right: 6px; }
 
         .status-bar {
@@ -327,16 +254,6 @@
         }
         .delete-btn:active { background: #dc3545; color: white; transform: scale(0.9); }
         .sync-info { font-size: 11px; color: #888; text-align: center; margin-top: 6px; }
-        .role-badge {
-            display: inline-block;
-            padding: 3px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            background: #667eea;
-            color: white;
-        }
-        .role-badge.guest { background: #28a745; }
 
         @media (max-width: 600px) {
             .container { padding: 14px; }
@@ -349,38 +266,17 @@
             h1 { font-size: 20px; }
             .footer { flex-direction: column; align-items: stretch; text-align: center; }
             .token-input input { font-size: 14px; }
-            .login-box { padding: 28px 20px; }
             .tabs { flex-wrap: wrap; }
             .tab-btn { font-size: 12px; padding: 8px; }
         }
-        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-<!-- ===== ОКНО ВХОДА ===== -->
-<div class="login-overlay" id="loginOverlay">
-    <div class="login-box">
-        <h2>🎭 Фестиваль</h2>
-        <p style="margin-bottom: 20px;">Выберите, как вы хотите войти</p>
-        
-        <button class="role-btn" id="adminBtn">👑 Войти как жюри</button>
-        
-        <div class="password-input" id="passwordBlock">
-            <input type="password" id="passwordInput" placeholder="Введите пароль" maxlength="20" autocomplete="off">
-            <button class="btn" id="passwordBtn" style="background: #667eea;">Подтвердить</button>
-            <div class="error" id="loginError">❌ Неверный пароль</div>
-        </div>
-        
-        <button class="role-btn guest" id="guestBtn">👁️ Войти как участник (только просмотр)</button>
-    </div>
-</div>
-
-<!-- ===== ОСНОВНОЕ ПРИЛОЖЕНИЕ ===== -->
-<div class="container" id="mainContent" style="display: none;">
+<div class="container" id="mainContent">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 4px;">
         <h1 style="margin-bottom: 0;">🎭 Фестиваль</h1>
-        <span id="roleBadge" class="role-badge">👑 Жюри</span>
+        <span class="role-badge">👑 Жюри</span>
     </div>
     <p class="subtitle" id="subtitle">Выберите номинацию и введите оценки</p>
 
@@ -407,8 +303,7 @@
             <div class="stat-card" style="background:#fff3cd;"><div class="num" id="statAvg">—</div><div class="label">🏆 Средний балл лидера</div></div>
         </div>
 
-        <!-- Форма добавления (только для жюри) -->
-        <div id="juryPanel" class="input-section">
+        <div class="input-section">
             <div class="input-group">
                 <label>👤 Имя участника</label>
                 <input type="text" id="nameInput" placeholder="Например: Анна">
@@ -422,14 +317,9 @@
             </div>
         </div>
 
-        <!-- Для участников показываем только таблицу -->
-        <div id="guestPanel" style="display: none; text-align: center; padding: 10px; background: #e8f5e9; border-radius: 15px; margin-bottom: 20px;">
-            <span style="font-size: 16px; color: #2e7d32;">👁️ Вы вошли как участник — вы можете только смотреть результаты</span>
-        </div>
-
         <div class="table-wrap">
             <table>
-                <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>Все оценки</th><th id="deleteHeader">✕</th></tr></thead>
+                <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>Все оценки</th><th>✕</th></tr></thead>
                 <tbody id="tableBody"><tr><td colspan="5" class="empty-message">Нет данных. Добавьте оценки!</td></tr></tbody>
             </table>
         </div>
@@ -451,11 +341,9 @@
     // ============================================================
     // НАСТРОЙКИ
     // ============================================================
-    var ADMIN_PASSWORD = 'EGORIK';
     var REPO_OWNER = 'fr4chek';
     var REPO_NAME = 'festival-votes';
     
-    // Файлы для каждой номинации
     var DATA_FILES = {
         'national': 'data_national.json',
         'free': 'data_free.json',
@@ -472,25 +360,10 @@
     var winnerName = null;
     var isSaving = false;
     var githubToken = '';
-    var userRole = ''; // 'admin' или 'guest'
     var dataSha = {};
 
     // DOM
-    var loginOverlay = document.getElementById('loginOverlay');
-    var adminBtn = document.getElementById('adminBtn');
-    var guestBtn = document.getElementById('guestBtn');
-    var passwordBlock = document.getElementById('passwordBlock');
-    var passwordInput = document.getElementById('passwordInput');
-    var passwordBtn = document.getElementById('passwordBtn');
-    var loginError = document.getElementById('loginError');
-    var mainContent = document.getElementById('mainContent');
-    var roleBadge = document.getElementById('roleBadge');
-    var subtitle = document.getElementById('subtitle');
-    var juryPanel = document.getElementById('juryPanel');
-    var guestPanel = document.getElementById('guestPanel');
-    var deleteHeader = document.getElementById('deleteHeader');
     var tabsContainer = document.getElementById('tabsContainer');
-
     var tokenBlock = document.getElementById('tokenBlock');
     var tokenInput = document.getElementById('tokenInput');
     var tokenBtn = document.getElementById('tokenBtn');
@@ -508,68 +381,6 @@
     var calcBtn = document.getElementById('calcBtn');
     var syncBtn = document.getElementById('syncBtn');
 
-    // ========== ВХОД ==========
-    function showAdminPassword() {
-        passwordBlock.style.display = 'block';
-        loginError.classList.remove('show');
-        passwordInput.value = '';
-        passwordInput.focus();
-    }
-
-    function checkAdminPassword() {
-        if (passwordInput.value.trim() === ADMIN_PASSWORD) {
-            userRole = 'admin';
-            enterApp();
-        } else {
-            loginError.classList.add('show');
-            passwordInput.value = '';
-            passwordInput.focus();
-            setTimeout(function() {
-                loginError.classList.remove('show');
-            }, 3000);
-        }
-    }
-
-    function enterAsGuest() {
-        userRole = 'guest';
-        enterApp();
-    }
-
-    function enterApp() {
-        loginOverlay.style.display = 'none';
-        mainContent.style.display = 'block';
-        
-        if (userRole === 'admin') {
-            roleBadge.textContent = '👑 Жюри';
-            roleBadge.className = 'role-badge';
-            subtitle.textContent = 'Выберите номинацию и введите оценки';
-            juryPanel.style.display = 'flex';
-            guestPanel.style.display = 'none';
-            deleteHeader.textContent = '✕';
-            calcBtn.style.display = 'inline-block';
-            syncBtn.style.display = 'inline-block';
-        } else {
-            roleBadge.textContent = '👁️ Участник';
-            roleBadge.className = 'role-badge guest';
-            subtitle.textContent = 'Вы вошли как участник — только просмотр результатов';
-            juryPanel.style.display = 'none';
-            guestPanel.style.display = 'block';
-            deleteHeader.textContent = '';
-            calcBtn.style.display = 'inline-block';
-            syncBtn.style.display = 'inline-block';
-        }
-        
-        init();
-    }
-
-    // Обработчики входа
-    adminBtn.addEventListener('click', showAdminPassword);
-    passwordBtn.addEventListener('click', checkAdminPassword);
-    passwordInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') { e.preventDefault(); checkAdminPassword(); }
-    });
-    guestBtn.addEventListener('click', enterAsGuest);
-
     // ========== ВКЛАДКИ ==========
     tabsContainer.addEventListener('click', function(e) {
         var btn = e.target.closest('.tab-btn');
@@ -577,19 +388,16 @@
         var tab = btn.dataset.tab;
         if (tab === currentTab) return;
         
-        // Сохраняем текущие данные перед переключением
         if (githubToken) {
             saveToGitHub(currentTab);
         }
         
-        // Переключаем активную вкладку
         document.querySelectorAll('.tab-btn').forEach(function(b) {
             b.classList.remove('active');
         });
         btn.classList.add('active');
         currentTab = tab;
         
-        // Загружаем данные для новой вкладки
         loadTabData(tab);
     });
 
@@ -663,10 +471,6 @@
 
     async function saveToGitHub(tab) {
         if (isSaving || !githubToken) return false;
-        if (userRole === 'guest') {
-            setStatus('⛔ Участники не могут изменять данные', '#dc3545');
-            return false;
-        }
         
         var filePath = getDataFilePath(tab);
         var votes = allData[tab]?.votes || [];
@@ -914,11 +718,7 @@
             html += '<td class="total-cell">' + (count > 0 ? avg.toFixed(2) : '—') + '</td>';
             html += '<td>' + count + '</td>';
             html += '<td>' + allScores.join(', ') + '</td>';
-            if (userRole === 'admin') {
-                html += '<td><button class="delete-btn" onclick="deleteParticipant(\'' + escaped + '\')">✕</button></td>';
-            } else {
-                html += '<td></td>';
-            }
+            html += '<td><button class="delete-btn" onclick="deleteParticipant(\'' + escaped + '\')">✕</button></td>';
             html += '</tr>';
         });
         tableBody.innerHTML = html;
@@ -958,10 +758,6 @@
     }
 
     window.deleteParticipant = async function(name) {
-        if (userRole === 'guest') {
-            alert('Участники не могут удалять данные');
-            return;
-        }
         if (!confirm('Удалить все оценки участника "' + name + '" из номинации "' + getTabName(currentTab) + '"?')) return;
         
         var votes = getCurrentVotes();
@@ -974,10 +770,6 @@
     };
 
     async function addVote() {
-        if (userRole === 'guest') {
-            alert('Участники не могут добавлять оценки');
-            return;
-        }
         var name = nameInput.value.trim();
         var score = parseFloat(scoreInput.value);
         if (!name) { alert('Введите имя участника'); nameInput.focus(); return; }
@@ -1057,14 +849,13 @@
         tokenBlock.style.display = 'none';
         appContent.style.display = 'block';
         
-        // Загружаем все три номинации
         await loadFromGitHub('national');
         await loadFromGitHub('free');
         await loadFromGitHub('evening');
         render();
         
         setInterval(function() {
-            if (githubToken && userRole === 'admin') {
+            if (githubToken) {
                 saveToGitHub(currentTab);
             }
         }, 30000);
@@ -1098,9 +889,10 @@
         if (e.key === 'Enter') { e.preventDefault(); addVote(); }
     });
 
+    init();
+
     console.log('✅ Программа загружена!');
     console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
-    console.log('👑 Пароль администратора: EGORIK');
     console.log('📂 Номинации: Национальный, Свободный, Вечерний');
 </script>
 
