@@ -98,6 +98,9 @@
         body.dark-theme .podium-item .podium-name { color: #eee; }
         body.dark-theme .podium-item .podium-score { color: #aaa; }
         body.dark-theme .podium-item .place { color: #888; }
+        body.dark-theme .history-item { border-bottom-color: #444; color: #ccc; }
+        body.dark-theme .history-item .time { color: #888; }
+        body.dark-theme .history-item .score { color: #8fdfb0; }
 
         /* ПРЕДУПРЕЖДЕНИЕ ОБ ИНТЕРНЕТЕ */
         .offline-warning {
@@ -283,8 +286,6 @@
         .btn-primary { background: #667eea; }
         .btn-danger { background: #dc3545; }
         .btn-clear { background: #dc3545; }
-        .btn-export { background: #17a2b8; }
-        .btn-export:active { background: #138496; }
         .actions {
             display: flex;
             flex-wrap: wrap;
@@ -422,6 +423,61 @@
             color: #888;
             padding: 20px;
             font-style: italic;
+            transition: color 0.3s ease;
+        }
+
+        /* ИСТОРИЯ */
+        .history-section {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 15px;
+            border: 1px solid #eee;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .history-section h3 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 16px;
+            transition: color 0.3s ease;
+        }
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 0 4px;
+        }
+        .history-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .history-list::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 4px;
+        }
+        .history-list::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 4px;
+        }
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 13px;
+            color: #333;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        .history-item:last-child { border-bottom: none; }
+        .history-item .name { font-weight: 600; }
+        .history-item .score { font-weight: 700; color: #28a745; transition: color 0.3s ease; }
+        .history-item .time { font-size: 11px; color: #888; transition: color 0.3s ease; }
+        .history-empty {
+            text-align: center;
+            color: #888;
+            padding: 15px;
+            font-style: italic;
+            font-size: 13px;
             transition: color 0.3s ease;
         }
 
@@ -630,10 +686,17 @@
             </div>
         </div>
 
+        <!-- ИСТОРИЯ -->
+        <div class="history-section" id="historySection">
+            <h3>📋 История голосований</h3>
+            <div class="history-list" id="historyList">
+                <div class="history-empty">История пуста</div>
+            </div>
+        </div>
+
         <div class="actions">
             <button class="btn btn-warning" id="calcBtn">🏆 Победитель</button>
             <button class="btn btn-success" id="syncBtn">🔄 Синхронизировать</button>
-            <button class="btn btn-export" id="exportBtn">📊 Скачать отчёт</button>
             <button class="btn btn-clear" id="clearBtn">🗑️ Очистить всё</button>
         </div>
 
@@ -763,7 +826,11 @@
     };
 
     var currentTab = 'national';
-    var allData = { 'national': { votes: [] }, 'free': { votes: [] }, 'evening': { votes: [] } };
+    var allData = { 
+        'national': { votes: [], history: [] }, 
+        'free': { votes: [], history: [] }, 
+        'evening': { votes: [], history: [] } 
+    };
     var githubToken = '';
     var winnerName = null;
     var lastUpdateTime = {};
@@ -787,11 +854,11 @@
     var addBtn = document.getElementById('addBtn');
     var calcBtn = document.getElementById('calcBtn');
     var syncBtn = document.getElementById('syncBtn');
-    var exportBtn = document.getElementById('exportBtn');
     var deleteBtn = document.getElementById('deleteBtn');
     var deleteName = document.getElementById('deleteName');
     var clearBtn = document.getElementById('clearBtn');
     var chartContainer = document.getElementById('chartContainer');
+    var historyList = document.getElementById('historyList');
 
     var clearModal = document.getElementById('clearModal');
     var captchaInput = document.getElementById('captchaInput');
@@ -814,6 +881,7 @@
         currentTab = tab;
         render();
         updateChart();
+        renderHistory();
     });
 
     // ========== УДАЛЕНИЕ ==========
@@ -845,46 +913,41 @@
         if (e.key === 'Enter') { e.preventDefault(); deleteBtn.click(); }
     });
 
-    // ========== ЭКСПОРТ В CSV ==========
-    exportBtn.addEventListener('click', function() {
-        var votes = allData[currentTab]?.votes || [];
-        if (votes.length === 0) {
-            alert('Нет данных для экспорта');
+    // ========== ИСТОРИЯ ==========
+    function addHistory(name, score) {
+        var now = new Date();
+        var time = now.toTimeString().slice(0, 8);
+        var tabData = allData[currentTab];
+        if (!tabData.history) tabData.history = [];
+        tabData.history.unshift({
+            name: name,
+            score: score,
+            time: time
+        });
+        if (tabData.history.length > 50) {
+            tabData.history = tabData.history.slice(0, 50);
+        }
+        renderHistory();
+        saveToGitHub(currentTab);
+    }
+
+    function renderHistory() {
+        var history = allData[currentTab]?.history || [];
+        if (history.length === 0) {
+            historyList.innerHTML = '<div class="history-empty">История пуста</div>';
             return;
         }
-        
-        var participants = getUniqueParticipants(votes);
-        // Используем запятую как разделитель и экранируем кавычки
-        var csv = '\uFEFF'; // BOM для Excel
-        csv += '"Участник","Средний балл","Кол-во оценок","Все оценки"\n';
-        
-        for (var i = 0; i < participants.length; i++) {
-            var p = participants[i];
-            var pVotes = [];
-            for (var j = 0; j < votes.length; j++) {
-                if (votes[j].name === p) { pVotes.push(votes[j]); }
-            }
-            var total = 0;
-            var scores = [];
-            for (var k = 0; k < pVotes.length; k++) {
-                total += pVotes[k].score;
-                scores.push(pVotes[k].score.toFixed(1));
-            }
-            var count = pVotes.length;
-            var avg = count > 0 ? total / count : 0;
-            csv += '"' + p + '","' + avg.toFixed(2) + '","' + count + '","' + scores.join(', ') + '"\n';
+        var html = '';
+        for (var i = 0; i < history.length; i++) {
+            var item = history[i];
+            html += '<div class="history-item">';
+            html += '<span class="name">' + escapeHtml(item.name) + '</span>';
+            html += '<span class="score">+' + item.score.toFixed(1) + '</span>';
+            html += '<span class="time">' + escapeHtml(item.time) + '</span>';
+            html += '</div>';
         }
-        
-        var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-        var link = document.createElement('a');
-        link.href = URL.createObjectURL(blob);
-        link.download = 'фестиваль_' + currentTab + '_' + new Date().toISOString().slice(0,10) + '.csv';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        URL.revokeObjectURL(link.href);
-        setStatus('📊 Отчёт скачан!', '#17a2b8');
-    });
+        historyList.innerHTML = html;
+    }
 
     // ========== ОЧИСТКА ВСЕГО ==========
     clearBtn.addEventListener('click', function() {
@@ -904,9 +967,11 @@
         if (answer === '4') {
             clearModal.classList.remove('active');
             allData[currentTab].votes = [];
+            allData[currentTab].history = [];
             winnerName = null;
             render();
             updateChart();
+            renderHistory();
             lastUpdateTime[currentTab] = Date.now();
             saveToGitHub(currentTab);
             setStatus('🗑️ Всё очищено в номинации "' + getTabName(currentTab) + '"', '#dc3545');
@@ -976,18 +1041,14 @@
             if (avg > maxAvg) maxAvg = avg;
         }
 
-        // Сортируем по убыванию для цветов
         var sorted = averages.slice().sort(function(a, b) { return b.avg - a.avg; });
         var colors = ['gold', 'silver', 'bronze'];
-
-        // Если максимальный балл меньше 1, используем 1 для масштаба
         var scale = maxAvg > 0 ? maxAvg : 1;
         var maxHeight = 130;
 
         var html = '';
         for (var m = 0; m < sorted.length; m++) {
             var item = sorted[m];
-            // ВЫЧИСЛЯЕМ ВЫСОТУ СТРОГО ПО ФОРМУЛЕ (одинаковые баллы = одинаковая высота)
             var heightPercent = item.avg / scale;
             var barHeight = Math.max(heightPercent * maxHeight, 8);
             var colorClass = m < 3 ? colors[m] : '';
@@ -1001,7 +1062,7 @@
         chartContainer.innerHTML = html;
     }
 
-    // ========== УМНЫЙ ПОДИУМ ==========
+    // ========== ПРАВИЛЬНЫЙ ПОДИУМ ==========
     function showPodium() {
         var votes = allData[currentTab]?.votes || [];
         var participants = getUniqueParticipants(votes);
@@ -1029,8 +1090,10 @@
             averages.push({ name: p, avg: avg, count: count });
         }
 
+        // Сортируем по убыванию баллов
         averages.sort(function(a, b) { return b.avg - a.avg; });
 
+        // Группируем по баллам (с одинаковыми баллами — одна группа)
         var groups = [];
         var currentGroup = null;
         for (var g = 0; g < averages.length; g++) {
@@ -1044,6 +1107,7 @@
             }
         }
 
+        // Берём топ-3 группы
         var topGroups = groups.slice(0, 3);
         var medals = ['🥇', '🥈', '🥉'];
         var steps = ['gold', 'silver', 'bronze'];
@@ -1117,15 +1181,17 @@
     async function saveToGitHub(tab) {
         if (!githubToken) return;
         var filePath = getDataFilePath(tab);
-        var votes = allData[tab]?.votes || [];
+        var dataToSave = {
+            votes: allData[tab]?.votes || [],
+            history: allData[tab]?.history || []
+        };
         try {
             setStatusBar('saving', '💾 Сохранение...');
             var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
             var loadResponse = await fetch(url, { headers: { 'Authorization': 'token ' + githubToken, 'Accept': 'application/vnd.github.v3+json' } });
             var remoteSha = null;
             if (loadResponse.ok) { var loadData = await loadResponse.json(); remoteSha = loadData.sha; }
-            var data = { votes: votes, updatedAt: new Date().toISOString() };
-            var content = utf8ToBase64(JSON.stringify(data, null, 2));
+            var content = utf8ToBase64(JSON.stringify(dataToSave, null, 2));
             var body = { message: 'Обновление данных', content: content };
             if (remoteSha) { body.sha = remoteSha; }
             var saveResponse = await fetch(url, { method: 'PUT', headers: { 'Authorization': 'token ' + githubToken, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) });
@@ -1140,18 +1206,28 @@
         try {
             var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
             var response = await fetch(url, { headers: { 'Authorization': 'token ' + githubToken, 'Accept': 'application/vnd.github.v3+json' } });
-            if (response.status === 404) { allData[tab] = { votes: [] }; render(); updateChart(); return; }
+            if (response.status === 404) { 
+                allData[tab] = { votes: [], history: [] }; 
+                render(); 
+                updateChart();
+                renderHistory();
+                return; 
+            }
             if (!response.ok) { throw new Error('Ошибка загрузки'); }
             var data = await response.json();
             var content = base64ToUtf8(data.content);
             var jsonData = JSON.parse(content);
-            if (jsonData && jsonData.votes) {
+            if (jsonData) {
                 if (lastUpdateTime[tab] && Date.now() - lastUpdateTime[tab] < 3000) {
                     return;
                 }
-                allData[tab] = { votes: jsonData.votes };
+                allData[tab] = { 
+                    votes: jsonData.votes || [], 
+                    history: jsonData.history || [] 
+                };
                 render();
                 updateChart();
+                renderHistory();
                 setStatusBar('online', '☁️ Автосинхронизация');
                 setStatus('☁️ Синхронизировано', '#17a2b8');
             }
@@ -1228,6 +1304,7 @@
         nameInput.value = ''; scoreInput.value = ''; nameInput.focus();
         render();
         updateChart();
+        addHistory(name, score);
         lastUpdateTime[currentTab] = Date.now();
         await saveToGitHub(currentTab);
         setStatus('✅ Добавлено! (' + getTabName(currentTab) + ')', '#28a745');
@@ -1272,7 +1349,6 @@
             }
         }
         
-        // Фейерверк!
         fireConfetti();
         
         if (isTie) {
@@ -1308,6 +1384,7 @@
         await loadFromGitHub('evening');
         render();
         updateChart();
+        renderHistory();
         if (autoSyncInterval) clearInterval(autoSyncInterval);
         autoSyncInterval = setInterval(function() {
             if (githubToken) {
