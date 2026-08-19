@@ -356,6 +356,17 @@
         } catch(e) { return ''; }
     }
 
+    // ========== ФУНКЦИЯ ДЛЯ КОРРЕКТНОГО КОДИРОВАНИЯ ==========
+    function utf8ToBase64(str) {
+        // Кодируем строку в UTF-8, потом в Base64
+        var bytes = new TextEncoder().encode(str);
+        var binary = '';
+        for (var i = 0; i < bytes.length; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        return btoa(binary);
+    }
+
     // ========== ЗАГРУЗКА ДАННЫХ ИЗ GITHUB ==========
     async function loadFromGitHub() {
         if (!githubToken) return false;
@@ -383,6 +394,7 @@
             var data = await response.json();
             dataSha = data.sha;
             var content = atob(data.content);
+            // Декодируем из UTF-8
             var jsonData = JSON.parse(content);
 
             if (jsonData && jsonData.votes && Array.isArray(jsonData.votes)) {
@@ -421,7 +433,9 @@
                 votes: votes,
                 updatedAt: new Date().toISOString()
             };
-            var content = btoa(JSON.stringify(data, null, 2));
+            var jsonString = JSON.stringify(data, null, 2);
+            // Используем правильную кодировку
+            var content = utf8ToBase64(jsonString);
 
             var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
             var body = {
