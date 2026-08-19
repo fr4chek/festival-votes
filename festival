@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Фестиваль - Подсчёт голосов</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+        body {
+            font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 16px;
+            margin: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            width: 100%;
+        }
+        h1 { text-align: center; color: #333; margin-bottom: 4px; font-size: 24px; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 20px; font-size: 14px; }
+        
+        .status-bar {
+            text-align: center;
+            padding: 10px;
+            border-radius: 12px;
+            margin-bottom: 18px;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        .status-bar.online { background: #d4edda; color: #155724; border: 2px solid #28a745; }
+        .status-bar.offline { background: #f8d7da; color: #721c24; border: 2px solid #dc3545; }
+        .status-bar.connecting { background: #fff3cd; color: #856404; border: 2px solid #ffc107; }
+        .status-bar.saving { background: #cce5ff; color: #004085; border: 2px solid #007bff; }
+        
+        .token-input {
+            background: #f8f9ff;
+            padding: 16px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 2px solid #667eea;
+        }
+        .token-input label { font-weight: 600; font-size: 14px; color: #333; }
+        .token-input input {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            margin-top: 8px;
+            background: white;
+        }
+        .token-input input:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        .token-input .hint {
+            font-size: 12px;
+            color: #888;
+            margin-top: 6px;
+        }
+        .token-input .btn {
+            margin-top: 10px;
+            width: 100%;
+        }
+        
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 18px;
+        }
+        .stat-card {
+            background: #f8f9ff;
+            padding: 8px 16px;
+            border-radius: 12px;
+            text-align: center;
+            min-width: 80px;
+            flex: 1;
+        }
+        .stat-card .num { font-size: 24px; font-weight: 700; color: #667eea; }
+        .stat-card .label { font-size: 12px; color: #666; }
+        
+        .input-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            background: #f8f9ff;
+            padding: 16px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            align-items: flex-end;
+        }
+        .input-group {
+            flex: 1 1 140px;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 100px;
+        }
+        .input-group label { font-weight: 600; font-size: 12px; color: #555; }
+        .input-group input {
+            padding: 12px 14px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 16px;
+            width: 100%;
+            background: white;
+        }
+        .input-group input:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        .input-group input[type="number"] { -moz-appearance: textfield; }
+        .input-group input[type="number"]::-webkit-outer-spin-button,
+        .input-group input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            color: white;
+            background: #667eea;
+            flex: 0 0 auto;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn:active { transform: scale(0.96); }
+        .btn-add { background: #28a745; }
+        .btn-warning { background: #ffc107; color: #333; }
+        .btn-success { background: #17a2b8; }
+        .btn-primary { background: #667eea; }
+        
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin: 14px 0;
+        }
+        .actions .btn {
+            flex: 1 1 auto;
+            min-width: 100px;
+            text-align: center;
+        }
+        
+        .table-wrap {
+            overflow-x: auto;
+            border-radius: 15px;
+            border: 1px solid #eee;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        th {
+            background: #667eea;
+            color: white;
+            padding: 10px 6px;
+            text-align: center;
+        }
+        td {
+            padding: 8px 6px;
+            text-align: center;
+            border-bottom: 1px solid #eee;
+            background: white;
+        }
+        .winner-row td { background: #ffd700 !important; font-weight: 700; border-bottom: 3px solid #ffa500; }
+        .total-cell { font-weight: 700; font-size: 16px; color: #333; }
+        .empty-message { text-align: center; padding: 25px; color: #888; font-style: italic; }
+        
+        .footer {
+            margin-top: 16px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            color: #555;
+            font-size: 13px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .save-status {
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: #e8f5e9;
+            color: #28a745;
+        }
+        .delete-btn {
+            background: none;
+            border: none;
+            color: #dc3545;
+            font-size: 20px;
+            padding: 4px 10px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .delete-btn:active { background: #dc3545; color: white; transform: scale(0.9); }
+        .sync-info { font-size: 11px; color: #888; text-align: center; margin-top: 6px; }
+        
+        @media (max-width: 600px) {
+            .container { padding: 14px; }
+            .input-section { flex-direction: column; padding: 12px; }
+            .input-group { flex: 1 1 auto; width: 100%; }
+            .btn { width: 100%; justify-content: center; }
+            .actions .btn { min-width: 80px; }
+            .stats .stat-card { flex: 1 1 50px; min-width: 50px; padding: 6px 10px; }
+            .stat-card .num { font-size: 18px; }
+            h1 { font-size: 20px; }
+            .footer { flex-direction: column; align-items: stretch; text-align: center; }
+            .token-input input { font-size: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container" id="mainContent">
+    <h1>🎭 Фестиваль — Подсчёт голосов</h1>
+    <p class="subtitle">Введите имя участника и оценку. Данные сохраняются в облако автоматически!</p>
+
+    <!-- Блок для ввода токена -->
+    <div class="token-input" id="tokenBlock">
+        <label>🔑 Введите GitHub токен для доступа к данным</label>
+        <input type="password" id="tokenInput" placeholder="Вставьте токен (ghp_...)" autocomplete="off">
+        <div class="hint">Токен нужен только для сохранения данных в GitHub. Он не передаётся никуда, кроме GitHub API.</div>
+        <button class="btn btn-primary" id="tokenBtn">✅ Подключиться</button>
+    </div>
+
+    <div id="appContent" style="display: none;">
+        <div id="statusBar" class="status-bar connecting">⏳ Подключение к GitHub...</div>
+
+        <div class="stats">
+            <div class="stat-card"><div class="num" id="statParticipants">0</div><div class="label">👤 Участников</div></div>
+            <div class="stat-card"><div class="num" id="statVotes">0</div><div class="label">📊 Оценок</div></div>
+            <div class="stat-card" style="background:#fff3cd;"><div class="num" id="statAvg">—</div><div class="label">🏆 Средний балл лидера</div></div>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <label>👤 Имя участника</label>
+                <input type="text" id="nameInput" placeholder="Например: Анна">
+            </div>
+            <div class="input-group" style="flex:0 0 110px;">
+                <label>⭐ Оценка (0–10)</label>
+                <input type="number" id="scoreInput" placeholder="10" min="0" max="10" step="0.1">
+            </div>
+            <div class="input-group" style="flex:0 0 auto;">
+                <button class="btn btn-add" id="addBtn">➕ Добавить</button>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table>
+                <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>✕</th></tr></thead>
+                <tbody id="tableBody"><tr><td colspan="4" class="empty-message">Нет данных. Добавьте оценки!</td></tr></tbody>
+            </table>
+        </div>
+
+        <div class="actions">
+            <button class="btn btn-warning" id="calcBtn">🏆 Победитель</button>
+            <button class="btn btn-success" id="syncBtn">🔄 Синхронизировать</button>
+        </div>
+
+        <div class="footer">
+            <span id="winnerDisplay" style="font-weight:700;color:#333;">👑 Победитель: не определен</span>
+            <span class="save-status" id="statusDisplay">☁️ Автосохранение</span>
+        </div>
+        <div class="sync-info">💾 Данные автоматически сохраняются в GitHub</div>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    // НАСТРОЙКИ
+    // ============================================================
+    var REPO_OWNER = 'fr4chek';
+    var REPO_NAME = 'festival-votes';
+    var DATA_FILE_PATH = 'data.json';
+    // ============================================================
+
+    var votes = [];
+    var winnerName = null;
+    var isSaving = false;
+    var dataSha = null;
+    var githubToken = '';
+
+    // DOM
+    var tokenBlock = document.getElementById('tokenBlock');
+    var tokenInput = document.getElementById('tokenInput');
+    var tokenBtn = document.getElementById('tokenBtn');
+    var appContent = document.getElementById('appContent');
+    var statusBar = document.getElementById('statusBar');
+    var nameInput = document.getElementById('nameInput');
+    var scoreInput = document.getElementById('scoreInput');
+    var tableBody = document.getElementById('tableBody');
+    var winnerDisplay = document.getElementById('winnerDisplay');
+    var statusDisplay = document.getElementById('statusDisplay');
+    var statParticipants = document.getElementById('statParticipants');
+    var statVotes = document.getElementById('statVotes');
+    var statAvg = document.getElementById('statAvg');
+    var addBtn = document.getElementById('addBtn');
+    var calcBtn = document.getElementById('calcBtn');
+    var syncBtn = document.getElementById('syncBtn');
+
+    // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
+    function genId() { return Date.now() + '_' + Math.random().toString(36).substr(2, 6); }
+
+    function setStatus(text, color) {
+        statusDisplay.textContent = text;
+        statusDisplay.style.color = color || '#28a745';
+    }
+
+    function setStatusBar(status, message) {
+        statusBar.className = 'status-bar ' + status;
+        statusBar.textContent = message;
+    }
+
+    function getUniqueParticipants() {
+        var set = new Set();
+        votes.forEach(function(v) { set.add(v.name); });
+        return Array.from(set).sort();
+    }
+
+    function escapeHtml(text) {
+        var div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    // ========== РАБОТА С ТОКЕНОМ ==========
+    function saveToken(token) {
+        try {
+            localStorage.setItem('github_token', token);
+        } catch(e) {}
+    }
+
+    function loadToken() {
+        try {
+            return localStorage.getItem('github_token') || '';
+        } catch(e) { return ''; }
+    }
+
+    // ========== ЗАГРУЗКА ДАННЫХ ИЗ GITHUB ==========
+    async function loadFromGitHub() {
+        if (!githubToken) return false;
+        try {
+            setStatusBar('connecting', '⏳ Загрузка данных из GitHub...');
+            
+            var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
+            var response = await fetch(url, {
+                headers: {
+                    'Authorization': 'token ' + githubToken,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+
+            if (response.status === 404) {
+                setStatusBar('connecting', '📝 Создание файла данных...');
+                await saveToGitHub();
+                return true;
+            }
+
+            if (!response.ok) {
+                throw new Error('Ошибка загрузки: ' + response.status);
+            }
+
+            var data = await response.json();
+            dataSha = data.sha;
+            var content = atob(data.content);
+            var jsonData = JSON.parse(content);
+
+            if (jsonData && jsonData.votes && Array.isArray(jsonData.votes)) {
+                votes = jsonData.votes;
+                render();
+                setStatusBar('online', '☁️ Данные загружены из GitHub (' + votes.length + ' оценок)');
+                setStatus('☁️ Загружено из GitHub', '#17a2b8');
+                return true;
+            }
+
+            return false;
+        } catch(e) {
+            console.error('Load error:', e);
+            setStatusBar('offline', '⚠️ Ошибка загрузки: ' + e.message);
+            setStatus('❌ Ошибка загрузки', '#dc3545');
+            if (loadFromCache()) {
+                render();
+                setStatusBar('offline', '📂 Загружено из кэша (офлайн)');
+                setStatus('📂 Загружено из кэша', '#fd7e14');
+                return true;
+            }
+            return false;
+        }
+    }
+
+    // ========== СОХРАНЕНИЕ ДАННЫХ В GITHUB ==========
+    async function saveToGitHub() {
+        if (isSaving || !githubToken) return false;
+        
+        try {
+            isSaving = true;
+            setStatusBar('saving', '💾 Сохранение в GitHub...');
+            setStatus('⏳ Сохранение...', '#856404');
+
+            var data = {
+                votes: votes,
+                updatedAt: new Date().toISOString()
+            };
+            var content = btoa(JSON.stringify(data, null, 2));
+
+            var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
+            var body = {
+                message: 'Обновление данных голосования',
+                content: content
+            };
+
+            if (dataSha) {
+                body.sha = dataSha;
+            }
+
+            var response = await fetch(url, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'token ' + githubToken,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/vnd.github.v3+json'
+                },
+                body: JSON.stringify(body)
+            });
+
+            if (!response.ok) {
+                var errorText = await response.text();
+                throw new Error('Ошибка сохранения: ' + response.status + ' ' + errorText);
+            }
+
+            var result = await response.json();
+            dataSha = result.content.sha;
+            
+            setStatusBar('online', '☁️ Данные сохранены в GitHub');
+            setStatus('☁️ Сохранено в GitHub', '#28a745');
+            
+            saveToCache();
+            return true;
+        } catch(e) {
+            console.error('Save error:', e);
+            setStatusBar('offline', '⚠️ Ошибка сохранения: ' + e.message);
+            setStatus('❌ Ошибка сохранения', '#dc3545');
+            saveToCache();
+            return false;
+        } finally {
+            isSaving = false;
+        }
+    }
+
+    // ========== РАБОТА С КЭШЕМ ==========
+    function saveToCache() {
+        try {
+            localStorage.setItem('festival_votes_cache', JSON.stringify({ votes: votes }));
+        } catch(e) { console.warn('Cache save error:', e); }
+    }
+
+    function loadFromCache() {
+        try {
+            var raw = localStorage.getItem('festival_votes_cache');
+            if (raw) {
+                var data = JSON.parse(raw);
+                if (data.votes && Array.isArray(data.votes)) {
+                    votes = data.votes;
+                    return true;
+                }
+            }
+        } catch(e) { console.warn('Cache load error:', e); }
+        return false;
+    }
+
+    // ========== РЕНДЕРИНГ ==========
+    function render() {
+        var allParticipants = getUniqueParticipants();
+        statParticipants.textContent = allParticipants.length;
+        statVotes.textContent = votes.length;
+
+        if (allParticipants.length === 0) {
+            tableBody.innerHTML = '<tr><td colspan="4" class="empty-message">Нет данных. Добавьте оценки!</td></tr>';
+            winnerDisplay.textContent = '👑 Победитель: не определен';
+            statAvg.textContent = '—';
+            return;
+        }
+
+        var html = '';
+        var averages = [];
+        allParticipants.forEach(function(p) {
+            var pVotes = votes.filter(function(v) { return v.name === p; });
+            var total = 0;
+            pVotes.forEach(function(v) { total += v.score; });
+            var count = pVotes.length;
+            var avg = count > 0 ? total / count : 0;
+            averages.push({ name: p, avg: avg, count: count });
+            var escaped = p.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            html += '<tr>';
+            html += '<td><strong>' + escapeHtml(p) + '</strong></td>';
+            html += '<td class="total-cell">' + (count > 0 ? avg.toFixed(2) : '—') + '</td>';
+            html += '<td>' + count + '</td>';
+            html += '<td><button class="delete-btn" onclick="deleteParticipant(\'' + escaped + '\')">✕</button></td>';
+            html += '</tr>';
+        });
+        tableBody.innerHTML = html;
+
+        if (winnerName) {
+            var rows = tableBody.querySelectorAll('tr');
+            rows.forEach(function(row) {
+                var firstTd = row.querySelector('td:first-child');
+                if (firstTd && firstTd.textContent.trim() === winnerName) {
+                    row.classList.add('winner-row');
+                }
+            });
+        }
+
+        var sorted = averages.slice().sort(function(a, b) { return b.avg - a.avg; });
+        statAvg.textContent = (sorted.length > 0 && sorted[0].count > 0) ? sorted[0].avg.toFixed(2) : '—';
+
+        if (winnerName) {
+            var winner = averages.find(function(a) { return a.name === winnerName; });
+            if (winner && winner.count > 0) {
+                winnerDisplay.textContent = '👑 Победитель: ' + winnerName + ' (средний балл ' + winner.avg.toFixed(2) + ')';
+            } else {
+                winnerDisplay.textContent = '👑 Победитель: не определен';
+            }
+        } else {
+            winnerDisplay.textContent = '👑 Победитель: не определен';
+        }
+    }
+
+    // ========== ОСНОВНЫЕ ДЕЙСТВИЯ ==========
+    window.deleteParticipant = async function(name) {
+        if (!confirm('Удалить все оценки участника "' + name + '"?')) return;
+        votes = votes.filter(function(v) { return v.name !== name; });
+        if (winnerName === name) winnerName = null;
+        render();
+        await saveToGitHub();
+        setStatus('🗑️ Удалён участник: ' + name, '#dc3545');
+    };
+
+    async function addVote() {
+        var name = nameInput.value.trim();
+        var score = parseFloat(scoreInput.value);
+        if (!name) { alert('Введите имя участника'); nameInput.focus(); return; }
+        if (isNaN(score) || score < 0 || score > 10) {
+            alert('Оценка должна быть от 0 до 10');
+            scoreInput.focus();
+            return;
+        }
+        votes.push({ id: genId(), name: name, score: score });
+        nameInput.value = '';
+        scoreInput.value = '';
+        nameInput.focus();
+        render();
+        await saveToGitHub();
+        setStatus('✅ Оценка добавлена!', '#28a745');
+    }
+
+    function calculateWinner() {
+        var allParticipants = getUniqueParticipants();
+        if (allParticipants.length === 0) { alert('Нет данных для подсчёта'); return; }
+        var averages = allParticipants.map(function(p) {
+            var pVotes = votes.filter(function(v) { return v.name === p; });
+            var total = 0;
+            pVotes.forEach(function(v) { total += v.score; });
+            var count = pVotes.length;
+            return { name: p, avg: count > 0 ? total / count : 0, count: count };
+        });
+        var sorted = averages.slice().sort(function(a, b) { return b.avg - a.avg; });
+        if (sorted.length === 0 || sorted[0].count === 0) { alert('Нет оценок для подсчёта'); return; }
+        var winner = sorted[0];
+        var isTie = false;
+        var tieNames = [winner.name];
+        for (var i = 1; i < sorted.length; i++) {
+            if (Math.abs(sorted[i].avg - winner.avg) < 0.001 && sorted[i].count > 0) {
+                isTie = true;
+                tieNames.push(sorted[i].name);
+            } else break;
+        }
+        if (isTie) {
+            winnerName = null;
+            winnerDisplay.textContent = '🤝 Ничья между: ' + tieNames.join(', ') + ' (средний балл ' + winner.avg.toFixed(2) + ')';
+        } else {
+            winnerName = winner.name;
+            winnerDisplay.textContent = '👑 Победитель: ' + winner.name + ' (средний балл ' + winner.avg.toFixed(2) + ')';
+        }
+        render();
+    }
+
+    async function syncData() {
+        if (!githubToken) { alert('Сначала подключитесь к GitHub'); return; }
+        setStatus('🔄 Синхронизация...', '#856404');
+        await loadFromGitHub();
+        setStatus('✅ Синхронизация завершена', '#28a745');
+    }
+
+    // ========== ПОДКЛЮЧЕНИЕ К GITHUB ==========
+    async function connectToGitHub() {
+        var token = tokenInput.value.trim();
+        if (!token) {
+            alert('Введите GitHub токен');
+            return;
+        }
+        if (!token.startsWith('ghp_')) {
+            alert('Токен должен начинаться с "ghp_"');
+            return;
+        }
+
+        githubToken = token;
+        saveToken(token);
+        
+        tokenBlock.style.display = 'none';
+        appContent.style.display = 'block';
+        
+        // Загружаем данные
+        await loadFromGitHub();
+        
+        // Автосохранение каждые 30 секунд
+        setInterval(function() {
+            if (votes.length > 0 && githubToken) {
+                saveToGitHub();
+            }
+        }, 30000);
+    }
+
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
+    function init() {
+        // Проверяем сохранённый токен
+        var savedToken = loadToken();
+        if (savedToken) {
+            tokenInput.value = savedToken;
+            // Автоматически подключаемся
+            connectToGitHub();
+        } else {
+            tokenBlock.style.display = 'block';
+            appContent.style.display = 'none';
+        }
+    }
+
+    // ========== ОБРАБОТЧИКИ ==========
+    tokenBtn.addEventListener('click', connectToGitHub);
+    tokenInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); connectToGitHub(); }
+    });
+
+    addBtn.addEventListener('click', addVote);
+    calcBtn.addEventListener('click', calculateWinner);
+    syncBtn.addEventListener('click', syncData);
+
+    nameInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); scoreInput.focus(); }
+    });
+    scoreInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); addVote(); }
+    });
+
+    // ========== ЗАПУСК ==========
+    init();
+
+    console.log('✅ Программа загружена!');
+    console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
+</script>
+
+</body>
+</html>
