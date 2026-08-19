@@ -280,7 +280,6 @@
     </div>
     <p class="subtitle" id="subtitle">Выберите номинацию и введите оценки</p>
 
-    <!-- ВКЛАДКИ -->
     <div class="tabs" id="tabsContainer">
         <button class="tab-btn active" data-tab="national">🎵 Национальный</button>
         <button class="tab-btn" data-tab="free">🎸 Свободный</button>
@@ -401,6 +400,25 @@
         loadTabData(tab);
     });
 
+    // ========== ГЛОБАЛЬНАЯ ФУНКЦИЯ УДАЛЕНИЯ ==========
+    window.deleteParticipant = function(name) {
+        var tabName = getTabName(currentTab);
+        if (!confirm('Удалить все оценки участника "' + name + '" из номинации "' + tabName + '"?')) return;
+        
+        var votes = getCurrentVotes();
+        var newVotes = [];
+        for (var i = 0; i < votes.length; i++) {
+            if (votes[i].name !== name) {
+                newVotes.push(votes[i]);
+            }
+        }
+        setCurrentVotes(newVotes);
+        if (winnerName === name) winnerName = null;
+        render();
+        saveToGitHub(currentTab);
+        setStatus('🗑️ Удалён участник: ' + name + ' (' + tabName + ')', '#dc3545');
+    };
+
     // ========== ОСТАЛЬНОЙ КОД ==========
     function getCurrentVotes() {
         return allData[currentTab]?.votes || [];
@@ -427,7 +445,9 @@
 
     function getUniqueParticipants(votes) {
         var set = new Set();
-        votes.forEach(function(v) { set.add(v.name); });
+        for (var i = 0; i < votes.length; i++) {
+            set.add(votes[i].name);
+        }
         return Array.from(set).sort();
     }
 
@@ -509,19 +529,21 @@
             var merged = [];
             var ids = new Set();
 
-            remoteVotes.forEach(function(v) {
+            for (var i = 0; i < remoteVotes.length; i++) {
+                var v = remoteVotes[i];
                 if (!ids.has(v.id)) {
                     ids.add(v.id);
                     merged.push(v);
                 }
-            });
+            }
 
-            votes.forEach(function(v) {
-                if (!ids.has(v.id)) {
-                    ids.add(v.id);
-                    merged.push(v);
+            for (var j = 0; j < votes.length; j++) {
+                var v2 = votes[j];
+                if (!ids.has(v2.id)) {
+                    ids.add(v2.id);
+                    merged.push(v2);
                 }
-            });
+            }
 
             allData[tab].votes = merged;
             if (tab === currentTab) render();
@@ -567,18 +589,20 @@
                         
                         var finalMerged = [];
                         var finalIds = new Set();
-                        retryVotes.forEach(function(v) {
-                            if (!finalIds.has(v.id)) {
-                                finalIds.add(v.id);
-                                finalMerged.push(v);
+                        for (var k = 0; k < retryVotes.length; k++) {
+                            var v3 = retryVotes[k];
+                            if (!finalIds.has(v3.id)) {
+                                finalIds.add(v3.id);
+                                finalMerged.push(v3);
                             }
-                        });
-                        votes.forEach(function(v) {
-                            if (!finalIds.has(v.id)) {
-                                finalIds.add(v.id);
-                                finalMerged.push(v);
+                        }
+                        for (var m = 0; m < votes.length; m++) {
+                            var v4 = votes[m];
+                            if (!finalIds.has(v4.id)) {
+                                finalIds.add(v4.id);
+                                finalMerged.push(v4);
                             }
-                        });
+                        }
                         allData[tab].votes = finalMerged;
                         if (tab === currentTab) render();
                         
@@ -686,19 +710,6 @@
         }
     }
 
-    // ========== ОСНОВНАЯ ФУНКЦИЯ УДАЛЕНИЯ (через data-атрибуты) ==========
-    function deleteParticipantByName(name) {
-        if (!confirm('Удалить все оценки участника "' + name + '" из номинации "' + getTabName(currentTab) + '"?')) return;
-        
-        var votes = getCurrentVotes();
-        votes = votes.filter(function(v) { return v.name !== name; });
-        setCurrentVotes(votes);
-        if (winnerName === name) winnerName = null;
-        render();
-        saveToGitHub(currentTab);
-        setStatus('🗑️ Удалён участник: ' + name + ' (' + getTabName(currentTab) + ')', '#dc3545');
-    }
-
     function render() {
         var votes = getCurrentVotes();
         var allParticipants = getUniqueParticipants(votes);
@@ -714,14 +725,20 @@
 
         var html = '';
         var averages = [];
-        allParticipants.forEach(function(p) {
-            var pVotes = votes.filter(function(v) { return v.name === p; });
+        for (var i = 0; i < allParticipants.length; i++) {
+            var p = allParticipants[i];
+            var pVotes = [];
+            for (var j = 0; j < votes.length; j++) {
+                if (votes[j].name === p) {
+                    pVotes.push(votes[j]);
+                }
+            }
             var total = 0;
             var allScores = [];
-            pVotes.forEach(function(v) {
-                total += v.score;
-                allScores.push(v.score.toFixed(1));
-            });
+            for (var k = 0; k < pVotes.length; k++) {
+                total += pVotes[k].score;
+                allScores.push(pVotes[k].score.toFixed(1));
+            }
             var count = pVotes.length;
             var avg = count > 0 ? total / count : 0;
             averages.push({ name: p, avg: avg, count: count });
@@ -731,36 +748,33 @@
             html += '<td class="total-cell">' + (count > 0 ? avg.toFixed(2) : '—') + '</td>';
             html += '<td>' + count + '</td>';
             html += '<td>' + allScores.join(', ') + '</td>';
-            // Кнопка удаления с data-атрибутом
-            html += '<td><button class="delete-btn" data-name="' + escaped + '">✕</button></td>';
+            // Используем onclick с вызовом глобальной функции
+            html += '<td><button class="delete-btn" onclick="deleteParticipant(\'' + escaped + '\')">✕</button></td>';
             html += '</tr>';
-        });
+        }
         tableBody.innerHTML = html;
-
-        // Вешаем обработчики на кнопки удаления
-        var deleteBtns = tableBody.querySelectorAll('.delete-btn');
-        deleteBtns.forEach(function(btn) {
-            btn.addEventListener('click', function(e) {
-                var name = this.getAttribute('data-name');
-                deleteParticipantByName(name);
-            });
-        });
 
         if (winnerName) {
             var rows = tableBody.querySelectorAll('tr');
-            rows.forEach(function(row) {
-                var firstTd = row.querySelector('td:first-child');
+            for (var r = 0; r < rows.length; r++) {
+                var firstTd = rows[r].querySelector('td:first-child');
                 if (firstTd && firstTd.textContent.trim() === winnerName) {
-                    row.classList.add('winner-row');
+                    rows[r].classList.add('winner-row');
                 }
-            });
+            }
         }
 
         var sorted = averages.slice().sort(function(a, b) { return b.avg - a.avg; });
         statAvg.textContent = (sorted.length > 0 && sorted[0].count > 0) ? sorted[0].avg.toFixed(2) : '—';
 
         if (winnerName) {
-            var winner = averages.find(function(a) { return a.name === winnerName; });
+            var winner = null;
+            for (var w = 0; w < averages.length; w++) {
+                if (averages[w].name === winnerName) {
+                    winner = averages[w];
+                    break;
+                }
+            }
             if (winner && winner.count > 0) {
                 winnerDisplay.textContent = '👑 Победитель в номинации "' + getTabName(currentTab) + '": ' + winnerName + ' (средний балл ' + winner.avg.toFixed(2) + ')';
             } else {
@@ -807,23 +821,32 @@
         var allParticipants = getUniqueParticipants(votes);
         if (allParticipants.length === 0) { alert('Нет данных для подсчёта'); return; }
         
-        var averages = allParticipants.map(function(p) {
-            var pVotes = votes.filter(function(v) { return v.name === p; });
+        var averages = [];
+        for (var i = 0; i < allParticipants.length; i++) {
+            var p = allParticipants[i];
+            var pVotes = [];
+            for (var j = 0; j < votes.length; j++) {
+                if (votes[j].name === p) {
+                    pVotes.push(votes[j]);
+                }
+            }
             var total = 0;
-            pVotes.forEach(function(v) { total += v.score; });
+            for (var k = 0; k < pVotes.length; k++) {
+                total += pVotes[k].score;
+            }
             var count = pVotes.length;
-            return { name: p, avg: count > 0 ? total / count : 0, count: count };
-        });
+            averages.push({ name: p, avg: count > 0 ? total / count : 0, count: count });
+        }
         var sorted = averages.slice().sort(function(a, b) { return b.avg - a.avg; });
         if (sorted.length === 0 || sorted[0].count === 0) { alert('Нет оценок для подсчёта'); return; }
         
         var winner = sorted[0];
         var isTie = false;
         var tieNames = [winner.name];
-        for (var i = 1; i < sorted.length; i++) {
-            if (Math.abs(sorted[i].avg - winner.avg) < 0.001 && sorted[i].count > 0) {
+        for (var t = 1; t < sorted.length; t++) {
+            if (Math.abs(sorted[t].avg - winner.avg) < 0.001 && sorted[t].count > 0) {
                 isTie = true;
-                tieNames.push(sorted[i].name);
+                tieNames.push(sorted[t].name);
             } else break;
         }
         if (isTie) {
@@ -905,6 +928,7 @@
     console.log('✅ Программа загружена!');
     console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
     console.log('📂 Номинации: Национальный, Свободный, Вечерний');
+    console.log('🗑️ Удаление работает через deleteParticipant(имя)');
 </script>
 
 </body>
