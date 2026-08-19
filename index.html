@@ -185,8 +185,7 @@
         .btn-success { background: #17a2b8; }
         .btn-primary { background: #667eea; }
         .btn-danger { background: #dc3545; }
-        .btn-delete { background: #dc3545; }
-        .btn-delete:active { background: #c82333; }
+        .btn-sm { padding: 4px 8px; font-size: 12px; }
 
         .actions {
             display: flex;
@@ -244,38 +243,19 @@
             background: #e8f5e9;
             color: #28a745;
         }
-        .sync-info { font-size: 11px; color: #888; text-align: center; margin-top: 6px; }
-        .delete-select {
-            padding: 8px 12px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 14px;
-            background: white;
-            flex: 1;
-            min-width: 120px;
-        }
-        .delete-select:focus {
-            border-color: #dc3545;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
-        }
-        .delete-row {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
-            padding: 12px;
-            background: #fff5f5;
-            border-radius: 12px;
-            border: 1px solid #fcc;
-        }
-        .delete-row label {
-            font-weight: 600;
-            font-size: 13px;
+        .delete-btn {
+            background: none;
+            border: none;
             color: #dc3545;
+            font-size: 16px;
+            padding: 2px 8px;
+            border-radius: 8px;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            font-weight: 700;
         }
+        .delete-btn:active { background: #dc3545; color: white; transform: scale(0.9); }
+        .sync-info { font-size: 11px; color: #888; text-align: center; margin-top: 6px; }
 
         @media (max-width: 600px) {
             .container { padding: 14px; }
@@ -290,8 +270,6 @@
             .token-input input { font-size: 14px; }
             .tabs { flex-wrap: wrap; }
             .tab-btn { font-size: 12px; padding: 8px; }
-            .delete-row { flex-direction: column; }
-            .delete-select { width: 100%; }
         }
     </style>
 </head>
@@ -340,19 +318,10 @@
             </div>
         </div>
 
-        <!-- ОТДЕЛЬНАЯ СЕКЦИЯ УДАЛЕНИЯ -->
-        <div class="delete-row" id="deleteSection">
-            <label>🗑️ Удалить участника:</label>
-            <select id="deleteSelect" class="delete-select">
-                <option value="">— выберите —</option>
-            </select>
-            <button class="btn btn-delete" id="deleteBtn">✕ Удалить</button>
-        </div>
-
         <div class="table-wrap">
             <table>
-                <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>Все оценки</th></tr></thead>
-                <tbody id="tableBody"><tr><td colspan="4" class="empty-message">Нет данных. Добавьте оценки!</td></tr></tbody>
+                <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>Все оценки</th><th style="width:50px;">✕</th></tr></thead>
+                <tbody id="tableBody"><tr><td colspan="5" class="empty-message">Нет данных. Добавьте оценки!</td></tr></tbody>
             </table>
         </div>
 
@@ -365,7 +334,7 @@
             <span id="winnerDisplay" style="font-weight:700;color:#333;">👑 Победитель: не определен</span>
             <span class="save-status" id="statusDisplay">☁️ Автосохранение</span>
         </div>
-        <div class="sync-info">💾 Данные автоматически сохраняются в GitHub</div>
+        <div class="sync-info">💾 Данные сохраняются в GitHub</div>
     </div>
 </div>
 
@@ -413,8 +382,6 @@
     var addBtn = document.getElementById('addBtn');
     var calcBtn = document.getElementById('calcBtn');
     var syncBtn = document.getElementById('syncBtn');
-    var deleteSelect = document.getElementById('deleteSelect');
-    var deleteBtn = document.getElementById('deleteBtn');
 
     // ========== ВКЛАДКИ ==========
     tabsContainer.addEventListener('click', function(e) {
@@ -437,13 +404,7 @@
     });
 
     // ========== УДАЛЕНИЕ ==========
-    deleteBtn.addEventListener('click', async function() {
-        var name = deleteSelect.value;
-        if (!name) {
-            alert('Выберите участника для удаления');
-            return;
-        }
-        
+    function deleteParticipant(name) {
         if (!confirm('Удалить все оценки участника "' + name + '" из номинации "' + getTabName(currentTab) + '"?')) return;
         
         var votes = getCurrentVotes();
@@ -456,30 +417,9 @@
         setCurrentVotes(newVotes);
         if (winnerName === name) winnerName = null;
         render();
-        
-        // 1. СОХРАНЯЕМ В GITHUB
-        await saveToGitHub(currentTab);
-        
-        // 2. ОСТАНАВЛИВАЕМ АВТОСИНХРОНИЗАЦИЮ
-        if (syncInterval) {
-            clearInterval(syncInterval);
-            syncInterval = null;
-        }
-        
-        // 3. ЗАГРУЖАЕМ СВЕЖИЕ ДАННЫЕ ИЗ GITHUB (чтобы перезаписать старый кэш)
-        await loadFromGitHub(currentTab);
-        
-        // 4. ЗАПУСКАЕМ АВТОСИНХРОНИЗАЦИЮ ЗАНОВО
-        if (!syncInterval) {
-            syncInterval = setInterval(function() {
-                if (githubToken) {
-                    loadFromGitHub(currentTab);
-                }
-            }, 30000);
-        }
-        
+        saveToGitHub(currentTab);
         setStatus('🗑️ Удалён участник: ' + name + ' (' + getTabName(currentTab) + ')', '#dc3545');
-    });
+    }
 
     // ========== ОСТАЛЬНОЙ КОД ==========
     function getCurrentVotes() {
@@ -743,10 +683,7 @@
 
             if (jsonData && jsonData.votes && Array.isArray(jsonData.votes)) {
                 allData[tab] = { votes: jsonData.votes };
-                if (tab === currentTab) {
-                    render();
-                    updateDeleteSelect();
-                }
+                if (tab === currentTab) render();
                 setStatusBar('online', '☁️ Данные загружены из GitHub (' + tab + ')');
                 setStatus('☁️ Загружено из GitHub', '#17a2b8');
                 return true;
@@ -764,7 +701,6 @@
     function loadTabData(tab) {
         if (allData[tab]) {
             render();
-            updateDeleteSelect();
             setStatusBar('online', '☁️ Данные загружены (' + tab + ')');
         } else {
             if (githubToken) {
@@ -772,24 +708,7 @@
             } else {
                 allData[tab] = { votes: [] };
                 render();
-                updateDeleteSelect();
             }
-        }
-    }
-
-    function updateDeleteSelect() {
-        var votes = getCurrentVotes();
-        var participants = getUniqueParticipants(votes);
-        var currentValue = deleteSelect.value;
-        deleteSelect.innerHTML = '<option value="">— выберите —</option>';
-        for (var i = 0; i < participants.length; i++) {
-            var opt = document.createElement('option');
-            opt.value = participants[i];
-            opt.textContent = participants[i];
-            deleteSelect.appendChild(opt);
-        }
-        if (currentValue && participants.indexOf(currentValue) !== -1) {
-            deleteSelect.value = currentValue;
         }
     }
 
@@ -800,10 +719,9 @@
         statVotes.textContent = votes.length;
 
         if (allParticipants.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="4" class="empty-message">Нет данных. Добавьте оценки!</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="5" class="empty-message">Нет данных. Добавьте оценки!</td></tr>';
             winnerDisplay.textContent = '👑 Победитель: не определен';
             statAvg.textContent = '—';
-            updateDeleteSelect();
             return;
         }
 
@@ -826,12 +744,13 @@
             var count = pVotes.length;
             var avg = count > 0 ? total / count : 0;
             averages.push({ name: p, avg: avg, count: count });
-            
+            var escaped = p.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
             html += '<tr>';
             html += '<td><strong>' + escapeHtml(p) + '</strong></td>';
             html += '<td class="total-cell">' + (count > 0 ? avg.toFixed(2) : '—') + '</td>';
             html += '<td>' + count + '</td>';
             html += '<td>' + allScores.join(', ') + '</td>';
+            html += '<td><button class="delete-btn" onclick="deleteParticipant(\'' + escaped + '\')">✕</button></td>';
             html += '</tr>';
         }
         tableBody.innerHTML = html;
@@ -865,8 +784,6 @@
         } else {
             winnerDisplay.textContent = '👑 Победитель: не определен';
         }
-        
-        updateDeleteSelect();
     }
 
     function getTabName(tab) {
@@ -971,15 +888,6 @@
         await loadFromGitHub('free');
         await loadFromGitHub('evening');
         render();
-        
-        if (syncInterval) {
-            clearInterval(syncInterval);
-        }
-        syncInterval = setInterval(function() {
-            if (githubToken) {
-                loadFromGitHub(currentTab);
-            }
-        }, 30000);
     }
 
     function init() {
@@ -1015,7 +923,7 @@
     console.log('✅ Программа загружена!');
     console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
     console.log('📂 Номинации: Национальный, Свободный, Вечерний');
-    console.log('🗑️ Удаление теперь работает правильно!');
+    console.log('🗑️ Удаление работает через кнопку ✕ в таблице');
 </script>
 
 </body>
