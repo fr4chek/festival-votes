@@ -401,15 +401,9 @@
     });
 
     // ================================================================
-    // УДАЛЕНИЕ ЧЕРЕЗ ДЕЛЕГИРОВАНИЕ СОБЫТИЙ (работает 100%)
+    // УДАЛЕНИЕ — ПРОСТОЙ СПОСОБ
     // ================================================================
-    tableBody.addEventListener('click', function(e) {
-        var btn = e.target.closest('.delete-btn');
-        if (!btn) return;
-        
-        var name = btn.getAttribute('data-name');
-        if (!name) return;
-        
+    function deleteParticipant(name) {
         var tabName = getTabName(currentTab);
         if (!confirm('Удалить все оценки участника "' + name + '" из номинации "' + tabName + '"?')) return;
         
@@ -425,7 +419,10 @@
         render();
         saveToGitHub(currentTab);
         setStatus('🗑️ Удалён участник: ' + name + ' (' + tabName + ')', '#dc3545');
-    });
+    }
+
+    // Делаем функцию глобальной, чтобы её можно было вызвать из onclick
+    window.deleteParticipant = deleteParticipant;
 
     // ========== ОСТАЛЬНОЙ КОД ==========
     function getCurrentVotes() {
@@ -756,7 +753,8 @@
             html += '<td class="total-cell">' + (count > 0 ? avg.toFixed(2) : '—') + '</td>';
             html += '<td>' + count + '</td>';
             html += '<td>' + allScores.join(', ') + '</td>';
-            html += '<td><button class="delete-btn" data-name="' + escaped + '">✕</button></td>';
+            // Кнопка с onclick, вызывающая глобальную функцию
+            html += '<td><button class="delete-btn" onclick="window.deleteParticipant(\'' + escaped + '\')">✕</button></td>';
             html += '</tr>';
         }
         tableBody.innerHTML = html;
@@ -935,7 +933,7 @@
     console.log('✅ Программа загружена!');
     console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
     console.log('📂 Номинации: Национальный, Свободный, Вечерний');
-    console.log('🗑️ Удаление работает через делегирование событий');
+    console.log('🗑️ Удаление работает через onclick -> window.deleteParticipant');
 </script>
 
 </body>
