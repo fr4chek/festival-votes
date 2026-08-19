@@ -109,6 +109,37 @@
         }
         .login-box .error.show { display: block; }
 
+        /* === ВКЛАДКИ === */
+        .tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 18px;
+            background: #f0f0f0;
+            border-radius: 14px;
+            padding: 4px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            cursor: pointer;
+            background: transparent;
+            color: #666;
+            transition: 0.3s;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .tab-btn:active { transform: scale(0.96); }
+        .tab-btn.active {
+            background: #667eea;
+            color: white;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        .tab-btn.active .tab-emoji { filter: none; }
+        .tab-emoji { margin-right: 6px; }
+
         .status-bar {
             text-align: center;
             padding: 10px;
@@ -227,7 +258,6 @@
         .btn-success { background: #17a2b8; }
         .btn-primary { background: #667eea; }
         .btn-danger { background: #dc3545; }
-        .btn-disabled { background: #6c757d; opacity: 0.6; cursor: not-allowed; pointer-events: none; }
 
         .actions {
             display: flex;
@@ -293,6 +323,7 @@
             padding: 4px 10px;
             border-radius: 8px;
             cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
         }
         .delete-btn:active { background: #dc3545; color: white; transform: scale(0.9); }
         .sync-info { font-size: 11px; color: #888; text-align: center; margin-top: 6px; }
@@ -319,6 +350,8 @@
             .footer { flex-direction: column; align-items: stretch; text-align: center; }
             .token-input input { font-size: 14px; }
             .login-box { padding: 28px 20px; }
+            .tabs { flex-wrap: wrap; }
+            .tab-btn { font-size: 12px; padding: 8px; }
         }
         .hidden { display: none !important; }
     </style>
@@ -345,11 +378,18 @@
 
 <!-- ===== ОСНОВНОЕ ПРИЛОЖЕНИЕ ===== -->
 <div class="container" id="mainContent" style="display: none;">
-    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 8px;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 4px;">
         <h1 style="margin-bottom: 0;">🎭 Фестиваль</h1>
         <span id="roleBadge" class="role-badge">👑 Жюри</span>
     </div>
-    <p class="subtitle" id="subtitle">Введите имя участника и оценку. Каждая оценка добавляется отдельно!</p>
+    <p class="subtitle" id="subtitle">Выберите номинацию и введите оценки</p>
+
+    <!-- ВКЛАДКИ -->
+    <div class="tabs" id="tabsContainer">
+        <button class="tab-btn active" data-tab="national">🎵 Национальный</button>
+        <button class="tab-btn" data-tab="free">🎸 Свободный</button>
+        <button class="tab-btn" data-tab="evening">🌙 Вечерний</button>
+    </div>
 
     <div id="statusBar" class="status-bar connecting">⏳ Подключение к GitHub...</div>
 
@@ -414,14 +454,26 @@
     var ADMIN_PASSWORD = 'EGORIK';
     var REPO_OWNER = 'fr4chek';
     var REPO_NAME = 'festival-votes';
-    var DATA_FILE_PATH = 'data.json';
+    
+    // Файлы для каждой номинации
+    var DATA_FILES = {
+        'national': 'data_national.json',
+        'free': 'data_free.json',
+        'evening': 'data_evening.json'
+    };
     // ============================================================
 
-    var votes = [];
+    var currentTab = 'national';
+    var allData = {
+        'national': { votes: [] },
+        'free': { votes: [] },
+        'evening': { votes: [] }
+    };
     var winnerName = null;
     var isSaving = false;
     var githubToken = '';
     var userRole = ''; // 'admin' или 'guest'
+    var dataSha = {};
 
     // DOM
     var loginOverlay = document.getElementById('loginOverlay');
@@ -437,6 +489,7 @@
     var juryPanel = document.getElementById('juryPanel');
     var guestPanel = document.getElementById('guestPanel');
     var deleteHeader = document.getElementById('deleteHeader');
+    var tabsContainer = document.getElementById('tabsContainer');
 
     var tokenBlock = document.getElementById('tokenBlock');
     var tokenInput = document.getElementById('tokenInput');
@@ -489,11 +542,10 @@
         if (userRole === 'admin') {
             roleBadge.textContent = '👑 Жюри';
             roleBadge.className = 'role-badge';
-            subtitle.textContent = 'Введите имя участника и оценку. Каждая оценка добавляется отдельно!';
+            subtitle.textContent = 'Выберите номинацию и введите оценки';
             juryPanel.style.display = 'flex';
             guestPanel.style.display = 'none';
             deleteHeader.textContent = '✕';
-            // Показываем кнопку "Победитель" и "Синхронизировать"
             calcBtn.style.display = 'inline-block';
             syncBtn.style.display = 'inline-block';
         } else {
@@ -503,7 +555,6 @@
             juryPanel.style.display = 'none';
             guestPanel.style.display = 'block';
             deleteHeader.textContent = '';
-            // Скрываем кнопки для участников
             calcBtn.style.display = 'inline-block';
             syncBtn.style.display = 'inline-block';
         }
@@ -519,7 +570,41 @@
     });
     guestBtn.addEventListener('click', enterAsGuest);
 
+    // ========== ВКЛАДКИ ==========
+    tabsContainer.addEventListener('click', function(e) {
+        var btn = e.target.closest('.tab-btn');
+        if (!btn) return;
+        var tab = btn.dataset.tab;
+        if (tab === currentTab) return;
+        
+        // Сохраняем текущие данные перед переключением
+        if (githubToken) {
+            saveToGitHub(currentTab);
+        }
+        
+        // Переключаем активную вкладку
+        document.querySelectorAll('.tab-btn').forEach(function(b) {
+            b.classList.remove('active');
+        });
+        btn.classList.add('active');
+        currentTab = tab;
+        
+        // Загружаем данные для новой вкладки
+        loadTabData(tab);
+    });
+
     // ========== ОСТАЛЬНОЙ КОД ==========
+    function getCurrentVotes() {
+        return allData[currentTab]?.votes || [];
+    }
+
+    function setCurrentVotes(votes) {
+        if (!allData[currentTab]) {
+            allData[currentTab] = { votes: [] };
+        }
+        allData[currentTab].votes = votes;
+    }
+
     function genId() { return Date.now() + '_' + Math.random().toString(36).substr(2, 6); }
 
     function setStatus(text, color) {
@@ -532,7 +617,7 @@
         statusBar.textContent = message;
     }
 
-    function getUniqueParticipants() {
+    function getUniqueParticipants(votes) {
         var set = new Set();
         votes.forEach(function(v) { set.add(v.name); });
         return Array.from(set).sort();
@@ -572,19 +657,26 @@
         return decoder.decode(bytes);
     }
 
-    async function saveToGitHub() {
+    function getDataFilePath(tab) {
+        return DATA_FILES[tab] || 'data.json';
+    }
+
+    async function saveToGitHub(tab) {
         if (isSaving || !githubToken) return false;
         if (userRole === 'guest') {
             setStatus('⛔ Участники не могут изменять данные', '#dc3545');
             return false;
         }
         
+        var filePath = getDataFilePath(tab);
+        var votes = allData[tab]?.votes || [];
+        
         try {
             isSaving = true;
-            setStatusBar('saving', '💾 Сохранение в GitHub...');
+            setStatusBar('saving', '💾 Сохранение в GitHub (' + tab + ')...');
             setStatus('⏳ Сохранение...', '#856404');
 
-            var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
+            var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
 
             var loadResponse = await fetch(url, {
                 headers: {
@@ -627,19 +719,18 @@
                 }
             });
 
-            votes = merged;
-            render();
-            saveToCache();
+            allData[tab].votes = merged;
+            if (tab === currentTab) render();
 
             var data = {
-                votes: votes,
+                votes: merged,
                 updatedAt: new Date().toISOString()
             };
             var jsonString = JSON.stringify(data, null, 2);
             var content = utf8ToBase64(jsonString);
 
             var body = {
-                message: 'Обновление данных голосования',
+                message: 'Обновление данных (' + tab + ')',
                 content: content
             };
             if (remoteSha) {
@@ -684,12 +775,11 @@
                                 finalMerged.push(v);
                             }
                         });
-                        votes = finalMerged;
-                        render();
-                        saveToCache();
+                        allData[tab].votes = finalMerged;
+                        if (tab === currentTab) render();
                         
                         var finalData = {
-                            votes: votes,
+                            votes: finalMerged,
                             updatedAt: new Date().toISOString()
                         };
                         var finalJson = JSON.stringify(finalData, null, 2);
@@ -715,27 +805,29 @@
             }
 
             var result = await saveResponse.json();
+            dataSha[tab] = result.content.sha;
             
-            setStatusBar('online', '☁️ Данные сохранены в GitHub');
+            setStatusBar('online', '☁️ Данные сохранены в GitHub (' + tab + ')');
             setStatus('☁️ Сохранено в GitHub', '#28a745');
             return true;
         } catch(e) {
             console.error('Save error:', e);
             setStatusBar('offline', '⚠️ Ошибка: ' + e.message);
             setStatus('❌ Ошибка сохранения', '#dc3545');
-            saveToCache();
             return false;
         } finally {
             isSaving = false;
         }
     }
 
-    async function loadFromGitHub() {
+    async function loadFromGitHub(tab) {
         if (!githubToken) return false;
+        var filePath = getDataFilePath(tab);
+        
         try {
-            setStatusBar('connecting', '⏳ Загрузка данных из GitHub...');
+            setStatusBar('connecting', '⏳ Загрузка данных из GitHub (' + tab + ')...');
             
-            var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
+            var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
             var response = await fetch(url, {
                 headers: {
                     'Authorization': 'token ' + githubToken,
@@ -744,12 +836,9 @@
             });
 
             if (response.status === 404) {
-                votes = [];
-                render();
-                saveToCache();
-                await saveToGitHub();
-                setStatusBar('online', '☁️ Создан новый файл данных');
-                setStatus('✅ Готово!', '#28a745');
+                allData[tab] = { votes: [] };
+                if (tab === currentTab) render();
+                await saveToGitHub(tab);
                 return true;
             }
 
@@ -758,15 +847,15 @@
             }
 
             var data = await response.json();
+            dataSha[tab] = data.sha;
             var content = base64ToUtf8(data.content);
             var jsonData = JSON.parse(content);
 
             if (jsonData && jsonData.votes && Array.isArray(jsonData.votes)) {
-                votes = jsonData.votes;
-                render();
-                setStatusBar('online', '☁️ Данные загружены из GitHub (' + votes.length + ' оценок)');
+                allData[tab] = { votes: jsonData.votes };
+                if (tab === currentTab) render();
+                setStatusBar('online', '☁️ Данные загружены из GitHub (' + tab + ')');
                 setStatus('☁️ Загружено из GitHub', '#17a2b8');
-                saveToCache();
                 return true;
             }
 
@@ -775,38 +864,27 @@
             console.error('Load error:', e);
             setStatusBar('offline', '⚠️ Ошибка загрузки: ' + e.message);
             setStatus('❌ Ошибка загрузки', '#dc3545');
-            if (loadFromCache()) {
-                render();
-                setStatusBar('offline', '📂 Загружено из кэша (офлайн)');
-                setStatus('📂 Загружено из кэша', '#fd7e14');
-                return true;
-            }
             return false;
         }
     }
 
-    function saveToCache() {
-        try {
-            localStorage.setItem('festival_votes_cache', JSON.stringify({ votes: votes }));
-        } catch(e) { console.warn('Cache save error:', e); }
-    }
-
-    function loadFromCache() {
-        try {
-            var raw = localStorage.getItem('festival_votes_cache');
-            if (raw) {
-                var data = JSON.parse(raw);
-                if (data.votes && Array.isArray(data.votes)) {
-                    votes = data.votes;
-                    return true;
-                }
+    function loadTabData(tab) {
+        if (allData[tab]) {
+            render();
+            setStatusBar('online', '☁️ Данные загружены (' + tab + ')');
+        } else {
+            if (githubToken) {
+                loadFromGitHub(tab);
+            } else {
+                allData[tab] = { votes: [] };
+                render();
             }
-        } catch(e) { console.warn('Cache load error:', e); }
-        return false;
+        }
     }
 
     function render() {
-        var allParticipants = getUniqueParticipants();
+        var votes = getCurrentVotes();
+        var allParticipants = getUniqueParticipants(votes);
         statParticipants.textContent = allParticipants.length;
         statVotes.textContent = votes.length;
 
@@ -836,7 +914,6 @@
             html += '<td class="total-cell">' + (count > 0 ? avg.toFixed(2) : '—') + '</td>';
             html += '<td>' + count + '</td>';
             html += '<td>' + allScores.join(', ') + '</td>';
-            // Кнопка удаления только для администратора
             if (userRole === 'admin') {
                 html += '<td><button class="delete-btn" onclick="deleteParticipant(\'' + escaped + '\')">✕</button></td>';
             } else {
@@ -862,7 +939,7 @@
         if (winnerName) {
             var winner = averages.find(function(a) { return a.name === winnerName; });
             if (winner && winner.count > 0) {
-                winnerDisplay.textContent = '👑 Победитель: ' + winnerName + ' (средний балл ' + winner.avg.toFixed(2) + ')';
+                winnerDisplay.textContent = '👑 Победитель в номинации "' + getTabName(currentTab) + '": ' + winnerName + ' (средний балл ' + winner.avg.toFixed(2) + ')';
             } else {
                 winnerDisplay.textContent = '👑 Победитель: не определен';
             }
@@ -871,17 +948,29 @@
         }
     }
 
+    function getTabName(tab) {
+        var names = {
+            'national': 'Национальный',
+            'free': 'Свободный',
+            'evening': 'Вечерний'
+        };
+        return names[tab] || tab;
+    }
+
     window.deleteParticipant = async function(name) {
         if (userRole === 'guest') {
             alert('Участники не могут удалять данные');
             return;
         }
-        if (!confirm('Удалить все оценки участника "' + name + '"?')) return;
+        if (!confirm('Удалить все оценки участника "' + name + '" из номинации "' + getTabName(currentTab) + '"?')) return;
+        
+        var votes = getCurrentVotes();
         votes = votes.filter(function(v) { return v.name !== name; });
+        setCurrentVotes(votes);
         if (winnerName === name) winnerName = null;
         render();
-        await saveToGitHub();
-        setStatus('🗑️ Удалён участник: ' + name, '#dc3545');
+        await saveToGitHub(currentTab);
+        setStatus('🗑️ Удалён участник: ' + name + ' (' + getTabName(currentTab) + ')', '#dc3545');
     };
 
     async function addVote() {
@@ -897,18 +986,24 @@
             scoreInput.focus();
             return;
         }
+        
+        var votes = getCurrentVotes();
         votes.push({ id: genId(), name: name, score: score });
+        setCurrentVotes(votes);
+        
         nameInput.value = '';
         scoreInput.value = '';
         nameInput.focus();
         render();
-        await saveToGitHub();
-        setStatus('✅ Оценка добавлена!', '#28a745');
+        await saveToGitHub(currentTab);
+        setStatus('✅ Оценка добавлена! (' + getTabName(currentTab) + ')', '#28a745');
     }
 
     function calculateWinner() {
-        var allParticipants = getUniqueParticipants();
+        var votes = getCurrentVotes();
+        var allParticipants = getUniqueParticipants(votes);
         if (allParticipants.length === 0) { alert('Нет данных для подсчёта'); return; }
+        
         var averages = allParticipants.map(function(p) {
             var pVotes = votes.filter(function(v) { return v.name === p; });
             var total = 0;
@@ -918,6 +1013,7 @@
         });
         var sorted = averages.slice().sort(function(a, b) { return b.avg - a.avg; });
         if (sorted.length === 0 || sorted[0].count === 0) { alert('Нет оценок для подсчёта'); return; }
+        
         var winner = sorted[0];
         var isTie = false;
         var tieNames = [winner.name];
@@ -929,10 +1025,10 @@
         }
         if (isTie) {
             winnerName = null;
-            winnerDisplay.textContent = '🤝 Ничья между: ' + tieNames.join(', ') + ' (средний балл ' + winner.avg.toFixed(2) + ')';
+            winnerDisplay.textContent = '🤝 Ничья в номинации "' + getTabName(currentTab) + '" между: ' + tieNames.join(', ') + ' (средний балл ' + winner.avg.toFixed(2) + ')';
         } else {
             winnerName = winner.name;
-            winnerDisplay.textContent = '👑 Победитель: ' + winner.name + ' (средний балл ' + winner.avg.toFixed(2) + ')';
+            winnerDisplay.textContent = '👑 Победитель в номинации "' + getTabName(currentTab) + '": ' + winner.name + ' (средний балл ' + winner.avg.toFixed(2) + ')';
         }
         render();
     }
@@ -940,8 +1036,8 @@
     async function syncData() {
         if (!githubToken) { alert('Сначала подключитесь к GitHub'); return; }
         setStatus('🔄 Синхронизация...', '#856404');
-        await loadFromGitHub();
-        setStatus('✅ Синхронизация завершена', '#28a745');
+        await loadFromGitHub(currentTab);
+        setStatus('✅ Синхронизация завершена (' + getTabName(currentTab) + ')', '#28a745');
     }
 
     async function connectToGitHub() {
@@ -961,11 +1057,15 @@
         tokenBlock.style.display = 'none';
         appContent.style.display = 'block';
         
-        await loadFromGitHub();
+        // Загружаем все три номинации
+        await loadFromGitHub('national');
+        await loadFromGitHub('free');
+        await loadFromGitHub('evening');
+        render();
         
         setInterval(function() {
-            if (votes.length > 0 && githubToken && userRole === 'admin') {
-                saveToGitHub();
+            if (githubToken && userRole === 'admin') {
+                saveToGitHub(currentTab);
             }
         }, 30000);
     }
@@ -1001,6 +1101,7 @@
     console.log('✅ Программа загружена!');
     console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
     console.log('👑 Пароль администратора: EGORIK');
+    console.log('📂 Номинации: Национальный, Свободный, Вечерний');
 </script>
 
 </body>
