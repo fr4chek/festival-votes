@@ -17,7 +17,7 @@
             margin: 0;
         }
         .container {
-            max-width: 900px;
+            max-width: 950px;
             margin: 0 auto;
             background: white;
             border-radius: 20px;
@@ -27,7 +27,88 @@
         }
         h1 { text-align: center; color: #333; margin-bottom: 4px; font-size: 24px; }
         .subtitle { text-align: center; color: #666; margin-bottom: 20px; font-size: 14px; }
-        
+
+        /* === ВХОД === */
+        .login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+        }
+        .login-box {
+            background: white;
+            padding: 36px 30px;
+            border-radius: 20px;
+            max-width: 420px;
+            width: 92%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        .login-box h2 { margin-bottom: 6px; color: #333; font-size: 22px; }
+        .login-box p { color: #666; margin-bottom: 20px; font-size: 14px; }
+        .login-box .role-btn {
+            width: 100%;
+            padding: 14px;
+            font-size: 18px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+            background: #667eea;
+            margin-bottom: 10px;
+            transition: 0.2s;
+        }
+        .login-box .role-btn:active { transform: scale(0.97); }
+        .login-box .role-btn.guest { background: #28a745; }
+        .login-box .role-btn.guest:hover { background: #218838; }
+        .login-box .password-input {
+            display: none;
+            margin-top: 10px;
+        }
+        .login-box .password-input input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 18px;
+            text-align: center;
+            letter-spacing: 4px;
+            margin-bottom: 10px;
+            background: white;
+        }
+        .login-box .password-input input:focus {
+            border-color: #667eea;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+        }
+        .login-box .password-input .btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 16px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+            background: #667eea;
+        }
+        .login-box .error {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+        .login-box .error.show { display: block; }
+
         .status-bar {
             text-align: center;
             padding: 10px;
@@ -40,7 +121,7 @@
         .status-bar.offline { background: #f8d7da; color: #721c24; border: 2px solid #dc3545; }
         .status-bar.connecting { background: #fff3cd; color: #856404; border: 2px solid #ffc107; }
         .status-bar.saving { background: #cce5ff; color: #004085; border: 2px solid #007bff; }
-        
+
         .token-input {
             background: #f8f9ff;
             padding: 16px;
@@ -72,7 +153,7 @@
             margin-top: 10px;
             width: 100%;
         }
-        
+
         .stats {
             display: flex;
             flex-wrap: wrap;
@@ -90,7 +171,7 @@
         }
         .stat-card .num { font-size: 24px; font-weight: 700; color: #667eea; }
         .stat-card .label { font-size: 12px; color: #666; }
-        
+
         .input-section {
             display: flex;
             flex-wrap: wrap;
@@ -127,7 +208,7 @@
         .input-group input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
         }
-        
+
         .btn {
             padding: 12px 20px;
             border: none;
@@ -145,7 +226,9 @@
         .btn-warning { background: #ffc107; color: #333; }
         .btn-success { background: #17a2b8; }
         .btn-primary { background: #667eea; }
-        
+        .btn-danger { background: #dc3545; }
+        .btn-disabled { background: #6c757d; opacity: 0.6; cursor: not-allowed; pointer-events: none; }
+
         .actions {
             display: flex;
             flex-wrap: wrap;
@@ -158,7 +241,7 @@
             min-width: 100px;
             text-align: center;
         }
-        
+
         .table-wrap {
             overflow-x: auto;
             border-radius: 15px;
@@ -184,7 +267,7 @@
         .winner-row td { background: #ffd700 !important; font-weight: 700; border-bottom: 3px solid #ffa500; }
         .total-cell { font-weight: 700; font-size: 16px; color: #333; }
         .empty-message { text-align: center; padding: 25px; color: #888; font-style: italic; }
-        
+
         .footer {
             margin-top: 16px;
             display: flex;
@@ -213,7 +296,17 @@
         }
         .delete-btn:active { background: #dc3545; color: white; transform: scale(0.9); }
         .sync-info { font-size: 11px; color: #888; text-align: center; margin-top: 6px; }
-        
+        .role-badge {
+            display: inline-block;
+            padding: 3px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            background: #667eea;
+            color: white;
+        }
+        .role-badge.guest { background: #28a745; }
+
         @media (max-width: 600px) {
             .container { padding: 14px; }
             .input-section { flex-direction: column; padding: 12px; }
@@ -225,15 +318,40 @@
             h1 { font-size: 20px; }
             .footer { flex-direction: column; align-items: stretch; text-align: center; }
             .token-input input { font-size: 14px; }
+            .login-box { padding: 28px 20px; }
         }
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
-<div class="container" id="mainContent">
-    <h1>🎭 Фестиваль — Подсчёт голосов</h1>
-    <p class="subtitle">Введите имя участника и оценку. Каждая оценка добавляется отдельно!</p>
+<!-- ===== ОКНО ВХОДА ===== -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+        <h2>🎭 Фестиваль</h2>
+        <p style="margin-bottom: 20px;">Выберите, как вы хотите войти</p>
+        
+        <button class="role-btn" id="adminBtn">👑 Войти как жюри</button>
+        
+        <div class="password-input" id="passwordBlock">
+            <input type="password" id="passwordInput" placeholder="Введите пароль" maxlength="20" autocomplete="off">
+            <button class="btn" id="passwordBtn" style="background: #667eea;">Подтвердить</button>
+            <div class="error" id="loginError">❌ Неверный пароль</div>
+        </div>
+        
+        <button class="role-btn guest" id="guestBtn">👁️ Войти как участник (только просмотр)</button>
+    </div>
+</div>
+
+<!-- ===== ОСНОВНОЕ ПРИЛОЖЕНИЕ ===== -->
+<div class="container" id="mainContent" style="display: none;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 8px;">
+        <h1 style="margin-bottom: 0;">🎭 Фестиваль</h1>
+        <span id="roleBadge" class="role-badge">👑 Жюри</span>
+    </div>
+    <p class="subtitle" id="subtitle">Введите имя участника и оценку. Каждая оценка добавляется отдельно!</p>
+
+    <div id="statusBar" class="status-bar connecting">⏳ Подключение к GitHub...</div>
 
     <div class="token-input" id="tokenBlock">
         <label>🔑 Введите GitHub токен для доступа к данным</label>
@@ -243,15 +361,14 @@
     </div>
 
     <div id="appContent" style="display: none;">
-        <div id="statusBar" class="status-bar connecting">⏳ Подключение к GitHub...</div>
-
         <div class="stats">
             <div class="stat-card"><div class="num" id="statParticipants">0</div><div class="label">👤 Участников</div></div>
             <div class="stat-card"><div class="num" id="statVotes">0</div><div class="label">📊 Оценок</div></div>
             <div class="stat-card" style="background:#fff3cd;"><div class="num" id="statAvg">—</div><div class="label">🏆 Средний балл лидера</div></div>
         </div>
 
-        <div class="input-section">
+        <!-- Форма добавления (только для жюри) -->
+        <div id="juryPanel" class="input-section">
             <div class="input-group">
                 <label>👤 Имя участника</label>
                 <input type="text" id="nameInput" placeholder="Например: Анна">
@@ -265,9 +382,14 @@
             </div>
         </div>
 
+        <!-- Для участников показываем только таблицу -->
+        <div id="guestPanel" style="display: none; text-align: center; padding: 10px; background: #e8f5e9; border-radius: 15px; margin-bottom: 20px;">
+            <span style="font-size: 16px; color: #2e7d32;">👁️ Вы вошли как участник — вы можете только смотреть результаты</span>
+        </div>
+
         <div class="table-wrap">
             <table>
-                <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>Все оценки</th><th>✕</th></tr></thead>
+                <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>Все оценки</th><th id="deleteHeader">✕</th></tr></thead>
                 <tbody id="tableBody"><tr><td colspan="5" class="empty-message">Нет данных. Добавьте оценки!</td></tr></tbody>
             </table>
         </div>
@@ -289,6 +411,7 @@
     // ============================================================
     // НАСТРОЙКИ
     // ============================================================
+    var ADMIN_PASSWORD = 'EGORIK';
     var REPO_OWNER = 'fr4chek';
     var REPO_NAME = 'festival-votes';
     var DATA_FILE_PATH = 'data.json';
@@ -298,9 +421,23 @@
     var winnerName = null;
     var isSaving = false;
     var githubToken = '';
-    var isConnected = false;
+    var userRole = ''; // 'admin' или 'guest'
 
     // DOM
+    var loginOverlay = document.getElementById('loginOverlay');
+    var adminBtn = document.getElementById('adminBtn');
+    var guestBtn = document.getElementById('guestBtn');
+    var passwordBlock = document.getElementById('passwordBlock');
+    var passwordInput = document.getElementById('passwordInput');
+    var passwordBtn = document.getElementById('passwordBtn');
+    var loginError = document.getElementById('loginError');
+    var mainContent = document.getElementById('mainContent');
+    var roleBadge = document.getElementById('roleBadge');
+    var subtitle = document.getElementById('subtitle');
+    var juryPanel = document.getElementById('juryPanel');
+    var guestPanel = document.getElementById('guestPanel');
+    var deleteHeader = document.getElementById('deleteHeader');
+
     var tokenBlock = document.getElementById('tokenBlock');
     var tokenInput = document.getElementById('tokenInput');
     var tokenBtn = document.getElementById('tokenBtn');
@@ -318,6 +455,71 @@
     var calcBtn = document.getElementById('calcBtn');
     var syncBtn = document.getElementById('syncBtn');
 
+    // ========== ВХОД ==========
+    function showAdminPassword() {
+        passwordBlock.style.display = 'block';
+        loginError.classList.remove('show');
+        passwordInput.value = '';
+        passwordInput.focus();
+    }
+
+    function checkAdminPassword() {
+        if (passwordInput.value.trim() === ADMIN_PASSWORD) {
+            userRole = 'admin';
+            enterApp();
+        } else {
+            loginError.classList.add('show');
+            passwordInput.value = '';
+            passwordInput.focus();
+            setTimeout(function() {
+                loginError.classList.remove('show');
+            }, 3000);
+        }
+    }
+
+    function enterAsGuest() {
+        userRole = 'guest';
+        enterApp();
+    }
+
+    function enterApp() {
+        loginOverlay.style.display = 'none';
+        mainContent.style.display = 'block';
+        
+        if (userRole === 'admin') {
+            roleBadge.textContent = '👑 Жюри';
+            roleBadge.className = 'role-badge';
+            subtitle.textContent = 'Введите имя участника и оценку. Каждая оценка добавляется отдельно!';
+            juryPanel.style.display = 'flex';
+            guestPanel.style.display = 'none';
+            deleteHeader.textContent = '✕';
+            // Показываем кнопку "Победитель" и "Синхронизировать"
+            calcBtn.style.display = 'inline-block';
+            syncBtn.style.display = 'inline-block';
+        } else {
+            roleBadge.textContent = '👁️ Участник';
+            roleBadge.className = 'role-badge guest';
+            subtitle.textContent = 'Вы вошли как участник — только просмотр результатов';
+            juryPanel.style.display = 'none';
+            guestPanel.style.display = 'block';
+            deleteHeader.textContent = '';
+            // Скрываем кнопки для участников
+            calcBtn.style.display = 'inline-block';
+            syncBtn.style.display = 'inline-block';
+        }
+        
+        init();
+    }
+
+    // Обработчики входа
+    adminBtn.addEventListener('click', showAdminPassword);
+    passwordBtn.addEventListener('click', checkAdminPassword);
+    passwordInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); checkAdminPassword(); }
+    });
+    guestBtn.addEventListener('click', enterAsGuest);
+
+    // ========== ОСТАЛЬНОЙ КОД ==========
     function genId() { return Date.now() + '_' + Math.random().toString(36).substr(2, 6); }
 
     function setStatus(text, color) {
@@ -350,9 +552,6 @@
         try { return localStorage.getItem('github_token') || ''; } catch(e) { return ''; }
     }
 
-    // ================================================================
-    // КОДИРОВАНИЕ
-    // ================================================================
     function utf8ToBase64(str) {
         var encoder = new TextEncoder();
         var bytes = encoder.encode(str);
@@ -373,11 +572,12 @@
         return decoder.decode(bytes);
     }
 
-    // ================================================================
-    // ОСНОВНАЯ ФУНКЦИЯ — ЗАГРУЗИТЬ И СОХРАНИТЬ
-    // ================================================================
     async function saveToGitHub() {
         if (isSaving || !githubToken) return false;
+        if (userRole === 'guest') {
+            setStatus('⛔ Участники не могут изменять данные', '#dc3545');
+            return false;
+        }
         
         try {
             isSaving = true;
@@ -386,7 +586,6 @@
 
             var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
 
-            // ===== 1. ЗАГРУЖАЕМ ТЕКУЩИЕ ДАННЫЕ С GITHUB =====
             var loadResponse = await fetch(url, {
                 headers: {
                     'Authorization': 'token ' + githubToken,
@@ -406,17 +605,14 @@
                     remoteVotes = remoteJson.votes;
                 }
             } else if (loadResponse.status === 404) {
-                // Файла нет — создадим
                 remoteSha = null;
             } else {
                 throw new Error('Ошибка загрузки: ' + loadResponse.status);
             }
 
-            // ===== 2. ОБЪЕДИНЯЕМ ДАННЫЕ =====
             var merged = [];
             var ids = new Set();
 
-            // Сначала все с GitHub
             remoteVotes.forEach(function(v) {
                 if (!ids.has(v.id)) {
                     ids.add(v.id);
@@ -424,7 +620,6 @@
                 }
             });
 
-            // Потом локальные (новые)
             votes.forEach(function(v) {
                 if (!ids.has(v.id)) {
                     ids.add(v.id);
@@ -436,7 +631,6 @@
             render();
             saveToCache();
 
-            // ===== 3. СОХРАНЯЕМ В GITHUB =====
             var data = {
                 votes: votes,
                 updatedAt: new Date().toISOString()
@@ -463,9 +657,7 @@
             });
 
             if (!saveResponse.ok) {
-                // Если конфликт — пробуем ещё раз (загружаем свежие данные)
                 if (saveResponse.status === 409) {
-                    // Повторно загружаем и объединяем
                     var retryResponse = await fetch(url, {
                         headers: {
                             'Authorization': 'token ' + githubToken,
@@ -478,7 +670,6 @@
                         var retryJson = JSON.parse(retryContent);
                         var retryVotes = retryJson.votes || [];
                         
-                        // Объединяем снова
                         var finalMerged = [];
                         var finalIds = new Set();
                         retryVotes.forEach(function(v) {
@@ -497,7 +688,6 @@
                         render();
                         saveToCache();
                         
-                        // Сохраняем с новым SHA
                         var finalData = {
                             votes: votes,
                             updatedAt: new Date().toISOString()
@@ -540,9 +730,6 @@
         }
     }
 
-    // ================================================================
-    // ЗАГРУЗКА ДАННЫХ ИЗ GITHUB
-    // ================================================================
     async function loadFromGitHub() {
         if (!githubToken) return false;
         try {
@@ -557,7 +744,6 @@
             });
 
             if (response.status === 404) {
-                // Файла нет — создаём пустые данные
                 votes = [];
                 render();
                 saveToCache();
@@ -599,7 +785,6 @@
         }
     }
 
-    // ========== РАБОТА С КЭШЕМ ==========
     function saveToCache() {
         try {
             localStorage.setItem('festival_votes_cache', JSON.stringify({ votes: votes }));
@@ -620,7 +805,6 @@
         return false;
     }
 
-    // ========== РЕНДЕРИНГ ==========
     function render() {
         var allParticipants = getUniqueParticipants();
         statParticipants.textContent = allParticipants.length;
@@ -652,7 +836,12 @@
             html += '<td class="total-cell">' + (count > 0 ? avg.toFixed(2) : '—') + '</td>';
             html += '<td>' + count + '</td>';
             html += '<td>' + allScores.join(', ') + '</td>';
-            html += '<td><button class="delete-btn" onclick="deleteParticipant(\'' + escaped + '\')">✕</button></td>';
+            // Кнопка удаления только для администратора
+            if (userRole === 'admin') {
+                html += '<td><button class="delete-btn" onclick="deleteParticipant(\'' + escaped + '\')">✕</button></td>';
+            } else {
+                html += '<td></td>';
+            }
             html += '</tr>';
         });
         tableBody.innerHTML = html;
@@ -682,8 +871,11 @@
         }
     }
 
-    // ========== ОСНОВНЫЕ ДЕЙСТВИЯ ==========
     window.deleteParticipant = async function(name) {
+        if (userRole === 'guest') {
+            alert('Участники не могут удалять данные');
+            return;
+        }
         if (!confirm('Удалить все оценки участника "' + name + '"?')) return;
         votes = votes.filter(function(v) { return v.name !== name; });
         if (winnerName === name) winnerName = null;
@@ -693,6 +885,10 @@
     };
 
     async function addVote() {
+        if (userRole === 'guest') {
+            alert('Участники не могут добавлять оценки');
+            return;
+        }
         var name = nameInput.value.trim();
         var score = parseFloat(scoreInput.value);
         if (!name) { alert('Введите имя участника'); nameInput.focus(); return; }
@@ -748,7 +944,6 @@
         setStatus('✅ Синхронизация завершена', '#28a745');
     }
 
-    // ========== ПОДКЛЮЧЕНИЕ ==========
     async function connectToGitHub() {
         var token = tokenInput.value.trim();
         if (!token) {
@@ -768,15 +963,13 @@
         
         await loadFromGitHub();
         
-        // Автосохранение каждые 30 секунд
         setInterval(function() {
-            if (votes.length > 0 && githubToken) {
+            if (votes.length > 0 && githubToken && userRole === 'admin') {
                 saveToGitHub();
             }
         }, 30000);
     }
 
-    // ========== ИНИЦИАЛИЗАЦИЯ ==========
     function init() {
         var savedToken = loadToken();
         if (savedToken) {
@@ -805,10 +998,9 @@
         if (e.key === 'Enter') { e.preventDefault(); addVote(); }
     });
 
-    init();
-
     console.log('✅ Программа загружена!');
     console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
+    console.log('👑 Пароль администратора: EGORIK');
 </script>
 
 </body>
