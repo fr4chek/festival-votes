@@ -257,7 +257,67 @@
         }
         .sync-info { font-size: 11px; color: #888; text-align: center; margin-top: 6px; }
 
-        /* Модальное окно для очистки */
+        /* ГРАФИК */
+        .chart-section {
+            margin-top: 20px;
+            padding: 16px;
+            background: rgba(255,255,255,0.5);
+            border-radius: 15px;
+            border: 1px solid #eee;
+        }
+        .chart-section h3 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+        .chart-container {
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 12px;
+            min-height: 150px;
+            padding: 10px 0;
+            flex-wrap: wrap;
+        }
+        .chart-bar-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 40px;
+        }
+        .chart-bar {
+            width: 30px;
+            border-radius: 6px 6px 0 0;
+            background: linear-gradient(180deg, #667eea, #764ba2);
+            transition: height 0.5s ease;
+            min-height: 4px;
+        }
+        .chart-bar.gold { background: linear-gradient(180deg, #ffd700, #ffb300); }
+        .chart-bar.silver { background: linear-gradient(180deg, #c0c0c0, #9e9e9e); }
+        .chart-bar.bronze { background: linear-gradient(180deg, #cd7f32, #a0522d); }
+        .chart-label {
+            font-size: 11px;
+            margin-top: 4px;
+            text-align: center;
+            font-weight: 600;
+            color: #333;
+            word-break: break-word;
+            max-width: 60px;
+        }
+        .chart-score {
+            font-size: 10px;
+            color: #666;
+            margin-bottom: 2px;
+        }
+        .chart-empty {
+            text-align: center;
+            color: #888;
+            padding: 20px;
+            font-style: italic;
+        }
+
+        /* Модальные окна */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -276,7 +336,7 @@
             background: white;
             padding: 30px;
             border-radius: 20px;
-            max-width: 400px;
+            max-width: 420px;
             width: 90%;
             text-align: center;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
@@ -315,6 +375,48 @@
         }
         .modal-box .winner-list .emoji { margin-right: 8px; }
 
+        /* Подиум */
+        .podium {
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 20px;
+            padding: 20px 0;
+            flex-wrap: wrap;
+        }
+        .podium-item {
+            text-align: center;
+            min-width: 80px;
+        }
+        .podium-item .medal {
+            font-size: 36px;
+            display: block;
+        }
+        .podium-item .place {
+            font-weight: 700;
+            font-size: 14px;
+            color: #555;
+        }
+        .podium-item .podium-name {
+            font-weight: 700;
+            font-size: 16px;
+            color: #333;
+            margin-top: 2px;
+        }
+        .podium-item .podium-score {
+            font-size: 13px;
+            color: #666;
+        }
+        .podium-step {
+            width: 100px;
+            border-radius: 8px 8px 0 0;
+            margin: 0 auto;
+            transition: height 0.5s ease;
+        }
+        .podium-step.gold { background: linear-gradient(180deg, #ffd700, #f9a825); height: 100px; }
+        .podium-step.silver { background: linear-gradient(180deg, #c0c0c0, #9e9e9e); height: 80px; }
+        .podium-step.bronze { background: linear-gradient(180deg, #cd7f32, #a0522d); height: 60px; }
+
         @media (max-width: 600px) {
             .container { padding: 14px; }
             .input-section { flex-direction: column; padding: 12px; }
@@ -331,6 +433,11 @@
             .delete-section { flex-direction: column; }
             .delete-section input { width: 100%; }
             .modal-box { padding: 20px; }
+            .podium { gap: 10px; }
+            .podium-step { width: 70px; }
+            .podium-item { min-width: 60px; }
+            .chart-bar { width: 20px; }
+            .chart-bar-wrapper { min-width: 30px; }
         }
     </style>
 </head>
@@ -387,6 +494,14 @@
             </table>
         </div>
 
+        <!-- ГРАФИК -->
+        <div class="chart-section" id="chartSection">
+            <h3>📊 Рейтинг участников</h3>
+            <div class="chart-container" id="chartContainer">
+                <div class="chart-empty">Нет данных для отображения</div>
+            </div>
+        </div>
+
         <div class="actions">
             <button class="btn btn-warning" id="calcBtn">🏆 Победитель</button>
             <button class="btn btn-success" id="syncBtn">🔄 Синхронизировать</button>
@@ -417,14 +532,12 @@
     </div>
 </div>
 
-<!-- Модальное окно для ничьей -->
-<div class="modal-overlay" id="tieModal">
+<!-- Модальное окно для подиума -->
+<div class="modal-overlay" id="podiumModal">
     <div class="modal-box">
-        <h2>🤝 НИЧЬЯ!</h2>
-        <p>Несколько участников набрали одинаковое количество баллов:</p>
-        <ul class="winner-list" id="tieList"></ul>
-        <p style="font-size: 14px; color: #888; margin-top: 10px;">Средний балл победителей: <span id="tieScore">0</span></p>
-        <button class="btn btn-primary" id="closeTieBtn" style="margin-top: 15px; width: 100%;">👏 Отлично!</button>
+        <h2>🏆 Победители!</h2>
+        <div class="podium" id="podiumContainer"></div>
+        <button class="btn btn-primary" id="closePodiumBtn" style="margin-top: 15px; width: 100%;">👏 Отлично!</button>
     </div>
 </div>
 
@@ -469,6 +582,7 @@
     var deleteBtn = document.getElementById('deleteBtn');
     var deleteName = document.getElementById('deleteName');
     var clearBtn = document.getElementById('clearBtn');
+    var chartContainer = document.getElementById('chartContainer');
 
     var clearModal = document.getElementById('clearModal');
     var captchaInput = document.getElementById('captchaInput');
@@ -476,10 +590,9 @@
     var cancelClearBtn = document.getElementById('cancelClearBtn');
     var captchaError = document.getElementById('captchaError');
 
-    var tieModal = document.getElementById('tieModal');
-    var tieList = document.getElementById('tieList');
-    var tieScore = document.getElementById('tieScore');
-    var closeTieBtn = document.getElementById('closeTieBtn');
+    var podiumModal = document.getElementById('podiumModal');
+    var podiumContainer = document.getElementById('podiumContainer');
+    var closePodiumBtn = document.getElementById('closePodiumBtn');
 
     // ========== ВКЛАДКИ ==========
     tabsContainer.addEventListener('click', function(e) {
@@ -491,6 +604,7 @@
         btn.classList.add('active');
         currentTab = tab;
         render();
+        updateChart();
     });
 
     // ========== УДАЛЕНИЕ ==========
@@ -511,6 +625,7 @@
         allData[currentTab].votes = newVotes;
         if (winnerName === name) winnerName = null;
         render();
+        updateChart();
         lastUpdateTime[currentTab] = Date.now();
         saveToGitHub(currentTab);
         deleteName.value = '';
@@ -541,6 +656,7 @@
             allData[currentTab].votes = [];
             winnerName = null;
             render();
+            updateChart();
             lastUpdateTime[currentTab] = Date.now();
             saveToGitHub(currentTab);
             setStatus('🗑️ Всё очищено в номинации "' + getTabName(currentTab) + '"', '#dc3545');
@@ -569,16 +685,119 @@
         if (e.target === clearModal) { cancelClearBtn.click(); }
     });
 
-    // ========== ОКНО НИЧЬЕЙ ==========
-    closeTieBtn.addEventListener('click', function() {
-        tieModal.classList.remove('active');
+    // ========== ПОДИУМ ==========
+    closePodiumBtn.addEventListener('click', function() {
+        podiumModal.classList.remove('active');
     });
 
-    tieModal.addEventListener('click', function(e) {
-        if (e.target === tieModal) {
-            tieModal.classList.remove('active');
+    podiumModal.addEventListener('click', function(e) {
+        if (e.target === podiumModal) {
+            podiumModal.classList.remove('active');
         }
     });
+
+    // ========== ГРАФИК ==========
+    function updateChart() {
+        var votes = allData[currentTab]?.votes || [];
+        var participants = getUniqueParticipants(votes);
+        
+        if (participants.length === 0) {
+            chartContainer.innerHTML = '<div class="chart-empty">Нет данных для отображения</div>';
+            return;
+        }
+
+        var averages = [];
+        for (var i = 0; i < participants.length; i++) {
+            var p = participants[i];
+            var pVotes = [];
+            for (var j = 0; j < votes.length; j++) {
+                if (votes[j].name === p) {
+                    pVotes.push(votes[j]);
+                }
+            }
+            var total = 0;
+            for (var k = 0; k < pVotes.length; k++) {
+                total += pVotes[k].score;
+            }
+            var count = pVotes.length;
+            var avg = count > 0 ? total / count : 0;
+            averages.push({ name: p, avg: avg });
+        }
+
+        // Сортируем по убыванию
+        averages.sort(function(a, b) { return b.avg - a.avg; });
+
+        // Определяем максимальный балл для масштабирования
+        var maxAvg = averages[0].avg > 0 ? averages[0].avg : 1;
+        var colors = ['gold', 'silver', 'bronze'];
+
+        var html = '';
+        for (var m = 0; m < averages.length; m++) {
+            var item = averages[m];
+            var percent = (item.avg / maxAvg) * 100;
+            var colorClass = m < 3 ? colors[m] : '';
+            var barHeight = Math.max(percent * 1.2, 8);
+            html += '<div class="chart-bar-wrapper">';
+            html += '<div class="chart-score">' + item.avg.toFixed(1) + '</div>';
+            html += '<div class="chart-bar ' + colorClass + '" style="height: ' + barHeight + 'px;"></div>';
+            html += '<div class="chart-label">' + escapeHtml(item.name) + '</div>';
+            html += '</div>';
+        }
+        chartContainer.innerHTML = html;
+    }
+
+    // ========== ПОКАЗ ПОДИУМА ==========
+    function showPodium() {
+        var votes = allData[currentTab]?.votes || [];
+        var participants = getUniqueParticipants(votes);
+        
+        if (participants.length === 0) {
+            alert('Нет данных для отображения');
+            return;
+        }
+
+        var averages = [];
+        for (var i = 0; i < participants.length; i++) {
+            var p = participants[i];
+            var pVotes = [];
+            for (var j = 0; j < votes.length; j++) {
+                if (votes[j].name === p) {
+                    pVotes.push(votes[j]);
+                }
+            }
+            var total = 0;
+            for (var k = 0; k < pVotes.length; k++) {
+                total += pVotes[k].score;
+            }
+            var count = pVotes.length;
+            var avg = count > 0 ? total / count : 0;
+            averages.push({ name: p, avg: avg, count: count });
+        }
+
+        // Сортируем по убыванию
+        averages.sort(function(a, b) { return b.avg - a.avg; });
+
+        // Берём топ-3
+        var top3 = averages.slice(0, 3);
+        var medals = ['🥇', '🥈', '🥉'];
+        var steps = ['gold', 'silver', 'bronze'];
+        var stepHeights = [100, 80, 60];
+
+        var html = '';
+        for (var m = 0; m < top3.length; m++) {
+            var item = top3[m];
+            html += '<div class="podium-item">';
+            html += '<span class="medal">' + medals[m] + '</span>';
+            html += '<div class="podium-step ' + steps[m] + '" style="height: ' + stepHeights[m] + 'px;"></div>';
+            html += '<div class="podium-name">' + escapeHtml(item.name) + '</div>';
+            html += '<div class="podium-score">' + item.avg.toFixed(2) + ' балла</div>';
+            html += '<div class="place">' + (m + 1) + '-е место</div>';
+            html += '</div>';
+        }
+
+        podiumContainer.innerHTML = html;
+        podiumModal.classList.add('active');
+    }
 
     // ========== ОСТАЛЬНОЙ КОД ==========
     function setStatus(text, color) {
@@ -650,7 +869,7 @@
         try {
             var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
             var response = await fetch(url, { headers: { 'Authorization': 'token ' + githubToken, 'Accept': 'application/vnd.github.v3+json' } });
-            if (response.status === 404) { allData[tab] = { votes: [] }; render(); return; }
+            if (response.status === 404) { allData[tab] = { votes: [] }; render(); updateChart(); return; }
             if (!response.ok) { throw new Error('Ошибка загрузки'); }
             var data = await response.json();
             var content = base64ToUtf8(data.content);
@@ -661,6 +880,7 @@
                 }
                 allData[tab] = { votes: jsonData.votes };
                 render();
+                updateChart();
                 setStatusBar('online', '☁️ Автосинхронизация');
                 setStatus('☁️ Синхронизировано', '#17a2b8');
             }
@@ -721,6 +941,7 @@
         votes.push({ id: Date.now() + '_' + Math.random().toString(36).substr(2, 6), name: name, score: score });
         nameInput.value = ''; scoreInput.value = ''; nameInput.focus();
         render();
+        updateChart();
         lastUpdateTime[currentTab] = Date.now();
         await saveToGitHub(currentTab);
         setStatus('✅ Добавлено! (' + getTabName(currentTab) + ')', '#28a745');
@@ -759,24 +980,18 @@
         }
         
         if (isTie) {
-            // Ничья — показываем модальное окно
             winnerName = null;
             winnerDisplay.textContent = '🤝 Ничья! (' + tieNames.join(', ') + ')';
             render();
-            
-            // Заполняем список победителей
-            var listHtml = '';
-            for (var n = 0; n < tieNames.length; n++) {
-                listHtml += '<li>🏆 ' + escapeHtml(tieNames[n]) + '</li>';
-            }
-            tieList.innerHTML = listHtml;
-            tieScore.textContent = tieAvg.toFixed(2);
-            tieModal.classList.add('active');
+            updateChart();
+            // Показываем подиум с ничьей
+            showPodium();
         } else {
-            // Один победитель
             winnerName = winner.name;
             winnerDisplay.textContent = '👑 Победитель: ' + winner.name + ' (' + winner.avg.toFixed(2) + ')';
             render();
+            updateChart();
+            showPodium();
         }
     }
 
@@ -797,6 +1012,7 @@
         await loadFromGitHub('free');
         await loadFromGitHub('evening');
         render();
+        updateChart();
         if (autoSyncInterval) clearInterval(autoSyncInterval);
         autoSyncInterval = setInterval(function() {
             if (githubToken) {
