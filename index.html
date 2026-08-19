@@ -101,6 +101,34 @@
         body.dark-theme .podium-item .podium-score { color: #aaa; }
         body.dark-theme .podium-item .place { color: #888; }
 
+        /* ПРЕДУПРЕЖДЕНИЕ ОБ ИНТЕРНЕТЕ */
+        .offline-warning {
+            display: none;
+            background: #fff3cd;
+            color: #856404;
+            border: 2px solid #ffc107;
+            border-radius: 12px;
+            padding: 12px 18px;
+            margin-bottom: 18px;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        .offline-warning.show { display: block; }
+        body.dark-theme .offline-warning {
+            background: #3a3a1a;
+            color: #f0d080;
+            border-color: #ffc107;
+        }
+        .offline-warning .sync-hint {
+            font-weight: 700;
+            color: #dc3545;
+        }
+        body.dark-theme .offline-warning .sync-hint {
+            color: #ff6b6b;
+        }
+
         /* Переключатель темы */
         .theme-toggle {
             display: flex;
@@ -539,6 +567,12 @@
     <!-- Переключатель темы -->
     <button class="theme-toggle" id="themeToggle">🌙 Сменить на тёмную тему</button>
 
+    <!-- ПРЕДУПРЕЖДЕНИЕ ОБ ОТСУТСТВИИ ИНТЕРНЕТА -->
+    <div class="offline-warning" id="offlineWarning">
+        ⚠️ Нет подключения к интернету. Данные сохраняются локально. <strong>Не закрывайте вкладку!</strong> 
+        Когда интернет появится — нажмите <span class="sync-hint">«Синхронизировать»</span> внизу страницы.
+    </div>
+
     <h1>🎭 Фестиваль</h1>
     <p class="subtitle">Выберите номинацию и введите оценки</p>
 
@@ -665,6 +699,23 @@
     });
 
     // ============================================================
+    // ОТСЛЕЖИВАНИЕ ИНТЕРНЕТА
+    // ============================================================
+    var offlineWarning = document.getElementById('offlineWarning');
+
+    function updateOnlineStatus() {
+        if (!navigator.onLine) {
+            offlineWarning.classList.add('show');
+        } else {
+            offlineWarning.classList.remove('show');
+        }
+    }
+
+    window.addEventListener('online', updateOnlineStatus);
+    window.addEventListener('offline', updateOnlineStatus);
+    updateOnlineStatus();
+
+    // ============================================================
     // ФЕЙЕРВЕРК / КОНФЕТТИ
     // ============================================================
     function fireConfetti() {
@@ -673,7 +724,6 @@
         document.body.appendChild(container);
         
         var colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff6fd8', '#ff9f43', '#a29bfe', '#fd79a8'];
-        var shapes = ['circle', 'square', 'triangle'];
         
         for (var i = 0; i < 120; i++) {
             var piece = document.createElement('div');
@@ -806,7 +856,7 @@
         }
         
         var participants = getUniqueParticipants(votes);
-        var csv = '\uFEFF'; // BOM для Excel
+        var csv = '\uFEFF';
         csv += 'Участник;Средний балл;Кол-во оценок;Все оценки\n';
         
         for (var i = 0; i < participants.length; i++) {
@@ -931,13 +981,12 @@
 
         // Если максимальный балл меньше 1, используем 1 для масштаба
         var scale = maxAvg > 0 ? maxAvg : 1;
-        // Высота столбца: минимум 8px, максимум 130px
         var maxHeight = 130;
 
         var html = '';
         for (var m = 0; m < sorted.length; m++) {
             var item = sorted[m];
-            // Вычисляем высоту строго по значению балла (одинаковые баллы = одинаковая высота)
+            // ВЫЧИСЛЯЕМ ВЫСОТУ СТРОГО ПО ФОРМУЛЕ (одинаковые баллы = одинаковая высота)
             var heightPercent = item.avg / scale;
             var barHeight = Math.max(heightPercent * maxHeight, 8);
             var colorClass = m < 3 ? colors[m] : '';
