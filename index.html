@@ -83,24 +83,10 @@
         body.dark-theme .footer { color: #aaa; }
         body.dark-theme .save-status { background: rgba(255,255,255,0.1); color: #8fdfb0; }
         body.dark-theme .sync-info { color: #666; }
-        body.dark-theme .chart-section { background: rgba(255,255,255,0.05); border-color: #333; }
-        body.dark-theme .chart-section h3 { color: #ddd; }
-        body.dark-theme .chart-label { color: #ddd; }
-        body.dark-theme .chart-score { color: #888; }
-        body.dark-theme .chart-empty { color: #666; }
-        body.dark-theme .modal-box { background: #2a2a3a; }
-        body.dark-theme .modal-box h2 { color: #eee; }
-        body.dark-theme .modal-box p { color: #aaa; }
-        body.dark-theme .modal-box .question { color: #eee; }
-        body.dark-theme .modal-box input { background: #3a3a4a; border-color: #555; color: #eee; }
-        body.dark-theme .modal-box input:focus { border-color: #5a6fd6; }
-        body.dark-theme .modal-box .winner-list { color: #8fdfb0; }
-        body.dark-theme .podium-item .podium-name { color: #eee; }
-        body.dark-theme .podium-item .podium-score { color: #aaa; }
-        body.dark-theme .podium-item .place { color: #888; }
         body.dark-theme .history-item { border-bottom-color: #444; color: #ccc; }
         body.dark-theme .history-item .time { color: #888; }
         body.dark-theme .history-item .score { color: #8fdfb0; }
+        body.dark-theme .chart-label { color: #ddd; }
 
         /* ПРЕДУПРЕЖДЕНИЕ ОБ ИНТЕРНЕТЕ */
         .offline-warning {
@@ -361,7 +347,7 @@
         }
         .sync-info { font-size: 11px; color: #888; text-align: center; margin-top: 6px; transition: color 0.3s ease; }
 
-        /* ГРАФИК */
+        /* КРУГОВАЯ ДИАГРАММА */
         .chart-section {
             margin-top: 20px;
             padding: 16px;
@@ -369,6 +355,7 @@
             border-radius: 15px;
             border: 1px solid #eee;
             transition: background 0.3s ease, border-color 0.3s ease;
+            text-align: center;
         }
         .chart-section h3 {
             text-align: center;
@@ -377,47 +364,55 @@
             font-size: 16px;
             transition: color 0.3s ease;
         }
-        .chart-container {
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            gap: 12px;
-            min-height: 150px;
-            padding: 10px 0;
-            flex-wrap: wrap;
-        }
-        .chart-bar-wrapper {
+        .pie-chart-wrapper {
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-width: 40px;
+            gap: 15px;
         }
-        .chart-bar {
-            width: 30px;
-            border-radius: 6px 6px 0 0;
-            background: linear-gradient(180deg, #667eea, #764ba2);
-            transition: height 0.5s ease, background 0.3s ease;
-            min-height: 4px;
+        .pie-chart-container {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin: 0 auto;
         }
-        .chart-bar.gold { background: linear-gradient(180deg, #ffd700, #f9a825); }
-        .chart-bar.silver { background: linear-gradient(180deg, #c0c0c0, #9e9e9e); }
-        .chart-bar.bronze { background: linear-gradient(180deg, #cd7f32, #a0522d); }
-        .chart-label {
-            font-size: 11px;
-            margin-top: 4px;
-            text-align: center;
-            font-weight: 600;
+        .pie-chart-container canvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+        }
+        .pie-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px 15px;
+            max-width: 350px;
+            margin: 0 auto;
+        }
+        .pie-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
             color: #333;
-            word-break: break-word;
-            max-width: 60px;
             transition: color 0.3s ease;
         }
-        .chart-score {
-            font-size: 10px;
+        .pie-legend-item .color-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .pie-legend-item .label {
+            font-weight: 500;
+        }
+        .pie-legend-item .value {
             color: #666;
-            margin-bottom: 2px;
+            font-size: 12px;
             transition: color 0.3s ease;
         }
+        body.dark-theme .pie-legend-item { color: #ddd; }
+        body.dark-theme .pie-legend-item .value { color: #888; }
         .chart-empty {
             text-align: center;
             color: #888;
@@ -604,8 +599,7 @@
             .podium { gap: 10px; }
             .podium-step { width: 70px; }
             .podium-item { min-width: 60px; }
-            .chart-bar { width: 20px; }
-            .chart-bar-wrapper { min-width: 30px; }
+            .pie-chart-container { width: 150px; height: 150px; }
             .theme-toggle {
                 top: 10px;
                 right: 10px;
@@ -618,10 +612,8 @@
 <body>
 
 <div class="container">
-    <!-- Переключатель темы -->
     <button class="theme-toggle" id="themeToggle">🌙 Сменить на тёмную тему</button>
 
-    <!-- ПРЕДУПРЕЖДЕНИЕ ОБ ОТСУТСТВИИ ИНТЕРНЕТА -->
     <div class="offline-warning" id="offlineWarning">
         ⚠️ Нет подключения к интернету. Данные сохраняются локально. <strong>Не закрывайте вкладку!</strong> 
         Когда интернет появится — нажмите <span class="sync-hint">«Синхронизировать»</span> внизу страницы.
@@ -678,11 +670,14 @@
             </table>
         </div>
 
-        <!-- ГРАФИК -->
+        <!-- КРУГОВАЯ ДИАГРАММА -->
         <div class="chart-section" id="chartSection">
-            <h3>📊 Рейтинг участников</h3>
-            <div class="chart-container" id="chartContainer">
-                <div class="chart-empty">Нет данных для отображения</div>
+            <h3>📊 Распределение голосов</h3>
+            <div class="pie-chart-wrapper" id="pieChartWrapper">
+                <div id="pieChartContainer" class="pie-chart-container">
+                    <canvas id="pieCanvas"></canvas>
+                </div>
+                <div id="pieLegend" class="pie-legend"></div>
             </div>
         </div>
 
@@ -835,6 +830,11 @@
     var winnerName = null;
     var lastUpdateTime = {};
     var autoSyncInterval = null;
+    var pieColors = [
+        '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', 
+        '#DDA0DD', '#FF9F43', '#A29BFE', '#FD79A8', '#00CEC9',
+        '#FDCB6E', '#E17055', '#6C5CE7', '#00B894', '#E84393'
+    ];
 
     // DOM
     var tabsContainer = document.getElementById('tabsContainer');
@@ -857,8 +857,9 @@
     var deleteBtn = document.getElementById('deleteBtn');
     var deleteName = document.getElementById('deleteName');
     var clearBtn = document.getElementById('clearBtn');
-    var chartContainer = document.getElementById('chartContainer');
     var historyList = document.getElementById('historyList');
+    var pieCanvas = document.getElementById('pieCanvas');
+    var pieLegend = document.getElementById('pieLegend');
 
     var clearModal = document.getElementById('clearModal');
     var captchaInput = document.getElementById('captchaInput');
@@ -880,8 +881,8 @@
         btn.classList.add('active');
         currentTab = tab;
         render();
-        updateChart();
         renderHistory();
+        renderPieChart();
     });
 
     // ========== УДАЛЕНИЕ ==========
@@ -902,7 +903,8 @@
         allData[currentTab].votes = newVotes;
         if (winnerName === name) winnerName = null;
         render();
-        updateChart();
+        renderHistory();
+        renderPieChart();
         lastUpdateTime[currentTab] = Date.now();
         saveToGitHub(currentTab);
         deleteName.value = '';
@@ -949,6 +951,87 @@
         historyList.innerHTML = html;
     }
 
+    // ========== КРУГОВАЯ ДИАГРАММА ==========
+    function renderPieChart() {
+        var votes = allData[currentTab]?.votes || [];
+        var participants = getUniqueParticipants(votes);
+        
+        if (participants.length === 0) {
+            var ctx = pieCanvas.getContext('2d');
+            ctx.clearRect(0, 0, pieCanvas.width, pieCanvas.height);
+            pieLegend.innerHTML = '<div class="chart-empty">Нет данных для отображения</div>';
+            return;
+        }
+
+        // Считаем общее количество оценок для каждого участника
+        var data = [];
+        var totalVotes = 0;
+        for (var i = 0; i < participants.length; i++) {
+            var p = participants[i];
+            var count = 0;
+            for (var j = 0; j < votes.length; j++) {
+                if (votes[j].name === p) {
+                    count++;
+                }
+            }
+            data.push({ name: p, count: count });
+            totalVotes += count;
+        }
+
+        if (totalVotes === 0) {
+            var ctx = pieCanvas.getContext('2d');
+            ctx.clearRect(0, 0, pieCanvas.width, pieCanvas.height);
+            pieLegend.innerHTML = '<div class="chart-empty">Нет данных для отображения</div>';
+            return;
+        }
+
+        // Рисуем круговую диаграмму на canvas
+        var canvas = pieCanvas;
+        var ctx = canvas.getContext('2d');
+        var width = canvas.parentElement.clientWidth || 200;
+        var height = width;
+        canvas.width = width;
+        canvas.height = height;
+        var centerX = width / 2;
+        var centerY = height / 2;
+        var radius = Math.min(width, height) / 2 - 10;
+
+        ctx.clearRect(0, 0, width, height);
+
+        var startAngle = -Math.PI / 2;
+        var legendHtml = '';
+
+        for (var i = 0; i < data.length; i++) {
+            var item = data[i];
+            var sliceAngle = (item.count / totalVotes) * 2 * Math.PI;
+            var color = pieColors[i % pieColors.length];
+            var endAngle = startAngle + sliceAngle;
+
+            // Рисуем сектор
+            ctx.beginPath();
+            ctx.moveTo(centerX, centerY);
+            ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+            ctx.closePath();
+            ctx.fillStyle = color;
+            ctx.fill();
+            ctx.strokeStyle = 'rgba(255,255,255,0.8)';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Добавляем в легенду
+            var percent = ((item.count / totalVotes) * 100).toFixed(1);
+            legendHtml += '<div class="pie-legend-item">';
+            legendHtml += '<span class="color-dot" style="background:' + color + '"></span>';
+            legendHtml += '<span class="label">' + escapeHtml(item.name) + '</span>';
+            legendHtml += '<span class="value">(' + item.count + ' голосов, ' + percent + '%)</span>';
+            legendHtml += '</div>';
+
+            startAngle = endAngle;
+        }
+
+        pieLegend.innerHTML = legendHtml;
+    }
+
     // ========== ОЧИСТКА ВСЕГО ==========
     clearBtn.addEventListener('click', function() {
         var votes = allData[currentTab].votes;
@@ -970,8 +1053,8 @@
             allData[currentTab].history = [];
             winnerName = null;
             render();
-            updateChart();
             renderHistory();
+            renderPieChart();
             lastUpdateTime[currentTab] = Date.now();
             saveToGitHub(currentTab);
             setStatus('🗑️ Всё очищено в номинации "' + getTabName(currentTab) + '"', '#dc3545');
@@ -1011,58 +1094,6 @@
         }
     });
 
-    // ========== ГРАФИК ==========
-    function updateChart() {
-        var votes = allData[currentTab]?.votes || [];
-        var participants = getUniqueParticipants(votes);
-        
-        if (participants.length === 0) {
-            chartContainer.innerHTML = '<div class="chart-empty">Нет данных для отображения</div>';
-            return;
-        }
-
-        var averages = [];
-        var maxAvg = 0;
-        for (var i = 0; i < participants.length; i++) {
-            var p = participants[i];
-            var pVotes = [];
-            for (var j = 0; j < votes.length; j++) {
-                if (votes[j].name === p) {
-                    pVotes.push(votes[j]);
-                }
-            }
-            var total = 0;
-            for (var k = 0; k < pVotes.length; k++) {
-                total += pVotes[k].score;
-            }
-            var count = pVotes.length;
-            var avg = count > 0 ? total / count : 0;
-            averages.push({ name: p, avg: avg });
-            if (avg > maxAvg) maxAvg = avg;
-        }
-
-        var sorted = averages.slice().sort(function(a, b) { return b.avg - a.avg; });
-        var colors = ['gold', 'silver', 'bronze'];
-        var scale = maxAvg > 0 ? maxAvg : 1;
-        var maxHeight = 130;
-
-        var html = '';
-        for (var m = 0; m < sorted.length; m++) {
-            var item = sorted[m];
-            var heightPercent = item.avg / scale;
-            var barHeight = Math.max(heightPercent * maxHeight, 8);
-            var colorClass = m < 3 ? colors[m] : '';
-            
-            html += '<div class="chart-bar-wrapper">';
-            html += '<div class="chart-score">' + item.avg.toFixed(1) + '</div>';
-            html += '<div class="chart-bar ' + colorClass + '" style="height: ' + barHeight + 'px;"></div>';
-            html += '<div class="chart-label">' + escapeHtml(item.name) + '</div>';
-            html += '</div>';
-        }
-        chartContainer.innerHTML = html;
-    }
-
-    // ========== ПРАВИЛЬНЫЙ ПОДИУМ ==========
     function showPodium() {
         var votes = allData[currentTab]?.votes || [];
         var participants = getUniqueParticipants(votes);
@@ -1090,10 +1121,8 @@
             averages.push({ name: p, avg: avg, count: count });
         }
 
-        // Сортируем по убыванию баллов
         averages.sort(function(a, b) { return b.avg - a.avg; });
 
-        // Группируем по баллам (с одинаковыми баллами — одна группа)
         var groups = [];
         var currentGroup = null;
         for (var g = 0; g < averages.length; g++) {
@@ -1107,7 +1136,6 @@
             }
         }
 
-        // Берём топ-3 группы
         var topGroups = groups.slice(0, 3);
         var medals = ['🥇', '🥈', '🥉'];
         var steps = ['gold', 'silver', 'bronze'];
@@ -1209,8 +1237,8 @@
             if (response.status === 404) { 
                 allData[tab] = { votes: [], history: [] }; 
                 render(); 
-                updateChart();
                 renderHistory();
+                renderPieChart();
                 return; 
             }
             if (!response.ok) { throw new Error('Ошибка загрузки'); }
@@ -1226,8 +1254,8 @@
                     history: jsonData.history || [] 
                 };
                 render();
-                updateChart();
                 renderHistory();
+                renderPieChart();
                 setStatusBar('online', '☁️ Автосинхронизация');
                 setStatus('☁️ Синхронизировано', '#17a2b8');
             }
@@ -1303,7 +1331,8 @@
         votes.push({ id: Date.now() + '_' + Math.random().toString(36).substr(2, 6), name: name, score: score });
         nameInput.value = ''; scoreInput.value = ''; nameInput.focus();
         render();
-        updateChart();
+        renderHistory();
+        renderPieChart();
         addHistory(name, score);
         lastUpdateTime[currentTab] = Date.now();
         await saveToGitHub(currentTab);
@@ -1355,13 +1384,15 @@
             winnerName = null;
             winnerDisplay.textContent = '🤝 Ничья! (' + tieNames.join(', ') + ')';
             render();
-            updateChart();
+            renderHistory();
+            renderPieChart();
             showPodium();
         } else {
             winnerName = winner.name;
             winnerDisplay.textContent = '👑 Победитель: ' + winner.name + ' (' + winner.avg.toFixed(2) + ')';
             render();
-            updateChart();
+            renderHistory();
+            renderPieChart();
             showPodium();
         }
     }
@@ -1383,8 +1414,8 @@
         await loadFromGitHub('free');
         await loadFromGitHub('evening');
         render();
-        updateChart();
         renderHistory();
+        renderPieChart();
         if (autoSyncInterval) clearInterval(autoSyncInterval);
         autoSyncInterval = setInterval(function() {
             if (githubToken) {
