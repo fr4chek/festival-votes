@@ -20,7 +20,6 @@
             align-items: center;
             padding: 16px;
             margin: 0;
-            transition: background-image 0.3s ease;
         }
         body::before {
             content: '';
@@ -31,7 +30,6 @@
             height: 100%;
             background: rgba(0, 0, 0, 0.55);
             z-index: 0;
-            transition: background 0.3s ease;
         }
         .container {
             position: relative;
@@ -50,15 +48,8 @@
         }
 
         /* ===== ТЁМНАЯ ТЕМА ===== */
-        body.dark-theme::before {
-            background: rgba(0, 0, 0, 0.8);
-        }
-        body.dark-theme .container {
-            background: rgba(30, 30, 40, 0.92);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border-color: rgba(255,255,255,0.1);
-        }
+        body.dark-theme::before { background: rgba(0, 0, 0, 0.8); }
+        body.dark-theme .container { background: rgba(30, 30, 40, 0.92); backdrop-filter: blur(10px); border-color: rgba(255,255,255,0.1); }
         body.dark-theme h1 { color: #eee; }
         body.dark-theme .subtitle { color: #aaa; }
         body.dark-theme .tab-btn { color: #aaa; }
@@ -112,6 +103,9 @@
 
         /* Переключатель темы */
         .theme-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
             position: absolute;
             top: 16px;
             right: 16px;
@@ -119,19 +113,19 @@
             background: rgba(255,255,255,0.3);
             border: none;
             border-radius: 30px;
-            padding: 6px 12px;
-            font-size: 20px;
+            padding: 6px 14px;
+            font-size: 13px;
             cursor: pointer;
             transition: 0.3s;
             backdrop-filter: blur(4px);
             -webkit-backdrop-filter: blur(4px);
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            color: #333;
+            font-weight: 600;
         }
-        .theme-toggle:hover { transform: scale(1.05); }
-        body.dark-theme .theme-toggle {
-            background: rgba(255,255,255,0.15);
-            color: #ddd;
-        }
+        .theme-toggle:hover { transform: scale(1.03); background: rgba(255,255,255,0.5); }
+        body.dark-theme .theme-toggle { background: rgba(255,255,255,0.15); color: #ddd; }
+        body.dark-theme .theme-toggle:hover { background: rgba(255,255,255,0.25); }
 
         /* Остальные стили */
         h1 { text-align: center; color: #333; margin-bottom: 4px; font-size: 24px; transition: color 0.3s ease; }
@@ -157,11 +151,7 @@
             transition: 0.3s;
         }
         .tab-btn:active { transform: scale(0.96); }
-        .tab-btn.active {
-            background: #667eea;
-            color: white;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
+        .tab-btn.active { background: #667eea; color: white; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); }
         .status-bar {
             text-align: center;
             padding: 10px;
@@ -195,11 +185,7 @@
             background: white;
             transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
-        .token-input input:focus {
-            border-color: #667eea;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-        }
+        .token-input input:focus { border-color: #667eea; outline: none; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2); }
         .token-input .hint { font-size: 12px; color: #888; margin-top: 6px; transition: color 0.3s ease; }
         .token-input .btn { margin-top: 10px; width: 100%; }
         .stats {
@@ -248,16 +234,10 @@
             background: white;
             transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
-        .input-group input:focus {
-            border-color: #667eea;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-        }
+        .input-group input:focus { border-color: #667eea; outline: none; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2); }
         .input-group input[type="number"] { -moz-appearance: textfield; }
         .input-group input[type="number"]::-webkit-outer-spin-button,
-        .input-group input[type="number"]::-webkit-inner-spin-button {
-            -webkit-appearance: none;
-        }
+        .input-group input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
         .btn {
             padding: 12px 20px;
             border: none;
@@ -277,7 +257,8 @@
         .btn-primary { background: #667eea; }
         .btn-danger { background: #dc3545; }
         .btn-clear { background: #dc3545; }
-        .btn-clear:active { background: #c82333; }
+        .btn-export { background: #17a2b8; }
+        .btn-export:active { background: #138496; }
         .actions {
             display: flex;
             flex-wrap: wrap;
@@ -310,11 +291,7 @@
             min-width: 120px;
             transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
-        .delete-section input:focus {
-            border-color: #dc3545;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
-        }
+        .delete-section input:focus { border-color: #dc3545; outline: none; box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2); }
         .table-wrap {
             overflow-x: auto;
             border-radius: 15px;
@@ -323,12 +300,7 @@
             transition: background 0.3s ease, border-color 0.3s ease;
         }
         table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th {
-            background: #667eea;
-            color: white;
-            padding: 10px 6px;
-            text-align: center;
-        }
+        th { background: #667eea; color: white; padding: 10px 6px; text-align: center; }
         td {
             padding: 8px 6px;
             text-align: center;
@@ -400,7 +372,7 @@
             transition: height 0.5s ease, background 0.3s ease;
             min-height: 4px;
         }
-        .chart-bar.gold { background: linear-gradient(180deg, #ffd700, #ffb300); }
+        .chart-bar.gold { background: linear-gradient(180deg, #ffd700, #f9a825); }
         .chart-bar.silver { background: linear-gradient(180deg, #c0c0c0, #9e9e9e); }
         .chart-bar.bronze { background: linear-gradient(180deg, #cd7f32, #a0522d); }
         .chart-label {
@@ -465,11 +437,7 @@
             margin-bottom: 15px;
             transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
-        .modal-box input:focus {
-            border-color: #dc3545;
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
-        }
+        .modal-box input:focus { border-color: #dc3545; outline: none; box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2); }
         .modal-box .btn-row { display: flex; gap: 10px; }
         .modal-box .btn-row .btn { flex: 1; }
         .modal-box .error-msg { color: #dc3545; font-size: 14px; margin-top: 10px; display: none; }
@@ -482,11 +450,7 @@
             color: #28a745;
             transition: color 0.3s ease;
         }
-        .modal-box .winner-list li {
-            list-style: none;
-            padding: 4px 0;
-        }
-        .modal-box .winner-list .emoji { margin-right: 8px; }
+        .modal-box .winner-list li { list-style: none; padding: 4px 0; }
 
         /* Подиум */
         .podium {
@@ -501,28 +465,10 @@
             text-align: center;
             min-width: 80px;
         }
-        .podium-item .medal {
-            font-size: 36px;
-            display: block;
-        }
-        .podium-item .place {
-            font-weight: 700;
-            font-size: 14px;
-            color: #555;
-            transition: color 0.3s ease;
-        }
-        .podium-item .podium-name {
-            font-weight: 700;
-            font-size: 16px;
-            color: #333;
-            margin-top: 2px;
-            transition: color 0.3s ease;
-        }
-        .podium-item .podium-score {
-            font-size: 13px;
-            color: #666;
-            transition: color 0.3s ease;
-        }
+        .podium-item .medal { font-size: 36px; display: block; }
+        .podium-item .place { font-weight: 700; font-size: 14px; color: #555; transition: color 0.3s ease; }
+        .podium-item .podium-name { font-weight: 700; font-size: 16px; color: #333; margin-top: 2px; transition: color 0.3s ease; }
+        .podium-item .podium-score { font-size: 13px; color: #666; transition: color 0.3s ease; }
         .podium-step {
             width: 100px;
             border-radius: 8px 8px 0 0;
@@ -532,6 +478,30 @@
         .podium-step.gold { background: linear-gradient(180deg, #ffd700, #f9a825); height: 100px; }
         .podium-step.silver { background: linear-gradient(180deg, #c0c0c0, #9e9e9e); height: 80px; }
         .podium-step.bronze { background: linear-gradient(180deg, #cd7f32, #a0522d); height: 60px; }
+
+        /* Фейерверк/конфетти */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 99999;
+            overflow: hidden;
+        }
+        .confetti-piece {
+            position: absolute;
+            top: -10px;
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            animation: confettiFall linear forwards;
+        }
+        @keyframes confettiFall {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+        }
 
         @media (max-width: 600px) {
             .container { padding: 14px; }
@@ -557,7 +527,7 @@
             .theme-toggle {
                 top: 10px;
                 right: 10px;
-                font-size: 16px;
+                font-size: 11px;
                 padding: 4px 10px;
             }
         }
@@ -567,7 +537,7 @@
 
 <div class="container">
     <!-- Переключатель темы -->
-    <button class="theme-toggle" id="themeToggle" title="Переключить тему">🌙</button>
+    <button class="theme-toggle" id="themeToggle">🌙 Сменить на тёмную тему</button>
 
     <h1>🎭 Фестиваль</h1>
     <p class="subtitle">Выберите номинацию и введите оценки</p>
@@ -631,6 +601,7 @@
         <div class="actions">
             <button class="btn btn-warning" id="calcBtn">🏆 Победитель</button>
             <button class="btn btn-success" id="syncBtn">🔄 Синхронизировать</button>
+            <button class="btn btn-export" id="exportBtn">📊 Скачать отчёт</button>
             <button class="btn btn-clear" id="clearBtn">🗑️ Очистить всё</button>
         </div>
 
@@ -674,10 +645,9 @@
     var themeToggle = document.getElementById('themeToggle');
     var isDark = false;
 
-    // Проверяем сохранённую тему
     if (localStorage.getItem('festival_theme') === 'dark') {
         document.body.classList.add('dark-theme');
-        themeToggle.textContent = '☀️';
+        themeToggle.textContent = '☀️ Сменить на светлую тему';
         isDark = true;
     }
 
@@ -685,14 +655,53 @@
         isDark = !isDark;
         if (isDark) {
             document.body.classList.add('dark-theme');
-            themeToggle.textContent = '☀️';
+            themeToggle.textContent = '☀️ Сменить на светлую тему';
             localStorage.setItem('festival_theme', 'dark');
         } else {
             document.body.classList.remove('dark-theme');
-            themeToggle.textContent = '🌙';
+            themeToggle.textContent = '🌙 Сменить на тёмную тему';
             localStorage.setItem('festival_theme', 'light');
         }
     });
+
+    // ============================================================
+    // ФЕЙЕРВЕРК / КОНФЕТТИ
+    // ============================================================
+    function fireConfetti() {
+        var container = document.createElement('div');
+        container.className = 'confetti-container';
+        document.body.appendChild(container);
+        
+        var colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff6fd8', '#ff9f43', '#a29bfe', '#fd79a8'];
+        var shapes = ['circle', 'square', 'triangle'];
+        
+        for (var i = 0; i < 120; i++) {
+            var piece = document.createElement('div');
+            piece.className = 'confetti-piece';
+            var size = Math.random() * 10 + 5;
+            var left = Math.random() * 100;
+            var delay = Math.random() * 2;
+            var duration = Math.random() * 2 + 2;
+            var color = colors[Math.floor(Math.random() * colors.length)];
+            var rotation = Math.random() * 360;
+            
+            piece.style.cssText = 
+                'left: ' + left + '%;' +
+                'width: ' + size + 'px;' +
+                'height: ' + size + 'px;' +
+                'background: ' + color + ';' +
+                'animation-delay: ' + delay + 's;' +
+                'animation-duration: ' + duration + 's;' +
+                'transform: rotate(' + rotation + 'deg);' +
+                'border-radius: ' + (Math.random() > 0.5 ? '50%' : '2px') + ';';
+            
+            container.appendChild(piece);
+        }
+        
+        setTimeout(function() {
+            container.remove();
+        }, 5000);
+    }
 
     // ============================================================
     // ОСНОВНОЙ КОД
@@ -730,6 +739,7 @@
     var addBtn = document.getElementById('addBtn');
     var calcBtn = document.getElementById('calcBtn');
     var syncBtn = document.getElementById('syncBtn');
+    var exportBtn = document.getElementById('exportBtn');
     var deleteBtn = document.getElementById('deleteBtn');
     var deleteName = document.getElementById('deleteName');
     var clearBtn = document.getElementById('clearBtn');
@@ -785,6 +795,44 @@
 
     deleteName.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') { e.preventDefault(); deleteBtn.click(); }
+    });
+
+    // ========== ЭКСПОРТ В CSV ==========
+    exportBtn.addEventListener('click', function() {
+        var votes = allData[currentTab]?.votes || [];
+        if (votes.length === 0) {
+            alert('Нет данных для экспорта');
+            return;
+        }
+        
+        var participants = getUniqueParticipants(votes);
+        var csv = '\uFEFF'; // BOM для Excel
+        csv += 'Участник;Средний балл;Кол-во оценок;Все оценки\n';
+        
+        for (var i = 0; i < participants.length; i++) {
+            var p = participants[i];
+            var pVotes = [];
+            for (var j = 0; j < votes.length; j++) {
+                if (votes[j].name === p) { pVotes.push(votes[j]); }
+            }
+            var total = 0;
+            var scores = [];
+            for (var k = 0; k < pVotes.length; k++) {
+                total += pVotes[k].score;
+                scores.push(pVotes[k].score.toFixed(1));
+            }
+            var count = pVotes.length;
+            var avg = count > 0 ? total / count : 0;
+            csv += p + ';' + avg.toFixed(2) + ';' + count + ';' + scores.join(', ') + '\n';
+        }
+        
+        var blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        var link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = 'фестиваль_' + currentTab + '_' + new Date().toISOString().slice(0,10) + '.csv';
+        link.click();
+        URL.revokeObjectURL(link.href);
+        setStatus('📊 Отчёт скачан!', '#17a2b8');
     });
 
     // ========== ОЧИСТКА ВСЕГО ==========
@@ -858,6 +906,7 @@
         }
 
         var averages = [];
+        var maxAvg = 0;
         for (var i = 0; i < participants.length; i++) {
             var p = participants[i];
             var pVotes = [];
@@ -873,18 +922,26 @@
             var count = pVotes.length;
             var avg = count > 0 ? total / count : 0;
             averages.push({ name: p, avg: avg });
+            if (avg > maxAvg) maxAvg = avg;
         }
 
-        averages.sort(function(a, b) { return b.avg - a.avg; });
-        var maxAvg = averages[0].avg > 0 ? averages[0].avg : 1;
+        // Сортируем по убыванию для цветов
+        var sorted = averages.slice().sort(function(a, b) { return b.avg - a.avg; });
         var colors = ['gold', 'silver', 'bronze'];
 
+        // Если максимальный балл меньше 1, используем 1 для масштаба
+        var scale = maxAvg > 0 ? maxAvg : 1;
+        // Высота столбца: минимум 8px, максимум 130px
+        var maxHeight = 130;
+
         var html = '';
-        for (var m = 0; m < averages.length; m++) {
-            var item = averages[m];
-            var percent = (item.avg / maxAvg) * 100;
+        for (var m = 0; m < sorted.length; m++) {
+            var item = sorted[m];
+            // Вычисляем высоту строго по значению балла (одинаковые баллы = одинаковая высота)
+            var heightPercent = item.avg / scale;
+            var barHeight = Math.max(heightPercent * maxHeight, 8);
             var colorClass = m < 3 ? colors[m] : '';
-            var barHeight = Math.max(percent * 1.2, 8);
+            
             html += '<div class="chart-bar-wrapper">';
             html += '<div class="chart-score">' + item.avg.toFixed(1) + '</div>';
             html += '<div class="chart-bar ' + colorClass + '" style="height: ' + barHeight + 'px;"></div>';
@@ -894,7 +951,7 @@
         chartContainer.innerHTML = html;
     }
 
-    // ========== УМНЫЙ ПОДИУМ (с группировкой по баллам) ==========
+    // ========== УМНЫЙ ПОДИУМ ==========
     function showPodium() {
         var votes = allData[currentTab]?.votes || [];
         var participants = getUniqueParticipants(votes);
@@ -922,10 +979,8 @@
             averages.push({ name: p, avg: avg, count: count });
         }
 
-        // Сортируем по убыванию
         averages.sort(function(a, b) { return b.avg - a.avg; });
 
-        // Группируем по баллам (с точностью до 0.001)
         var groups = [];
         var currentGroup = null;
         for (var g = 0; g < averages.length; g++) {
@@ -939,7 +994,6 @@
             }
         }
 
-        // Берём топ-3 группы
         var topGroups = groups.slice(0, 3);
         var medals = ['🥇', '🥈', '🥉'];
         var steps = ['gold', 'silver', 'bronze'];
@@ -958,7 +1012,6 @@
             html += '</div>';
         }
 
-        // Если нет данных — показываем сообщение
         if (topGroups.length === 0) {
             podiumContainer.innerHTML = '<p style="color: #888; padding: 20px;">Нет данных для отображения</p>';
         } else {
@@ -1070,9 +1123,14 @@
         for (var i = 0; i < participants.length; i++) {
             var p = participants[i];
             var pVotes = [];
-            for (var j = 0; j < votes.length; j++) { if (votes[j].name === p) { pVotes.push(votes[j]); } }
+            for (var j = 0; j < votes.length; j++) {
+                if (votes[j].name === p) { pVotes.push(votes[j]); }
+            }
             var total = 0, scores = [];
-            for (var k = 0; k < pVotes.length; k++) { total += pVotes[k].score; scores.push(pVotes[k].score.toFixed(1)); }
+            for (var k = 0; k < pVotes.length; k++) {
+                total += pVotes[k].score;
+                scores.push(pVotes[k].score.toFixed(1));
+            }
             var count = pVotes.length, avg = count > 0 ? total / count : 0;
             averages.push({ name: p, avg: avg, count: count });
             html += '<tr><td><strong>' + escapeHtml(p) + '</strong></td><td class="total-cell">' + (count > 0 ? avg.toFixed(2) : '—') + '</td><td>' + count + '</td><td>' + scores.join(', ') + '</td></tr>';
@@ -1089,10 +1147,20 @@
         statAvg.textContent = (sorted.length > 0 && sorted[0].count > 0) ? sorted[0].avg.toFixed(2) : '—';
         if (winnerName) {
             var winner = null;
-            for (var w = 0; w < averages.length; w++) { if (averages[w].name === winnerName) { winner = averages[w]; break; } }
-            if (winner && winner.count > 0) { winnerDisplay.textContent = '👑 Победитель: ' + winnerName + ' (' + winner.avg.toFixed(2) + ')'; }
-            else { winnerDisplay.textContent = '👑 Победитель: не определен'; }
-        } else { winnerDisplay.textContent = '👑 Победитель: не определен'; }
+            for (var w = 0; w < averages.length; w++) {
+                if (averages[w].name === winnerName) {
+                    winner = averages[w];
+                    break;
+                }
+            }
+            if (winner && winner.count > 0) {
+                winnerDisplay.textContent = '👑 Победитель: ' + winnerName + ' (' + winner.avg.toFixed(2) + ')';
+            } else {
+                winnerDisplay.textContent = '👑 Победитель: не определен';
+            }
+        } else {
+            winnerDisplay.textContent = '👑 Победитель: не определен';
+        }
     }
 
     function getTabName(tab) {
@@ -1124,8 +1192,15 @@
         for (var i = 0; i < participants.length; i++) {
             var p = participants[i];
             var pVotes = [];
-            for (var j = 0; j < votes.length; j++) { if (votes[j].name === p) { pVotes.push(votes[j]); } }
-            var total = 0; for (var k = 0; k < pVotes.length; k++) { total += pVotes[k].score; }
+            for (var j = 0; j < votes.length; j++) {
+                if (votes[j].name === p) {
+                    pVotes.push(votes[j]);
+                }
+            }
+            var total = 0;
+            for (var k = 0; k < pVotes.length; k++) {
+                total += pVotes[k].score;
+            }
             var count = pVotes.length;
             averages.push({ name: p, avg: count > 0 ? total / count : 0, count: count });
         }
@@ -1146,6 +1221,9 @@
                 break;
             }
         }
+        
+        // Фейерверк!
+        fireConfetti();
         
         if (isTie) {
             winnerName = null;
@@ -1195,12 +1273,18 @@
     }
 
     tokenBtn.addEventListener('click', connectToGitHub);
-    tokenInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); connectToGitHub(); } });
+    tokenInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); connectToGitHub(); }
+    });
     addBtn.addEventListener('click', addVote);
     calcBtn.addEventListener('click', calculateWinner);
     syncBtn.addEventListener('click', syncData);
-    nameInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); scoreInput.focus(); } });
-    scoreInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); addVote(); } });
+    nameInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); scoreInput.focus(); }
+    });
+    scoreInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); addVote(); }
+    });
     init();
 </script>
 </body>
