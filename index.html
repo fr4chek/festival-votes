@@ -400,8 +400,16 @@
         loadTabData(tab);
     });
 
-    // ========== ГЛОБАЛЬНАЯ ФУНКЦИЯ УДАЛЕНИЯ ==========
-    window.deleteParticipant = function(name) {
+    // ================================================================
+    // УДАЛЕНИЕ ЧЕРЕЗ ДЕЛЕГИРОВАНИЕ СОБЫТИЙ (работает 100%)
+    // ================================================================
+    tableBody.addEventListener('click', function(e) {
+        var btn = e.target.closest('.delete-btn');
+        if (!btn) return;
+        
+        var name = btn.getAttribute('data-name');
+        if (!name) return;
+        
         var tabName = getTabName(currentTab);
         if (!confirm('Удалить все оценки участника "' + name + '" из номинации "' + tabName + '"?')) return;
         
@@ -417,7 +425,7 @@
         render();
         saveToGitHub(currentTab);
         setStatus('🗑️ Удалён участник: ' + name + ' (' + tabName + ')', '#dc3545');
-    };
+    });
 
     // ========== ОСТАЛЬНОЙ КОД ==========
     function getCurrentVotes() {
@@ -748,8 +756,7 @@
             html += '<td class="total-cell">' + (count > 0 ? avg.toFixed(2) : '—') + '</td>';
             html += '<td>' + count + '</td>';
             html += '<td>' + allScores.join(', ') + '</td>';
-            // Используем onclick с вызовом глобальной функции
-            html += '<td><button class="delete-btn" onclick="deleteParticipant(\'' + escaped + '\')">✕</button></td>';
+            html += '<td><button class="delete-btn" data-name="' + escaped + '">✕</button></td>';
             html += '</tr>';
         }
         tableBody.innerHTML = html;
@@ -928,7 +935,7 @@
     console.log('✅ Программа загружена!');
     console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
     console.log('📂 Номинации: Национальный, Свободный, Вечерний');
-    console.log('🗑️ Удаление работает через deleteParticipant(имя)');
+    console.log('🗑️ Удаление работает через делегирование событий');
 </script>
 
 </body>
