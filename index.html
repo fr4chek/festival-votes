@@ -8,7 +8,11 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            /* ПРАЗДНИЧНЫЙ ФОН С ФЕЙЕРВЕРКОМ */
+            background-image: url('https://img.goodfon.ru/original/1920x1200/c/99/prazdnik-salyut-feyerverk.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -16,14 +20,30 @@
             padding: 16px;
             margin: 0;
         }
+        /* Полупрозрачный слой для читаемости текста */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 0;
+        }
         .container {
+            position: relative;
+            z-index: 1;
             max-width: 950px;
             margin: 0 auto;
-            background: white;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
             border-radius: 20px;
             padding: 24px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             width: 100%;
+            border: 1px solid rgba(255,255,255,0.2);
         }
         h1 { text-align: center; color: #333; margin-bottom: 4px; font-size: 24px; }
         .subtitle { text-align: center; color: #666; margin-bottom: 20px; font-size: 14px; }
@@ -31,7 +51,7 @@
             display: flex;
             gap: 6px;
             margin-bottom: 18px;
-            background: #f0f0f0;
+            background: rgba(255,255,255,0.5);
             border-radius: 14px;
             padding: 4px;
         }
@@ -60,6 +80,7 @@
             margin-bottom: 18px;
             font-weight: 600;
             font-size: 13px;
+            background: rgba(255,255,255,0.7);
         }
         .status-bar.online { background: #d4edda; color: #155724; border: 2px solid #28a745; }
         .status-bar.offline { background: #f8d7da; color: #721c24; border: 2px solid #dc3545; }
@@ -87,15 +108,8 @@
             outline: none;
             box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
         }
-        .token-input .hint {
-            font-size: 12px;
-            color: #888;
-            margin-top: 6px;
-        }
-        .token-input .btn {
-            margin-top: 10px;
-            width: 100%;
-        }
+        .token-input .hint { font-size: 12px; color: #888; margin-top: 6px; }
+        .token-input .btn { margin-top: 10px; width: 100%; }
         .stats {
             display: flex;
             flex-wrap: wrap;
@@ -104,7 +118,7 @@
             margin-bottom: 18px;
         }
         .stat-card {
-            background: #f8f9ff;
+            background: rgba(255,255,255,0.7);
             padding: 8px 16px;
             border-radius: 12px;
             text-align: center;
@@ -112,12 +126,12 @@
             flex: 1;
         }
         .stat-card .num { font-size: 24px; font-weight: 700; color: #667eea; }
-        .stat-card .label { font-size: 12px; color: #666; }
+        .stat-card .label { font-size: 12px; color: #555; }
         .input-section {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
-            background: #f8f9ff;
+            background: rgba(255,255,255,0.7);
             padding: 16px;
             border-radius: 15px;
             margin-bottom: 20px;
@@ -176,11 +190,7 @@
             justify-content: center;
             margin: 14px 0;
         }
-        .actions .btn {
-            flex: 1 1 auto;
-            min-width: 100px;
-            text-align: center;
-        }
+        .actions .btn { flex: 1 1 auto; min-width: 100px; text-align: center; }
         .delete-section {
             display: flex;
             flex-wrap: wrap;
@@ -193,11 +203,7 @@
             border-radius: 12px;
             border: 1px solid #fcc;
         }
-        .delete-section label {
-            font-weight: 600;
-            font-size: 13px;
-            color: #dc3545;
-        }
+        .delete-section label { font-weight: 600; font-size: 13px; color: #dc3545; }
         .delete-section input {
             padding: 8px 12px;
             border: 2px solid #ddd;
@@ -216,12 +222,9 @@
             overflow-x: auto;
             border-radius: 15px;
             border: 1px solid #eee;
+            background: rgba(255,255,255,0.5);
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 13px;
-        }
+        table { width: 100%; border-collapse: collapse; font-size: 13px; }
         th {
             background: #667eea;
             color: white;
@@ -256,7 +259,7 @@
         }
         .sync-info { font-size: 11px; color: #888; text-align: center; margin-top: 6px; }
 
-        /* Модальное окно для проверки */
+        /* Модальное окно */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -282,12 +285,7 @@
         }
         .modal-box h2 { margin-bottom: 10px; color: #dc3545; }
         .modal-box p { color: #555; margin-bottom: 15px; font-size: 16px; }
-        .modal-box .question {
-            font-size: 24px;
-            font-weight: 700;
-            color: #333;
-            margin: 15px 0;
-        }
+        .modal-box .question { font-size: 24px; font-weight: 700; color: #333; margin: 15px 0; }
         .modal-box input {
             width: 100%;
             padding: 12px 16px;
@@ -302,19 +300,9 @@
             outline: none;
             box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
         }
-        .modal-box .btn-row {
-            display: flex;
-            gap: 10px;
-        }
-        .modal-box .btn-row .btn {
-            flex: 1;
-        }
-        .modal-box .error-msg {
-            color: #dc3545;
-            font-size: 14px;
-            margin-top: 10px;
-            display: none;
-        }
+        .modal-box .btn-row { display: flex; gap: 10px; }
+        .modal-box .btn-row .btn { flex: 1; }
+        .modal-box .error-msg { color: #dc3545; font-size: 14px; margin-top: 10px; display: none; }
         .modal-box .error-msg.show { display: block; }
 
         @media (max-width: 600px) {
@@ -399,11 +387,11 @@
             <span id="winnerDisplay">👑 Победитель: не определен</span>
             <span class="save-status" id="statusDisplay">☁️ Готов</span>
         </div>
-        <div class="sync-info">🔄 Автосинхронизация каждые 10 секунд</div>
+        <div class="sync-info">🔄 Автосинхронизация каждые 10 секунд | 🎆 Праздничный фон</div>
     </div>
 </div>
 
-<!-- Модальное окно для проверки -->
+<!-- Модальное окно -->
 <div class="modal-overlay" id="clearModal">
     <div class="modal-box">
         <h2>⚠️ Очистка данных</h2>
@@ -461,7 +449,6 @@
     var deleteName = document.getElementById('deleteName');
     var clearBtn = document.getElementById('clearBtn');
 
-    // Модальное окно
     var clearModal = document.getElementById('clearModal');
     var captchaInput = document.getElementById('captchaInput');
     var confirmClearBtn = document.getElementById('confirmClearBtn');
@@ -524,7 +511,6 @@
     confirmClearBtn.addEventListener('click', function() {
         var answer = captchaInput.value.trim();
         if (answer === '4') {
-            // Правильный ответ
             clearModal.classList.remove('active');
             allData[currentTab].votes = [];
             winnerName = null;
@@ -553,11 +539,8 @@
         if (e.key === 'Escape') { e.preventDefault(); cancelClearBtn.click(); }
     });
 
-    // Закрытие по клику вне окна
     clearModal.addEventListener('click', function(e) {
-        if (e.target === clearModal) {
-            cancelClearBtn.click();
-        }
+        if (e.target === clearModal) { cancelClearBtn.click(); }
     });
 
     // ========== ОСТАЛЬНОЙ КОД ==========
