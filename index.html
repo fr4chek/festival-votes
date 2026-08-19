@@ -86,7 +86,11 @@
         body.dark-theme .history-item { border-bottom-color: #444; color: #ccc; }
         body.dark-theme .history-item .time { color: #888; }
         body.dark-theme .history-item .score { color: #8fdfb0; }
-        body.dark-theme .chart-label { color: #ddd; }
+        body.dark-theme .top-item { border-bottom-color: #444; color: #ddd; }
+        body.dark-theme .top-item .position { color: #888; }
+        body.dark-theme .leader-card { background: rgba(255,215,0,0.15); border-color: #ffd700; }
+        body.dark-theme .leader-card .leader-name { color: #ffd700; }
+        body.dark-theme .leader-card .leader-score { color: #ffd700; }
 
         /* ПРЕДУПРЕЖДЕНИЕ ОБ ИНТЕРНЕТЕ */
         .offline-warning {
@@ -347,77 +351,104 @@
         }
         .sync-info { font-size: 11px; color: #888; text-align: center; margin-top: 6px; transition: color 0.3s ease; }
 
-        /* КРУГОВАЯ ДИАГРАММА */
-        .chart-section {
-            margin-top: 20px;
+        /* ЛИДЕР */
+        .leader-section {
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+        .leader-card {
+            background: rgba(255, 215, 0, 0.12);
+            border: 2px solid #ffd700;
+            border-radius: 15px;
+            padding: 16px 20px;
+            text-align: center;
+            transition: background 0.3s ease, border-color 0.3s ease;
+        }
+        .leader-card .leader-label {
+            font-size: 14px;
+            color: #888;
+            font-weight: 600;
+            transition: color 0.3s ease;
+        }
+        .leader-card .leader-name {
+            font-size: 28px;
+            font-weight: 800;
+            color: #b8860b;
+            transition: color 0.3s ease;
+        }
+        .leader-card .leader-score {
+            font-size: 18px;
+            font-weight: 600;
+            color: #b8860b;
+            transition: color 0.3s ease;
+        }
+        .leader-card .leader-empty {
+            color: #888;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        /* ТОП-10 */
+        .top-section {
+            margin-top: 16px;
             padding: 16px;
             background: rgba(255,255,255,0.5);
             border-radius: 15px;
             border: 1px solid #eee;
             transition: background 0.3s ease, border-color 0.3s ease;
-            text-align: center;
         }
-        .chart-section h3 {
+        .top-section h3 {
             text-align: center;
             color: #333;
             margin-bottom: 12px;
             font-size: 16px;
             transition: color 0.3s ease;
         }
-        .pie-chart-wrapper {
+        .top-list {
+            max-height: 250px;
+            overflow-y: auto;
+            padding: 0 4px;
+        }
+        .top-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .top-list::-webkit-scrollbar-thumb {
+            background: #667eea;
+            border-radius: 4px;
+        }
+        .top-list::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.05);
+            border-radius: 4px;
+        }
+        .top-item {
             display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            gap: 15px;
-        }
-        .pie-chart-container {
-            position: relative;
-            width: 200px;
-            height: 200px;
-            margin: 0 auto;
-        }
-        .pie-chart-container canvas {
-            width: 100%;
-            height: 100%;
-            border-radius: 50%;
-        }
-        .pie-legend {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px 15px;
-            max-width: 350px;
-            margin: 0 auto;
-        }
-        .pie-legend-item {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            font-size: 13px;
+            padding: 6px 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 14px;
             color: #333;
+            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+        }
+        .top-item:last-child { border-bottom: none; }
+        .top-item .position {
+            font-weight: 700;
+            color: #888;
+            min-width: 30px;
             transition: color 0.3s ease;
         }
-        .pie-legend-item .color-dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            flex-shrink: 0;
-        }
-        .pie-legend-item .label {
-            font-weight: 500;
-        }
-        .pie-legend-item .value {
-            color: #666;
-            font-size: 12px;
-            transition: color 0.3s ease;
-        }
-        body.dark-theme .pie-legend-item { color: #ddd; }
-        body.dark-theme .pie-legend-item .value { color: #888; }
-        .chart-empty {
+        .top-item .position.gold { color: #ffd700; }
+        .top-item .position.silver { color: #c0c0c0; }
+        .top-item .position.bronze { color: #cd7f32; }
+        .top-item .name { font-weight: 600; flex: 1; padding: 0 10px; }
+        .top-item .score { font-weight: 700; color: #28a745; transition: color 0.3s ease; }
+        .top-empty {
             text-align: center;
             color: #888;
-            padding: 20px;
+            padding: 15px;
             font-style: italic;
+            font-size: 13px;
             transition: color 0.3s ease;
         }
 
@@ -519,15 +550,6 @@
         .modal-box .btn-row .btn { flex: 1; }
         .modal-box .error-msg { color: #dc3545; font-size: 14px; margin-top: 10px; display: none; }
         .modal-box .error-msg.show { display: block; }
-        .modal-box .winner-list {
-            text-align: left;
-            padding: 10px 0;
-            font-size: 18px;
-            font-weight: 600;
-            color: #28a745;
-            transition: color 0.3s ease;
-        }
-        .modal-box .winner-list li { list-style: none; padding: 4px 0; }
 
         /* Подиум */
         .podium {
@@ -599,13 +621,14 @@
             .podium { gap: 10px; }
             .podium-step { width: 70px; }
             .podium-item { min-width: 60px; }
-            .pie-chart-container { width: 150px; height: 150px; }
             .theme-toggle {
                 top: 10px;
                 right: 10px;
                 font-size: 11px;
                 padding: 4px 10px;
             }
+            .leader-card .leader-name { font-size: 22px; }
+            .leader-card .leader-score { font-size: 16px; }
         }
     </style>
 </head>
@@ -643,6 +666,18 @@
             <div class="stat-card" style="background:#fff3cd;"><div class="num" id="statAvg">—</div><div class="label">🏆 Средний балл лидера</div></div>
         </div>
 
+        <!-- ЛИДЕР -->
+        <div class="leader-section" id="leaderSection">
+            <div class="leader-card" id="leaderCard">
+                <div class="leader-label">👑 Текущий лидер</div>
+                <div class="leader-empty" id="leaderEmpty">Нет данных</div>
+                <div id="leaderContent" style="display: none;">
+                    <div class="leader-name" id="leaderName">—</div>
+                    <div class="leader-score" id="leaderScore">Средний балл: —</div>
+                </div>
+            </div>
+        </div>
+
         <div class="input-section">
             <div class="input-group">
                 <label>👤 Имя участника</label>
@@ -670,14 +705,11 @@
             </table>
         </div>
 
-        <!-- КРУГОВАЯ ДИАГРАММА -->
-        <div class="chart-section" id="chartSection">
-            <h3>📊 Распределение голосов</h3>
-            <div class="pie-chart-wrapper" id="pieChartWrapper">
-                <div id="pieChartContainer" class="pie-chart-container">
-                    <canvas id="pieCanvas"></canvas>
-                </div>
-                <div id="pieLegend" class="pie-legend"></div>
+        <!-- ТОП-10 -->
+        <div class="top-section" id="topSection">
+            <h3>🏅 Топ-10 участников</h3>
+            <div class="top-list" id="topList">
+                <div class="top-empty">Нет данных</div>
             </div>
         </div>
 
@@ -830,11 +862,6 @@
     var winnerName = null;
     var lastUpdateTime = {};
     var autoSyncInterval = null;
-    var pieColors = [
-        '#FF6B6B', '#4ECDC4', '#45B7D1', '#96CEB4', '#FFEAA7', 
-        '#DDA0DD', '#FF9F43', '#A29BFE', '#FD79A8', '#00CEC9',
-        '#FDCB6E', '#E17055', '#6C5CE7', '#00B894', '#E84393'
-    ];
 
     // DOM
     var tabsContainer = document.getElementById('tabsContainer');
@@ -858,8 +885,11 @@
     var deleteName = document.getElementById('deleteName');
     var clearBtn = document.getElementById('clearBtn');
     var historyList = document.getElementById('historyList');
-    var pieCanvas = document.getElementById('pieCanvas');
-    var pieLegend = document.getElementById('pieLegend');
+    var topList = document.getElementById('topList');
+    var leaderName = document.getElementById('leaderName');
+    var leaderScore = document.getElementById('leaderScore');
+    var leaderEmpty = document.getElementById('leaderEmpty');
+    var leaderContent = document.getElementById('leaderContent');
 
     var clearModal = document.getElementById('clearModal');
     var captchaInput = document.getElementById('captchaInput');
@@ -882,7 +912,7 @@
         currentTab = tab;
         render();
         renderHistory();
-        renderPieChart();
+        renderTopAndLeader();
     });
 
     // ========== УДАЛЕНИЕ ==========
@@ -904,7 +934,7 @@
         if (winnerName === name) winnerName = null;
         render();
         renderHistory();
-        renderPieChart();
+        renderTopAndLeader();
         lastUpdateTime[currentTab] = Date.now();
         saveToGitHub(currentTab);
         deleteName.value = '';
@@ -951,85 +981,70 @@
         historyList.innerHTML = html;
     }
 
-    // ========== КРУГОВАЯ ДИАГРАММА ==========
-    function renderPieChart() {
+    // ========== ТОП-10 И ЛИДЕР ==========
+    function renderTopAndLeader() {
         var votes = allData[currentTab]?.votes || [];
         var participants = getUniqueParticipants(votes);
         
         if (participants.length === 0) {
-            var ctx = pieCanvas.getContext('2d');
-            ctx.clearRect(0, 0, pieCanvas.width, pieCanvas.height);
-            pieLegend.innerHTML = '<div class="chart-empty">Нет данных для отображения</div>';
+            topList.innerHTML = '<div class="top-empty">Нет данных</div>';
+            leaderEmpty.style.display = 'block';
+            leaderContent.style.display = 'none';
             return;
         }
 
-        // Считаем общее количество оценок для каждого участника
-        var data = [];
-        var totalVotes = 0;
+        // Собираем данные
+        var averages = [];
         for (var i = 0; i < participants.length; i++) {
             var p = participants[i];
-            var count = 0;
+            var pVotes = [];
             for (var j = 0; j < votes.length; j++) {
                 if (votes[j].name === p) {
-                    count++;
+                    pVotes.push(votes[j]);
                 }
             }
-            data.push({ name: p, count: count });
-            totalVotes += count;
+            var total = 0;
+            for (var k = 0; k < pVotes.length; k++) {
+                total += pVotes[k].score;
+            }
+            var count = pVotes.length;
+            var avg = count > 0 ? total / count : 0;
+            averages.push({ name: p, avg: avg, count: count });
         }
 
-        if (totalVotes === 0) {
-            var ctx = pieCanvas.getContext('2d');
-            ctx.clearRect(0, 0, pieCanvas.width, pieCanvas.height);
-            pieLegend.innerHTML = '<div class="chart-empty">Нет данных для отображения</div>';
-            return;
+        // Сортируем по убыванию
+        averages.sort(function(a, b) { return b.avg - a.avg; });
+
+        // Лидер
+        var leader = averages[0];
+        if (leader && leader.count > 0) {
+            leaderEmpty.style.display = 'none';
+            leaderContent.style.display = 'block';
+            leaderName.textContent = leader.name;
+            leaderScore.textContent = 'Средний балл: ' + leader.avg.toFixed(2);
+        } else {
+            leaderEmpty.style.display = 'block';
+            leaderContent.style.display = 'none';
         }
 
-        // Рисуем круговую диаграмму на canvas
-        var canvas = pieCanvas;
-        var ctx = canvas.getContext('2d');
-        var width = canvas.parentElement.clientWidth || 200;
-        var height = width;
-        canvas.width = width;
-        canvas.height = height;
-        var centerX = width / 2;
-        var centerY = height / 2;
-        var radius = Math.min(width, height) / 2 - 10;
+        // Топ-10
+        var top10 = averages.slice(0, 10);
+        var medals = ['🥇', '🥈', '🥉'];
+        var medalClasses = ['gold', 'silver', 'bronze'];
 
-        ctx.clearRect(0, 0, width, height);
-
-        var startAngle = -Math.PI / 2;
-        var legendHtml = '';
-
-        for (var i = 0; i < data.length; i++) {
-            var item = data[i];
-            var sliceAngle = (item.count / totalVotes) * 2 * Math.PI;
-            var color = pieColors[i % pieColors.length];
-            var endAngle = startAngle + sliceAngle;
-
-            // Рисуем сектор
-            ctx.beginPath();
-            ctx.moveTo(centerX, centerY);
-            ctx.arc(centerX, centerY, radius, startAngle, endAngle);
-            ctx.closePath();
-            ctx.fillStyle = color;
-            ctx.fill();
-            ctx.strokeStyle = 'rgba(255,255,255,0.8)';
-            ctx.lineWidth = 2;
-            ctx.stroke();
-
-            // Добавляем в легенду
-            var percent = ((item.count / totalVotes) * 100).toFixed(1);
-            legendHtml += '<div class="pie-legend-item">';
-            legendHtml += '<span class="color-dot" style="background:' + color + '"></span>';
-            legendHtml += '<span class="label">' + escapeHtml(item.name) + '</span>';
-            legendHtml += '<span class="value">(' + item.count + ' голосов, ' + percent + '%)</span>';
-            legendHtml += '</div>';
-
-            startAngle = endAngle;
+        var html = '';
+        for (var i = 0; i < top10.length; i++) {
+            var item = top10[i];
+            var position = (i + 1);
+            var medal = i < 3 ? medals[i] : '#' + position;
+            var medalClass = i < 3 ? medalClasses[i] : '';
+            html += '<div class="top-item">';
+            html += '<span class="position ' + medalClass + '">' + medal + '</span>';
+            html += '<span class="name">' + escapeHtml(item.name) + '</span>';
+            html += '<span class="score">' + item.avg.toFixed(2) + '</span>';
+            html += '</div>';
         }
-
-        pieLegend.innerHTML = legendHtml;
+        topList.innerHTML = html;
     }
 
     // ========== ОЧИСТКА ВСЕГО ==========
@@ -1054,7 +1069,7 @@
             winnerName = null;
             render();
             renderHistory();
-            renderPieChart();
+            renderTopAndLeader();
             lastUpdateTime[currentTab] = Date.now();
             saveToGitHub(currentTab);
             setStatus('🗑️ Всё очищено в номинации "' + getTabName(currentTab) + '"', '#dc3545');
@@ -1238,7 +1253,7 @@
                 allData[tab] = { votes: [], history: [] }; 
                 render(); 
                 renderHistory();
-                renderPieChart();
+                renderTopAndLeader();
                 return; 
             }
             if (!response.ok) { throw new Error('Ошибка загрузки'); }
@@ -1255,7 +1270,7 @@
                 };
                 render();
                 renderHistory();
-                renderPieChart();
+                renderTopAndLeader();
                 setStatusBar('online', '☁️ Автосинхронизация');
                 setStatus('☁️ Синхронизировано', '#17a2b8');
             }
@@ -1332,7 +1347,7 @@
         nameInput.value = ''; scoreInput.value = ''; nameInput.focus();
         render();
         renderHistory();
-        renderPieChart();
+        renderTopAndLeader();
         addHistory(name, score);
         lastUpdateTime[currentTab] = Date.now();
         await saveToGitHub(currentTab);
@@ -1385,14 +1400,14 @@
             winnerDisplay.textContent = '🤝 Ничья! (' + tieNames.join(', ') + ')';
             render();
             renderHistory();
-            renderPieChart();
+            renderTopAndLeader();
             showPodium();
         } else {
             winnerName = winner.name;
             winnerDisplay.textContent = '👑 Победитель: ' + winner.name + ' (' + winner.avg.toFixed(2) + ')';
             render();
             renderHistory();
-            renderPieChart();
+            renderTopAndLeader();
             showPodium();
         }
     }
@@ -1415,7 +1430,7 @@
         await loadFromGitHub('evening');
         render();
         renderHistory();
-        renderPieChart();
+        renderTopAndLeader();
         if (autoSyncInterval) clearInterval(autoSyncInterval);
         autoSyncInterval = setInterval(function() {
             if (githubToken) {
