@@ -333,7 +333,7 @@
             <span id="winnerDisplay">👑 Победитель: не определен</span>
             <span class="save-status" id="statusDisplay">☁️ Готов</span>
         </div>
-        <div class="sync-info">💾 Синхронизация только по кнопке</div>
+        <div class="sync-info">🔄 Автосинхронизация каждые 30 секунд</div>
     </div>
 </div>
 
@@ -354,6 +354,8 @@
     var allData = { 'national': { votes: [] }, 'free': { votes: [] }, 'evening': { votes: [] } };
     var githubToken = '';
     var winnerName = null;
+    var lastUpdateTime = {};
+    var autoSyncInterval = null;
 
     // DOM
     var tabsContainer = document.getElementById('tabsContainer');
@@ -406,6 +408,7 @@
         allData[currentTab].votes = newVotes;
         if (winnerName === name) winnerName = null;
         render();
+        lastUpdateTime[currentTab] = Date.now();
         saveToGitHub(currentTab);
         deleteName.value = '';
         setStatus('🗑️ Удалён: ' + name, '#dc3545');
@@ -483,7 +486,6 @@
         if (!githubToken) return;
         var filePath = getDataFilePath(tab);
         try {
-            setStatusBar('connecting', '⏳ Загрузка...');
             var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
             var response = await fetch(url, { headers: { 'Authorization': 'token ' + githubToken, 'Accept': 'application/vnd.github.v3+json' } });
             if (response.status === 404) { allData[tab] = { votes: [] }; render(); return; }
@@ -491,8 +493,18 @@
             var data = await response.json();
             var content = base64ToUtf8(data.content);
             var jsonData = JSON.parse(content);
-            if (jsonData && jsonData.votes) { allData[tab] = { votes: jsonData.votes }; render(); setStatusBar('online', '☁️ Загружено'); setStatus('☁️ Загружено', '#17a2b8'); }
-        } catch(e) { setStatusBar('offline', '⚠️ Ошибка'); setStatus('❌ Ошибка', '#dc3545'); }
+            if (jsonData && jsonData.votes) {
+                // Проверяем, не изменились ли данные локально после последней загрузки
+                if (lastUpdateTime[tab] && Date.now() - lastUpdateTime[tab] < 5000) {
+                    // Если данные были изменены меньше 5 секунд назад — не перезаписываем
+                    return;
+                }
+                allData[tab] = { votes: jsonData.votes };
+                render();
+                setStatusBar('online', '☁️ Автосинхронизация');
+                setStatus('☁️ Синхронизировано', '#17a2b8');
+            }
+        } catch(e) { setStatusBar('offline', '⚠️ Ошибка'); }
     }
 
     function render() {
@@ -548,7 +560,9 @@
         var votes = allData[currentTab].votes;
         votes.push({ id: Date.now() + '_' + Math.random().toString(36).substr(2, 6), name: name, score: score });
         nameInput.value = ''; scoreInput.value = ''; nameInput.focus();
-        render(); await saveToGitHub(currentTab);
+        render();
+        lastUpdateTime[currentTab] = Date.now();
+        await saveToGitHub(currentTab);
         setStatus('✅ Добавлено! (' + getTabName(currentTab) + ')', '#28a745');
     }
 
@@ -593,6 +607,13 @@
         await loadFromGitHub('free');
         await loadFromGitHub('evening');
         render();
+        // Запускаем автосинхронизацию каждые 30 секунд
+        if (autoSyncInterval) clearInterval(autoSyncInterval);
+        autoSyncInterval = setInterval(function() {
+            if (githubToken) {
+                loadFromGitHub(currentTab);
+            }
+        }, 30000);
     }
 
     function init() {
