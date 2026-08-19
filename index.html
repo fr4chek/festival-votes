@@ -37,6 +37,7 @@
             color: white;
             margin-left: 8px;
         }
+
         .tabs {
             display: flex;
             gap: 6px;
@@ -65,6 +66,7 @@
             box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
         }
         .tab-emoji { margin-right: 6px; }
+
         .status-bar {
             text-align: center;
             padding: 10px;
@@ -77,6 +79,7 @@
         .status-bar.offline { background: #f8d7da; color: #721c24; border: 2px solid #dc3545; }
         .status-bar.connecting { background: #fff3cd; color: #856404; border: 2px solid #ffc107; }
         .status-bar.saving { background: #cce5ff; color: #004085; border: 2px solid #007bff; }
+
         .token-input {
             background: #f8f9ff;
             padding: 16px;
@@ -108,6 +111,7 @@
             margin-top: 10px;
             width: 100%;
         }
+
         .stats {
             display: flex;
             flex-wrap: wrap;
@@ -125,6 +129,7 @@
         }
         .stat-card .num { font-size: 24px; font-weight: 700; color: #667eea; }
         .stat-card .label { font-size: 12px; color: #666; }
+
         .input-section {
             display: flex;
             flex-wrap: wrap;
@@ -161,6 +166,7 @@
         .input-group input[type="number"]::-webkit-inner-spin-button {
             -webkit-appearance: none;
         }
+
         .btn {
             padding: 12px 20px;
             border: none;
@@ -180,6 +186,7 @@
         .btn-primary { background: #667eea; }
         .btn-danger { background: #dc3545; }
         .btn-sm { padding: 4px 8px; font-size: 12px; }
+
         .actions {
             display: flex;
             flex-wrap: wrap;
@@ -192,6 +199,39 @@
             min-width: 100px;
             text-align: center;
         }
+
+        .delete-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #fff5f5;
+            border-radius: 12px;
+            border: 1px solid #fcc;
+        }
+        .delete-section label {
+            font-weight: 600;
+            font-size: 13px;
+            color: #dc3545;
+        }
+        .delete-section input {
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 14px;
+            background: white;
+            flex: 1;
+            min-width: 120px;
+        }
+        .delete-section input:focus {
+            border-color: #dc3545;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+        }
+
         .table-wrap {
             overflow-x: auto;
             border-radius: 15px;
@@ -217,6 +257,7 @@
         .winner-row td { background: #ffd700 !important; font-weight: 700; border-bottom: 3px solid #ffa500; }
         .total-cell { font-weight: 700; font-size: 16px; color: #333; }
         .empty-message { text-align: center; padding: 25px; color: #888; font-style: italic; }
+
         .footer {
             margin-top: 16px;
             display: flex;
@@ -234,19 +275,8 @@
             background: #e8f5e9;
             color: #28a745;
         }
-        .delete-btn {
-            background: none;
-            border: none;
-            color: #dc3545;
-            font-size: 16px;
-            padding: 2px 8px;
-            border-radius: 8px;
-            cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
-            font-weight: 700;
-        }
-        .delete-btn:active { background: #dc3545; color: white; transform: scale(0.9); }
         .sync-info { font-size: 11px; color: #888; text-align: center; margin-top: 6px; }
+
         @media (max-width: 600px) {
             .container { padding: 14px; }
             .input-section { flex-direction: column; padding: 12px; }
@@ -260,34 +290,42 @@
             .token-input input { font-size: 14px; }
             .tabs { flex-wrap: wrap; }
             .tab-btn { font-size: 12px; padding: 8px; }
+            .delete-section { flex-direction: column; }
+            .delete-section input { width: 100%; }
         }
     </style>
 </head>
 <body>
+
 <div class="container" id="mainContent">
     <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; margin-bottom: 4px;">
         <h1 style="margin-bottom: 0;">🎭 Фестиваль</h1>
         <span class="role-badge">👑 Жюри</span>
     </div>
     <p class="subtitle" id="subtitle">Выберите номинацию и введите оценки</p>
+
     <div class="tabs" id="tabsContainer">
         <button class="tab-btn active" data-tab="national">🎵 Национальный</button>
         <button class="tab-btn" data-tab="free">🎸 Свободный</button>
         <button class="tab-btn" data-tab="evening">🌙 Вечерний</button>
     </div>
+
     <div id="statusBar" class="status-bar connecting">⏳ Подключение к GitHub...</div>
+
     <div class="token-input" id="tokenBlock">
         <label>🔑 Введите GitHub токен для доступа к данным</label>
         <input type="password" id="tokenInput" placeholder="Вставьте токен (ghp_...)" autocomplete="off">
         <div class="hint">Токен нужен только для сохранения данных в GitHub.</div>
         <button class="btn btn-primary" id="tokenBtn">✅ Подключиться</button>
     </div>
+
     <div id="appContent" style="display: none;">
         <div class="stats">
             <div class="stat-card"><div class="num" id="statParticipants">0</div><div class="label">👤 Участников</div></div>
             <div class="stat-card"><div class="num" id="statVotes">0</div><div class="label">📊 Оценок</div></div>
             <div class="stat-card" style="background:#fff3cd;"><div class="num" id="statAvg">—</div><div class="label">🏆 Средний балл лидера</div></div>
         </div>
+
         <div class="input-section">
             <div class="input-group">
                 <label>👤 Имя участника</label>
@@ -301,16 +339,26 @@
                 <button class="btn btn-add" id="addBtn">➕ Добавить</button>
             </div>
         </div>
+
+        <!-- НОВАЯ СЕКЦИЯ УДАЛЕНИЯ (без выпадающего списка) -->
+        <div class="delete-section" id="deleteSection">
+            <label>🗑️ Введите имя для удаления:</label>
+            <input type="text" id="deleteNameInput" placeholder="Например: Анна">
+            <button class="btn btn-danger" id="deleteBtn">✕ Удалить</button>
+        </div>
+
         <div class="table-wrap">
             <table>
-                <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>Все оценки</th><th style="width:50px;">✕</th></tr></thead>
-                <tbody id="tableBody"><tr><td colspan="5" class="empty-message">Нет данных. Добавьте оценки!</td></tr></tbody>
+                <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>Все оценки</th></tr></thead>
+                <tbody id="tableBody"><tr><td colspan="4" class="empty-message">Нет данных. Добавьте оценки!</td></tr></tbody>
             </table>
         </div>
+
         <div class="actions">
             <button class="btn btn-warning" id="calcBtn">🏆 Победитель</button>
             <button class="btn btn-success" id="syncBtn">🔄 Синхронизировать</button>
         </div>
+
         <div class="footer">
             <span id="winnerDisplay" style="font-weight:700;color:#333;">👑 Победитель: не определен</span>
             <span class="save-status" id="statusDisplay">☁️ Автосохранение</span>
@@ -318,14 +366,21 @@
         <div class="sync-info">💾 Данные сохраняются в GitHub</div>
     </div>
 </div>
+
 <script>
+    // ============================================================
+    // НАСТРОЙКИ
+    // ============================================================
     var REPO_OWNER = 'fr4chek';
     var REPO_NAME = 'festival-votes';
+    
     var DATA_FILES = {
         'national': 'data_national.json',
         'free': 'data_free.json',
         'evening': 'data_evening.json'
     };
+    // ============================================================
+
     var currentTab = 'national';
     var allData = {
         'national': { votes: [] },
@@ -336,6 +391,8 @@
     var isSaving = false;
     var githubToken = '';
     var dataSha = {};
+
+    // DOM
     var tabsContainer = document.getElementById('tabsContainer');
     var tokenBlock = document.getElementById('tokenBlock');
     var tokenInput = document.getElementById('tokenInput');
@@ -353,30 +410,59 @@
     var addBtn = document.getElementById('addBtn');
     var calcBtn = document.getElementById('calcBtn');
     var syncBtn = document.getElementById('syncBtn');
+    var deleteNameInput = document.getElementById('deleteNameInput');
+    var deleteBtn = document.getElementById('deleteBtn');
 
+    // ========== ВКЛАДКИ ==========
     tabsContainer.addEventListener('click', function(e) {
         var btn = e.target.closest('.tab-btn');
         if (!btn) return;
         var tab = btn.dataset.tab;
         if (tab === currentTab) return;
+        
         if (githubToken) {
             saveToGitHub(currentTab);
         }
+        
         document.querySelectorAll('.tab-btn').forEach(function(b) {
             b.classList.remove('active');
         });
         btn.classList.add('active');
         currentTab = tab;
+        
         loadTabData(tab);
     });
 
-    function deleteParticipant(name) {
-        if (!confirm('Удалить все оценки участника "' + name + '" из номинации "' + getTabName(currentTab) + '"?')) return;
+    // ========== УДАЛЕНИЕ ==========
+    deleteBtn.addEventListener('click', function() {
+        var name = deleteNameInput.value.trim();
+        if (!name) {
+            alert('Введите имя участника для удаления');
+            return;
+        }
+        
+        // Проверяем, есть ли такой участник
         var votes = getCurrentVotes();
-        var newVotes = [];
+        var found = false;
         for (var i = 0; i < votes.length; i++) {
-            if (votes[i].name !== name) {
-                newVotes.push(votes[i]);
+            if (votes[i].name === name) {
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            alert('Участник "' + name + '" не найден в номинации "' + getTabName(currentTab) + '"');
+            deleteNameInput.value = '';
+            deleteNameInput.focus();
+            return;
+        }
+        
+        if (!confirm('Удалить все оценки участника "' + name + '" из номинации "' + getTabName(currentTab) + '"?')) return;
+        
+        var newVotes = [];
+        for (var j = 0; j < votes.length; j++) {
+            if (votes[j].name !== name) {
+                newVotes.push(votes[j]);
             }
         }
         setCurrentVotes(newVotes);
@@ -384,26 +470,42 @@
         render();
         saveToGitHub(currentTab);
         setStatus('🗑️ Удалён участник: ' + name + ' (' + getTabName(currentTab) + ')', '#dc3545');
-    }
+        deleteNameInput.value = '';
+        deleteNameInput.focus();
+    });
 
+    // Enter для поля удаления
+    deleteNameInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            deleteBtn.click();
+        }
+    });
+
+    // ========== ОСТАЛЬНОЙ КОД ==========
     function getCurrentVotes() {
         return allData[currentTab]?.votes || [];
     }
+
     function setCurrentVotes(votes) {
         if (!allData[currentTab]) {
             allData[currentTab] = { votes: [] };
         }
         allData[currentTab].votes = votes;
     }
+
     function genId() { return Date.now() + '_' + Math.random().toString(36).substr(2, 6); }
+
     function setStatus(text, color) {
         statusDisplay.textContent = text;
         statusDisplay.style.color = color || '#28a745';
     }
+
     function setStatusBar(status, message) {
         statusBar.className = 'status-bar ' + status;
         statusBar.textContent = message;
     }
+
     function getUniqueParticipants(votes) {
         var set = new Set();
         for (var i = 0; i < votes.length; i++) {
@@ -411,17 +513,21 @@
         }
         return Array.from(set).sort();
     }
+
     function escapeHtml(text) {
         var div = document.createElement('div');
         div.textContent = text;
         return div.innerHTML;
     }
+
     function saveToken(token) {
         try { localStorage.setItem('github_token', token); } catch(e) {}
     }
+
     function loadToken() {
         try { return localStorage.getItem('github_token') || ''; } catch(e) { return ''; }
     }
+
     function utf8ToBase64(str) {
         var encoder = new TextEncoder();
         var bytes = encoder.encode(str);
@@ -431,6 +537,7 @@
         }
         return btoa(binary);
     }
+
     function base64ToUtf8(base64) {
         var binary = atob(base64);
         var bytes = new Uint8Array(binary.length);
@@ -440,26 +547,34 @@
         var decoder = new TextDecoder('utf-8');
         return decoder.decode(bytes);
     }
+
     function getDataFilePath(tab) {
         return DATA_FILES[tab] || 'data.json';
     }
+
     async function saveToGitHub(tab) {
         if (isSaving || !githubToken) return false;
+        
         var filePath = getDataFilePath(tab);
         var votes = allData[tab]?.votes || [];
+        
         try {
             isSaving = true;
             setStatusBar('saving', '💾 Сохранение в GitHub (' + tab + ')...');
             setStatus('⏳ Сохранение...', '#856404');
+
             var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
+
             var loadResponse = await fetch(url, {
                 headers: {
                     'Authorization': 'token ' + githubToken,
                     'Accept': 'application/vnd.github.v3+json'
                 }
             });
+
             var remoteVotes = [];
             var remoteSha = null;
+
             if (loadResponse.ok) {
                 var loadData = await loadResponse.json();
                 remoteSha = loadData.sha;
@@ -473,8 +588,10 @@
             } else {
                 throw new Error('Ошибка загрузки: ' + loadResponse.status);
             }
+
             var merged = [];
             var ids = new Set();
+
             for (var i = 0; i < remoteVotes.length; i++) {
                 var v = remoteVotes[i];
                 if (!ids.has(v.id)) {
@@ -482,6 +599,7 @@
                     merged.push(v);
                 }
             }
+
             for (var j = 0; j < votes.length; j++) {
                 var v2 = votes[j];
                 if (!ids.has(v2.id)) {
@@ -489,14 +607,17 @@
                     merged.push(v2);
                 }
             }
+
             allData[tab].votes = merged;
             if (tab === currentTab) render();
+
             var data = {
                 votes: merged,
                 updatedAt: new Date().toISOString()
             };
             var jsonString = JSON.stringify(data, null, 2);
             var content = utf8ToBase64(jsonString);
+
             var body = {
                 message: 'Обновление данных (' + tab + ')',
                 content: content
@@ -504,6 +625,7 @@
             if (remoteSha) {
                 body.sha = remoteSha;
             }
+
             var saveResponse = await fetch(url, {
                 method: 'PUT',
                 headers: {
@@ -513,6 +635,7 @@
                 },
                 body: JSON.stringify(body)
             });
+
             if (!saveResponse.ok) {
                 if (saveResponse.status === 409) {
                     var retryResponse = await fetch(url, {
@@ -526,6 +649,7 @@
                         var retryContent = base64ToUtf8(retryData.content);
                         var retryJson = JSON.parse(retryContent);
                         var retryVotes = retryJson.votes || [];
+                        
                         var finalMerged = [];
                         var finalIds = new Set();
                         for (var k = 0; k < retryVotes.length; k++) {
@@ -544,6 +668,7 @@
                         }
                         allData[tab].votes = finalMerged;
                         if (tab === currentTab) render();
+                        
                         var finalData = {
                             votes: finalMerged,
                             updatedAt: new Date().toISOString()
@@ -564,12 +689,15 @@
                     }
                 }
             }
+
             if (!saveResponse.ok) {
                 var errorText = await saveResponse.text();
                 throw new Error(errorText);
             }
+
             var result = await saveResponse.json();
             dataSha[tab] = result.content.sha;
+            
             setStatusBar('online', '☁️ Данные сохранены в GitHub (' + tab + ')');
             setStatus('☁️ Сохранено в GitHub', '#28a745');
             return true;
@@ -582,11 +710,14 @@
             isSaving = false;
         }
     }
+
     async function loadFromGitHub(tab) {
         if (!githubToken) return false;
         var filePath = getDataFilePath(tab);
+        
         try {
             setStatusBar('connecting', '⏳ Загрузка данных из GitHub (' + tab + ')...');
+            
             var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
             var response = await fetch(url, {
                 headers: {
@@ -594,19 +725,23 @@
                     'Accept': 'application/vnd.github.v3+json'
                 }
             });
+
             if (response.status === 404) {
                 allData[tab] = { votes: [] };
                 if (tab === currentTab) render();
                 await saveToGitHub(tab);
                 return true;
             }
+
             if (!response.ok) {
                 throw new Error('Ошибка загрузки: ' + response.status);
             }
+
             var data = await response.json();
             dataSha[tab] = data.sha;
             var content = base64ToUtf8(data.content);
             var jsonData = JSON.parse(content);
+
             if (jsonData && jsonData.votes && Array.isArray(jsonData.votes)) {
                 allData[tab] = { votes: jsonData.votes };
                 if (tab === currentTab) render();
@@ -614,6 +749,7 @@
                 setStatus('☁️ Загружено из GitHub', '#17a2b8');
                 return true;
             }
+
             return false;
         } catch(e) {
             console.error('Load error:', e);
@@ -622,6 +758,7 @@
             return false;
         }
     }
+
     function loadTabData(tab) {
         if (allData[tab]) {
             render();
@@ -635,17 +772,20 @@
             }
         }
     }
+
     function render() {
         var votes = getCurrentVotes();
         var allParticipants = getUniqueParticipants(votes);
         statParticipants.textContent = allParticipants.length;
         statVotes.textContent = votes.length;
+
         if (allParticipants.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="5" class="empty-message">Нет данных. Добавьте оценки!</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="4" class="empty-message">Нет данных. Добавьте оценки!</td></tr>';
             winnerDisplay.textContent = '👑 Победитель: не определен';
             statAvg.textContent = '—';
             return;
         }
+
         var html = '';
         var averages = [];
         for (var i = 0; i < allParticipants.length; i++) {
@@ -665,16 +805,16 @@
             var count = pVotes.length;
             var avg = count > 0 ? total / count : 0;
             averages.push({ name: p, avg: avg, count: count });
-            var escaped = p.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            
             html += '<tr>';
             html += '<td><strong>' + escapeHtml(p) + '</strong></td>';
             html += '<td class="total-cell">' + (count > 0 ? avg.toFixed(2) : '—') + '</td>';
             html += '<td>' + count + '</td>';
             html += '<td>' + allScores.join(', ') + '</td>';
-            html += '<td><button class="delete-btn" onclick="deleteParticipant(\'' + escaped + '\')">✕</button></td>';
             html += '</tr>';
         }
         tableBody.innerHTML = html;
+
         if (winnerName) {
             var rows = tableBody.querySelectorAll('tr');
             for (var r = 0; r < rows.length; r++) {
@@ -684,8 +824,10 @@
                 }
             }
         }
+
         var sorted = averages.slice().sort(function(a, b) { return b.avg - a.avg; });
         statAvg.textContent = (sorted.length > 0 && sorted[0].count > 0) ? sorted[0].avg.toFixed(2) : '—';
+
         if (winnerName) {
             var winner = null;
             for (var w = 0; w < averages.length; w++) {
@@ -703,6 +845,7 @@
             winnerDisplay.textContent = '👑 Победитель: не определен';
         }
     }
+
     function getTabName(tab) {
         var names = {
             'national': 'Национальный',
@@ -711,6 +854,7 @@
         };
         return names[tab] || tab;
     }
+
     async function addVote() {
         var name = nameInput.value.trim();
         var score = parseFloat(scoreInput.value);
@@ -720,9 +864,11 @@
             scoreInput.focus();
             return;
         }
+        
         var votes = getCurrentVotes();
         votes.push({ id: genId(), name: name, score: score });
         setCurrentVotes(votes);
+        
         nameInput.value = '';
         scoreInput.value = '';
         nameInput.focus();
@@ -730,10 +876,12 @@
         await saveToGitHub(currentTab);
         setStatus('✅ Оценка добавлена! (' + getTabName(currentTab) + ')', '#28a745');
     }
+
     function calculateWinner() {
         var votes = getCurrentVotes();
         var allParticipants = getUniqueParticipants(votes);
         if (allParticipants.length === 0) { alert('Нет данных для подсчёта'); return; }
+        
         var averages = [];
         for (var i = 0; i < allParticipants.length; i++) {
             var p = allParticipants[i];
@@ -752,6 +900,7 @@
         }
         var sorted = averages.slice().sort(function(a, b) { return b.avg - a.avg; });
         if (sorted.length === 0 || sorted[0].count === 0) { alert('Нет оценок для подсчёта'); return; }
+        
         var winner = sorted[0];
         var isTie = false;
         var tieNames = [winner.name];
@@ -770,12 +919,14 @@
         }
         render();
     }
+
     async function syncData() {
         if (!githubToken) { alert('Сначала подключитесь к GitHub'); return; }
         setStatus('🔄 Синхронизация...', '#856404');
         await loadFromGitHub(currentTab);
         setStatus('✅ Синхронизация завершена (' + getTabName(currentTab) + ')', '#28a745');
     }
+
     async function connectToGitHub() {
         var token = tokenInput.value.trim();
         if (!token) {
@@ -786,15 +937,19 @@
             alert('Токен должен начинаться с "ghp_"');
             return;
         }
+
         githubToken = token;
         saveToken(token);
+        
         tokenBlock.style.display = 'none';
         appContent.style.display = 'block';
+        
         await loadFromGitHub('national');
         await loadFromGitHub('free');
         await loadFromGitHub('evening');
         render();
     }
+
     function init() {
         var savedToken = loadToken();
         if (savedToken) {
@@ -805,24 +960,31 @@
             appContent.style.display = 'none';
         }
     }
+
+    // ========== ОБРАБОТЧИКИ ==========
     tokenBtn.addEventListener('click', connectToGitHub);
     tokenInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') { e.preventDefault(); connectToGitHub(); }
     });
+
     addBtn.addEventListener('click', addVote);
     calcBtn.addEventListener('click', calculateWinner);
     syncBtn.addEventListener('click', syncData);
+
     nameInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') { e.preventDefault(); scoreInput.focus(); }
     });
     scoreInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') { e.preventDefault(); addVote(); }
     });
+
     init();
+
     console.log('✅ Программа загружена!');
     console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
     console.log('📂 Номинации: Национальный, Свободный, Вечерний');
-    console.log('🗑️ Удаление работает через кнопку ✕ в таблице');
+    console.log('🗑️ Удаление: введите имя и нажмите "Удалить"');
 </script>
+
 </body>
 </html>
