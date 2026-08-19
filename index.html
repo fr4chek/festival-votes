@@ -297,8 +297,8 @@
     var votes = [];
     var winnerName = null;
     var isSaving = false;
-    var dataSha = null;
     var githubToken = '';
+    var isConnected = false;
 
     // DOM
     var tokenBlock = document.getElementById('tokenBlock');
@@ -374,83 +374,7 @@
     }
 
     // ================================================================
-    // ЗАГРУЗКА ДАННЫХ ИЗ GITHUB
-    // ================================================================
-    async function loadFromGitHub() {
-        if (!githubToken) return false;
-        try {
-            setStatusBar('connecting', '⏳ Загрузка данных из GitHub...');
-            
-            var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
-            var response = await fetch(url, {
-                headers: {
-                    'Authorization': 'token ' + githubToken,
-                    'Accept': 'application/vnd.github.v3+json'
-                }
-            });
-
-            if (response.status === 404) {
-                setStatusBar('connecting', '📝 Создание файла данных...');
-                // Создаём пустой файл
-                var emptyData = { votes: [], updatedAt: new Date().toISOString() };
-                var emptyJson = JSON.stringify(emptyData, null, 2);
-                var emptyContent = utf8ToBase64(emptyJson);
-                var createResponse = await fetch(url, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': 'token ' + githubToken,
-                        'Content-Type': 'application/json',
-                        'Accept': 'application/vnd.github.v3+json'
-                    },
-                    body: JSON.stringify({
-                        message: 'Создание файла данных',
-                        content: emptyContent
-                    })
-                });
-                if (createResponse.ok) {
-                    var result = await createResponse.json();
-                    dataSha = result.content.sha;
-                    votes = [];
-                    render();
-                    return true;
-                }
-                return false;
-            }
-
-            if (!response.ok) {
-                throw new Error('Ошибка загрузки: ' + response.status);
-            }
-
-            var data = await response.json();
-            dataSha = data.sha;
-            var content = base64ToUtf8(data.content);
-            var jsonData = JSON.parse(content);
-
-            if (jsonData && jsonData.votes && Array.isArray(jsonData.votes)) {
-                votes = jsonData.votes;
-                render();
-                setStatusBar('online', '☁️ Данные загружены из GitHub (' + votes.length + ' оценок)');
-                setStatus('☁️ Загружено из GitHub', '#17a2b8');
-                return true;
-            }
-
-            return false;
-        } catch(e) {
-            console.error('Load error:', e);
-            setStatusBar('offline', '⚠️ Ошибка загрузки: ' + e.message);
-            setStatus('❌ Ошибка загрузки', '#dc3545');
-            if (loadFromCache()) {
-                render();
-                setStatusBar('offline', '📂 Загружено из кэша (офлайн)');
-                setStatus('📂 Загружено из кэша', '#fd7e14');
-                return true;
-            }
-            return false;
-        }
-    }
-
-    // ================================================================
-    // ОБНОВЛЁННАЯ ФУНКЦИЯ СОХРАНЕНИЯ
+    // ОСНОВНАЯ ФУНКЦИЯ — ЗАГРУЗИТЬ И СОХРАНИТЬ
     // ================================================================
     async function saveToGitHub() {
         if (isSaving || !githubToken) return false;
@@ -460,8 +384,9 @@
             setStatusBar('saving', '💾 Сохранение в GitHub...');
             setStatus('⏳ Сохранение...', '#856404');
 
-            // 1. ВСЕГДА загружаем последние данные с GitHub
             var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
+
+            // ===== 1. ЗАГРУЖАЕМ ТЕКУЩИЕ ДАННЫЕ С GITHUB =====
             var loadResponse = await fetch(url, {
                 headers: {
                     'Authorization': 'token ' + githubToken,
@@ -480,13 +405,18 @@
                 if (remoteJson && remoteJson.votes && Array.isArray(remoteJson.votes)) {
                     remoteVotes = remoteJson.votes;
                 }
+            } else if (loadResponse.status === 404) {
+                // Файла нет — создадим
+                remoteSha = null;
+            } else {
+                throw new Error('Ошибка загрузки: ' + loadResponse.status);
             }
 
-            // 2. Объединяем локальные и удалённые данные (по id)
+            // ===== 2. ОБЪЕДИНЯЕМ ДАННЫЕ =====
             var merged = [];
             var ids = new Set();
 
-            // Добавляем все оценки с GitHub
+            // Сначала все с GitHub
             remoteVotes.forEach(function(v) {
                 if (!ids.has(v.id)) {
                     ids.add(v.id);
@@ -494,7 +424,7 @@
                 }
             });
 
-            // Добавляем локальные оценки, которых нет на GitHub
+            // Потом локальные (новые)
             votes.forEach(function(v) {
                 if (!ids.has(v.id)) {
                     ids.add(v.id);
@@ -502,12 +432,11 @@
                 }
             });
 
-            // 3. Обновляем votes и сохраняем
             votes = merged;
             render();
             saveToCache();
 
-            // 4. Сохраняем объединённые данные в GitHub
+            // ===== 3. СОХРАНЯЕМ В GITHUB =====
             var data = {
                 votes: votes,
                 updatedAt: new Date().toISOString()
@@ -534,12 +463,68 @@
             });
 
             if (!saveResponse.ok) {
+                // Если конфликт — пробуем ещё раз (загружаем свежие данные)
+                if (saveResponse.status === 409) {
+                    // Повторно загружаем и объединяем
+                    var retryResponse = await fetch(url, {
+                        headers: {
+                            'Authorization': 'token ' + githubToken,
+                            'Accept': 'application/vnd.github.v3+json'
+                        }
+                    });
+                    if (retryResponse.ok) {
+                        var retryData = await retryResponse.json();
+                        var retryContent = base64ToUtf8(retryData.content);
+                        var retryJson = JSON.parse(retryContent);
+                        var retryVotes = retryJson.votes || [];
+                        
+                        // Объединяем снова
+                        var finalMerged = [];
+                        var finalIds = new Set();
+                        retryVotes.forEach(function(v) {
+                            if (!finalIds.has(v.id)) {
+                                finalIds.add(v.id);
+                                finalMerged.push(v);
+                            }
+                        });
+                        votes.forEach(function(v) {
+                            if (!finalIds.has(v.id)) {
+                                finalIds.add(v.id);
+                                finalMerged.push(v);
+                            }
+                        });
+                        votes = finalMerged;
+                        render();
+                        saveToCache();
+                        
+                        // Сохраняем с новым SHA
+                        var finalData = {
+                            votes: votes,
+                            updatedAt: new Date().toISOString()
+                        };
+                        var finalJson = JSON.stringify(finalData, null, 2);
+                        var finalContent = utf8ToBase64(finalJson);
+                        body.content = finalContent;
+                        body.sha = retryData.sha;
+                        saveResponse = await fetch(url, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': 'token ' + githubToken,
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/vnd.github.v3+json'
+                            },
+                            body: JSON.stringify(body)
+                        });
+                    }
+                }
+            }
+
+            if (!saveResponse.ok) {
                 var errorText = await saveResponse.text();
                 throw new Error(errorText);
             }
 
             var result = await saveResponse.json();
-            dataSha = result.content.sha;
             
             setStatusBar('online', '☁️ Данные сохранены в GitHub');
             setStatus('☁️ Сохранено в GitHub', '#28a745');
@@ -552,6 +537,65 @@
             return false;
         } finally {
             isSaving = false;
+        }
+    }
+
+    // ================================================================
+    // ЗАГРУЗКА ДАННЫХ ИЗ GITHUB
+    // ================================================================
+    async function loadFromGitHub() {
+        if (!githubToken) return false;
+        try {
+            setStatusBar('connecting', '⏳ Загрузка данных из GitHub...');
+            
+            var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
+            var response = await fetch(url, {
+                headers: {
+                    'Authorization': 'token ' + githubToken,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+
+            if (response.status === 404) {
+                // Файла нет — создаём пустые данные
+                votes = [];
+                render();
+                saveToCache();
+                await saveToGitHub();
+                setStatusBar('online', '☁️ Создан новый файл данных');
+                setStatus('✅ Готово!', '#28a745');
+                return true;
+            }
+
+            if (!response.ok) {
+                throw new Error('Ошибка загрузки: ' + response.status);
+            }
+
+            var data = await response.json();
+            var content = base64ToUtf8(data.content);
+            var jsonData = JSON.parse(content);
+
+            if (jsonData && jsonData.votes && Array.isArray(jsonData.votes)) {
+                votes = jsonData.votes;
+                render();
+                setStatusBar('online', '☁️ Данные загружены из GitHub (' + votes.length + ' оценок)');
+                setStatus('☁️ Загружено из GitHub', '#17a2b8');
+                saveToCache();
+                return true;
+            }
+
+            return false;
+        } catch(e) {
+            console.error('Load error:', e);
+            setStatusBar('offline', '⚠️ Ошибка загрузки: ' + e.message);
+            setStatus('❌ Ошибка загрузки', '#dc3545');
+            if (loadFromCache()) {
+                render();
+                setStatusBar('offline', '📂 Загружено из кэша (офлайн)');
+                setStatus('📂 Загружено из кэша', '#fd7e14');
+                return true;
+            }
+            return false;
         }
     }
 
@@ -724,6 +768,7 @@
         
         await loadFromGitHub();
         
+        // Автосохранение каждые 30 секунд
         setInterval(function() {
             if (votes.length > 0 && githubToken) {
                 saveToGitHub();
