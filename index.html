@@ -351,8 +351,40 @@
     }
 
     // ================================================================
-    // НОВАЯ ФУНКЦИЯ СОХРАНЕНИЯ — БЕЗ btoa!
-    // Используем простой способ: отправляем JSON как есть
+    // ПРАВИЛЬНОЕ КОДИРОВАНИЕ В BASE64 ДЛЯ РУССКИХ БУКВ
+    // ================================================================
+    function utf8ToBase64(str) {
+        // 1. Кодируем строку в UTF-8 байты
+        var encoder = new TextEncoder();
+        var bytes = encoder.encode(str);
+        
+        // 2. Превращаем байты в бинарную строку
+        var binary = '';
+        for (var i = 0; i < bytes.length; i++) {
+            binary += String.fromCharCode(bytes[i]);
+        }
+        
+        // 3. Кодируем в Base64
+        return btoa(binary);
+    }
+
+    function base64ToUtf8(base64) {
+        // 1. Декодируем Base64 в бинарную строку
+        var binary = atob(base64);
+        
+        // 2. Превращаем в Uint8Array
+        var bytes = new Uint8Array(binary.length);
+        for (var i = 0; i < binary.length; i++) {
+            bytes[i] = binary.charCodeAt(i);
+        }
+        
+        // 3. Декодируем из UTF-8
+        var decoder = new TextDecoder('utf-8');
+        return decoder.decode(bytes);
+    }
+
+    // ================================================================
+    // СОХРАНЕНИЕ В GITHUB
     // ================================================================
     async function saveToGitHub() {
         if (isSaving || !githubToken) return false;
@@ -362,38 +394,11 @@
             setStatusBar('saving', '💾 Сохранение в GitHub...');
             setStatus('⏳ Сохранение...', '#856404');
 
-            // Просто создаём JSON-строку с русскими буквами
             var data = {
                 votes: votes,
                 updatedAt: new Date().toISOString()
             };
             var jsonString = JSON.stringify(data, null, 2);
-
-            // Кодируем в Base64 через простой обход
-            // Сначала переводим строку в UTF-8 байты, потом в Base64
-            function utf8ToBase64(str) {
-                // Кодируем строку в UTF-8
-                var bytes = [];
-                for (var i = 0; i < str.length; i++) {
-                    var code = str.charCodeAt(i);
-                    if (code < 128) {
-                        bytes.push(code);
-                    } else if (code < 2048) {
-                        bytes.push(192 | (code >> 6), 128 | (code & 63));
-                    } else if (code < 65536) {
-                        bytes.push(224 | (code >> 12), 128 | ((code >> 6) & 63), 128 | (code & 63));
-                    } else {
-                        bytes.push(240 | (code >> 18), 128 | ((code >> 12) & 63), 128 | ((code >> 6) & 63), 128 | (code & 63));
-                    }
-                }
-                // Превращаем байты в строку для btoa
-                var binary = '';
-                for (var j = 0; j < bytes.length; j++) {
-                    binary += String.fromCharCode(bytes[j]);
-                }
-                return btoa(binary);
-            }
-
             var content = utf8ToBase64(jsonString);
 
             var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
@@ -439,7 +444,9 @@
         }
     }
 
-    // ========== ЗАГРУЗКА ДАННЫХ ИЗ GITHUB ==========
+    // ================================================================
+    // ЗАГРУЗКА ИЗ GITHUB
+    // ================================================================
     async function loadFromGitHub() {
         if (!githubToken) return false;
         try {
@@ -465,13 +472,7 @@
 
             var data = await response.json();
             dataSha = data.sha;
-            // Декодируем из Base64 в UTF-8
-            var binary = atob(data.content);
-            var bytes = new Uint8Array(binary.length);
-            for (var i = 0; i < binary.length; i++) {
-                bytes[i] = binary.charCodeAt(i);
-            }
-            var content = new TextDecoder('utf-8').decode(bytes);
+            var content = base64ToUtf8(data.content);
             var jsonData = JSON.parse(content);
 
             if (jsonData && jsonData.votes && Array.isArray(jsonData.votes)) {
