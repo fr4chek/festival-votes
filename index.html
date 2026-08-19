@@ -64,6 +64,7 @@
         .status-bar.online { background: #d4edda; color: #155724; border: 2px solid #28a745; }
         .status-bar.offline { background: #f8d7da; color: #721c24; border: 2px solid #dc3545; }
         .status-bar.connecting { background: #fff3cd; color: #856404; border: 2px solid #ffc107; }
+        .status-bar.saving { background: #cce5ff; color: #004085; border: 2px solid #007bff; }
         .token-input {
             background: #f8f9ff;
             padding: 16px;
@@ -332,6 +333,7 @@
             <span id="winnerDisplay">👑 Победитель: не определен</span>
             <span class="save-status" id="statusDisplay">☁️ Готов</span>
         </div>
+        <div class="sync-info">💾 Синхронизация только по кнопке</div>
     </div>
 </div>
 
@@ -384,7 +386,6 @@
         btn.classList.add('active');
         currentTab = tab;
         render();
-        loadTabData(tab);
     });
 
     // ========== УДАЛЕНИЕ ==========
@@ -494,11 +495,6 @@
         } catch(e) { setStatusBar('offline', '⚠️ Ошибка'); setStatus('❌ Ошибка', '#dc3545'); }
     }
 
-    function loadTabData(tab) {
-        if (allData[tab]) { render(); setStatusBar('online', '☁️ Данные загружены (' + tab + ')'); }
-        else { if (githubToken) { loadFromGitHub(tab); } else { allData[tab] = { votes: [] }; render(); } }
-    }
-
     function render() {
         var votes = allData[currentTab]?.votes || [];
         var participants = getUniqueParticipants(votes);
@@ -593,7 +589,9 @@
         if (!token.startsWith('ghp_')) { alert('Токен должен начинаться с "ghp_"'); return; }
         githubToken = token; saveToken(token);
         tokenBlock.style.display = 'none'; appContent.style.display = 'block';
-        await loadFromGitHub('national'); await loadFromGitHub('free'); await loadFromGitHub('evening');
+        await loadFromGitHub('national');
+        await loadFromGitHub('free');
+        await loadFromGitHub('evening');
         render();
     }
 
