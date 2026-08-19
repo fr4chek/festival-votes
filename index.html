@@ -374,29 +374,6 @@
     }
 
     // ================================================================
-    // ОБНОВЛЁННАЯ ФУНКЦИЯ ПОЛУЧЕНИЯ SHA
-    // ================================================================
-    async function getFileSha() {
-        if (!githubToken) return null;
-        try {
-            var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
-            var response = await fetch(url, {
-                headers: {
-                    'Authorization': 'token ' + githubToken,
-                    'Accept': 'application/vnd.github.v3+json'
-                }
-            });
-            if (response.ok) {
-                var data = await response.json();
-                return data.sha;
-            }
-            return null;
-        } catch(e) {
-            return null;
-        }
-    }
-
-    // ================================================================
     // ЗАГРУЗКА ДАННЫХ ИЗ GITHUB
     // ================================================================
     async function loadFromGitHub() {
@@ -414,8 +391,30 @@
 
             if (response.status === 404) {
                 setStatusBar('connecting', '📝 Создание файла данных...');
-                await saveToGitHub();
-                return true;
+                // Создаём пустой файл
+                var emptyData = { votes: [], updatedAt: new Date().toISOString() };
+                var emptyJson = JSON.stringify(emptyData, null, 2);
+                var emptyContent = utf8ToBase64(emptyJson);
+                var createResponse = await fetch(url, {
+                    method: 'PUT',
+                    headers: {
+                        'Authorization': 'token ' + githubToken,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github.v3+json'
+                    },
+                    body: JSON.stringify({
+                        message: 'Создание файла данных',
+                        content: emptyContent
+                    })
+                });
+                if (createResponse.ok) {
+                    var result = await createResponse.json();
+                    dataSha = result.content.sha;
+                    votes = [];
+                    render();
+                    return true;
+                }
+                return false;
             }
 
             if (!response.ok) {
@@ -451,7 +450,7 @@
     }
 
     // ================================================================
-    // ГЛАВНАЯ ФУНКЦИЯ СОХРАНЕНИЯ — УПРОЩЁННАЯ И НАДЁЖНАЯ
+    // ОБНОВЛЁННАЯ ФУНКЦИЯ СОХРАНЕНИЯ
     // ================================================================
     async function saveToGitHub() {
         if (isSaving || !githubToken) return false;
@@ -461,13 +460,54 @@
             setStatusBar('saving', '💾 Сохранение в GitHub...');
             setStatus('⏳ Сохранение...', '#856404');
 
-            // 1. Получаем свежий SHA
-            var currentSha = await getFileSha();
-            if (currentSha) {
-                dataSha = currentSha;
+            // 1. ВСЕГДА загружаем последние данные с GitHub
+            var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
+            var loadResponse = await fetch(url, {
+                headers: {
+                    'Authorization': 'token ' + githubToken,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+
+            var remoteVotes = [];
+            var remoteSha = null;
+
+            if (loadResponse.ok) {
+                var loadData = await loadResponse.json();
+                remoteSha = loadData.sha;
+                var remoteContent = base64ToUtf8(loadData.content);
+                var remoteJson = JSON.parse(remoteContent);
+                if (remoteJson && remoteJson.votes && Array.isArray(remoteJson.votes)) {
+                    remoteVotes = remoteJson.votes;
+                }
             }
 
-            // 2. Готовим данные
+            // 2. Объединяем локальные и удалённые данные (по id)
+            var merged = [];
+            var ids = new Set();
+
+            // Добавляем все оценки с GitHub
+            remoteVotes.forEach(function(v) {
+                if (!ids.has(v.id)) {
+                    ids.add(v.id);
+                    merged.push(v);
+                }
+            });
+
+            // Добавляем локальные оценки, которых нет на GitHub
+            votes.forEach(function(v) {
+                if (!ids.has(v.id)) {
+                    ids.add(v.id);
+                    merged.push(v);
+                }
+            });
+
+            // 3. Обновляем votes и сохраняем
+            votes = merged;
+            render();
+            saveToCache();
+
+            // 4. Сохраняем объединённые данные в GitHub
             var data = {
                 votes: votes,
                 updatedAt: new Date().toISOString()
@@ -475,17 +515,15 @@
             var jsonString = JSON.stringify(data, null, 2);
             var content = utf8ToBase64(jsonString);
 
-            var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
             var body = {
                 message: 'Обновление данных голосования',
                 content: content
             };
-            if (dataSha) {
-                body.sha = dataSha;
+            if (remoteSha) {
+                body.sha = remoteSha;
             }
 
-            // 3. Пытаемся сохранить
-            var response = await fetch(url, {
+            var saveResponse = await fetch(url, {
                 method: 'PUT',
                 headers: {
                     'Authorization': 'token ' + githubToken,
@@ -495,102 +533,16 @@
                 body: JSON.stringify(body)
             });
 
-            // 4. Если конфликт — загружаем данные с GitHub, объединяем и сохраняем
-            if (response.status === 409) {
-                console.log('🔄 Конфликт SHA, загружаем данные с GitHub...');
-                
-                // Загружаем текущие данные с GitHub
-                var loadResponse = await fetch(url, {
-                    headers: {
-                        'Authorization': 'token ' + githubToken,
-                        'Accept': 'application/vnd.github.v3+json'
-                    }
-                });
-                
-                if (loadResponse.ok) {
-                    var loadData = await loadResponse.json();
-                    var remoteContent = base64ToUtf8(loadData.content);
-                    var remoteData = JSON.parse(remoteContent);
-                    
-                    if (remoteData && remoteData.votes && Array.isArray(remoteData.votes)) {
-                        // Объединяем оценки (по id)
-                        var merged = [];
-                        var ids = new Set();
-                        
-                        // Сначала добавляем все оценки из GitHub
-                        remoteData.votes.forEach(function(v) {
-                            if (!ids.has(v.id)) {
-                                ids.add(v.id);
-                                merged.push(v);
-                            }
-                        });
-                        
-                        // Потом добавляем локальные, которых нет
-                        votes.forEach(function(v) {
-                            if (!ids.has(v.id)) {
-                                ids.add(v.id);
-                                merged.push(v);
-                            }
-                        });
-                        
-                        votes = merged;
-                        render();
-                        saveToCache();
-                        
-                        // Сохраняем объединённые данные
-                        var mergedData = {
-                            votes: votes,
-                            updatedAt: new Date().toISOString()
-                        };
-                        var mergedJson = JSON.stringify(mergedData, null, 2);
-                        var mergedContent = utf8ToBase64(mergedJson);
-                        
-                        body.content = mergedContent;
-                        body.sha = loadData.sha;
-                        dataSha = loadData.sha;
-                        
-                        response = await fetch(url, {
-                            method: 'PUT',
-                            headers: {
-                                'Authorization': 'token ' + githubToken,
-                                'Content-Type': 'application/json',
-                                'Accept': 'application/vnd.github.v3+json'
-                            },
-                            body: JSON.stringify(body)
-                        });
-                    }
-                }
-            }
-
-            // 5. Если всё равно ошибка — пробуем ещё раз с новым SHA
-            if (!response.ok && response.status === 409) {
-                var newSha = await getFileSha();
-                if (newSha) {
-                    dataSha = newSha;
-                    body.sha = dataSha;
-                    response = await fetch(url, {
-                        method: 'PUT',
-                        headers: {
-                            'Authorization': 'token ' + githubToken,
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/vnd.github.v3+json'
-                        },
-                        body: JSON.stringify(body)
-                    });
-                }
-            }
-
-            if (!response.ok) {
-                var errorText = await response.text();
+            if (!saveResponse.ok) {
+                var errorText = await saveResponse.text();
                 throw new Error(errorText);
             }
 
-            var result = await response.json();
+            var result = await saveResponse.json();
             dataSha = result.content.sha;
             
             setStatusBar('online', '☁️ Данные сохранены в GitHub');
             setStatus('☁️ Сохранено в GitHub', '#28a745');
-            saveToCache();
             return true;
         } catch(e) {
             console.error('Save error:', e);
