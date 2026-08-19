@@ -234,11 +234,10 @@
     <h1>🎭 Фестиваль — Подсчёт голосов</h1>
     <p class="subtitle">Введите имя участника и оценку. Данные сохраняются в облако автоматически!</p>
 
-    <!-- Блок для ввода токена -->
     <div class="token-input" id="tokenBlock">
         <label>🔑 Введите GitHub токен для доступа к данным</label>
         <input type="password" id="tokenInput" placeholder="Вставьте токен (ghp_...)" autocomplete="off">
-        <div class="hint">Токен нужен только для сохранения данных в GitHub. Он не передаётся никуда, кроме GitHub API.</div>
+        <div class="hint">Токен нужен только для сохранения данных в GitHub.</div>
         <button class="btn btn-primary" id="tokenBtn">✅ Подключиться</button>
     </div>
 
@@ -318,7 +317,6 @@
     var calcBtn = document.getElementById('calcBtn');
     var syncBtn = document.getElementById('syncBtn');
 
-    // ========== ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ==========
     function genId() { return Date.now() + '_' + Math.random().toString(36).substr(2, 6); }
 
     function setStatus(text, color) {
@@ -345,82 +343,17 @@
 
     // ========== РАБОТА С ТОКЕНОМ ==========
     function saveToken(token) {
-        try {
-            localStorage.setItem('github_token', token);
-        } catch(e) {}
+        try { localStorage.setItem('github_token', token); } catch(e) {}
     }
 
     function loadToken() {
-        try {
-            return localStorage.getItem('github_token') || '';
-        } catch(e) { return ''; }
+        try { return localStorage.getItem('github_token') || ''; } catch(e) { return ''; }
     }
 
-    // ========== ФУНКЦИЯ ДЛЯ КОРРЕКТНОГО КОДИРОВАНИЯ ==========
-    function utf8ToBase64(str) {
-        // Кодируем строку в UTF-8, потом в Base64
-        var bytes = new TextEncoder().encode(str);
-        var binary = '';
-        for (var i = 0; i < bytes.length; i++) {
-            binary += String.fromCharCode(bytes[i]);
-        }
-        return btoa(binary);
-    }
-
-    // ========== ЗАГРУЗКА ДАННЫХ ИЗ GITHUB ==========
-    async function loadFromGitHub() {
-        if (!githubToken) return false;
-        try {
-            setStatusBar('connecting', '⏳ Загрузка данных из GitHub...');
-            
-            var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
-            var response = await fetch(url, {
-                headers: {
-                    'Authorization': 'token ' + githubToken,
-                    'Accept': 'application/vnd.github.v3+json'
-                }
-            });
-
-            if (response.status === 404) {
-                setStatusBar('connecting', '📝 Создание файла данных...');
-                await saveToGitHub();
-                return true;
-            }
-
-            if (!response.ok) {
-                throw new Error('Ошибка загрузки: ' + response.status);
-            }
-
-            var data = await response.json();
-            dataSha = data.sha;
-            var content = atob(data.content);
-            // Декодируем из UTF-8
-            var jsonData = JSON.parse(content);
-
-            if (jsonData && jsonData.votes && Array.isArray(jsonData.votes)) {
-                votes = jsonData.votes;
-                render();
-                setStatusBar('online', '☁️ Данные загружены из GitHub (' + votes.length + ' оценок)');
-                setStatus('☁️ Загружено из GitHub', '#17a2b8');
-                return true;
-            }
-
-            return false;
-        } catch(e) {
-            console.error('Load error:', e);
-            setStatusBar('offline', '⚠️ Ошибка загрузки: ' + e.message);
-            setStatus('❌ Ошибка загрузки', '#dc3545');
-            if (loadFromCache()) {
-                render();
-                setStatusBar('offline', '📂 Загружено из кэша (офлайн)');
-                setStatus('📂 Загружено из кэша', '#fd7e14');
-                return true;
-            }
-            return false;
-        }
-    }
-
-    // ========== СОХРАНЕНИЕ ДАННЫХ В GITHUB ==========
+    // ================================================================
+    // НОВАЯ ФУНКЦИЯ СОХРАНЕНИЯ — БЕЗ btoa!
+    // Используем простой способ: отправляем JSON как есть
+    // ================================================================
     async function saveToGitHub() {
         if (isSaving || !githubToken) return false;
         
@@ -429,12 +362,38 @@
             setStatusBar('saving', '💾 Сохранение в GitHub...');
             setStatus('⏳ Сохранение...', '#856404');
 
+            // Просто создаём JSON-строку с русскими буквами
             var data = {
                 votes: votes,
                 updatedAt: new Date().toISOString()
             };
             var jsonString = JSON.stringify(data, null, 2);
-            // Используем правильную кодировку
+
+            // Кодируем в Base64 через простой обход
+            // Сначала переводим строку в UTF-8 байты, потом в Base64
+            function utf8ToBase64(str) {
+                // Кодируем строку в UTF-8
+                var bytes = [];
+                for (var i = 0; i < str.length; i++) {
+                    var code = str.charCodeAt(i);
+                    if (code < 128) {
+                        bytes.push(code);
+                    } else if (code < 2048) {
+                        bytes.push(192 | (code >> 6), 128 | (code & 63));
+                    } else if (code < 65536) {
+                        bytes.push(224 | (code >> 12), 128 | ((code >> 6) & 63), 128 | (code & 63));
+                    } else {
+                        bytes.push(240 | (code >> 18), 128 | ((code >> 12) & 63), 128 | ((code >> 6) & 63), 128 | (code & 63));
+                    }
+                }
+                // Превращаем байты в строку для btoa
+                var binary = '';
+                for (var j = 0; j < bytes.length; j++) {
+                    binary += String.fromCharCode(bytes[j]);
+                }
+                return btoa(binary);
+            }
+
             var content = utf8ToBase64(jsonString);
 
             var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
@@ -467,17 +426,74 @@
             
             setStatusBar('online', '☁️ Данные сохранены в GitHub');
             setStatus('☁️ Сохранено в GitHub', '#28a745');
-            
             saveToCache();
             return true;
         } catch(e) {
             console.error('Save error:', e);
-            setStatusBar('offline', '⚠️ Ошибка сохранения: ' + e.message);
+            setStatusBar('offline', '⚠️ Ошибка: ' + e.message);
             setStatus('❌ Ошибка сохранения', '#dc3545');
             saveToCache();
             return false;
         } finally {
             isSaving = false;
+        }
+    }
+
+    // ========== ЗАГРУЗКА ДАННЫХ ИЗ GITHUB ==========
+    async function loadFromGitHub() {
+        if (!githubToken) return false;
+        try {
+            setStatusBar('connecting', '⏳ Загрузка данных из GitHub...');
+            
+            var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
+            var response = await fetch(url, {
+                headers: {
+                    'Authorization': 'token ' + githubToken,
+                    'Accept': 'application/vnd.github.v3+json'
+                }
+            });
+
+            if (response.status === 404) {
+                setStatusBar('connecting', '📝 Создание файла данных...');
+                await saveToGitHub();
+                return true;
+            }
+
+            if (!response.ok) {
+                throw new Error('Ошибка загрузки: ' + response.status);
+            }
+
+            var data = await response.json();
+            dataSha = data.sha;
+            // Декодируем из Base64 в UTF-8
+            var binary = atob(data.content);
+            var bytes = new Uint8Array(binary.length);
+            for (var i = 0; i < binary.length; i++) {
+                bytes[i] = binary.charCodeAt(i);
+            }
+            var content = new TextDecoder('utf-8').decode(bytes);
+            var jsonData = JSON.parse(content);
+
+            if (jsonData && jsonData.votes && Array.isArray(jsonData.votes)) {
+                votes = jsonData.votes;
+                render();
+                setStatusBar('online', '☁️ Данные загружены из GitHub (' + votes.length + ' оценок)');
+                setStatus('☁️ Загружено из GitHub', '#17a2b8');
+                return true;
+            }
+
+            return false;
+        } catch(e) {
+            console.error('Load error:', e);
+            setStatusBar('offline', '⚠️ Ошибка загрузки: ' + e.message);
+            setStatus('❌ Ошибка загрузки', '#dc3545');
+            if (loadFromCache()) {
+                render();
+                setStatusBar('offline', '📂 Загружено из кэша (офлайн)');
+                setStatus('📂 Загружено из кэша', '#fd7e14');
+                return true;
+            }
+            return false;
         }
     }
 
@@ -643,10 +659,8 @@
         tokenBlock.style.display = 'none';
         appContent.style.display = 'block';
         
-        // Загружаем данные
         await loadFromGitHub();
         
-        // Автосохранение каждые 30 секунд
         setInterval(function() {
             if (votes.length > 0 && githubToken) {
                 saveToGitHub();
@@ -656,11 +670,9 @@
 
     // ========== ИНИЦИАЛИЗАЦИЯ ==========
     function init() {
-        // Проверяем сохранённый токен
         var savedToken = loadToken();
         if (savedToken) {
             tokenInput.value = savedToken;
-            // Автоматически подключаемся
             connectToGitHub();
         } else {
             tokenBlock.style.display = 'block';
@@ -685,7 +697,6 @@
         if (e.key === 'Enter') { e.preventDefault(); addVote(); }
     });
 
-    // ========== ЗАПУСК ==========
     init();
 
     console.log('✅ Программа загружена!');
