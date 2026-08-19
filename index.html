@@ -400,9 +400,8 @@
         loadTabData(tab);
     });
 
-    // ========== УДАЛЕНИЕ (НОВАЯ ЛОГИКА) ==========
+    // ========== УДАЛЕНИЕ ==========
     function deleteParticipant(name) {
-        // Убрали лишнюю строку var tabName = getTabName(currentTab);
         if (!confirm('Удалить все оценки участника "' + name + '" из номинации "' + getTabName(currentTab) + '"?')) return;
         
         var votes = getCurrentVotes();
@@ -420,12 +419,10 @@
     }
 
     // Обработчик клика на всю таблицу (делегирование событий)
-    // Это 100% гарантирует, что кнопка удаления будет работать при любой перерисовке
     tableBody.addEventListener('click', function(e) {
         var btn = e.target.closest('.delete-btn');
-        if (!btn) return; // Если кликнули не по крестику, игнорируем
-
-        var name = btn.getAttribute('data-name'); // Берем имя из data-атрибута
+        if (!btn) return;
+        var name = btn.getAttribute('data-name');
         if (name) {
             deleteParticipant(name);
         }
@@ -755,7 +752,6 @@
             var avg = count > 0 ? total / count : 0;
             averages.push({ name: p, avg: avg, count: count });
             
-            // ИСПРАВЛЕНИЕ: используем data-name вместо опасного onclick
             html += '<tr>';
             html += '<td><strong>' + escapeHtml(p) + '</strong></td>';
             html += '<td class="total-cell">' + (count > 0 ? avg.toFixed(2) : '—') + '</td>';
