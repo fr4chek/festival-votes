@@ -8,7 +8,6 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
             font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
-            /* ПРАЗДНИЧНЫЙ ФОН С ФЕЙЕРВЕРКОМ */
             background-image: url('https://img.goodfon.ru/original/1920x1200/c/99/prazdnik-salyut-feyerverk.jpg');
             background-size: cover;
             background-position: center;
@@ -20,7 +19,6 @@
             padding: 16px;
             margin: 0;
         }
-        /* Полупрозрачный слой для читаемости текста */
         body::before {
             content: '';
             position: fixed;
@@ -259,7 +257,7 @@
         }
         .sync-info { font-size: 11px; color: #888; text-align: center; margin-top: 6px; }
 
-        /* Модальное окно */
+        /* Модальное окно для очистки */
         .modal-overlay {
             position: fixed;
             top: 0;
@@ -283,7 +281,7 @@
             text-align: center;
             box-shadow: 0 20px 60px rgba(0,0,0,0.3);
         }
-        .modal-box h2 { margin-bottom: 10px; color: #dc3545; }
+        .modal-box h2 { margin-bottom: 10px; }
         .modal-box p { color: #555; margin-bottom: 15px; font-size: 16px; }
         .modal-box .question { font-size: 24px; font-weight: 700; color: #333; margin: 15px 0; }
         .modal-box input {
@@ -304,6 +302,18 @@
         .modal-box .btn-row .btn { flex: 1; }
         .modal-box .error-msg { color: #dc3545; font-size: 14px; margin-top: 10px; display: none; }
         .modal-box .error-msg.show { display: block; }
+        .modal-box .winner-list {
+            text-align: left;
+            padding: 10px 0;
+            font-size: 18px;
+            font-weight: 600;
+            color: #28a745;
+        }
+        .modal-box .winner-list li {
+            list-style: none;
+            padding: 4px 0;
+        }
+        .modal-box .winner-list .emoji { margin-right: 8px; }
 
         @media (max-width: 600px) {
             .container { padding: 14px; }
@@ -391,7 +401,7 @@
     </div>
 </div>
 
-<!-- Модальное окно -->
+<!-- Модальное окно для очистки -->
 <div class="modal-overlay" id="clearModal">
     <div class="modal-box">
         <h2>⚠️ Очистка данных</h2>
@@ -404,6 +414,17 @@
             <button class="btn" id="cancelClearBtn" style="background: #6c757d;">Отмена</button>
         </div>
         <div class="error-msg" id="captchaError">❌ Неправильный ответ! Попробуйте ещё раз.</div>
+    </div>
+</div>
+
+<!-- Модальное окно для ничьей -->
+<div class="modal-overlay" id="tieModal">
+    <div class="modal-box">
+        <h2>🤝 НИЧЬЯ!</h2>
+        <p>Несколько участников набрали одинаковое количество баллов:</p>
+        <ul class="winner-list" id="tieList"></ul>
+        <p style="font-size: 14px; color: #888; margin-top: 10px;">Средний балл победителей: <span id="tieScore">0</span></p>
+        <button class="btn btn-primary" id="closeTieBtn" style="margin-top: 15px; width: 100%;">👏 Отлично!</button>
     </div>
 </div>
 
@@ -454,6 +475,11 @@
     var confirmClearBtn = document.getElementById('confirmClearBtn');
     var cancelClearBtn = document.getElementById('cancelClearBtn');
     var captchaError = document.getElementById('captchaError');
+
+    var tieModal = document.getElementById('tieModal');
+    var tieList = document.getElementById('tieList');
+    var tieScore = document.getElementById('tieScore');
+    var closeTieBtn = document.getElementById('closeTieBtn');
 
     // ========== ВКЛАДКИ ==========
     tabsContainer.addEventListener('click', function(e) {
@@ -541,6 +567,17 @@
 
     clearModal.addEventListener('click', function(e) {
         if (e.target === clearModal) { cancelClearBtn.click(); }
+    });
+
+    // ========== ОКНО НИЧЬЕЙ ==========
+    closeTieBtn.addEventListener('click', function() {
+        tieModal.classList.remove('active');
+    });
+
+    tieModal.addEventListener('click', function(e) {
+        if (e.target === tieModal) {
+            tieModal.classList.remove('active');
+        }
     });
 
     // ========== ОСТАЛЬНОЙ КОД ==========
@@ -693,6 +730,7 @@
         var votes = allData[currentTab]?.votes || [];
         var participants = getUniqueParticipants(votes);
         if (participants.length === 0) { alert('Нет данных'); return; }
+        
         var averages = [];
         for (var i = 0; i < participants.length; i++) {
             var p = participants[i];
@@ -702,15 +740,44 @@
             var count = pVotes.length;
             averages.push({ name: p, avg: count > 0 ? total / count : 0, count: count });
         }
+        
         var sorted = averages.slice().sort(function(a, b) { return b.avg - a.avg; });
+        if (sorted.length === 0 || sorted[0].count === 0) { alert('Нет оценок для подсчёта'); return; }
+        
         var winner = sorted[0];
-        var isTie = false, tieNames = [winner.name];
+        var isTie = false;
+        var tieNames = [winner.name];
+        var tieAvg = winner.avg;
+        
         for (var t = 1; t < sorted.length; t++) {
-            if (Math.abs(sorted[t].avg - winner.avg) < 0.001 && sorted[t].count > 0) { isTie = true; tieNames.push(sorted[t].name); } else break;
+            if (sorted[t].count > 0 && Math.abs(sorted[t].avg - winner.avg) < 0.001) {
+                isTie = true;
+                tieNames.push(sorted[t].name);
+            } else {
+                break;
+            }
         }
-        if (isTie) { winnerName = null; winnerDisplay.textContent = '🤝 Ничья: ' + tieNames.join(', ') + ' (' + winner.avg.toFixed(2) + ')'; }
-        else { winnerName = winner.name; winnerDisplay.textContent = '👑 Победитель: ' + winner.name + ' (' + winner.avg.toFixed(2) + ')'; }
-        render();
+        
+        if (isTie) {
+            // Ничья — показываем модальное окно
+            winnerName = null;
+            winnerDisplay.textContent = '🤝 Ничья! (' + tieNames.join(', ') + ')';
+            render();
+            
+            // Заполняем список победителей
+            var listHtml = '';
+            for (var n = 0; n < tieNames.length; n++) {
+                listHtml += '<li>🏆 ' + escapeHtml(tieNames[n]) + '</li>';
+            }
+            tieList.innerHTML = listHtml;
+            tieScore.textContent = tieAvg.toFixed(2);
+            tieModal.classList.add('active');
+        } else {
+            // Один победитель
+            winnerName = winner.name;
+            winnerDisplay.textContent = '👑 Победитель: ' + winner.name + ' (' + winner.avg.toFixed(2) + ')';
+            render();
+        }
     }
 
     async function syncData() {
