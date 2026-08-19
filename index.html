@@ -232,7 +232,7 @@
 
 <div class="container" id="mainContent">
     <h1>🎭 Фестиваль — Подсчёт голосов</h1>
-    <p class="subtitle">Введите имя участника и оценку. Каждая оценка добавляется отдельно, средний балл обновляется автоматически!</p>
+    <p class="subtitle">Введите имя участника и оценку. Каждая оценка добавляется отдельно!</p>
 
     <div class="token-input" id="tokenBlock">
         <label>🔑 Введите GitHub токен для доступа к данным</label>
@@ -266,7 +266,7 @@
 
         <div class="table-wrap">
             <table>
-                <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во оценок</th><th>Все оценки</th><th>✕</th></tr></thead>
+                <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>Все оценки</th><th>✕</th></tr></thead>
                 <tbody id="tableBody"><tr><td colspan="5" class="empty-message">Нет данных. Добавьте оценки!</td></tr></tbody>
             </table>
         </div>
@@ -341,7 +341,6 @@
         return div.innerHTML;
     }
 
-    // ========== РАБОТА С ТОКЕНОМ ==========
     function saveToken(token) {
         try { localStorage.setItem('github_token', token); } catch(e) {}
     }
@@ -374,7 +373,7 @@
     }
 
     // ================================================================
-    // РАБОТА С GITHUB
+    // ОБНОВЛЁННАЯ ФУНКЦИЯ ПОЛУЧЕНИЯ SHA
     // ================================================================
     async function getFileSha() {
         if (!githubToken) return null;
@@ -396,23 +395,39 @@
         }
     }
 
+    // ================================================================
+    // ОБНОВЛЁННАЯ ФУНКЦИЯ СОХРАНЕНИЯ (с автоматическим решением конфликта)
+    // ================================================================
     async function saveToGitHub() {
         if (isSaving || !githubToken) return false;
+        
         try {
             isSaving = true;
             setStatusBar('saving', '💾 Сохранение в GitHub...');
             setStatus('⏳ Сохранение...', '#856404');
 
+            // 1. ВСЕГДА получаем свежий SHA перед сохранением
             var currentSha = await getFileSha();
-            if (currentSha) dataSha = currentSha;
+            if (currentSha) {
+                dataSha = currentSha;
+            }
 
-            var data = { votes: votes, updatedAt: new Date().toISOString() };
+            var data = {
+                votes: votes,
+                updatedAt: new Date().toISOString()
+            };
             var jsonString = JSON.stringify(data, null, 2);
             var content = utf8ToBase64(jsonString);
 
             var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
-            var body = { message: 'Обновление данных голосования', content: content };
-            if (dataSha) body.sha = dataSha;
+            var body = {
+                message: 'Обновление данных голосования',
+                content: content
+            };
+
+            if (dataSha) {
+                body.sha = dataSha;
+            }
 
             var response = await fetch(url, {
                 method: 'PUT',
@@ -424,7 +439,9 @@
                 body: JSON.stringify(body)
             });
 
+            // 2. ЕСЛИ КОНФЛИКТ (409) — обновляем SHA и пробуем снова
             if (response.status === 409) {
+                console.log('🔄 Конфликт SHA, обновляем...');
                 var newSha = await getFileSha();
                 if (newSha) {
                     dataSha = newSha;
@@ -438,6 +455,56 @@
                         },
                         body: JSON.stringify(body)
                     });
+                }
+            }
+
+            // 3. ЕСЛИ ВСЁ РАВНО ОШИБКА — пробуем загрузить данные, объединить и сохранить
+            if (response.status === 409) {
+                console.log('🔄 Второй конфликт, загружаем данные и объединяем...');
+                var loadResponse = await fetch(url, {
+                    headers: {
+                        'Authorization': 'token ' + githubToken,
+                        'Accept': 'application/vnd.github.v3+json'
+                    }
+                });
+                if (loadResponse.ok) {
+                    var loadData = await loadResponse.json();
+                    var remoteContent = base64ToUtf8(loadData.content);
+                    var remoteJson = JSON.parse(remoteContent);
+                    if (remoteJson && remoteJson.votes && Array.isArray(remoteJson.votes)) {
+                        // Объединяем: оставляем только уникальные оценки (по id)
+                        var allVotes = remoteJson.votes.concat(votes);
+                        var uniqueVotes = [];
+                        var ids = new Set();
+                        for (var i = allVotes.length - 1; i >= 0; i--) {
+                            if (!ids.has(allVotes[i].id)) {
+                                ids.add(allVotes[i].id);
+                                uniqueVotes.push(allVotes[i]);
+                            }
+                        }
+                        votes = uniqueVotes.reverse();
+                        render();
+                        saveToCache();
+                        dataSha = loadData.sha;
+                        // Пробуем сохранить объединённые данные
+                        var mergedData = {
+                            votes: votes,
+                            updatedAt: new Date().toISOString()
+                        };
+                        var mergedJson = JSON.stringify(mergedData, null, 2);
+                        var mergedContent = utf8ToBase64(mergedJson);
+                        body.content = mergedContent;
+                        body.sha = dataSha;
+                        response = await fetch(url, {
+                            method: 'PUT',
+                            headers: {
+                                'Authorization': 'token ' + githubToken,
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/vnd.github.v3+json'
+                            },
+                            body: JSON.stringify(body)
+                        });
+                    }
                 }
             }
 
@@ -464,6 +531,9 @@
         }
     }
 
+    // ================================================================
+    // ЗАГРУЗКА ИЗ GITHUB
+    // ================================================================
     async function loadFromGitHub() {
         if (!githubToken) return false;
         try {
@@ -617,7 +687,6 @@
             scoreInput.focus();
             return;
         }
-        // КАЖДАЯ ОЦЕНКА ДОБАВЛЯЕТСЯ ОТДЕЛЬНО, НЕ ЗАМЕНЯЕТ СТАРУЮ!
         votes.push({ id: genId(), name: name, score: score });
         nameInput.value = '';
         scoreInput.value = '';
