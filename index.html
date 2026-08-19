@@ -232,7 +232,7 @@
 
 <div class="container" id="mainContent">
     <h1>🎭 Фестиваль — Подсчёт голосов</h1>
-    <p class="subtitle">Введите имя участника и оценку. Данные сохраняются в облако автоматически!</p>
+    <p class="subtitle">Введите имя участника и оценку. Каждая оценка добавляется отдельно, средний балл обновляется автоматически!</p>
 
     <div class="token-input" id="tokenBlock">
         <label>🔑 Введите GitHub токен для доступа к данным</label>
@@ -266,8 +266,8 @@
 
         <div class="table-wrap">
             <table>
-                <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>✕</th></tr></thead>
-                <tbody id="tableBody"><tr><td colspan="4" class="empty-message">Нет данных. Добавьте оценки!</td></tr></tbody>
+                <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во оценок</th><th>Все оценки</th><th>✕</th></tr></thead>
+                <tbody id="tableBody"><tr><td colspan="5" class="empty-message">Нет данных. Добавьте оценки!</td></tr></tbody>
             </table>
         </div>
 
@@ -351,7 +351,7 @@
     }
 
     // ================================================================
-    // ПРАВИЛЬНОЕ КОДИРОВАНИЕ В BASE64 ДЛЯ РУССКИХ БУКВ
+    // КОДИРОВАНИЕ
     // ================================================================
     function utf8ToBase64(str) {
         var encoder = new TextEncoder();
@@ -374,7 +374,7 @@
     }
 
     // ================================================================
-    // ПОЛУЧЕНИЕ ТЕКУЩЕГО SHA (версия файла)
+    // РАБОТА С GITHUB
     // ================================================================
     async function getFileSha() {
         if (!githubToken) return null;
@@ -396,39 +396,23 @@
         }
     }
 
-    // ================================================================
-    // СОХРАНЕНИЕ В GITHUB (с обновлением SHA)
-    // ================================================================
     async function saveToGitHub() {
         if (isSaving || !githubToken) return false;
-        
         try {
             isSaving = true;
             setStatusBar('saving', '💾 Сохранение в GitHub...');
             setStatus('⏳ Сохранение...', '#856404');
 
-            // Сначала получаем актуальный SHA (версию файла)
             var currentSha = await getFileSha();
-            if (currentSha) {
-                dataSha = currentSha;
-            }
+            if (currentSha) dataSha = currentSha;
 
-            var data = {
-                votes: votes,
-                updatedAt: new Date().toISOString()
-            };
+            var data = { votes: votes, updatedAt: new Date().toISOString() };
             var jsonString = JSON.stringify(data, null, 2);
             var content = utf8ToBase64(jsonString);
 
             var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE_PATH;
-            var body = {
-                message: 'Обновление данных голосования',
-                content: content
-            };
-
-            if (dataSha) {
-                body.sha = dataSha;
-            }
+            var body = { message: 'Обновление данных голосования', content: content };
+            if (dataSha) body.sha = dataSha;
 
             var response = await fetch(url, {
                 method: 'PUT',
@@ -441,8 +425,6 @@
             });
 
             if (response.status === 409) {
-                // Конфликт версий — получаем новый SHA и пробуем ещё раз
-                console.log('Конфликт SHA, обновляем...');
                 var newSha = await getFileSha();
                 if (newSha) {
                     dataSha = newSha;
@@ -482,9 +464,6 @@
         }
     }
 
-    // ================================================================
-    // ЗАГРУЗКА ИЗ GITHUB
-    // ================================================================
     async function loadFromGitHub() {
         if (!githubToken) return false;
         try {
@@ -564,7 +543,7 @@
         statVotes.textContent = votes.length;
 
         if (allParticipants.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="4" class="empty-message">Нет данных. Добавьте оценки!</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="5" class="empty-message">Нет данных. Добавьте оценки!</td></tr>';
             winnerDisplay.textContent = '👑 Победитель: не определен';
             statAvg.textContent = '—';
             return;
@@ -575,7 +554,11 @@
         allParticipants.forEach(function(p) {
             var pVotes = votes.filter(function(v) { return v.name === p; });
             var total = 0;
-            pVotes.forEach(function(v) { total += v.score; });
+            var allScores = [];
+            pVotes.forEach(function(v) {
+                total += v.score;
+                allScores.push(v.score.toFixed(1));
+            });
             var count = pVotes.length;
             var avg = count > 0 ? total / count : 0;
             averages.push({ name: p, avg: avg, count: count });
@@ -584,6 +567,7 @@
             html += '<td><strong>' + escapeHtml(p) + '</strong></td>';
             html += '<td class="total-cell">' + (count > 0 ? avg.toFixed(2) : '—') + '</td>';
             html += '<td>' + count + '</td>';
+            html += '<td>' + allScores.join(', ') + '</td>';
             html += '<td><button class="delete-btn" onclick="deleteParticipant(\'' + escaped + '\')">✕</button></td>';
             html += '</tr>';
         });
@@ -633,6 +617,7 @@
             scoreInput.focus();
             return;
         }
+        // КАЖДАЯ ОЦЕНКА ДОБАВЛЯЕТСЯ ОТДЕЛЬНО, НЕ ЗАМЕНЯЕТ СТАРУЮ!
         votes.push({ id: genId(), name: name, score: score });
         nameInput.value = '';
         scoreInput.value = '';
@@ -680,7 +665,7 @@
         setStatus('✅ Синхронизация завершена', '#28a745');
     }
 
-    // ========== ПОДКЛЮЧЕНИЕ К GITHUB ==========
+    // ========== ПОДКЛЮЧЕНИЕ ==========
     async function connectToGitHub() {
         var token = tokenInput.value.trim();
         if (!token) {
