@@ -167,6 +167,8 @@
         .btn-success { background: #17a2b8; }
         .btn-primary { background: #667eea; }
         .btn-danger { background: #dc3545; }
+        .btn-clear { background: #dc3545; }
+        .btn-clear:active { background: #c82333; }
         .actions {
             display: flex;
             flex-wrap: wrap;
@@ -253,6 +255,68 @@
             color: #28a745;
         }
         .sync-info { font-size: 11px; color: #888; text-align: center; margin-top: 6px; }
+
+        /* Модальное окно для проверки */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(4px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+        .modal-overlay.active { display: flex; }
+        .modal-box {
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .modal-box h2 { margin-bottom: 10px; color: #dc3545; }
+        .modal-box p { color: #555; margin-bottom: 15px; font-size: 16px; }
+        .modal-box .question {
+            font-size: 24px;
+            font-weight: 700;
+            color: #333;
+            margin: 15px 0;
+        }
+        .modal-box input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #ddd;
+            border-radius: 12px;
+            font-size: 18px;
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        .modal-box input:focus {
+            border-color: #dc3545;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2);
+        }
+        .modal-box .btn-row {
+            display: flex;
+            gap: 10px;
+        }
+        .modal-box .btn-row .btn {
+            flex: 1;
+        }
+        .modal-box .error-msg {
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 10px;
+            display: none;
+        }
+        .modal-box .error-msg.show { display: block; }
+
         @media (max-width: 600px) {
             .container { padding: 14px; }
             .input-section { flex-direction: column; padding: 12px; }
@@ -268,6 +332,7 @@
             .tab-btn { font-size: 12px; padding: 8px; }
             .delete-section { flex-direction: column; }
             .delete-section input { width: 100%; }
+            .modal-box { padding: 20px; }
         }
     </style>
 </head>
@@ -327,13 +392,30 @@
         <div class="actions">
             <button class="btn btn-warning" id="calcBtn">🏆 Победитель</button>
             <button class="btn btn-success" id="syncBtn">🔄 Синхронизировать</button>
+            <button class="btn btn-clear" id="clearBtn">🗑️ Очистить всё</button>
         </div>
 
         <div class="footer">
             <span id="winnerDisplay">👑 Победитель: не определен</span>
             <span class="save-status" id="statusDisplay">☁️ Готов</span>
         </div>
-        <div class="sync-info">🔄 Автосинхронизация каждые 30 секунд</div>
+        <div class="sync-info">🔄 Автосинхронизация каждые 10 секунд</div>
+    </div>
+</div>
+
+<!-- Модальное окно для проверки -->
+<div class="modal-overlay" id="clearModal">
+    <div class="modal-box">
+        <h2>⚠️ Очистка данных</h2>
+        <p>Вы уверены, что хотите удалить ВСЕ данные в текущей номинации?</p>
+        <p>Для подтверждения решите пример:</p>
+        <div class="question">2 + 2 = ?</div>
+        <input type="number" id="captchaInput" placeholder="Введите ответ" autocomplete="off">
+        <div class="btn-row">
+            <button class="btn btn-danger" id="confirmClearBtn">🗑️ Очистить</button>
+            <button class="btn" id="cancelClearBtn" style="background: #6c757d;">Отмена</button>
+        </div>
+        <div class="error-msg" id="captchaError">❌ Неправильный ответ! Попробуйте ещё раз.</div>
     </div>
 </div>
 
@@ -377,6 +459,14 @@
     var syncBtn = document.getElementById('syncBtn');
     var deleteBtn = document.getElementById('deleteBtn');
     var deleteName = document.getElementById('deleteName');
+    var clearBtn = document.getElementById('clearBtn');
+
+    // Модальное окно
+    var clearModal = document.getElementById('clearModal');
+    var captchaInput = document.getElementById('captchaInput');
+    var confirmClearBtn = document.getElementById('confirmClearBtn');
+    var cancelClearBtn = document.getElementById('cancelClearBtn');
+    var captchaError = document.getElementById('captchaError');
 
     // ========== ВКЛАДКИ ==========
     tabsContainer.addEventListener('click', function(e) {
@@ -416,6 +506,58 @@
 
     deleteName.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') { e.preventDefault(); deleteBtn.click(); }
+    });
+
+    // ========== ОЧИСТКА ВСЕГО ==========
+    clearBtn.addEventListener('click', function() {
+        var votes = allData[currentTab].votes;
+        if (votes.length === 0) {
+            alert('В текущей номинации нет данных для очистки');
+            return;
+        }
+        captchaInput.value = '';
+        captchaError.classList.remove('show');
+        clearModal.classList.add('active');
+        setTimeout(function() { captchaInput.focus(); }, 300);
+    });
+
+    confirmClearBtn.addEventListener('click', function() {
+        var answer = captchaInput.value.trim();
+        if (answer === '4') {
+            // Правильный ответ
+            clearModal.classList.remove('active');
+            allData[currentTab].votes = [];
+            winnerName = null;
+            render();
+            lastUpdateTime[currentTab] = Date.now();
+            saveToGitHub(currentTab);
+            setStatus('🗑️ Всё очищено в номинации "' + getTabName(currentTab) + '"', '#dc3545');
+        } else {
+            captchaError.classList.add('show');
+            captchaInput.value = '';
+            captchaInput.focus();
+            setTimeout(function() {
+                captchaError.classList.remove('show');
+            }, 3000);
+        }
+    });
+
+    cancelClearBtn.addEventListener('click', function() {
+        clearModal.classList.remove('active');
+        captchaInput.value = '';
+        captchaError.classList.remove('show');
+    });
+
+    captchaInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); confirmClearBtn.click(); }
+        if (e.key === 'Escape') { e.preventDefault(); cancelClearBtn.click(); }
+    });
+
+    // Закрытие по клику вне окна
+    clearModal.addEventListener('click', function(e) {
+        if (e.target === clearModal) {
+            cancelClearBtn.click();
+        }
     });
 
     // ========== ОСТАЛЬНОЙ КОД ==========
@@ -494,9 +636,7 @@
             var content = base64ToUtf8(data.content);
             var jsonData = JSON.parse(content);
             if (jsonData && jsonData.votes) {
-                // Проверяем, не изменились ли данные локально после последней загрузки
-                if (lastUpdateTime[tab] && Date.now() - lastUpdateTime[tab] < 5000) {
-                    // Если данные были изменены меньше 5 секунд назад — не перезаписываем
+                if (lastUpdateTime[tab] && Date.now() - lastUpdateTime[tab] < 3000) {
                     return;
                 }
                 allData[tab] = { votes: jsonData.votes };
@@ -607,13 +747,12 @@
         await loadFromGitHub('free');
         await loadFromGitHub('evening');
         render();
-        // Запускаем автосинхронизацию каждые 30 секунд
         if (autoSyncInterval) clearInterval(autoSyncInterval);
         autoSyncInterval = setInterval(function() {
             if (githubToken) {
                 loadFromGitHub(currentTab);
             }
-        }, 30000);
+        }, 10000);
     }
 
     function init() {
