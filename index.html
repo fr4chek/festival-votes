@@ -686,6 +686,19 @@
         }
     }
 
+    // ========== ОСНОВНАЯ ФУНКЦИЯ УДАЛЕНИЯ (через data-атрибуты) ==========
+    function deleteParticipantByName(name) {
+        if (!confirm('Удалить все оценки участника "' + name + '" из номинации "' + getTabName(currentTab) + '"?')) return;
+        
+        var votes = getCurrentVotes();
+        votes = votes.filter(function(v) { return v.name !== name; });
+        setCurrentVotes(votes);
+        if (winnerName === name) winnerName = null;
+        render();
+        saveToGitHub(currentTab);
+        setStatus('🗑️ Удалён участник: ' + name + ' (' + getTabName(currentTab) + ')', '#dc3545');
+    }
+
     function render() {
         var votes = getCurrentVotes();
         var allParticipants = getUniqueParticipants(votes);
@@ -718,10 +731,20 @@
             html += '<td class="total-cell">' + (count > 0 ? avg.toFixed(2) : '—') + '</td>';
             html += '<td>' + count + '</td>';
             html += '<td>' + allScores.join(', ') + '</td>';
-            html += '<td><button class="delete-btn" onclick="deleteParticipant(\'' + escaped + '\')">✕</button></td>';
+            // Кнопка удаления с data-атрибутом
+            html += '<td><button class="delete-btn" data-name="' + escaped + '">✕</button></td>';
             html += '</tr>';
         });
         tableBody.innerHTML = html;
+
+        // Вешаем обработчики на кнопки удаления
+        var deleteBtns = tableBody.querySelectorAll('.delete-btn');
+        deleteBtns.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                var name = this.getAttribute('data-name');
+                deleteParticipantByName(name);
+            });
+        });
 
         if (winnerName) {
             var rows = tableBody.querySelectorAll('tr');
@@ -756,18 +779,6 @@
         };
         return names[tab] || tab;
     }
-
-    window.deleteParticipant = async function(name) {
-        if (!confirm('Удалить все оценки участника "' + name + '" из номинации "' + getTabName(currentTab) + '"?')) return;
-        
-        var votes = getCurrentVotes();
-        votes = votes.filter(function(v) { return v.name !== name; });
-        setCurrentVotes(votes);
-        if (winnerName === name) winnerName = null;
-        render();
-        await saveToGitHub(currentTab);
-        setStatus('🗑️ Удалён участник: ' + name + ' (' + getTabName(currentTab) + ')', '#dc3545');
-    };
 
     async function addVote() {
         var name = nameInput.value.trim();
