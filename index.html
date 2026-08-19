@@ -400,12 +400,10 @@
         loadTabData(tab);
     });
 
-    // ================================================================
-    // УДАЛЕНИЕ — ПРОСТОЙ СПОСОБ
-    // ================================================================
+    // ========== УДАЛЕНИЕ (НОВАЯ ЛОГИКА) ==========
     function deleteParticipant(name) {
-        var tabName = getTabName(currentTab);
-        if (!confirm('Удалить все оценки участника "' + name + '" из номинации "' + tabName + '"?')) return;
+        // Убрали лишнюю строку var tabName = getTabName(currentTab);
+        if (!confirm('Удалить все оценки участника "' + name + '" из номинации "' + getTabName(currentTab) + '"?')) return;
         
         var votes = getCurrentVotes();
         var newVotes = [];
@@ -418,11 +416,20 @@
         if (winnerName === name) winnerName = null;
         render();
         saveToGitHub(currentTab);
-        setStatus('🗑️ Удалён участник: ' + name + ' (' + tabName + ')', '#dc3545');
+        setStatus('🗑️ Удалён участник: ' + name + ' (' + getTabName(currentTab) + ')', '#dc3545');
     }
 
-    // Делаем функцию глобальной, чтобы её можно было вызвать из onclick
-    window.deleteParticipant = deleteParticipant;
+    // Обработчик клика на всю таблицу (делегирование событий)
+    // Это 100% гарантирует, что кнопка удаления будет работать при любой перерисовке
+    tableBody.addEventListener('click', function(e) {
+        var btn = e.target.closest('.delete-btn');
+        if (!btn) return; // Если кликнули не по крестику, игнорируем
+
+        var name = btn.getAttribute('data-name'); // Берем имя из data-атрибута
+        if (name) {
+            deleteParticipant(name);
+        }
+    });
 
     // ========== ОСТАЛЬНОЙ КОД ==========
     function getCurrentVotes() {
@@ -747,14 +754,14 @@
             var count = pVotes.length;
             var avg = count > 0 ? total / count : 0;
             averages.push({ name: p, avg: avg, count: count });
-            var escaped = p.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+            
+            // ИСПРАВЛЕНИЕ: используем data-name вместо опасного onclick
             html += '<tr>';
             html += '<td><strong>' + escapeHtml(p) + '</strong></td>';
             html += '<td class="total-cell">' + (count > 0 ? avg.toFixed(2) : '—') + '</td>';
             html += '<td>' + count + '</td>';
             html += '<td>' + allScores.join(', ') + '</td>';
-            // Кнопка с onclick, вызывающая глобальную функцию
-            html += '<td><button class="delete-btn" onclick="window.deleteParticipant(\'' + escaped + '\')">✕</button></td>';
+            html += '<td><button class="delete-btn" data-name="' + p + '">✕</button></td>';
             html += '</tr>';
         }
         tableBody.innerHTML = html;
@@ -933,7 +940,7 @@
     console.log('✅ Программа загружена!');
     console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
     console.log('📂 Номинации: Национальный, Свободный, Вечерний');
-    console.log('🗑️ Удаление работает через onclick -> window.deleteParticipant');
+    console.log('🗑️ Удаление работает через обработчик таблицы (делегирование)');
 </script>
 
 </body>
