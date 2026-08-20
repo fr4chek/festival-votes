@@ -5,9 +5,22 @@
       "name": "АНна",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1787235565534_ho81h6",
+      "name": "Егор",
+      "score": 10,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Егор",
+      "score": 10,
+      "comment": "",
+      "time": "17:19:25"
+    },
     {
       "type": "vote",
       "name": "АНна",
