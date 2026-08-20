@@ -1,6 +1,20 @@
 {
-  "votes": [],
+  "votes": [
+    {
+      "id": "1787233441579_26kp6n",
+      "name": "Дима",
+      "score": 10,
+      "comment": ""
+    }
+  ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Дима",
+      "score": 10,
+      "comment": "",
+      "time": "16:44:01"
+    },
     {
       "type": "delete",
       "name": "Дима",
