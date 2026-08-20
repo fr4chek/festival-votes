@@ -1,43 +1,4 @@
 {
-  "votes": [
-    {
-      "id": "1787233096399_g6eaoz",
-      "name": "Дима",
-      "score": 10,
-      "comment": ""
-    }
-  ],
-  "history": [
-    {
-      "type": "vote",
-      "name": "Дима",
-      "score": 10,
-      "comment": "",
-      "time": "16:38:16"
-    },
-    {
-      "type": "delete",
-      "name": "дима",
-      "time": "16:37:36"
-    },
-    {
-      "type": "delete",
-      "name": "ДИма",
-      "time": "16:37:33"
-    },
-    {
-      "type": "vote",
-      "name": "дима",
-      "score": 1,
-      "comment": "",
-      "time": "16:37:16"
-    },
-    {
-      "type": "vote",
-      "name": "ДИма",
-      "score": 10,
-      "comment": "круто",
-      "time": "16:36:59"
-    }
-  ]
+  "votes": [],
+  "history": []
 }
