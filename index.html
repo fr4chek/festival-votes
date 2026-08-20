@@ -124,7 +124,7 @@
             color: #ff6b6b;
         }
 
-        /* ТОАСТ-УВЕДОМЛЕНИЯ (вместо большой ошибки) */
+        /* ТОАСТ-УВЕДОМЛЕНИЯ */
         .toast-container {
             position: fixed;
             bottom: 20px;
@@ -446,7 +446,7 @@
             transition: color 0.3s ease;
         }
 
-        /* ИСТОРИЯ */
+        /* ИСТОРИЯ — ИСПРАВЛЕННАЯ ВЕРСИЯ */
         .history-section {
             margin-top: 20px;
             padding: 16px;
@@ -482,16 +482,34 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 6px 10px;
+            padding: 6px 12px;
             border-bottom: 1px solid #eee;
             font-size: 13px;
             color: #333;
             transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
         .history-item:last-child { border-bottom: none; }
-        .history-item .name { font-weight: 600; }
-        .history-item .score { font-weight: 700; color: #28a745; transition: color 0.3s ease; }
-        .history-item .time { font-size: 11px; color: #888; transition: color 0.3s ease; }
+        .history-item .name { 
+            font-weight: 600; 
+            flex: 1; 
+            text-align: left; 
+        }
+        .history-item .score { 
+            font-weight: 700; 
+            color: #28a745; 
+            transition: color 0.3s ease;
+            width: 60px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+        .history-item .time { 
+            font-size: 11px; 
+            color: #888; 
+            transition: color 0.3s ease;
+            width: 70px;
+            text-align: right;
+            flex-shrink: 0;
+        }
         .history-empty {
             text-align: center;
             color: #888;
@@ -624,6 +642,8 @@
             .leader-card .leader-names { font-size: 18px; }
             .leader-card .leader-names.small { font-size: 15px; }
             .leader-card .leader-score { font-size: 15px; }
+            .history-item .score { width: 50px; }
+            .history-item .time { width: 60px; }
         }
     </style>
 </head>
@@ -637,7 +657,6 @@
         Когда интернет появится — нажмите <span class="sync-hint">«Синхронизировать»</span> внизу страницы.
     </div>
 
-    <!-- TOAST-КОНТЕЙНЕР -->
     <div class="toast-container" id="toastContainer"></div>
 
     <h1>🎭 Фестиваль</h1>
@@ -664,7 +683,6 @@
             <div class="stat-card" style="background:#fff3cd;"><div class="num" id="statAvg">—</div><div class="label">🏆 Средний балл лидера</div></div>
         </div>
 
-        <!-- ЛИДЕР -->
         <div class="leader-section" id="leaderSection">
             <div class="leader-card" id="leaderCard">
                 <div class="leader-label">👑 Текущий лидер</div>
@@ -703,7 +721,6 @@
             </table>
         </div>
 
-        <!-- ИСТОРИЯ -->
         <div class="history-section" id="historySection">
             <h3>📋 История голосований</h3>
             <div class="history-list" id="historyList">
@@ -951,7 +968,7 @@
         if (e.key === 'Enter') { e.preventDefault(); deleteBtn.click(); }
     });
 
-    // ========== ИСТОРИЯ ==========
+    // ========== ИСТОРИЯ (ИСПРАВЛЕННАЯ) ==========
     function addHistory(name, score) {
         var now = new Date();
         var time = now.toTimeString().slice(0, 8);
@@ -1249,9 +1266,7 @@
         } catch(e) { 
             setStatusBar('online', '☁️ Данные сохранены локально'); 
             setStatus('💾 Сохранено локально', '#fd7e14');
-            // Показываем тост с ошибкой, но не пугаем пользователя
             showToast('⚠️ Не удалось сохранить в GitHub, но данные сохранены локально', 'warning');
-            // Пытаемся снова через 5 секунд
             setTimeout(function() {
                 if (githubToken) {
                     saveToGitHub(tab);
@@ -1473,15 +1488,4 @@
         if (e.key === 'Enter') { e.preventDefault(); connectToGitHub(); }
     });
     addBtn.addEventListener('click', addVote);
-    calcBtn.addEventListener('click', calculateWinner);
-    syncBtn.addEventListener('click', syncData);
-    nameInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') { e.preventDefault(); scoreInput.focus(); }
-    });
-    scoreInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') { e.preventDefault(); addVote(); }
-    });
-    init();
-</script>
-</body>
-</html>
+    calcBtn.addEventListener('click',
