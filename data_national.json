@@ -1,19 +1,4 @@
 {
-  "votes": [
-    {
-      "id": "1787232119748_remty7",
-      "name": "Егор",
-      "score": 10,
-      "comment": ""
-    }
-  ],
-  "history": [
-    {
-      "type": "vote",
-      "name": "Егор",
-      "score": 10,
-      "comment": "",
-      "time": "16:21:59"
-    }
-  ]
+  "votes": [],
+  "history": []
 }
