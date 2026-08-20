@@ -5,9 +5,22 @@
       "name": "Дима",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1787233609632_t1xuse",
+      "name": "Саша",
+      "score": 10,
+      "comment": "апапапапапап"
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Саша",
+      "score": 10,
+      "comment": "апапапапапап",
+      "time": "16:46:49"
+    },
     {
       "type": "vote",
       "name": "Дима",
