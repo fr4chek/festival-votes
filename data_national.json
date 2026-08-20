@@ -1,13 +1,11 @@
 {
-  "votes": [
-    {
-      "id": "1787235324515_1tehtt",
-      "name": "Саша",
-      "score": 10,
-      "comment": "прапрапрап"
-    }
-  ],
+  "votes": [],
   "history": [
+    {
+      "type": "delete",
+      "name": "Саша",
+      "time": "17:16:54"
+    },
     {
       "type": "vote",
       "name": "Саша",
