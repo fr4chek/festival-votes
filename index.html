@@ -86,6 +86,8 @@
         body.dark-theme .history-item { border-bottom-color: #444; color: #ccc; }
         body.dark-theme .history-item .time { color: #888; }
         body.dark-theme .history-item .score { color: #8fdfb0; }
+        body.dark-theme .history-item.delete { color: #f8a0a0; }
+        body.dark-theme .history-item.delete .time { color: #888; }
         body.dark-theme .leader-card { background: rgba(255,215,0,0.15); border-color: #ffd700; }
         body.dark-theme .leader-card .leader-name { color: #ffd700; }
         body.dark-theme .leader-card .leader-score { color: #ffd700; }
@@ -504,6 +506,8 @@
             text-align: right;
             flex-shrink: 0;
         }
+        .history-item.delete .name { color: #dc3545; }
+        .history-item.delete .score { color: #dc3545; }
         .history-empty {
             text-align: center;
             color: #888;
@@ -878,7 +882,6 @@
     var winnerName = null;
     var lastUpdateTime = {};
     var autoSyncInterval = null;
-    var isConnected = false;
 
     // DOM
     var tabsContainer = document.getElementById('tabsContainer');
@@ -949,6 +952,8 @@
         allData[currentTab].votes = newVotes;
         if (winnerName === name) winnerName = null;
         render();
+        // Добавляем запись об удалении в историю
+        addHistoryDelete(name);
         renderHistory();
         renderLeader();
         lastUpdateTime[currentTab] = Date.now();
@@ -968,8 +973,26 @@
         var tabData = allData[currentTab];
         if (!tabData.history) tabData.history = [];
         tabData.history.unshift({
+            type: 'vote',
             name: name,
             score: score,
+            time: time
+        });
+        if (tabData.history.length > 50) {
+            tabData.history = tabData.history.slice(0, 50);
+        }
+        renderHistory();
+        saveToGitHub(currentTab);
+    }
+
+    function addHistoryDelete(name) {
+        var now = new Date();
+        var time = now.toTimeString().slice(0, 8);
+        var tabData = allData[currentTab];
+        if (!tabData.history) tabData.history = [];
+        tabData.history.unshift({
+            type: 'delete',
+            name: name,
             time: time
         });
         if (tabData.history.length > 50) {
@@ -988,9 +1011,16 @@
         var html = '';
         for (var i = 0; i < history.length; i++) {
             var item = history[i];
-            html += '<div class="history-item">';
-            html += '<span class="name">' + escapeHtml(item.name) + '</span>';
-            html += '<span class="score">+' + item.score.toFixed(1) + '</span>';
+            var isDelete = item.type === 'delete';
+            var deleteClass = isDelete ? 'delete' : '';
+            html += '<div class="history-item ' + deleteClass + '">';
+            if (isDelete) {
+                html += '<span class="name">🗑️ Удалён: ' + escapeHtml(item.name) + '</span>';
+                html += '<span class="score"></span>';
+            } else {
+                html += '<span class="name">' + escapeHtml(item.name) + '</span>';
+                html += '<span class="score">+' + item.score.toFixed(1) + '</span>';
+            }
             html += '<span class="time">' + escapeHtml(item.time) + '</span>';
             html += '</div>';
         }
@@ -1265,6 +1295,11 @@
             setStatusBar('online', '☁️ Данные сохранены локально'); 
             setStatus('💾 Сохранено локально', '#fd7e14');
             showToast('⚠️ Не удалось сохранить в GitHub, но данные сохранены локально', 'warning');
+            setTimeout(function() {
+                if (githubToken) {
+                    saveToGitHub(tab);
+                }
+            }, 5000);
         }
     }
 
@@ -1298,7 +1333,6 @@
                 renderLeader();
                 setStatusBar('online', '☁️ Автосинхронизация');
                 setStatus('☁️ Синхронизировано', '#17a2b8');
-                isConnected = true;
             }
         } catch(e) { 
             setStatusBar('online', '☁️ Данные загружены из кэша');
