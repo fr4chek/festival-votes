@@ -5,9 +5,22 @@
       "name": "Егор",
       "score": 5,
       "comment": ""
+    },
+    {
+      "id": "1787235020837_lp0iho",
+      "name": "Саша",
+      "score": 5,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Саша",
+      "score": 5,
+      "comment": "",
+      "time": "17:10:20"
+    },
     {
       "type": "vote",
       "name": "Егор",
