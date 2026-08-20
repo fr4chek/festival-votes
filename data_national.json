@@ -1,4 +1,19 @@
 {
-  "votes": [],
-  "history": []
+  "votes": [
+    {
+      "id": "1787234929471_z3o3p1",
+      "name": "Егор",
+      "score": 10,
+      "comment": ""
+    }
+  ],
+  "history": [
+    {
+      "type": "vote",
+      "name": "Егор",
+      "score": 10,
+      "comment": "",
+      "time": "17:08:49"
+    }
+  ]
 }
