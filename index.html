@@ -91,6 +91,7 @@
         body.dark-theme .leader-card .leader-score { color: #ffd700; }
         body.dark-theme .leader-card .leader-label { color: #aaa; }
         body.dark-theme .leader-card .leader-empty { color: #888; }
+        body.dark-theme .leader-card .leader-names { color: #ffd700; }
 
         /* ПРЕДУПРЕЖДЕНИЕ ОБ ИНТЕРНЕТЕ */
         .offline-warning {
@@ -370,8 +371,8 @@
             font-weight: 600;
             transition: color 0.3s ease;
         }
-        .leader-card .leader-name {
-            font-size: 28px;
+        .leader-card .leader-names {
+            font-size: 24px;
             font-weight: 800;
             color: #b8860b;
             transition: color 0.3s ease;
@@ -387,6 +388,9 @@
             font-size: 16px;
             font-weight: 500;
             transition: color 0.3s ease;
+        }
+        .leader-card .leader-names.small {
+            font-size: 18px;
         }
 
         /* ИСТОРИЯ */
@@ -564,8 +568,9 @@
                 font-size: 11px;
                 padding: 4px 10px;
             }
-            .leader-card .leader-name { font-size: 22px; }
-            .leader-card .leader-score { font-size: 16px; }
+            .leader-card .leader-names { font-size: 18px; }
+            .leader-card .leader-names.small { font-size: 15px; }
+            .leader-card .leader-score { font-size: 15px; }
         }
     </style>
 </head>
@@ -609,7 +614,7 @@
                 <div class="leader-label">👑 Текущий лидер</div>
                 <div class="leader-empty" id="leaderEmpty">Нет данных</div>
                 <div id="leaderContent" style="display: none;">
-                    <div class="leader-name" id="leaderName">—</div>
+                    <div class="leader-names" id="leaderNames">—</div>
                     <div class="leader-score" id="leaderScore">Средний балл: —</div>
                 </div>
             </div>
@@ -814,7 +819,7 @@
     var deleteName = document.getElementById('deleteName');
     var clearBtn = document.getElementById('clearBtn');
     var historyList = document.getElementById('historyList');
-    var leaderName = document.getElementById('leaderName');
+    var leaderNames = document.getElementById('leaderNames');
     var leaderScore = document.getElementById('leaderScore');
     var leaderEmpty = document.getElementById('leaderEmpty');
     var leaderContent = document.getElementById('leaderContent');
@@ -909,7 +914,7 @@
         historyList.innerHTML = html;
     }
 
-    // ========== ЛИДЕР ==========
+    // ========== ЛИДЕР (с несколькими победителями) ==========
     function renderLeader() {
         var votes = allData[currentTab]?.votes || [];
         var participants = getUniqueParticipants(votes);
@@ -921,6 +926,7 @@
         }
 
         var averages = [];
+        var maxAvg = 0;
         for (var i = 0; i < participants.length; i++) {
             var p = participants[i];
             var pVotes = [];
@@ -936,16 +942,36 @@
             var count = pVotes.length;
             var avg = count > 0 ? total / count : 0;
             averages.push({ name: p, avg: avg, count: count });
+            if (avg > maxAvg) maxAvg = avg;
         }
 
-        averages.sort(function(a, b) { return b.avg - a.avg; });
+        if (maxAvg === 0) {
+            leaderEmpty.style.display = 'block';
+            leaderContent.style.display = 'none';
+            return;
+        }
 
-        var leader = averages[0];
-        if (leader && leader.count > 0) {
+        // Находим всех участников с максимальным баллом
+        var leaders = [];
+        for (var i = 0; i < averages.length; i++) {
+            if (averages[i].count > 0 && Math.abs(averages[i].avg - maxAvg) < 0.001) {
+                leaders.push(averages[i].name);
+            }
+        }
+
+        if (leaders.length > 0) {
             leaderEmpty.style.display = 'none';
             leaderContent.style.display = 'block';
-            leaderName.textContent = leader.name;
-            leaderScore.textContent = 'Средний балл: ' + leader.avg.toFixed(2);
+            
+            var namesText = leaders.join(', ');
+            // Если имён много, уменьшаем шрифт
+            if (namesText.length > 30) {
+                leaderNames.className = 'leader-names small';
+            } else {
+                leaderNames.className = 'leader-names';
+            }
+            leaderNames.textContent = namesText;
+            leaderScore.textContent = 'Средний балл: ' + maxAvg.toFixed(2);
         } else {
             leaderEmpty.style.display = 'block';
             leaderContent.style.display = 'none';
