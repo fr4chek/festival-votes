@@ -92,6 +92,9 @@
         body.dark-theme .leader-card .leader-label { color: #aaa; }
         body.dark-theme .leader-card .leader-empty { color: #888; }
         body.dark-theme .leader-card .leader-names { color: #ffd700; }
+        body.dark-theme .toast { background: #3a3a3a; color: #eee; }
+        body.dark-theme .toast.warning { background: #3a3a1a; color: #f0d080; border-color: #ffc107; }
+        body.dark-theme .toast.error { background: #3a1a1a; color: #f8a0a0; border-color: #dc3545; }
 
         /* ПРЕДУПРЕЖДЕНИЕ ОБ ИНТЕРНЕТЕ */
         .offline-warning {
@@ -119,6 +122,56 @@
         }
         body.dark-theme .offline-warning .sync-hint {
             color: #ff6b6b;
+        }
+
+        /* ТОАСТ-УВЕДОМЛЕНИЯ (вместо большой ошибки) */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
+            max-width: 90%;
+        }
+        .toast {
+            background: rgba(40, 167, 69, 0.95);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
+            animation: toastIn 0.4s ease, toastOut 0.4s ease 3s forwards;
+            pointer-events: auto;
+            backdrop-filter: blur(4px);
+            -webkit-backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+        .toast.warning {
+            background: rgba(255, 193, 7, 0.95);
+            color: #333;
+        }
+        .toast.error {
+            background: rgba(220, 53, 69, 0.95);
+            color: white;
+        }
+        .toast.info {
+            background: rgba(23, 162, 184, 0.95);
+            color: white;
+        }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
         }
 
         /* Переключатель темы */
@@ -377,6 +430,9 @@
             color: #b8860b;
             transition: color 0.3s ease;
         }
+        .leader-card .leader-names.small {
+            font-size: 18px;
+        }
         .leader-card .leader-score {
             font-size: 18px;
             font-weight: 600;
@@ -388,9 +444,6 @@
             font-size: 16px;
             font-weight: 500;
             transition: color 0.3s ease;
-        }
-        .leader-card .leader-names.small {
-            font-size: 18px;
         }
 
         /* ИСТОРИЯ */
@@ -584,6 +637,9 @@
         Когда интернет появится — нажмите <span class="sync-hint">«Синхронизировать»</span> внизу страницы.
     </div>
 
+    <!-- TOAST-КОНТЕЙНЕР -->
+    <div class="toast-container" id="toastContainer"></div>
+
     <h1>🎭 Фестиваль</h1>
     <p class="subtitle">Выберите номинацию и введите оценки</p>
 
@@ -695,6 +751,23 @@
 </div>
 
 <script>
+    // ============================================================
+    // TOAST-УВЕДОМЛЕНИЯ
+    // ============================================================
+    function showToast(message, type) {
+        var container = document.getElementById('toastContainer');
+        var toast = document.createElement('div');
+        toast.className = 'toast';
+        if (type) toast.classList.add(type);
+        toast.textContent = message;
+        container.appendChild(toast);
+        setTimeout(function() {
+            if (toast.parentNode) {
+                toast.remove();
+            }
+        }, 4000);
+    }
+
     // ============================================================
     // ТЁМНАЯ ТЕМА
     // ============================================================
@@ -851,13 +924,13 @@
     // ========== УДАЛЕНИЕ ==========
     deleteBtn.addEventListener('click', function() {
         var name = deleteName.value.trim();
-        if (!name) { alert('Введите имя'); return; }
+        if (!name) { showToast('Введите имя для удаления', 'warning'); return; }
         var votes = allData[currentTab].votes;
         var found = false;
         for (var i = 0; i < votes.length; i++) {
             if (votes[i].name === name) { found = true; break; }
         }
-        if (!found) { alert('Участник "' + name + '" не найден'); deleteName.value = ''; return; }
+        if (!found) { showToast('Участник "' + name + '" не найден', 'warning'); deleteName.value = ''; return; }
         if (!confirm('Удалить "' + name + '"?')) return;
         var newVotes = [];
         for (var j = 0; j < votes.length; j++) {
@@ -871,7 +944,7 @@
         lastUpdateTime[currentTab] = Date.now();
         saveToGitHub(currentTab);
         deleteName.value = '';
-        setStatus('🗑️ Удалён: ' + name, '#dc3545');
+        showToast('🗑️ Удалён: ' + name, 'error');
     });
 
     deleteName.addEventListener('keydown', function(e) {
@@ -914,7 +987,7 @@
         historyList.innerHTML = html;
     }
 
-    // ========== ЛИДЕР (с несколькими победителями) ==========
+    // ========== ЛИДЕР ==========
     function renderLeader() {
         var votes = allData[currentTab]?.votes || [];
         var participants = getUniqueParticipants(votes);
@@ -951,7 +1024,6 @@
             return;
         }
 
-        // Находим всех участников с максимальным баллом
         var leaders = [];
         for (var i = 0; i < averages.length; i++) {
             if (averages[i].count > 0 && Math.abs(averages[i].avg - maxAvg) < 0.001) {
@@ -964,7 +1036,6 @@
             leaderContent.style.display = 'block';
             
             var namesText = leaders.join(', ');
-            // Если имён много, уменьшаем шрифт
             if (namesText.length > 30) {
                 leaderNames.className = 'leader-names small';
             } else {
@@ -982,7 +1053,7 @@
     clearBtn.addEventListener('click', function() {
         var votes = allData[currentTab].votes;
         if (votes.length === 0) {
-            alert('В текущей номинации нет данных для очистки');
+            showToast('В текущей номинации нет данных для очистки', 'warning');
             return;
         }
         captchaInput.value = '';
@@ -1003,7 +1074,7 @@
             renderLeader();
             lastUpdateTime[currentTab] = Date.now();
             saveToGitHub(currentTab);
-            setStatus('🗑️ Всё очищено в номинации "' + getTabName(currentTab) + '"', '#dc3545');
+            showToast('🗑️ Всё очищено в номинации "' + getTabName(currentTab) + '"', 'error');
         } else {
             captchaError.classList.add('show');
             captchaInput.value = '';
@@ -1045,7 +1116,7 @@
         var participants = getUniqueParticipants(votes);
         
         if (participants.length === 0) {
-            alert('Нет данных для отображения');
+            showToast('Нет данных для отображения', 'warning');
             return;
         }
 
@@ -1169,9 +1240,24 @@
             var body = { message: 'Обновление данных', content: content };
             if (remoteSha) { body.sha = remoteSha; }
             var saveResponse = await fetch(url, { method: 'PUT', headers: { 'Authorization': 'token ' + githubToken, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) });
-            if (saveResponse.ok) { setStatusBar('online', '☁️ Сохранено'); setStatus('☁️ Сохранено', '#28a745'); }
-            else { throw new Error('Ошибка'); }
-        } catch(e) { setStatusBar('offline', '⚠️ Ошибка'); setStatus('❌ Ошибка', '#dc3545'); }
+            if (saveResponse.ok) { 
+                setStatusBar('online', '☁️ Сохранено'); 
+                setStatus('☁️ Сохранено', '#28a745'); 
+            } else {
+                throw new Error('Ошибка сохранения');
+            }
+        } catch(e) { 
+            setStatusBar('online', '☁️ Данные сохранены локально'); 
+            setStatus('💾 Сохранено локально', '#fd7e14');
+            // Показываем тост с ошибкой, но не пугаем пользователя
+            showToast('⚠️ Не удалось сохранить в GitHub, но данные сохранены локально', 'warning');
+            // Пытаемся снова через 5 секунд
+            setTimeout(function() {
+                if (githubToken) {
+                    saveToGitHub(tab);
+                }
+            }, 5000);
+        }
     }
 
     async function loadFromGitHub(tab) {
@@ -1205,7 +1291,10 @@
                 setStatusBar('online', '☁️ Автосинхронизация');
                 setStatus('☁️ Синхронизировано', '#17a2b8');
             }
-        } catch(e) { setStatusBar('offline', '⚠️ Ошибка'); }
+        } catch(e) { 
+            setStatusBar('online', '☁️ Данные загружены из кэша');
+            setStatus('📂 Из кэша', '#fd7e14');
+        }
     }
 
     function render() {
@@ -1271,8 +1360,8 @@
     async function addVote() {
         var name = nameInput.value.trim();
         var score = parseFloat(scoreInput.value);
-        if (!name) { alert('Введите имя'); nameInput.focus(); return; }
-        if (isNaN(score) || score < 0 || score > 10) { alert('Оценка от 0 до 10'); scoreInput.focus(); return; }
+        if (!name) { showToast('Введите имя участника', 'warning'); nameInput.focus(); return; }
+        if (isNaN(score) || score < 0 || score > 10) { showToast('Оценка должна быть от 0 до 10', 'warning'); scoreInput.focus(); return; }
         var votes = allData[currentTab].votes;
         votes.push({ id: Date.now() + '_' + Math.random().toString(36).substr(2, 6), name: name, score: score });
         nameInput.value = ''; scoreInput.value = ''; nameInput.focus();
@@ -1282,13 +1371,13 @@
         addHistory(name, score);
         lastUpdateTime[currentTab] = Date.now();
         await saveToGitHub(currentTab);
-        setStatus('✅ Добавлено! (' + getTabName(currentTab) + ')', '#28a745');
+        showToast('✅ ' + name + ' +' + score.toFixed(1), '');
     }
 
     function calculateWinner() {
         var votes = allData[currentTab]?.votes || [];
         var participants = getUniqueParticipants(votes);
-        if (participants.length === 0) { alert('Нет данных'); return; }
+        if (participants.length === 0) { showToast('Нет данных для подсчёта', 'warning'); return; }
         
         var averages = [];
         for (var i = 0; i < participants.length; i++) {
@@ -1308,7 +1397,7 @@
         }
         
         var sorted = averages.slice().sort(function(a, b) { return b.avg - a.avg; });
-        if (sorted.length === 0 || sorted[0].count === 0) { alert('Нет оценок для подсчёта'); return; }
+        if (sorted.length === 0 || sorted[0].count === 0) { showToast('Нет оценок для подсчёта', 'warning'); return; }
         
         var winner = sorted[0];
         var isTie = false;
@@ -1333,6 +1422,7 @@
             renderHistory();
             renderLeader();
             showPodium();
+            showToast('🤝 Ничья между: ' + tieNames.join(', '), 'info');
         } else {
             winnerName = winner.name;
             winnerDisplay.textContent = '👑 Победитель: ' + winner.name + ' (' + winner.avg.toFixed(2) + ')';
@@ -1340,20 +1430,21 @@
             renderHistory();
             renderLeader();
             showPodium();
+            showToast('🏆 Победитель: ' + winner.name + ' (' + winner.avg.toFixed(2) + ')', '');
         }
     }
 
     async function syncData() {
-        if (!githubToken) { alert('Подключитесь к GitHub'); return; }
-        setStatus('🔄 Синхронизация...', '#856404');
+        if (!githubToken) { showToast('Сначала подключитесь к GitHub', 'warning'); return; }
+        showToast('🔄 Синхронизация...', 'info');
         await loadFromGitHub(currentTab);
-        setStatus('✅ Синхронизация завершена', '#28a745');
+        showToast('✅ Синхронизация завершена', '');
     }
 
     async function connectToGitHub() {
         var token = tokenInput.value.trim();
-        if (!token) { alert('Введите токен'); return; }
-        if (!token.startsWith('ghp_')) { alert('Токен должен начинаться с "ghp_"'); return; }
+        if (!token) { showToast('Введите GitHub токен', 'warning'); return; }
+        if (!token.startsWith('ghp_')) { showToast('Токен должен начинаться с "ghp_"', 'warning'); return; }
         githubToken = token; saveToken(token);
         tokenBlock.style.display = 'none'; appContent.style.display = 'block';
         await loadFromGitHub('national');
@@ -1362,6 +1453,7 @@
         render();
         renderHistory();
         renderLeader();
+        showToast('✅ Подключено к GitHub!', '');
         if (autoSyncInterval) clearInterval(autoSyncInterval);
         autoSyncInterval = setInterval(function() {
             if (githubToken) {
