@@ -5,9 +5,22 @@
       "name": "ДИма",
       "score": 10,
       "comment": "круто"
+    },
+    {
+      "id": "1787233036086_7a97wk",
+      "name": "дима",
+      "score": 1,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "дима",
+      "score": 1,
+      "comment": "",
+      "time": "16:37:16"
+    },
     {
       "type": "vote",
       "name": "ДИма",
