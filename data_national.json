@@ -11,9 +11,22 @@
       "name": "Саша",
       "score": 10,
       "comment": "апапапапапап"
+    },
+    {
+      "id": "1787233726793_1sw32i",
+      "name": "Егор1",
+      "score": 5,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Егор1",
+      "score": 5,
+      "comment": "",
+      "time": "16:48:46"
+    },
     {
       "type": "delete",
       "name": "Егор",
