@@ -1,4 +1,19 @@
 {
-  "votes": [],
-  "history": []
+  "votes": [
+    {
+      "id": "1787235324515_1tehtt",
+      "name": "Саша",
+      "score": 10,
+      "comment": "прапрапрап"
+    }
+  ],
+  "history": [
+    {
+      "type": "vote",
+      "name": "Саша",
+      "score": 10,
+      "comment": "прапрапрап",
+      "time": "17:15:24"
+    }
+  ]
 }
