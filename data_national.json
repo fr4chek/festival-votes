@@ -1,6 +1,20 @@
 {
-  "votes": [],
+  "votes": [
+    {
+      "id": "1787235492237_nzek56",
+      "name": "АНна",
+      "score": 10,
+      "comment": ""
+    }
+  ],
   "history": [
+    {
+      "type": "vote",
+      "name": "АНна",
+      "score": 10,
+      "comment": "",
+      "time": "17:18:12"
+    },
     {
       "type": "delete",
       "name": "Саша",
