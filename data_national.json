@@ -11,15 +11,14 @@
       "name": "Саша",
       "score": 10,
       "comment": "апапапапапап"
-    },
-    {
-      "id": "1787233644993_uxzvo5",
-      "name": "Егор",
-      "score": 1,
-      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "delete",
+      "name": "Егор",
+      "time": "16:47:38"
+    },
     {
       "type": "vote",
       "name": "Егор",
