@@ -1,4 +1,19 @@
 {
-  "votes": [],
-  "history": []
+  "votes": [
+    {
+      "id": "1787233383430_efqwni",
+      "name": "Дима",
+      "score": 10,
+      "comment": ""
+    }
+  ],
+  "history": [
+    {
+      "type": "vote",
+      "name": "Дима",
+      "score": 10,
+      "comment": "",
+      "time": "16:43:03"
+    }
+  ]
 }
