@@ -9,17 +9,54 @@
         
         body {
             font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background-image: url('https://img.goodfon.ru/original/1920x1200/c/99/prazdnik-salyut-feyerverk.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 16px;
             margin: 0;
+            transition: background 0.5s ease, background-image 0.5s ease;
         }
+        
+        /* ===== ЦВЕТОВЫЕ СХЕМЫ ДЛЯ НОМИНАЦИЙ ===== */
+        body.theme-national {
+            background: linear-gradient(135deg, #1a237e, #0d47a1);
+            background-image: radial-gradient(ellipse at top, #1a237e 0%, #0d47a1 50%, #000051 100%);
+        }
+        body.theme-national::before {
+            background: rgba(13, 71, 161, 0.3);
+        }
+        body.theme-national .tab-btn.active { background: #ffd700; color: #1a237e; }
+        body.theme-national .leader-card { border-color: #ffd700; background: rgba(255, 215, 0, 0.1); }
+        body.theme-national .leader-card .leader-names { color: #ffd700; }
+        body.theme-national .leader-card .leader-score { color: #ffd700; }
+        body.theme-national .stat-card .num { color: #ffd700; }
+        body.theme-national th { background: #ffd700; color: #1a237e; }
+        
+        body.theme-free {
+            background: linear-gradient(135deg, #b71c1c, #880e4f);
+            background-image: radial-gradient(ellipse at bottom, #b71c1c 0%, #880e4f 50%, #4a148c 100%);
+        }
+        body.theme-free::before { background: rgba(136, 14, 79, 0.3); }
+        body.theme-free .tab-btn.active { background: #00e5ff; color: #1a1a1a; }
+        body.theme-free .leader-card { border-color: #00e5ff; background: rgba(0, 229, 255, 0.1); }
+        body.theme-free .leader-card .leader-names { color: #00e5ff; }
+        body.theme-free .leader-card .leader-score { color: #00e5ff; }
+        body.theme-free .stat-card .num { color: #00e5ff; }
+        body.theme-free th { background: #00e5ff; color: #1a1a1a; }
+        
+        body.theme-evening {
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            background-image: radial-gradient(ellipse at center, #1a1a2e 0%, #16213e 50%, #0f0f1a 100%);
+        }
+        body.theme-evening::before { background: rgba(22, 33, 62, 0.3); }
+        body.theme-evening .tab-btn.active { background: #ff6f00; color: #1a1a2e; }
+        body.theme-evening .leader-card { border-color: #ff6f00; background: rgba(255, 111, 0, 0.1); }
+        body.theme-evening .leader-card .leader-names { color: #ff6f00; }
+        body.theme-evening .leader-card .leader-score { color: #ff6f00; }
+        body.theme-evening .stat-card .num { color: #ff6f00; }
+        body.theme-evening th { background: #ff6f00; color: #1a1a2e; }
+        
         body::before {
             content: '';
             position: fixed;
@@ -27,17 +64,18 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.55);
             z-index: 0;
+            transition: background 0.5s ease;
         }
+        
         .container {
             position: relative;
             z-index: 1;
             max-width: 950px;
             margin: 0 auto;
             background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border-radius: 20px;
             padding: 24px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.5);
@@ -46,13 +84,10 @@
             transition: background 0.3s ease, backdrop-filter 0.3s ease;
         }
 
-        /* ===== ТЁМНАЯ ТЕМА ===== */
-        body.dark-theme::before { background: rgba(0, 0, 0, 0.8); }
         body.dark-theme .container { background: rgba(30, 30, 40, 0.92); backdrop-filter: blur(10px); border-color: rgba(255,255,255,0.1); }
         body.dark-theme h1 { color: #eee; }
         body.dark-theme .subtitle { color: #aaa; }
         body.dark-theme .tab-btn { color: #aaa; }
-        body.dark-theme .tab-btn.active { background: #5a6fd6; color: white; }
         body.dark-theme .status-bar { background: rgba(255,255,255,0.1); color: #ddd; }
         body.dark-theme .status-bar.online { background: #1a3a2a; color: #8fdfb0; border-color: #28a745; }
         body.dark-theme .status-bar.offline { background: #3a1a1a; color: #f8a0a0; border-color: #dc3545; }
@@ -64,7 +99,6 @@
         body.dark-theme .token-input input:focus { border-color: #5a6fd6; }
         body.dark-theme .token-input .hint { color: #888; }
         body.dark-theme .stat-card { background: rgba(255,255,255,0.05); }
-        body.dark-theme .stat-card .num { color: #8a9ff0; }
         body.dark-theme .stat-card .label { color: #aaa; }
         body.dark-theme .input-section { background: rgba(255,255,255,0.05); }
         body.dark-theme .input-group label { color: #aaa; }
@@ -77,7 +111,6 @@
         body.dark-theme td { background: #2a2a3a; border-color: #333; color: #ddd; }
         body.dark-theme tr:nth-child(even) td { background: #222233; }
         body.dark-theme tr:hover td { background: #333344; }
-        body.dark-theme th { background: #5a6fd6; color: white; }
         body.dark-theme .total-cell { color: #eee; }
         body.dark-theme .empty-message { color: #666; }
         body.dark-theme .footer { color: #aaa; }
@@ -88,15 +121,13 @@
         body.dark-theme .history-item .score { color: #8fdfb0; }
         body.dark-theme .history-item.delete { color: #f8a0a0; }
         body.dark-theme .history-item.delete .time { color: #888; }
-        body.dark-theme .leader-card { background: rgba(255,215,0,0.15); border-color: #ffd700; }
-        body.dark-theme .leader-card .leader-name { color: #ffd700; }
-        body.dark-theme .leader-card .leader-score { color: #ffd700; }
-        body.dark-theme .leader-card .leader-label { color: #aaa; }
-        body.dark-theme .leader-card .leader-empty { color: #888; }
-        body.dark-theme .leader-card .leader-names { color: #ffd700; }
         body.dark-theme .toast { background: #3a3a3a; color: #eee; }
         body.dark-theme .toast.warning { background: #3a3a1a; color: #f0d080; border-color: #ffc107; }
         body.dark-theme .toast.error { background: #3a1a1a; color: #f8a0a0; border-color: #dc3545; }
+        body.dark-theme .comment-input { background: #2a2a3a; border-color: #444; color: #eee; }
+        body.dark-theme .comment-input:focus { border-color: #5a6fd6; }
+        body.dark-theme .voice-btn { background: #3a3a4a; color: #ddd; }
+        body.dark-theme .voice-btn.listening { background: #1a3a2a; color: #8fdfb0; }
 
         .offline-warning {
             display: none;
@@ -112,18 +143,9 @@
             transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
         .offline-warning.show { display: block; }
-        body.dark-theme .offline-warning {
-            background: #3a3a1a;
-            color: #f0d080;
-            border-color: #ffc107;
-        }
-        .offline-warning .sync-hint {
-            font-weight: 700;
-            color: #dc3545;
-        }
-        body.dark-theme .offline-warning .sync-hint {
-            color: #ff6b6b;
-        }
+        body.dark-theme .offline-warning { background: #3a3a1a; color: #f0d080; border-color: #ffc107; }
+        .offline-warning .sync-hint { font-weight: 700; color: #dc3545; }
+        body.dark-theme .offline-warning .sync-hint { color: #ff6b6b; }
 
         .toast-container {
             position: fixed;
@@ -153,18 +175,9 @@
             border: 1px solid rgba(255,255,255,0.1);
             text-align: center;
         }
-        .toast.warning {
-            background: rgba(255, 193, 7, 0.95);
-            color: #333;
-        }
-        .toast.error {
-            background: rgba(220, 53, 69, 0.95);
-            color: white;
-        }
-        .toast.info {
-            background: rgba(23, 162, 184, 0.95);
-            color: white;
-        }
+        .toast.warning { background: rgba(255, 193, 7, 0.95); color: #333; }
+        .toast.error { background: rgba(220, 53, 69, 0.95); color: white; }
+        .toast.info { background: rgba(23, 162, 184, 0.95); color: white; }
         @keyframes toastIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
@@ -201,11 +214,12 @@
 
         h1 { text-align: center; color: #333; margin-bottom: 4px; font-size: 24px; transition: color 0.3s ease; }
         .subtitle { text-align: center; color: #666; margin-bottom: 20px; font-size: 14px; transition: color 0.3s ease; }
+        
         .tabs {
             display: flex;
             gap: 6px;
             margin-bottom: 18px;
-            background: rgba(255,255,255,0.5);
+            background: rgba(255,255,255,0.3);
             border-radius: 14px;
             padding: 4px;
         }
@@ -223,6 +237,7 @@
         }
         .tab-btn:active { transform: scale(0.96); }
         .tab-btn.active { background: #667eea; color: white; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); }
+        
         .status-bar {
             text-align: center;
             padding: 10px;
@@ -237,6 +252,7 @@
         .status-bar.offline { background: #f8d7da; color: #721c24; border: 2px solid #dc3545; }
         .status-bar.connecting { background: #fff3cd; color: #856404; border: 2px solid #ffc107; }
         .status-bar.saving { background: #cce5ff; color: #004085; border: 2px solid #007bff; }
+        
         .token-input {
             background: #f8f9ff;
             padding: 16px;
@@ -259,6 +275,7 @@
         .token-input input:focus { border-color: #667eea; outline: none; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2); }
         .token-input .hint { font-size: 12px; color: #888; margin-top: 6px; transition: color 0.3s ease; }
         .token-input .btn { margin-top: 10px; width: 100%; }
+        
         .stats {
             display: flex;
             flex-wrap: wrap;
@@ -277,6 +294,7 @@
         }
         .stat-card .num { font-size: 24px; font-weight: 700; color: #667eea; transition: color 0.3s ease; }
         .stat-card .label { font-size: 12px; color: #555; transition: color 0.3s ease; }
+        
         .input-section {
             display: flex;
             flex-wrap: wrap;
@@ -309,6 +327,44 @@
         .input-group input[type="number"] { -moz-appearance: textfield; }
         .input-group input[type="number"]::-webkit-outer-spin-button,
         .input-group input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+        
+        .comment-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 13px;
+            background: white;
+            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            margin-top: 4px;
+        }
+        .comment-input:focus { border-color: #667eea; outline: none; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2); }
+        .comment-input::placeholder { color: #aaa; }
+        
+        .voice-btn {
+            padding: 8px 12px;
+            border: none;
+            border-radius: 10px;
+            background: #f0f0f0;
+            color: #333;
+            font-size: 18px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 4px;
+            width: 100%;
+        }
+        .voice-btn:hover { background: #e0e0e0; }
+        .voice-btn.listening {
+            background: #28a745;
+            color: white;
+            animation: pulse 1s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        .voice-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+        
         .btn {
             padding: 12px 20px;
             border: none;
@@ -328,6 +384,7 @@
         .btn-primary { background: #667eea; }
         .btn-danger { background: #dc3545; }
         .btn-clear { background: #dc3545; }
+        
         .actions {
             display: flex;
             flex-wrap: wrap;
@@ -336,6 +393,7 @@
             margin: 14px 0;
         }
         .actions .btn { flex: 1 1 auto; min-width: 100px; text-align: center; }
+        
         .delete-section {
             display: flex;
             flex-wrap: wrap;
@@ -361,6 +419,7 @@
             transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
         .delete-section input:focus { border-color: #dc3545; outline: none; box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2); }
+        
         .table-wrap {
             overflow-x: auto;
             border-radius: 15px;
@@ -369,7 +428,7 @@
             transition: background 0.3s ease, border-color 0.3s ease;
         }
         table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th { background: #667eea; color: white; padding: 10px 6px; text-align: center; }
+        th { background: #667eea; color: white; padding: 10px 6px; text-align: center; transition: background 0.3s ease, color 0.3s ease; }
         td {
             padding: 8px 6px;
             text-align: center;
@@ -381,7 +440,9 @@
         tr:hover td { background: #f0f2ff; }
         .winner-row td { background: #ffd700 !important; font-weight: 700; border-bottom: 3px solid #ffa500; }
         .total-cell { font-weight: 700; font-size: 16px; color: #333; transition: color 0.3s ease; }
+        .comment-cell { font-size: 11px; color: #888; max-width: 120px; word-break: break-word; }
         .empty-message { text-align: center; padding: 25px; color: #888; font-style: italic; transition: color 0.3s ease; }
+        
         .footer {
             margin-top: 16px;
             display: flex;
@@ -403,10 +464,7 @@
         }
         .sync-info { font-size: 11px; color: #888; text-align: center; margin-top: 6px; transition: color 0.3s ease; }
 
-        .leader-section {
-            margin-top: 10px;
-            margin-bottom: 20px;
-        }
+        .leader-section { margin-top: 10px; margin-bottom: 20px; }
         .leader-card {
             background: rgba(255, 215, 0, 0.12);
             border: 2px solid #ffd700;
@@ -415,33 +473,11 @@
             text-align: center;
             transition: background 0.3s ease, border-color 0.3s ease;
         }
-        .leader-card .leader-label {
-            font-size: 14px;
-            color: #888;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-        .leader-card .leader-names {
-            font-size: 24px;
-            font-weight: 800;
-            color: #b8860b;
-            transition: color 0.3s ease;
-        }
-        .leader-card .leader-names.small {
-            font-size: 18px;
-        }
-        .leader-card .leader-score {
-            font-size: 18px;
-            font-weight: 600;
-            color: #b8860b;
-            transition: color 0.3s ease;
-        }
-        .leader-card .leader-empty {
-            color: #888;
-            font-size: 16px;
-            font-weight: 500;
-            transition: color 0.3s ease;
-        }
+        .leader-card .leader-label { font-size: 14px; color: #888; font-weight: 600; transition: color 0.3s ease; }
+        .leader-card .leader-names { font-size: 24px; font-weight: 800; color: #b8860b; transition: color 0.3s ease; }
+        .leader-card .leader-names.small { font-size: 18px; }
+        .leader-card .leader-score { font-size: 18px; font-weight: 600; color: #b8860b; transition: color 0.3s ease; }
+        .leader-card .leader-empty { color: #888; font-size: 16px; font-weight: 500; transition: color 0.3s ease; }
 
         .history-section {
             margin-top: 20px;
@@ -451,29 +487,11 @@
             border: 1px solid #eee;
             transition: background 0.3s ease, border-color 0.3s ease;
         }
-        .history-section h3 {
-            text-align: center;
-            color: #333;
-            margin-bottom: 12px;
-            font-size: 16px;
-            transition: color 0.3s ease;
-        }
-        .history-list {
-            max-height: 200px;
-            overflow-y: auto;
-            padding: 0 4px;
-        }
-        .history-list::-webkit-scrollbar {
-            width: 4px;
-        }
-        .history-list::-webkit-scrollbar-thumb {
-            background: #667eea;
-            border-radius: 4px;
-        }
-        .history-list::-webkit-scrollbar-track {
-            background: rgba(0,0,0,0.05);
-            border-radius: 4px;
-        }
+        .history-section h3 { text-align: center; color: #333; margin-bottom: 12px; font-size: 16px; transition: color 0.3s ease; }
+        .history-list { max-height: 200px; overflow-y: auto; padding: 0 4px; }
+        .history-list::-webkit-scrollbar { width: 4px; }
+        .history-list::-webkit-scrollbar-thumb { background: #667eea; border-radius: 4px; }
+        .history-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-radius: 4px; }
         .history-item {
             display: flex;
             justify-content: space-between;
@@ -485,37 +503,13 @@
             transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
         }
         .history-item:last-child { border-bottom: none; }
-        .history-item .name { 
-            font-weight: 600; 
-            flex: 1; 
-            text-align: left; 
-        }
-        .history-item .score { 
-            font-weight: 700; 
-            color: #28a745; 
-            transition: color 0.3s ease;
-            width: 60px;
-            text-align: right;
-            flex-shrink: 0;
-        }
-        .history-item .time { 
-            font-size: 11px; 
-            color: #888; 
-            transition: color 0.3s ease;
-            width: 70px;
-            text-align: right;
-            flex-shrink: 0;
-        }
+        .history-item .name { font-weight: 600; flex: 1; text-align: left; }
+        .history-item .comment-text { font-size: 11px; color: #888; max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .history-item .score { font-weight: 700; color: #28a745; transition: color 0.3s ease; width: 60px; text-align: right; flex-shrink: 0; }
+        .history-item .time { font-size: 11px; color: #888; transition: color 0.3s ease; width: 70px; text-align: right; flex-shrink: 0; }
         .history-item.delete .name { color: #dc3545; }
         .history-item.delete .score { color: #dc3545; }
-        .history-empty {
-            text-align: center;
-            color: #888;
-            padding: 15px;
-            font-style: italic;
-            font-size: 13px;
-            transition: color 0.3s ease;
-        }
+        .history-empty { text-align: center; color: #888; padding: 15px; font-style: italic; font-size: 13px; transition: color 0.3s ease; }
 
         .modal-overlay {
             position: fixed;
@@ -568,10 +562,7 @@
             padding: 20px 0;
             flex-wrap: wrap;
         }
-        .podium-item {
-            text-align: center;
-            min-width: 80px;
-        }
+        .podium-item { text-align: center; min-width: 80px; }
         .podium-item .medal { font-size: 36px; display: block; }
         .podium-item .place { font-weight: 700; font-size: 14px; color: #555; transition: color 0.3s ease; }
         .podium-item .podium-name { font-weight: 700; font-size: 16px; color: #333; margin-top: 2px; transition: color 0.3s ease; }
@@ -628,17 +619,14 @@
             .podium { gap: 10px; }
             .podium-step { width: 70px; }
             .podium-item { min-width: 60px; }
-            .theme-toggle {
-                top: 10px;
-                right: 10px;
-                font-size: 11px;
-                padding: 4px 10px;
-            }
+            .theme-toggle { top: 10px; right: 10px; font-size: 11px; padding: 4px 10px; }
             .leader-card .leader-names { font-size: 18px; }
             .leader-card .leader-names.small { font-size: 15px; }
             .leader-card .leader-score { font-size: 15px; }
             .history-item .score { width: 50px; }
             .history-item .time { width: 60px; }
+            .history-item .comment-text { max-width: 60px; }
+            .comment-cell { max-width: 80px; }
         }
     </style>
 </head>
@@ -699,6 +687,13 @@
                 <label>⭐ Оценка (0–10)</label>
                 <input type="number" id="scoreInput" placeholder="10" min="0" max="10" step="0.1">
             </div>
+            <div class="input-group" style="flex:1 1 100%; margin-top: 4px;">
+                <label>💬 Комментарий (необязательно)</label>
+                <div style="display: flex; gap: 6px; align-items: center; width: 100%;">
+                    <input type="text" id="commentInput" class="comment-input" placeholder="Например: Отличное выступление!">
+                    <button class="voice-btn" id="voiceBtn" title="Голосовой ввод">🎤</button>
+                </div>
+            </div>
             <div class="input-group" style="flex:0 0 auto;">
                 <button class="btn btn-add" id="addBtn">➕ Добавить</button>
             </div>
@@ -712,8 +707,8 @@
 
         <div class="table-wrap">
             <table>
-                <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>Все оценки</th></tr></thead>
-                <tbody id="tableBody"><tr><td colspan="4" class="empty-message">Нет данных</td></tr></tbody>
+                <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>Все оценки</th><th>Комментарии</th></tr></thead>
+                <tbody id="tableBody"><tr><td colspan="5" class="empty-message">Нет данных</td></tr></tbody>
             </table>
         </div>
 
@@ -734,7 +729,7 @@
             <span id="winnerDisplay">👑 Победитель: не определен</span>
             <span class="save-status" id="statusDisplay">☁️ Готов</span>
         </div>
-        <div class="sync-info">🔄 Автосинхронизация каждые 10 секунд | 🎆 Праздничный фон</div>
+        <div class="sync-info">🔄 Автосинхронизация каждые 10 секунд | 🎤 Голосовой ввод | 💬 Комментарии</div>
     </div>
 </div>
 
@@ -764,6 +759,113 @@
 </div>
 
 <script>
+    // ============================================================
+    // ЦВЕТОВЫЕ СХЕМЫ ДЛЯ НОМИНАЦИЙ
+    // ============================================================
+    function applyTheme(tab) {
+        document.body.className = document.body.className.replace(/theme-\w+/g, '');
+        if (tab === 'national') document.body.classList.add('theme-national');
+        else if (tab === 'free') document.body.classList.add('theme-free');
+        else if (tab === 'evening') document.body.classList.add('theme-evening');
+    }
+
+    // ============================================================
+    // ГОЛОСОВОЙ ВВОД
+    // ============================================================
+    var voiceBtn = document.getElementById('voiceBtn');
+    var commentInput = document.getElementById('commentInput');
+    var isListening = false;
+    var recognition = null;
+
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+        var SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        recognition = new SpeechRecognition();
+        recognition.lang = 'ru-RU';
+        recognition.continuous = false;
+        recognition.interimResults = true;
+
+        recognition.onstart = function() {
+            isListening = true;
+            voiceBtn.classList.add('listening');
+            voiceBtn.textContent = '⏹️';
+            showToast('🎤 Слушаю... Говорите имя и оценку', 'info');
+        };
+
+        recognition.onend = function() {
+            isListening = false;
+            voiceBtn.classList.remove('listening');
+            voiceBtn.textContent = '🎤';
+        };
+
+        recognition.onresult = function(event) {
+            var result = event.results[event.results.length - 1];
+            var transcript = result[0].transcript.trim().toLowerCase();
+            
+            if (result.isFinal) {
+                // Парсим: ищем число (оценку) и имя
+                var words = transcript.split(/\s+/);
+                var score = null;
+                var nameWords = [];
+                
+                for (var i = 0; i < words.length; i++) {
+                    var word = words[i].replace(',', '.');
+                    var num = parseFloat(word);
+                    if (!isNaN(num) && num >= 0 && num <= 10) {
+                        score = num;
+                    } else {
+                        nameWords.push(words[i]);
+                    }
+                }
+                
+                if (score !== null && nameWords.length > 0) {
+                    var name = nameWords.join(' ').trim();
+                    // Делаем первую букву заглавной
+                    name = name.charAt(0).toUpperCase() + name.slice(1);
+                    
+                    document.getElementById('nameInput').value = name;
+                    document.getElementById('scoreInput').value = score;
+                    // Автоматически добавляем оценку
+                    setTimeout(function() {
+                        document.getElementById('addBtn').click();
+                    }, 500);
+                    showToast('🎤 Распознано: ' + name + ' — ' + score, '');
+                } else if (score !== null) {
+                    showToast('🎤 Не удалось распознать имя. Попробуйте ещё раз.', 'warning');
+                } else {
+                    showToast('🎤 Не удалось распознать оценку. Скажите "Имя + число".', 'warning');
+                }
+                recognition.stop();
+            }
+        };
+
+        recognition.onerror = function(event) {
+            if (event.error === 'not-allowed') {
+                showToast('❌ Доступ к микрофону запрещён. Разрешите в настройках браузера.', 'error');
+            } else if (event.error === 'no-speech') {
+                showToast('🎤 Ничего не услышано. Попробуйте ещё раз.', 'warning');
+            } else {
+                showToast('❌ Ошибка распознавания: ' + event.error, 'error');
+            }
+            recognition.stop();
+        };
+
+        voiceBtn.addEventListener('click', function() {
+            if (!recognition) return;
+            if (isListening) {
+                recognition.stop();
+                return;
+            }
+            try {
+                recognition.start();
+            } catch(e) {
+                // Если уже запущен
+            }
+        });
+    } else {
+        voiceBtn.style.display = 'none';
+        showToast('🎤 Голосовой ввод не поддерживается в этом браузере', 'warning');
+    }
+
     // ============================================================
     // TOAST-УВЕДОМЛЕНИЯ
     // ============================================================
@@ -892,6 +994,7 @@
     var statusBar = document.getElementById('statusBar');
     var nameInput = document.getElementById('nameInput');
     var scoreInput = document.getElementById('scoreInput');
+    var commentInputField = document.getElementById('commentInput');
     var tableBody = document.getElementById('tableBody');
     var winnerDisplay = document.getElementById('winnerDisplay');
     var statusDisplay = document.getElementById('statusDisplay');
@@ -920,7 +1023,7 @@
     var podiumContainer = document.getElementById('podiumContainer');
     var closePodiumBtn = document.getElementById('closePodiumBtn');
 
-    // ========== ВКЛАДКИ ==========
+    // ========== ПРИМЕНЕНИЕ ТЕМЫ ПРИ ПЕРЕКЛЮЧЕНИИ ВКЛАДКИ ==========
     tabsContainer.addEventListener('click', function(e) {
         var btn = e.target.closest('.tab-btn');
         if (!btn) return;
@@ -929,10 +1032,14 @@
         document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
         btn.classList.add('active');
         currentTab = tab;
+        applyTheme(tab);
         render();
         renderHistory();
         renderLeader();
     });
+
+    // Применяем тему при загрузке
+    applyTheme('national');
 
     // ========== УДАЛЕНИЕ ==========
     deleteBtn.addEventListener('click', function() {
@@ -952,7 +1059,6 @@
         allData[currentTab].votes = newVotes;
         if (winnerName === name) winnerName = null;
         render();
-        // Добавляем запись об удалении в историю
         addHistoryDelete(name);
         renderHistory();
         renderLeader();
@@ -967,7 +1073,7 @@
     });
 
     // ========== ИСТОРИЯ ==========
-    function addHistory(name, score) {
+    function addHistory(name, score, comment) {
         var now = new Date();
         var time = now.toTimeString().slice(0, 8);
         var tabData = allData[currentTab];
@@ -976,6 +1082,7 @@
             type: 'vote',
             name: name,
             score: score,
+            comment: comment || '',
             time: time
         });
         if (tabData.history.length > 50) {
@@ -1016,9 +1123,15 @@
             html += '<div class="history-item ' + deleteClass + '">';
             if (isDelete) {
                 html += '<span class="name">🗑️ Удалён: ' + escapeHtml(item.name) + '</span>';
+                html += '<span class="comment-text"></span>';
                 html += '<span class="score"></span>';
             } else {
                 html += '<span class="name">' + escapeHtml(item.name) + '</span>';
+                if (item.comment) {
+                    html += '<span class="comment-text">" ' + escapeHtml(item.comment) + '"</span>';
+                } else {
+                    html += '<span class="comment-text"></span>';
+                }
                 html += '<span class="score">+' + item.score.toFixed(1) + '</span>';
             }
             html += '<span class="time">' + escapeHtml(item.time) + '</span>';
@@ -1346,7 +1459,7 @@
         statParticipants.textContent = participants.length;
         statVotes.textContent = votes.length;
         if (participants.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="4" class="empty-message">Нет данных</td></tr>';
+            tableBody.innerHTML = '<tr><td colspan="5" class="empty-message">Нет данных</td></tr>';
             winnerDisplay.textContent = '👑 Победитель: не определен';
             statAvg.textContent = '—';
             return;
@@ -1355,8 +1468,14 @@
         for (var i = 0; i < participants.length; i++) {
             var p = participants[i];
             var pVotes = [];
+            var allComments = [];
             for (var j = 0; j < votes.length; j++) {
-                if (votes[j].name === p) { pVotes.push(votes[j]); }
+                if (votes[j].name === p) {
+                    pVotes.push(votes[j]);
+                    if (votes[j].comment) {
+                        allComments.push(votes[j].comment);
+                    }
+                }
             }
             var total = 0, scores = [];
             for (var k = 0; k < pVotes.length; k++) {
@@ -1365,7 +1484,8 @@
             }
             var count = pVotes.length, avg = count > 0 ? total / count : 0;
             averages.push({ name: p, avg: avg, count: count });
-            html += '<tr><td><strong>' + escapeHtml(p) + '</strong></td><td class="total-cell">' + (count > 0 ? avg.toFixed(2) : '—') + '</td><td>' + count + '</td><td>' + scores.join(', ') + '</td></tr>';
+            var commentsText = allComments.join('; ');
+            html += '<tr><td><strong>' + escapeHtml(p) + '</strong></td><td class="total-cell">' + (count > 0 ? avg.toFixed(2) : '—') + '</td><td>' + count + '</td><td>' + scores.join(', ') + '</td><td class="comment-cell">' + escapeHtml(commentsText) + '</td></tr>';
         }
         tableBody.innerHTML = html;
         if (winnerName) {
@@ -1403,18 +1523,29 @@
     async function addVote() {
         var name = nameInput.value.trim();
         var score = parseFloat(scoreInput.value);
+        var comment = commentInputField.value.trim();
+        
         if (!name) { showToast('Введите имя участника', 'warning'); nameInput.focus(); return; }
         if (isNaN(score) || score < 0 || score > 10) { showToast('Оценка должна быть от 0 до 10', 'warning'); scoreInput.focus(); return; }
+        
         var votes = allData[currentTab].votes;
-        votes.push({ id: Date.now() + '_' + Math.random().toString(36).substr(2, 6), name: name, score: score });
-        nameInput.value = ''; scoreInput.value = ''; nameInput.focus();
+        votes.push({ 
+            id: Date.now() + '_' + Math.random().toString(36).substr(2, 6), 
+            name: name, 
+            score: score,
+            comment: comment || ''
+        });
+        nameInput.value = ''; 
+        scoreInput.value = ''; 
+        commentInputField.value = '';
+        nameInput.focus();
         render();
         renderHistory();
         renderLeader();
-        addHistory(name, score);
+        addHistory(name, score, comment);
         lastUpdateTime[currentTab] = Date.now();
         await saveToGitHub(currentTab);
-        showToast('✅ ' + name + ' +' + score.toFixed(1), '');
+        showToast('✅ ' + name + ' +' + score.toFixed(1) + (comment ? ' 💬 ' + comment : ''), '');
     }
 
     function calculateWinner() {
@@ -1498,6 +1629,7 @@
         render();
         renderHistory();
         renderLeader();
+        applyTheme(currentTab);
         showToast('✅ Подключено к GitHub!', '');
         if (autoSyncInterval) clearInterval(autoSyncInterval);
         autoSyncInterval = setInterval(function() {
@@ -1534,6 +1666,10 @@
     });
     
     scoreInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') { e.preventDefault(); commentInputField.focus(); }
+    });
+    
+    commentInputField.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') { e.preventDefault(); addVote(); }
     });
 
@@ -1542,6 +1678,9 @@
     
     console.log('✅ Программа загружена!');
     console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
+    console.log('🎤 Голосовой ввод: скажите "Имя + оценка"');
+    console.log('💬 Комментарии: можно добавлять к каждой оценке');
+    console.log('🎨 Цветовые схемы для каждой номинации');
 </script>
 </body>
 </html>
