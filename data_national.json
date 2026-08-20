@@ -1,19 +1,11 @@
 {
-  "votes": [
-    {
-      "id": "1787233383430_efqwni",
-      "name": "Дима",
-      "score": 10,
-      "comment": ""
-    },
-    {
-      "id": "1787233393076_vjdta2",
-      "name": "Дима",
-      "score": 1,
-      "comment": ""
-    }
-  ],
+  "votes": [],
   "history": [
+    {
+      "type": "delete",
+      "name": "Дима",
+      "time": "16:43:49"
+    },
     {
       "type": "vote",
       "name": "Дима",
