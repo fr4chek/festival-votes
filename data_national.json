@@ -5,9 +5,22 @@
       "name": "Дима",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1787233393076_vjdta2",
+      "name": "Дима",
+      "score": 1,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Дима",
+      "score": 1,
+      "comment": "",
+      "time": "16:43:13"
+    },
     {
       "type": "vote",
       "name": "Дима",
