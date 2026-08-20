@@ -823,6 +823,7 @@
     var winnerName = null;
     var lastUpdateTime = {};
     var autoSyncInterval = null;
+    var isConnecting = false;
 
     // DOM
     var tabsContainer = document.getElementById('tabsContainer');
@@ -1451,32 +1452,72 @@
     }
 
     async function connectToGitHub() {
+        if (isConnecting) return;
+        
         var token = tokenInput.value.trim();
-        if (!token) { showToast('Введите GitHub токен', 'warning'); return; }
-        if (!token.startsWith('ghp_')) { showToast('Токен должен начинаться с "ghp_"', 'warning'); return; }
+        if (!token) { 
+            showToast('Введите GitHub токен', 'warning'); 
+            return; 
+        }
+        if (!token.startsWith('ghp_')) { 
+            showToast('Токен должен начинаться с "ghp_"', 'warning'); 
+            return; 
+        }
+        
+        isConnecting = true;
         githubToken = token; 
         saveToken(token);
-        tokenBlock.style.display = 'none'; 
-        appContent.style.display = 'block';
-        await loadFromGitHub('national');
-        await loadFromGitHub('free');
-        await loadFromGitHub('evening');
-        render();
-        renderHistory();
-        renderLeader();
-        showToast('✅ Подключено к GitHub!', '');
-        if (autoSyncInterval) clearInterval(autoSyncInterval);
-        autoSyncInterval = setInterval(function() {
-            if (githubToken) {
-                loadFromGitHub(currentTab);
+        
+        // Показываем статус
+        setStatusBar('connecting', '⏳ Подключение к GitHub...');
+        
+        try {
+            // Проверяем токен на GitHub
+            var testResponse = await fetch('https://api.github.com/user', {
+                headers: { 'Authorization': 'token ' + githubToken }
+            });
+            
+            if (!testResponse.ok) {
+                if (testResponse.status === 401) {
+                    showToast('❌ Неверный токен! Проверьте и попробуйте снова.', 'error');
+                } else {
+                    showToast('❌ Ошибка подключения: ' + testResponse.status, 'error');
+                }
+                isConnecting = false;
+                return;
             }
-        }, 10000);
+            
+            // Токен верный — подключаемся
+            tokenBlock.style.display = 'none'; 
+            appContent.style.display = 'block';
+            
+            await loadFromGitHub('national');
+            await loadFromGitHub('free');
+            await loadFromGitHub('evening');
+            render();
+            renderHistory();
+            renderLeader();
+            showToast('✅ Подключено к GitHub!', '');
+            
+            if (autoSyncInterval) clearInterval(autoSyncInterval);
+            autoSyncInterval = setInterval(function() {
+                if (githubToken) {
+                    loadFromGitHub(currentTab);
+                }
+            }, 10000);
+            
+        } catch(e) {
+            showToast('❌ Ошибка подключения: ' + e.message, 'error');
+        }
+        
+        isConnecting = false;
     }
 
     function init() {
         var savedToken = loadToken();
         if (savedToken) { 
             tokenInput.value = savedToken; 
+            // Автоматически подключаемся
             connectToGitHub(); 
         } else { 
             tokenBlock.style.display = 'block'; 
