@@ -1,13 +1,11 @@
 {
-  "votes": [
-    {
-      "id": "1787233036086_7a97wk",
-      "name": "дима",
-      "score": 1,
-      "comment": ""
-    }
-  ],
+  "votes": [],
   "history": [
+    {
+      "type": "delete",
+      "name": "дима",
+      "time": "16:37:36"
+    },
     {
       "type": "delete",
       "name": "ДИма",
