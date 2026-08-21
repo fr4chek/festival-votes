@@ -87,12 +87,12 @@
         body.dark-theme .save-status { background: rgba(255,255,255,0.1); color: #8fdfb0; }
         body.dark-theme .sync-info { color: #666; }
         body.dark-theme .history-item { border-bottom-color: #444; color: #ddd; }
-        body.dark-theme .history-item .time { color: #99ccff; }
-        body.dark-theme .history-item .date { color: #99ccff; }
+        body.dark-theme .history-item .time { color: #66b3ff; }
+        body.dark-theme .history-item .date { color: #66b3ff; }
         body.dark-theme .history-item .score { color: #8fdfb0; }
         body.dark-theme .history-item .comment-text { color: #999; }
-        body.dark-theme .history-item.delete .time { color: #99ccff; }
-        body.dark-theme .history-item.delete .date { color: #99ccff; }
+        body.dark-theme .history-item.delete .time { color: #66b3ff; }
+        body.dark-theme .history-item.delete .date { color: #66b3ff; }
         body.dark-theme .history-empty { color: #666; }
         body.dark-theme .leader-card { background: rgba(255,215,0,0.15); border-color: #ffd700; }
         body.dark-theme .leader-card .leader-names { color: #ffd700; }
@@ -102,41 +102,6 @@
         body.dark-theme .toast { background: #3a3a3a; color: #eee; }
         body.dark-theme .toast.warning { background: #3a3a1a; color: #f0d080; border-color: #ffc107; }
         body.dark-theme .toast.error { background: #3a1a1a; color: #f8a0a0; border-color: #dc3545; }
-        body.dark-theme .counter-box { background: rgba(255,255,255,0.05); border-color: #5a6fd6; color: #eee; }
-        body.dark-theme .counter-box .number { color: #8a9ff0; }
-
-        /* СЧЁТЧИК УЧАСТНИКОВ */
-        .counter-box {
-            position: absolute;
-            top: 16px;
-            left: 16px;
-            z-index: 10;
-            background: rgba(255,255,255,0.3);
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            border-radius: 16px;
-            padding: 8px 16px;
-            text-align: center;
-            border: 2px solid rgba(102, 126, 234, 0.3);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            transition: background 0.3s ease, border-color 0.3s ease;
-            min-width: 70px;
-        }
-        .counter-box .emoji { font-size: 22px; display: block; }
-        .counter-box .number {
-            font-size: 32px;
-            font-weight: 800;
-            color: #667eea;
-            line-height: 1.1;
-            transition: color 0.3s ease;
-        }
-        .counter-box .label {
-            font-size: 11px;
-            color: #555;
-            font-weight: 600;
-            transition: color 0.3s ease;
-            display: block;
-        }
 
         .offline-warning {
             display: none;
@@ -221,7 +186,7 @@
         body.dark-theme .theme-toggle { background: rgba(255,255,255,0.15); color: #ddd; }
         body.dark-theme .theme-toggle:hover { background: rgba(255,255,255,0.25); }
 
-        h1 { text-align: center; color: #333; margin-bottom: 4px; font-size: 24px; transition: color 0.3s ease; padding-left: 80px; }
+        h1 { text-align: center; color: #333; margin-bottom: 4px; font-size: 24px; transition: color 0.3s ease; }
         .subtitle { text-align: center; color: #666; margin-bottom: 20px; font-size: 14px; transition: color 0.3s ease; }
         
         .tabs {
@@ -491,8 +456,8 @@
         .history-item .name { font-weight: 600; flex: 1; text-align: left; }
         .history-item .comment-text { font-size: 11px; color: #888; max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color 0.3s ease; }
         .history-item .score { font-weight: 700; color: #28a745; transition: color 0.3s ease; width: 60px; text-align: right; flex-shrink: 0; }
-        .history-item .time { font-size: 11px; color: #888; transition: color 0.3s ease; width: 65px; text-align: right; flex-shrink: 0; }
-        .history-item .date { font-size: 11px; color: #888; transition: color 0.3s ease; width: 80px; text-align: right; flex-shrink: 0; }
+        .history-item .time { font-size: 11px; color: #555; transition: color 0.3s ease; width: 65px; text-align: right; flex-shrink: 0; }
+        .history-item .date { font-size: 11px; color: #555; font-weight: 600; transition: color 0.3s ease; width: 80px; text-align: right; flex-shrink: 0; }
         .history-item.delete .name { color: #dc3545; }
         .history-item.delete .score { color: #dc3545; }
         .history-empty { text-align: center; color: #888; padding: 15px; font-style: italic; font-size: 13px; transition: color 0.3s ease; }
@@ -594,8 +559,7 @@
             .actions .btn { min-width: 80px; }
             .stats .stat-card { flex: 1 1 50px; min-width: 50px; padding: 6px 10px; }
             .stat-card .num { font-size: 18px; }
-            h1 { font-size: 20px; padding-left: 0; padding-top: 60px; }
-            .subtitle { font-size: 12px; }
+            h1 { font-size: 20px; }
             .footer { flex-direction: column; align-items: stretch; text-align: center; }
             .token-input input { font-size: 14px; }
             .tabs { flex-wrap: wrap; }
@@ -607,10 +571,6 @@
             .podium-step { width: 70px; }
             .podium-item { min-width: 60px; }
             .theme-toggle { top: 10px; right: 10px; font-size: 11px; padding: 4px 10px; }
-            .counter-box { top: 10px; left: 10px; padding: 4px 12px; min-width: 55px; }
-            .counter-box .number { font-size: 24px; }
-            .counter-box .emoji { font-size: 18px; }
-            .counter-box .label { font-size: 10px; }
             .leader-card .leader-names { font-size: 18px; }
             .leader-card .leader-names.small { font-size: 15px; }
             .leader-card .leader-score { font-size: 15px; }
@@ -625,13 +585,6 @@
 <body>
 
 <div class="container">
-    <!-- СЧЁТЧИК УЧАСТНИКОВ -->
-    <div class="counter-box" id="counterBox">
-        <span class="emoji">👥</span>
-        <span class="number" id="counterNumber">0</span>
-        <span class="label">Участников</span>
-    </div>
-
     <button class="theme-toggle" id="themeToggle">🌙 Сменить на тёмную тему</button>
 
     <div class="offline-warning" id="offlineWarning">
@@ -902,7 +855,6 @@
     var leaderScore = document.getElementById('leaderScore');
     var leaderEmpty = document.getElementById('leaderEmpty');
     var leaderContent = document.getElementById('leaderContent');
-    var counterNumber = document.getElementById('counterNumber');
 
     var clearModal = document.getElementById('clearModal');
     var captchaInput = document.getElementById('captchaInput');
@@ -926,15 +878,7 @@
         render();
         renderHistory();
         renderLeader();
-        updateCounter();
     });
-
-    // ========== ОБНОВЛЕНИЕ СЧЁТЧИКА ==========
-    function updateCounter() {
-        var votes = allData[currentTab]?.votes || [];
-        var participants = getUniqueParticipants(votes);
-        counterNumber.textContent = participants.length;
-    }
 
     // ========== УДАЛЕНИЕ ==========
     deleteBtn.addEventListener('click', function() {
@@ -957,7 +901,6 @@
         addHistoryDelete(name);
         renderHistory();
         renderLeader();
-        updateCounter();
         lastUpdateTime[currentTab] = Date.now();
         saveToGitHub(currentTab);
         deleteName.value = '';
@@ -1134,7 +1077,6 @@
             render();
             renderHistory();
             renderLeader();
-            updateCounter();
             lastUpdateTime[currentTab] = Date.now();
             saveToGitHub(currentTab);
             showToast('🗑️ Всё очищено в номинации "' + getTabName(currentTab) + '"', 'error');
@@ -1337,7 +1279,6 @@
                 render(); 
                 renderHistory();
                 renderLeader();
-                updateCounter();
                 return; 
             }
             if (!response.ok) { throw new Error('Ошибка загрузки'); }
@@ -1355,7 +1296,6 @@
                 render();
                 renderHistory();
                 renderLeader();
-                updateCounter();
                 setStatusBar('online', '☁️ Автосинхронизация');
                 setStatus('☁️ Синхронизировано', '#17a2b8');
             }
@@ -1370,7 +1310,6 @@
         var participants = getUniqueParticipants(votes);
         statParticipants.textContent = participants.length;
         statVotes.textContent = votes.length;
-        updateCounter();
         if (participants.length === 0) {
             tableBody.innerHTML = '<tr><td colspan="5" class="empty-message">Нет данных</td></tr>';
             winnerDisplay.textContent = '👑 Победитель: не определен';
@@ -1455,7 +1394,6 @@
         render();
         renderHistory();
         renderLeader();
-        updateCounter();
         addHistory(name, score, comment);
         lastUpdateTime[currentTab] = Date.now();
         await saveToGitHub(currentTab);
@@ -1572,7 +1510,6 @@
             render();
             renderHistory();
             renderLeader();
-            updateCounter();
             showToast('✅ Подключено к GitHub!', '');
             
             if (autoSyncInterval) clearInterval(autoSyncInterval);
@@ -1628,7 +1565,6 @@
     
     console.log('✅ Программа загружена!');
     console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
-    console.log('👥 Счётчик участников обновляется автоматически');
     console.log('📅 Дата добавлена в историю голосований');
     console.log('💬 Комментарии: можно добавлять к каждой оценке');
 </script>
