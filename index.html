@@ -12,56 +12,6 @@
             box-sizing: border-box;
         }
 
-        /* ----- Шрифт San Francisco ----- */
-        @font-face {
-            font-family: 'SF Pro Display';
-            src: local('SF Pro Display'), local('SFProDisplay-Regular');
-            font-weight: 400;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'SF Pro Display';
-            src: local('SF Pro Display Medium'), local('SFProDisplay-Medium');
-            font-weight: 500;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'SF Pro Display';
-            src: local('SF Pro Display Semibold'), local('SFProDisplay-Semibold');
-            font-weight: 600;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'SF Pro Display';
-            src: local('SF Pro Display Bold'), local('SFProDisplay-Bold');
-            font-weight: 700;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'SF Pro Text';
-            src: local('SF Pro Text'), local('SFProText-Regular');
-            font-weight: 400;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'SF Pro Text';
-            src: local('SF Pro Text Medium'), local('SFProText-Medium');
-            font-weight: 500;
-            font-style: normal;
-        }
-
-        @font-face {
-            font-family: 'SF Pro Text';
-            src: local('SF Pro Text Semibold'), local('SFProText-Semibold');
-            font-weight: 600;
-            font-style: normal;
-        }
-
         /* ----- Переменные для цветов ----- */
         :root {
             --bg-light: #0abab5;
@@ -74,33 +24,6 @@
             --overlay-opacity-dark: 0.90;
         }
 
-        /* ----- ГЛОБАЛЬНЫЙ ШРИФТ ----- */
-        html,
-        body,
-        .container,
-        .btn,
-        input,
-        textarea,
-        select,
-        button,
-        .header,
-        .status-bar,
-        .token-input,
-        .section-glass,
-        .stat-card,
-        .leader-card,
-        .tab-btn,
-        table,
-        th,
-        td,
-        .history-item,
-        .modal-box,
-        .color-option,
-        .podium-item,
-        .footer {
-            font-family: -apple-system, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
-        }
-
         body {
             font-family: -apple-system, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
             min-height: 100vh;
@@ -111,7 +34,7 @@
             background: var(--bg-light);
             color: var(--text-light);
             transition: background 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                        color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
         }
 
@@ -144,7 +67,7 @@
             opacity: var(--overlay-opacity-light);
             z-index: 0;
             transition: background 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                        opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             pointer-events: none;
         }
 
@@ -162,60 +85,7 @@
             margin: 0 auto;
         }
 
-        /* ============================================================
-           LIQUID GLASS
-           ============================================================ */
-        .liquid-glass {
-            background: rgba(255, 255, 255, 0.12);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.04),
-                0 0 0 1px rgba(255, 255, 255, 0.04) inset,
-                0 0 40px rgba(255, 255, 255, 0.02);
-            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .liquid-glass::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
-            pointer-events: none;
-            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-        }
-
-        .liquid-glass::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 30%;
-            background: linear-gradient(to top, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
-            pointer-events: none;
-            border-radius: 0 0 inherit inherit;
-        }
-
-        body.dark .liquid-glass {
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 255, 255, 0.02);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.15),
-                0 0 0 1px rgba(255, 255, 255, 0.01) inset;
-        }
-
-        body.dark .liquid-glass::before {
-            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
-        }
-
-        /* ----- КНОПКИ — ВСЕГДА БЕЛЫЕ ----- */
+        /* ----- КНОПКИ ----- */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -234,24 +104,11 @@
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.04),
-                0 0 0 1px rgba(255, 255, 255, 0.3) inset;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.3) inset;
             color: #1c2a2a;
             transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
             overflow: hidden;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.3) 0%, transparent 60%);
-            pointer-events: none;
         }
 
         .btn:active {
@@ -263,30 +120,20 @@
             transform: scale(1.02);
             background: rgba(255, 255, 255, 0.95);
             border-color: rgba(255, 255, 255, 0.5);
-            box-shadow:
-                0 12px 48px rgba(0, 0, 0, 0.08),
-                0 0 0 1px rgba(255, 255, 255, 0.4) inset;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.4) inset;
         }
 
         body.dark .btn {
             background: rgba(255, 255, 255, 0.85);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.1),
-                0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
             color: #1c2a2a;
-        }
-
-        body.dark .btn::before {
-            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
         }
 
         body.dark .btn:hover {
             background: rgba(255, 255, 255, 0.95);
             border-color: rgba(255, 255, 255, 0.4);
-            box-shadow:
-                0 12px 48px rgba(0, 0, 0, 0.15),
-                0 0 0 1px rgba(255, 255, 255, 0.3) inset;
+            box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.3) inset;
         }
 
         .btn-sm {
@@ -324,36 +171,16 @@
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.04),
-                0 0 0 1px rgba(255, 255, 255, 0.04) inset;
             border-radius: 40px;
             position: relative;
             overflow: hidden;
             transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .header::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.06) 0%, transparent 60%);
-            pointer-events: none;
-        }
-
         body.dark .header {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.02);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.1),
-                0 0 0 1px rgba(255, 255, 255, 0.01) inset;
-        }
-
-        body.dark .header::before {
-            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 60%);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
         }
 
         .header h1 {
@@ -361,7 +188,6 @@
             font-weight: 700;
             letter-spacing: -0.02em;
             color: var(--text-light);
-            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .header h1 {
@@ -372,7 +198,6 @@
             font-size: 15px;
             color: var(--text-light);
             font-weight: 400;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .header .sub {
@@ -397,7 +222,6 @@
             font-weight: 500;
             color: var(--text-light);
             opacity: 0.8;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .color-picker-label {
@@ -417,36 +241,16 @@
             cursor: pointer;
             color: var(--text-light);
             transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.04),
-                0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
             position: relative;
             overflow: hidden;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
-        }
-
-        .theme-toggle::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
-            pointer-events: none;
         }
 
         body.dark .theme-toggle {
             background: rgba(255, 255, 255, 0.04);
             border-color: rgba(255, 255, 255, 0.02);
             color: var(--text-dark);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.1),
-                0 0 0 1px rgba(255, 255, 255, 0.01) inset;
-        }
-
-        body.dark .theme-toggle::before {
-            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 60%);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
         }
 
         .theme-toggle:hover {
@@ -479,43 +283,20 @@
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.04);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.03),
-                0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
             position: relative;
             overflow: hidden;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
-        }
-
-        .status-bar::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.06) 0%, transparent 60%);
-            pointer-events: none;
         }
 
         body.dark .status-bar {
             color: var(--text-dark);
             background: rgba(255, 255, 255, 0.02);
             border-color: rgba(255, 255, 255, 0.02);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.08),
-                0 0 0 1px rgba(255, 255, 255, 0.01) inset;
-        }
-
-        body.dark .status-bar::before {
-            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.015) 0%, transparent 60%);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
         }
 
         .status-bar.online {
             border-color: rgba(10, 186, 181, 0.15);
-        }
-        body.dark .status-bar.online {
-            border-color: rgba(10, 186, 181, 0.08);
         }
 
         /* ----- токен ----- */
@@ -527,35 +308,15 @@
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.04);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.03),
-                0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
             position: relative;
             overflow: hidden;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
-        }
-
-        .token-input::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.04) 0%, transparent 60%);
-            pointer-events: none;
         }
 
         body.dark .token-input {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.02);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.08),
-                0 0 0 1px rgba(255, 255, 255, 0.01) inset;
-        }
-
-        body.dark .token-input::before {
-            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.015) 0%, transparent 60%);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
         }
 
         .token-input label {
@@ -564,7 +325,6 @@
             font-size: 14px;
             color: var(--text-light);
             margin-bottom: 8px;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .token-input label {
@@ -583,7 +343,6 @@
             color: #1c2a2a;
             transition: all 0.3s ease;
             outline: none;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .token-input input {
@@ -601,7 +360,6 @@
             font-size: 13px;
             color: var(--text-light);
             margin-top: 10px;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .token-input .hint {
@@ -617,34 +375,15 @@
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.03);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.02),
-                0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.02), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
             position: relative;
             overflow: hidden;
-        }
-
-        .section-glass::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
-            pointer-events: none;
         }
 
         body.dark .section-glass {
             background: rgba(255, 255, 255, 0.015);
             border: 1px solid rgba(255, 255, 255, 0.01);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.06),
-                0 0 0 1px rgba(255, 255, 255, 0.01) inset;
-        }
-
-        body.dark .section-glass::before {
-            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.01) 0%, transparent 60%);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06), 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
         }
 
         .section-title {
@@ -654,7 +393,6 @@
             color: var(--text-light);
             margin-bottom: 16px;
             font-weight: 600;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .section-title {
@@ -676,54 +414,22 @@
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.03);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.02),
-                0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.02), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
             position: relative;
             overflow: hidden;
             transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            font-family: 'SF Pro Display', -apple-system, sans-serif;
-        }
-
-        .stat-card::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
-            pointer-events: none;
-        }
-
-        .stat-card:hover {
-            transform: scale(1.02);
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.05);
-        }
-
-        .stat-card:active {
-            transform: scale(0.94);
-            transition-duration: 0.08s;
         }
 
         body.dark .stat-card {
             background: rgba(255, 255, 255, 0.015);
             border-color: rgba(255, 255, 255, 0.01);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.04),
-                0 0 0 1px rgba(255, 255, 255, 0.01) inset;
-        }
-
-        body.dark .stat-card::before {
-            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.01) 0%, transparent 60%);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
         }
 
         .stat-card .num {
             font-size: 36px;
             font-weight: 700;
             color: var(--text-light);
-            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .stat-card .num {
@@ -734,7 +440,6 @@
             font-size: 13px;
             color: var(--text-light);
             margin-top: 4px;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .stat-card .label {
@@ -751,7 +456,6 @@
             margin-bottom: 20px;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .leader-card {
@@ -763,7 +467,6 @@
             font-size: 14px;
             color: var(--text-light);
             font-weight: 500;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .leader-card .label {
@@ -776,7 +479,6 @@
             color: #FFD700;
             letter-spacing: -0.02em;
             margin: 6px 0 2px;
-            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .leader-card .names {
@@ -787,7 +489,6 @@
             font-size: 17px;
             color: #FFD700;
             font-weight: 500;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .leader-card .score {
@@ -797,7 +498,6 @@
         .leader-card .empty {
             color: var(--text-light);
             font-size: 16px;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .leader-card .empty {
@@ -824,7 +524,6 @@
             font-size: 13px;
             font-weight: 500;
             color: var(--text-light);
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .input-group label {
@@ -843,7 +542,6 @@
             transition: all 0.3s ease;
             outline: none;
             width: 100%;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .input-group input {
@@ -860,7 +558,6 @@
         .input-group input::placeholder {
             color: var(--text-light);
             opacity: 0.5;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .input-group input::placeholder {
@@ -881,7 +578,6 @@
             outline: none;
             transition: all 0.3s ease;
             margin-top: 6px;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .comment-input {
@@ -898,7 +594,6 @@
         .comment-input::placeholder {
             color: var(--text-light);
             opacity: 0.5;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .comment-input::placeholder {
@@ -937,7 +632,6 @@
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .tab-btn {
@@ -949,18 +643,14 @@
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.04),
-                0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
             color: #1c2a2a;
         }
 
         body.dark .tab-btn.active {
             background: rgba(255, 255, 255, 0.85);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow:
-                0 8px 32px rgba(0, 0, 0, 0.08),
-                0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
             color: #1c2a2a;
         }
 
@@ -1017,7 +707,6 @@
             min-width: 600px;
             border-collapse: collapse;
             font-size: 14px;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         th {
@@ -1030,7 +719,6 @@
             letter-spacing: 0.04em;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
             white-space: nowrap;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark th {
@@ -1044,7 +732,6 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
             color: var(--text-light);
             white-space: nowrap;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark td {
@@ -1075,7 +762,6 @@
         .total-cell {
             font-weight: 700;
             color: #FFD700 !important;
-            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .total-cell {
@@ -1088,7 +774,6 @@
             max-width: 120px;
             word-break: break-word;
             white-space: normal;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .comment-cell {
@@ -1100,7 +785,6 @@
             padding: 40px;
             color: var(--text-light);
             font-style: italic;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .empty-message {
@@ -1170,7 +854,6 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
             font-size: 14px;
             color: var(--text-light);
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
             flex-shrink: 0;
             gap: 16px;
         }
@@ -1187,7 +870,6 @@
         .history-item .name {
             font-weight: 500;
             flex: 0 0 120px;
-            font-family: 'SF Pro Display', -apple-system, sans-serif;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -1200,7 +882,6 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .history-item .comment-text {
@@ -1213,7 +894,6 @@
             color: #34c759;
             flex: 0 0 60px;
             text-align: right;
-            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .history-item .score {
@@ -1225,7 +905,6 @@
             color: var(--text-light);
             flex: 0 0 65px;
             text-align: right;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .history-item .time {
@@ -1237,7 +916,6 @@
             color: var(--text-light);
             flex: 0 0 80px;
             text-align: right;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .history-item .date {
@@ -1257,7 +935,6 @@
             padding: 20px;
             font-style: italic;
             font-size: 14px;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .history-empty {
@@ -1271,7 +948,6 @@
             color: #ff3b30;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
         .section-glass .btn-delete:hover {
             background: rgba(255, 59, 48, 0.12);
@@ -1289,7 +965,6 @@
             border-top: 1px solid rgba(255, 255, 255, 0.04);
             color: var(--text-light);
             font-size: 13px;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .footer {
@@ -1299,7 +974,6 @@
 
         .save-status {
             color: var(--accent-color, #0abab5);
-            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         .actions {
@@ -1347,7 +1021,6 @@
             box-shadow: 0 40px 100px rgba(0, 0, 0, 0.04);
             max-height: 90vh;
             overflow-y: auto;
-            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .modal-box {
@@ -1360,7 +1033,6 @@
             color: var(--text-light);
             font-weight: 700;
             font-size: 24px;
-            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .modal-box h2 {
@@ -1371,7 +1043,6 @@
             color: var(--text-light);
             margin-bottom: 16px;
             font-size: 14px;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .modal-box p {
@@ -1383,7 +1054,6 @@
             font-weight: 700;
             color: #FFD700;
             margin: 16px 0;
-            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .modal-box .question {
@@ -1403,7 +1073,6 @@
             color: #1c2a2a;
             outline: none;
             margin-bottom: 16px;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .modal-box input {
@@ -1430,7 +1099,6 @@
             font-size: 14px;
             margin-top: 12px;
             display: none;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
         .modal-box .error-msg.show {
             display: block;
@@ -1453,7 +1121,6 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .palette-title {
@@ -1487,7 +1154,6 @@
             background: rgba(255, 255, 255, 0.06);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .color-option {
@@ -1529,7 +1195,6 @@
             font-size: 13px;
             font-weight: 500;
             color: var(--text-light);
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .color-name {
@@ -1549,7 +1214,6 @@
         .podium-item {
             text-align: center;
             min-width: 80px;
-            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         .podium-item .medal {
@@ -1562,7 +1226,6 @@
             font-size: 13px;
             color: var(--text-light);
             margin-top: 4px;
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .podium-item .place {
@@ -1574,7 +1237,6 @@
             font-size: 17px;
             color: #FFD700;
             margin-top: 2px;
-            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .podium-item .podium-name {
@@ -1584,7 +1246,6 @@
         .podium-item .podium-score {
             font-size: 14px;
             color: var(--text-light);
-            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .podium-item .podium-score {
@@ -1822,7 +1483,7 @@
         </div>
 
         <!-- ОФЛАЙН ПРЕДУПРЕЖДЕНИЕ -->
-        <div class="glass" style="padding: 14px 24px; margin-bottom: 20px; border-color: rgba(255,149,0,0.2); display: none; background: rgba(255,149,0,0.04);" id="offlineWarning">
+        <div style="padding: 14px 24px; margin-bottom: 20px; border-color: rgba(255,149,0,0.2); display: none; background: rgba(255,149,0,0.04); border-radius: 30px; backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1);" id="offlineWarning">
             ⚠️ Нет подключения к интернету. Данные сохраняются локально. <strong style="color:#f08a00;">Не закрывайте вкладку!</strong>
             Когда интернет появится — нажмите <span style="color:#f08a00; font-weight:700;">«Синхронизировать»</span> внизу.
         </div>
@@ -1892,7 +1553,7 @@
             <div class="section-glass" style="border-color: rgba(255,59,48,0.06);">
                 <label style="font-size:14px; color:#ff3b30; font-weight:500;">🗑️ Удалить участника</label>
                 <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
-                    <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.06); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.03); color:#1c2a2a; outline:none; min-width:120px; font-family:'SF Pro Text', sans-serif;">
+                    <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.06); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.03); color:#1c2a2a; outline:none; min-width:120px;">
                     <button class="btn btn-sm btn-delete" id="deleteBtn" style="min-width:auto;">✕ Удалить</button>
                 </div>
             </div>
@@ -1927,7 +1588,7 @@
                 <span id="winnerDisplay">👑 Победитель: не определен</span>
                 <span class="save-status" id="statusDisplay">☁️ Готов</span>
             </div>
-            <div style="text-align:center; margin-top:14px; font-size:12px; color:var(--text-light); font-family:'SF Pro Text', sans-serif;">
+            <div style="text-align:center; margin-top:14px; font-size:12px; color:var(--text-light);">
                 🔄 Автосинхронизация каждые 10 секунд · 💬 Комментарии
             </div>
         </div>
@@ -2117,7 +1778,8 @@
                 const el = document.createElement('div');
                 el.className = 'color-option' + (color.hex === lightColor ? ' active' : '');
                 el.dataset.color = color.hex;
-                el.innerHTML = `
+                el.innerHTML =
+                    `
                         <span class="color-swatch" style="background: ${color.hex};"></span>
                         <span class="color-name">${color.name}</span>
                     `;
@@ -2130,7 +1792,8 @@
                 const el = document.createElement('div');
                 el.className = 'color-option' + (color.hex === darkColor ? ' active' : '');
                 el.dataset.color = color.hex;
-                el.innerHTML = `
+                el.innerHTML =
+                    `
                         <span class="color-swatch" style="background: ${color.hex};"></span>
                         <span class="color-name">${color.name}</span>
                     `;
@@ -2556,7 +2219,7 @@
 
             if (topGroups.length === 0) {
                 podiumContainer.innerHTML =
-                    '<p style="color: var(--text-light); padding: 20px; font-family:'SF Pro Text", sans-serif;">Нет данных для отображения</p>';
+                    '<p style="color: var(--text-light); padding: 20px;">Нет данных для отображения</p>';
             } else {
                 podiumContainer.innerHTML = html;
             }
