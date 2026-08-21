@@ -1,34 +1,4 @@
 {
-  "votes": [
-    {
-      "id": "1787350422155_vo5cg4",
-      "name": "Проверка",
-      "score": 10,
-      "comment": ""
-    }
-  ],
-  "history": [
-    {
-      "type": "delete",
-      "name": "Егор",
-      "time": "01:15:03",
-      "date": "22.08.2026"
-    },
-    {
-      "type": "vote",
-      "name": "Проверка",
-      "score": 10,
-      "comment": "",
-      "time": "01:13:42",
-      "date": "22.08.2026"
-    },
-    {
-      "type": "vote",
-      "name": "Егор",
-      "score": 10,
-      "comment": "",
-      "time": "21:40:44",
-      "date": "21.08.2026"
-    }
-  ]
+  "votes": [],
+  "history": []
 }
