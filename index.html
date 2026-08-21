@@ -990,7 +990,7 @@
 
         .palette-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 8px;
         }
 
@@ -1036,25 +1036,14 @@
             border-color: rgba(255, 255, 255, 0.06);
         }
 
-        .color-hex {
+        .color-name {
             font-size: 13px;
             font-weight: 500;
             color: #1c2a2a;
-            font-family: 'SF Mono', monospace;
-        }
-
-        body.dark .color-hex {
-            color: #e0e0e0;
-        }
-
-        .color-name {
-            font-size: 11px;
-            color: #6a8a8a;
-            margin-left: auto;
         }
 
         body.dark .color-name {
-            color: #6a6a7a;
+            color: #e0e0e0;
         }
 
         /* ----- подиум ----- */
@@ -1163,7 +1152,7 @@
             .token-input { padding: 20px 16px; }
             .tabs .tab-btn { font-size: 12px; padding: 8px 10px; }
             .header-right { width: 100%; justify-content: center; }
-            .palette-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
+            .palette-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
         }
 
         @media (max-width: 450px) {
@@ -1171,9 +1160,9 @@
             .header { flex-direction: column; align-items: stretch; text-align: center; }
             .theme-toggle { align-self: center; }
             .header-right { flex-direction: column; align-items: stretch; }
-            .palette-grid { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); }
+            .palette-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
             .color-option { padding: 6px 10px; }
-            .color-hex { font-size: 11px; }
+            .color-name { font-size: 11px; }
         }
     </style>
 </head>
@@ -1318,7 +1307,6 @@
             <div class="palette-title">
                 ☀️ Светлая тема
                 <span class="current-color" id="lightPreview" style="background: #0abab5;"></span>
-                <span style="font-size:13px; font-weight:400; color:#6a8a8a;" id="lightHex">#0ABAB5</span>
             </div>
             <div class="palette-grid" id="lightPalette">
                 <!-- будет заполнено JS -->
@@ -1330,7 +1318,6 @@
             <div class="palette-title">
                 🌙 Тёмная тема
                 <span class="current-color" id="darkPreview" style="background: #0abab5;"></span>
-                <span style="font-size:13px; font-weight:400; color:#6a8a8a;" id="darkHex">#0ABAB5</span>
             </div>
             <div class="palette-grid" id="darkPalette">
                 <!-- будет заполнено JS -->
@@ -1425,8 +1412,8 @@
     function setLightColor(color) {
         lightColor = color;
         document.documentElement.style.setProperty('--accent-color', color);
+        document.body.style.background = color;
         document.getElementById('lightPreview').style.background = color;
-        document.getElementById('lightHex').textContent = color.toUpperCase();
         document.getElementById('accentPreview').style.background = color;
         // Обновляем активный класс в палитре
         document.querySelectorAll('#lightPalette .color-option').forEach(el => {
@@ -1439,10 +1426,13 @@
         darkColor = color;
         document.documentElement.style.setProperty('--dark-accent', color);
         document.getElementById('darkPreview').style.background = color;
-        document.getElementById('darkHex').textContent = color.toUpperCase();
         document.querySelectorAll('#darkPalette .color-option').forEach(el => {
             el.classList.toggle('active', el.dataset.color === color);
         });
+        // Если включена тёмная тема — меняем акцентный цвет
+        if (document.body.classList.contains('dark')) {
+            document.documentElement.style.setProperty('--accent-color', color);
+        }
         saveColors();
     }
 
@@ -1460,15 +1450,17 @@
             if (savedLight) {
                 lightColor = savedLight;
                 document.documentElement.style.setProperty('--accent-color', lightColor);
+                document.body.style.background = lightColor;
                 document.getElementById('lightPreview').style.background = lightColor;
-                document.getElementById('lightHex').textContent = lightColor.toUpperCase();
                 document.getElementById('accentPreview').style.background = lightColor;
             }
             if (savedDark) {
                 darkColor = savedDark;
                 document.documentElement.style.setProperty('--dark-accent', darkColor);
                 document.getElementById('darkPreview').style.background = darkColor;
-                document.getElementById('darkHex').textContent = darkColor.toUpperCase();
+                if (document.body.classList.contains('dark')) {
+                    document.documentElement.style.setProperty('--accent-color', darkColor);
+                }
             }
         } catch(e) {}
     }
@@ -1484,7 +1476,6 @@
             el.dataset.color = color.hex;
             el.innerHTML = `
                 <span class="color-swatch" style="background: ${color.hex};"></span>
-                <span class="color-hex">${color.hex}</span>
                 <span class="color-name">${color.name}</span>
             `;
             el.addEventListener('click', () => setLightColor(color.hex));
@@ -1498,7 +1489,6 @@
             el.dataset.color = color.hex;
             el.innerHTML = `
                 <span class="color-swatch" style="background: ${color.hex};"></span>
-                <span class="color-hex">${color.hex}</span>
                 <span class="color-name">${color.name}</span>
             `;
             el.addEventListener('click', () => setDarkColor(color.hex));
@@ -1517,11 +1507,15 @@
         document.body.classList.toggle('dark');
         isDark = document.body.classList.contains('dark');
         themeToggle.textContent = isDark ? '☀️ Светлая тема' : '🌙 Тёмная тема';
-        // Применяем акцентный цвет для тёмной темы
+        // Применяем соответствующий акцентный цвет
         if (isDark && darkColor) {
             document.documentElement.style.setProperty('--accent-color', darkColor);
         } else if (!isDark && lightColor) {
             document.documentElement.style.setProperty('--accent-color', lightColor);
+            document.body.style.background = lightColor;
+        }
+        if (!isDark) {
+            document.body.style.background = lightColor;
         }
     });
 
