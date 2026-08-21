@@ -7,469 +7,483 @@
     <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         
+        /* ===== ГЛОБАЛЬНЫЙ СТИЛЬ ===== */
         body {
-            font-family: -apple-system, 'Segoe UI', Roboto, sans-serif;
-            background-image: url('https://img.goodfon.ru/original/1920x1200/c/99/prazdnik-salyut-feyerverk.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+            background: linear-gradient(145deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 16px;
+            padding: 20px;
             margin: 0;
+            color: #fff;
         }
+        
+        /* Анимированный фон */
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.55);
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(ellipse at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 50%, rgba(118, 75, 162, 0.15) 0%, transparent 60%);
             z-index: 0;
+            animation: backgroundFloat 20s ease-in-out infinite alternate;
         }
+        @keyframes backgroundFloat {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(-2%, 2%) rotate(2deg); }
+        }
+        
         .container {
             position: relative;
             z-index: 1;
-            max-width: 950px;
+            max-width: 980px;
             margin: 0 auto;
-            background: rgba(255, 255, 255, 0.92);
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
-            border-radius: 20px;
-            padding: 24px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
             width: 100%;
-            border: 1px solid rgba(255,255,255,0.2);
-            transition: background 0.3s ease, backdrop-filter 0.3s ease;
         }
-
-        /* ===== ТЁМНАЯ ТЕМА ===== */
-        body.dark-theme::before { background: rgba(0, 0, 0, 0.8); }
-        body.dark-theme .container { background: rgba(30, 30, 40, 0.92); backdrop-filter: blur(10px); border-color: rgba(255,255,255,0.1); }
-        body.dark-theme h1 { color: #eee; }
-        body.dark-theme .subtitle { color: #aaa; }
-        body.dark-theme .tab-btn { color: #aaa; }
-        body.dark-theme .tab-btn.active { background: #5a6fd6; color: white; }
-        body.dark-theme .status-bar { background: rgba(255,255,255,0.1); color: #ddd; }
-        body.dark-theme .status-bar.online { background: #1a3a2a; color: #8fdfb0; border-color: #28a745; }
-        body.dark-theme .status-bar.offline { background: #3a1a1a; color: #f8a0a0; border-color: #dc3545; }
-        body.dark-theme .status-bar.connecting { background: #3a3a1a; color: #f0d080; border-color: #ffc107; }
-        body.dark-theme .status-bar.saving { background: #1a2a3a; color: #80c0f0; border-color: #007bff; }
-        body.dark-theme .token-input { background: rgba(255,255,255,0.05); border-color: #5a6fd6; }
-        body.dark-theme .token-input label { color: #ddd; }
-        body.dark-theme .token-input input { background: #2a2a3a; border-color: #444; color: #eee; }
-        body.dark-theme .token-input input:focus { border-color: #5a6fd6; }
-        body.dark-theme .token-input .hint { color: #888; }
-        body.dark-theme .stat-card { background: rgba(255,255,255,0.05); }
-        body.dark-theme .stat-card .num { color: #8a9ff0; }
-        body.dark-theme .stat-card .label { color: #aaa; }
-        body.dark-theme .input-section { background: rgba(255,255,255,0.05); }
-        body.dark-theme .input-group label { color: #aaa; }
-        body.dark-theme .input-group input { background: #2a2a3a; border-color: #444; color: #eee; }
-        body.dark-theme .input-group input:focus { border-color: #5a6fd6; }
-        body.dark-theme .comment-input { background: #2a2a3a; border-color: #444; color: #eee; }
-        body.dark-theme .comment-input:focus { border-color: #5a6fd6; }
-        body.dark-theme .delete-section { background: rgba(220,53,69,0.1); border-color: rgba(220,53,69,0.3); }
-        body.dark-theme .delete-section label { color: #f08080; }
-        body.dark-theme .delete-section input { background: #2a2a3a; border-color: #444; color: #eee; }
-        body.dark-theme .table-wrap { background: rgba(255,255,255,0.03); border-color: #333; }
-        body.dark-theme td { background: #2a2a3a; border-color: #333; color: #ddd; }
-        body.dark-theme tr:nth-child(even) td { background: #222233; }
-        body.dark-theme tr:hover td { background: #333344; }
-        body.dark-theme th { background: #5a6fd6; color: white; }
-        body.dark-theme .total-cell { color: #eee; }
-        body.dark-theme .comment-cell { color: #999; }
-        body.dark-theme .empty-message { color: #666; }
-        body.dark-theme .footer { color: #aaa; }
-        body.dark-theme .save-status { background: rgba(255,255,255,0.1); color: #8fdfb0; }
-        body.dark-theme .sync-info { color: #666; }
-        body.dark-theme .history-item { border-bottom-color: #444; color: #ddd; }
-        body.dark-theme .history-item .time { color: #66b3ff; }
-        body.dark-theme .history-item .date { color: #66b3ff; }
-        body.dark-theme .history-item .score { color: #8fdfb0; }
-        body.dark-theme .history-item .comment-text { color: #999; }
-        body.dark-theme .history-item.delete .time { color: #66b3ff; }
-        body.dark-theme .history-item.delete .date { color: #66b3ff; }
-        body.dark-theme .history-empty { color: #666; }
-        body.dark-theme .leader-card { background: rgba(255,215,0,0.15); border-color: #ffd700; }
-        body.dark-theme .leader-card .leader-names { color: #ffd700; }
-        body.dark-theme .leader-card .leader-score { color: #ffd700; }
-        body.dark-theme .leader-card .leader-label { color: #aaa; }
-        body.dark-theme .leader-card .leader-empty { color: #888; }
-        body.dark-theme .toast { background: #3a3a3a; color: #eee; }
-        body.dark-theme .toast.warning { background: #3a3a1a; color: #f0d080; border-color: #ffc107; }
-        body.dark-theme .toast.error { background: #3a1a1a; color: #f8a0a0; border-color: #dc3545; }
-
-        .offline-warning {
-            display: none;
-            background: #fff3cd;
-            color: #856404;
-            border: 2px solid #ffc107;
-            border-radius: 12px;
-            padding: 12px 18px;
-            margin-bottom: 18px;
-            font-weight: 600;
-            font-size: 14px;
-            text-align: center;
-            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
-        }
-        .offline-warning.show { display: block; }
-        body.dark-theme .offline-warning { background: #3a3a1a; color: #f0d080; border-color: #ffc107; }
-        .offline-warning .sync-hint { font-weight: 700; color: #dc3545; }
-        body.dark-theme .offline-warning .sync-hint { color: #ff6b6b; }
-
-        .toast-container {
-            position: fixed;
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 99999;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 8px;
-            pointer-events: none;
-            max-width: 90%;
-        }
-        .toast {
-            background: rgba(40, 167, 69, 0.95);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 14px;
-            box-shadow: 0 8px 30px rgba(0,0,0,0.3);
-            animation: toastIn 0.4s ease, toastOut 0.4s ease 3s forwards;
-            pointer-events: auto;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            border: 1px solid rgba(255,255,255,0.1);
-            text-align: center;
-        }
-        .toast.warning { background: rgba(255, 193, 7, 0.95); color: #333; }
-        .toast.error { background: rgba(220, 53, 69, 0.95); color: white; }
-        .toast.info { background: rgba(23, 162, 184, 0.95); color: white; }
-        @keyframes toastIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        @keyframes toastOut {
-            from { opacity: 1; transform: translateY(0); }
-            to { opacity: 0; transform: translateY(-20px); }
-        }
-
-        .theme-toggle {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            position: absolute;
-            top: 16px;
-            right: 16px;
-            z-index: 10;
-            background: rgba(255,255,255,0.3);
-            border: none;
-            border-radius: 30px;
-            padding: 6px 14px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: 0.3s;
-            backdrop-filter: blur(4px);
-            -webkit-backdrop-filter: blur(4px);
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            color: #333;
-            font-weight: 600;
-        }
-        .theme-toggle:hover { transform: scale(1.03); background: rgba(255,255,255,0.5); }
-        body.dark-theme .theme-toggle { background: rgba(255,255,255,0.15); color: #ddd; }
-        body.dark-theme .theme-toggle:hover { background: rgba(255,255,255,0.25); }
-
-        h1 { text-align: center; color: #333; margin-bottom: 4px; font-size: 24px; transition: color 0.3s ease; }
-        .subtitle { text-align: center; color: #666; margin-bottom: 20px; font-size: 14px; transition: color 0.3s ease; }
         
-        .tabs {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 18px;
-            background: rgba(255,255,255,0.3);
-            border-radius: 14px;
-            padding: 4px;
+        /* ===== СТЕКЛЯННЫЙ ЭФФЕКТ ===== */
+        .glass {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(40px) saturate(1.4);
+            -webkit-backdrop-filter: blur(40px) saturate(1.4);
+            border-radius: 24px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
+                        0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
-        .tab-btn {
-            flex: 1;
-            padding: 10px 12px;
-            border: none;
-            border-radius: 12px;
+        .glass:hover {
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        
+        .glass-card {
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(20px) saturate(1.2);
+            -webkit-backdrop-filter: blur(20px) saturate(1.2);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+        
+        /* ===== ХЕДЕР ===== */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 24px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .header h1 {
+            font-size: 28px;
             font-weight: 700;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, #fff 0%, #8a9ff0 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .header .sub {
+            font-size: 14px;
+            color: rgba(255,255,255,0.5);
+            font-weight: 400;
+        }
+        
+        /* ===== ТЕМНАЯ ТЕМА (переключатель) ===== */
+        .theme-toggle {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 30px;
+            padding: 8px 16px;
             font-size: 14px;
             cursor: pointer;
-            background: transparent;
-            color: #666;
-            transition: 0.3s;
+            color: #fff;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
-        .tab-btn:active { transform: scale(0.96); }
-        .tab-btn.active { background: #667eea; color: white; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3); }
+        .theme-toggle:hover {
+            background: rgba(255,255,255,0.15);
+            border-color: rgba(255,255,255,0.2);
+            transform: scale(1.02);
+        }
         
+        /* ===== СТАТУС ===== */
         .status-bar {
-            text-align: center;
-            padding: 10px;
-            border-radius: 12px;
-            margin-bottom: 18px;
-            font-weight: 600;
-            font-size: 13px;
-            background: rgba(255,255,255,0.7);
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-        .status-bar.online { background: #d4edda; color: #155724; border: 2px solid #28a745; }
-        .status-bar.offline { background: #f8d7da; color: #721c24; border: 2px solid #dc3545; }
-        .status-bar.connecting { background: #fff3cd; color: #856404; border: 2px solid #ffc107; }
-        .status-bar.saving { background: #cce5ff; color: #004085; border: 2px solid #007bff; }
-        
-        .token-input {
-            background: #f8f9ff;
-            padding: 16px;
-            border-radius: 15px;
+            padding: 12px 20px;
             margin-bottom: 20px;
-            border: 2px solid #667eea;
-            transition: background 0.3s ease, border-color 0.3s ease;
+            border-radius: 14px;
+            font-size: 13px;
+            font-weight: 500;
+            text-align: center;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.06);
+            color: rgba(255,255,255,0.7);
         }
-        .token-input label { font-weight: 600; font-size: 14px; color: #333; transition: color 0.3s ease; }
+        .status-bar.online { border-color: rgba(40, 167, 69, 0.3); color: #8fdfb0; }
+        .status-bar.connecting { border-color: rgba(255, 193, 7, 0.3); color: #f0d080; }
+        .status-bar.saving { border-color: rgba(0, 123, 255, 0.3); color: #80c0f0; }
+        
+        /* ===== ВХОД С ТОКЕНОМ ===== */
+        .token-input {
+            padding: 24px;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+        .token-input label {
+            display: block;
+            font-weight: 600;
+            font-size: 14px;
+            color: rgba(255,255,255,0.7);
+            margin-bottom: 8px;
+        }
         .token-input input {
             width: 100%;
-            padding: 12px 14px;
-            border: 2px solid #ddd;
-            border-radius: 12px;
+            padding: 14px 18px;
+            border-radius: 14px;
             font-size: 16px;
-            margin-top: 8px;
-            background: white;
-            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            transition: all 0.3s ease;
+            outline: none;
         }
-        .token-input input:focus { border-color: #667eea; outline: none; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2); }
-        .token-input .hint { font-size: 12px; color: #888; margin-top: 6px; transition: color 0.3s ease; }
-        .token-input .btn { margin-top: 10px; width: 100%; }
+        .token-input input:focus {
+            border-color: rgba(102, 126, 234, 0.5);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+        }
+        .token-input .hint {
+            font-size: 12px;
+            color: rgba(255,255,255,0.3);
+            margin-top: 8px;
+        }
         
-        .stats {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-bottom: 18px;
+        /* ===== БЛОКИ ===== */
+        .section-glass {
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.06);
+            background: rgba(255,255,255,0.03);
+        }
+        
+        .section-title {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.3);
+            margin-bottom: 16px;
+            font-weight: 600;
+        }
+        
+        /* ===== СТАТИСТИКА ===== */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
         }
         .stat-card {
-            background: rgba(255,255,255,0.7);
-            padding: 8px 16px;
-            border-radius: 12px;
             text-align: center;
-            min-width: 80px;
-            flex: 1;
-            transition: background 0.3s ease;
+            padding: 16px 12px;
+            border-radius: 16px;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.05);
         }
-        .stat-card .num { font-size: 24px; font-weight: 700; color: #667eea; transition: color 0.3s ease; }
-        .stat-card .label { font-size: 12px; color: #555; transition: color 0.3s ease; }
+        .stat-card .num {
+            font-size: 32px;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .stat-card .label {
+            font-size: 12px;
+            color: rgba(255,255,255,0.4);
+            margin-top: 4px;
+        }
         
-        .input-section {
+        /* ===== ЛИДЕР ===== */
+        .leader-card {
+            padding: 20px 24px;
+            border-radius: 20px;
+            background: rgba(255,215,0,0.06);
+            border: 1px solid rgba(255,215,0,0.15);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .leader-card .label {
+            font-size: 13px;
+            color: rgba(255,255,255,0.4);
+            font-weight: 500;
+        }
+        .leader-card .names {
+            font-size: 28px;
+            font-weight: 700;
+            color: #ffd700;
+            letter-spacing: -0.5px;
+            margin: 4px 0 2px;
+        }
+        .leader-card .score {
+            font-size: 16px;
+            color: rgba(255,215,0,0.7);
+            font-weight: 500;
+        }
+        .leader-card .empty {
+            color: rgba(255,255,255,0.3);
+            font-size: 16px;
+        }
+        
+        /* ===== ФОРМА ===== */
+        .input-row {
             display: flex;
             flex-wrap: wrap;
-            gap: 10px;
-            background: rgba(255,255,255,0.7);
-            padding: 16px;
-            border-radius: 15px;
-            margin-bottom: 20px;
+            gap: 12px;
             align-items: flex-end;
-            transition: background 0.3s ease;
         }
         .input-group {
-            flex: 1 1 140px;
+            flex: 1 1 160px;
             display: flex;
             flex-direction: column;
             gap: 4px;
-            min-width: 100px;
+            min-width: 120px;
         }
-        .input-group label { font-weight: 600; font-size: 12px; color: #555; transition: color 0.3s ease; }
+        .input-group label {
+            font-size: 12px;
+            font-weight: 500;
+            color: rgba(255,255,255,0.5);
+        }
         .input-group input {
-            padding: 12px 14px;
-            border: 2px solid #ddd;
-            border-radius: 12px;
-            font-size: 16px;
+            padding: 12px 16px;
+            border-radius: 14px;
+            font-size: 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
+            color: #fff;
+            transition: all 0.3s ease;
+            outline: none;
             width: 100%;
-            background: white;
-            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
         }
-        .input-group input:focus { border-color: #667eea; outline: none; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2); }
-        .input-group input[type="number"] { -moz-appearance: textfield; }
-        .input-group input[type="number"]::-webkit-outer-spin-button,
-        .input-group input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+        .input-group input:focus {
+            border-color: rgba(102, 126, 234, 0.4);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.08);
+        }
+        .input-group input::placeholder {
+            color: rgba(255,255,255,0.25);
+        }
         
         .comment-input {
-            width: 100%;
-            padding: 8px 12px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
+            padding: 10px 16px;
+            border-radius: 14px;
             font-size: 13px;
-            background: white;
-            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.06);
+            color: #fff;
+            width: 100%;
+            outline: none;
+            transition: all 0.3s ease;
             margin-top: 4px;
         }
-        .comment-input:focus { border-color: #667eea; outline: none; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2); }
-        .comment-input::placeholder { color: #aaa; }
+        .comment-input:focus {
+            border-color: rgba(102, 126, 234, 0.3);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.06);
+        }
+        .comment-input::placeholder {
+            color: rgba(255,255,255,0.2);
+        }
         
+        /* ===== КНОПКИ ===== */
         .btn {
-            padding: 12px 20px;
+            padding: 12px 28px;
             border: none;
-            border-radius: 12px;
+            border-radius: 14px;
             font-weight: 600;
             font-size: 15px;
             cursor: pointer;
-            color: white;
-            background: #667eea;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            color: #fff;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            position: relative;
+            overflow: hidden;
             flex: 0 0 auto;
-            -webkit-tap-highlight-color: transparent;
         }
-        .btn:active { transform: scale(0.96); }
-        .btn-add { background: #28a745; }
-        .btn-warning { background: #ffc107; color: #333; }
-        .btn-success { background: #17a2b8; }
-        .btn-primary { background: #667eea; }
-        .btn-danger { background: #dc3545; }
-        .btn-clear { background: #dc3545; }
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .btn:hover {
+            transform: translateY(-2px) scale(1.01);
+            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.25);
+        }
+        .btn:active {
+            transform: scale(0.97);
+        }
+        .btn-add { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); }
+        .btn-add:hover { box-shadow: 0 20px 40px rgba(40, 167, 69, 0.3); }
+        .btn-warning { background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%); color: #1a1a2e; }
+        .btn-warning:hover { box-shadow: 0 20px 40px rgba(255, 193, 7, 0.3); }
+        .btn-success { background: linear-gradient(135deg, #17a2b8 0%, #0dcaf0 100%); }
+        .btn-success:hover { box-shadow: 0 20px 40px rgba(23, 162, 184, 0.3); }
+        .btn-danger { background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%); }
+        .btn-danger:hover { box-shadow: 0 20px 40px rgba(220, 53, 69, 0.3); }
+        .btn-clear { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
+        .btn-clear:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.2); box-shadow: none; }
+        
+        .btn-sm {
+            padding: 6px 14px;
+            font-size: 12px;
+            border-radius: 10px;
+        }
+        .btn-delete {
+            background: rgba(220, 53, 69, 0.2);
+            border: 1px solid rgba(220, 53, 69, 0.2);
+            color: #f8a0a0;
+        }
+        .btn-delete:hover { background: rgba(220, 53, 69, 0.3); border-color: rgba(220, 53, 69, 0.4); box-shadow: none; }
         
         .actions {
             display: flex;
             flex-wrap: wrap;
             gap: 10px;
             justify-content: center;
-            margin: 14px 0;
+            margin-top: 20px;
         }
-        .actions .btn { flex: 1 1 auto; min-width: 100px; text-align: center; }
-        
-        .delete-section {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 15px;
-            padding: 12px;
-            background: #fff5f5;
-            border-radius: 12px;
-            border: 1px solid #fcc;
-            transition: background 0.3s ease, border-color 0.3s ease;
-        }
-        .delete-section label { font-weight: 600; font-size: 13px; color: #dc3545; transition: color 0.3s ease; }
-        .delete-section input {
-            padding: 8px 12px;
-            border: 2px solid #ddd;
-            border-radius: 10px;
-            font-size: 14px;
-            background: white;
-            flex: 1;
+        .actions .btn {
+            flex: 1 1 auto;
             min-width: 120px;
-            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            text-align: center;
         }
-        .delete-section input:focus { border-color: #dc3545; outline: none; box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2); }
         
+        /* ===== ТАБЛИЦА ===== */
         .table-wrap {
             overflow-x: auto;
-            border-radius: 15px;
-            border: 1px solid #eee;
-            background: rgba(255,255,255,0.5);
-            transition: background 0.3s ease, border-color 0.3s ease;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.06);
         }
-        table { width: 100%; border-collapse: collapse; font-size: 13px; }
-        th { background: #667eea; color: white; padding: 10px 6px; text-align: center; transition: background 0.3s ease, color 0.3s ease; }
-        td {
-            padding: 8px 6px;
-            text-align: center;
-            border-bottom: 1px solid #eee;
-            background: white;
-            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
-        }
-        tr:nth-child(even) td { background: #fafbff; }
-        tr:hover td { background: #f0f2ff; }
-        .winner-row td { background: #ffd700 !important; font-weight: 700; border-bottom: 3px solid #ffa500; }
-        .total-cell { font-weight: 700; font-size: 16px; color: #333; transition: color 0.3s ease; }
-        .comment-cell { font-size: 11px; color: #888; max-width: 120px; word-break: break-word; transition: color 0.3s ease; }
-        .empty-message { text-align: center; padding: 25px; color: #888; font-style: italic; transition: color 0.3s ease; }
-        
-        .footer {
-            margin-top: 16px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            color: #555;
+        table {
+            width: 100%;
+            border-collapse: collapse;
             font-size: 13px;
-            align-items: center;
-            justify-content: space-between;
-            transition: color 0.3s ease;
         }
-        .save-status {
-            font-size: 12px;
-            padding: 4px 12px;
-            border-radius: 20px;
-            background: #e8f5e9;
-            color: #28a745;
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-        .sync-info { font-size: 11px; color: #888; text-align: center; margin-top: 6px; transition: color 0.3s ease; }
-
-        .leader-section { margin-top: 10px; margin-bottom: 20px; }
-        .leader-card {
-            background: rgba(255, 215, 0, 0.12);
-            border: 2px solid #ffd700;
-            border-radius: 15px;
-            padding: 16px 20px;
+        th {
+            padding: 14px 12px;
             text-align: center;
-            transition: background 0.3s ease, border-color 0.3s ease;
+            font-weight: 600;
+            color: rgba(255,255,255,0.4);
+            text-transform: uppercase;
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        .leader-card .leader-label { font-size: 14px; color: #888; font-weight: 600; transition: color 0.3s ease; }
-        .leader-card .leader-names { font-size: 24px; font-weight: 800; color: #b8860b; transition: color 0.3s ease; }
-        .leader-card .leader-names.small { font-size: 18px; }
-        .leader-card .leader-score { font-size: 18px; font-weight: 600; color: #b8860b; transition: color 0.3s ease; }
-        .leader-card .leader-empty { color: #888; font-size: 16px; font-weight: 500; transition: color 0.3s ease; }
-
-        .history-section {
-            margin-top: 20px;
-            padding: 16px;
-            background: rgba(255,255,255,0.5);
-            border-radius: 15px;
-            border: 1px solid #eee;
-            transition: background 0.3s ease, border-color 0.3s ease;
+        td {
+            padding: 12px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
+            color: rgba(255,255,255,0.85);
         }
-        .history-section h3 { text-align: center; color: #333; margin-bottom: 12px; font-size: 16px; transition: color 0.3s ease; }
-        .history-list { max-height: 200px; overflow-y: auto; padding: 0 4px; }
-        .history-list::-webkit-scrollbar { width: 4px; }
-        .history-list::-webkit-scrollbar-thumb { background: #667eea; border-radius: 4px; }
-        .history-list::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); border-radius: 4px; }
+        tr:hover td {
+            background: rgba(255,255,255,0.03);
+        }
+        .winner-row td {
+            background: rgba(255,215,0,0.08) !important;
+            border-bottom: 2px solid rgba(255,215,0,0.2);
+        }
+        .winner-row td:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+        .winner-row td:last-child {
+            border-radius: 0 12px 12px 0;
+        }
+        .total-cell {
+            font-weight: 700;
+            color: #fff;
+        }
+        .comment-cell {
+            font-size: 11px;
+            color: rgba(255,255,255,0.3);
+            max-width: 120px;
+            word-break: break-word;
+        }
+        .empty-message {
+            text-align: center;
+            padding: 40px;
+            color: rgba(255,255,255,0.25);
+            font-style: italic;
+        }
+        
+        /* ===== ИСТОРИЯ ===== */
+        .history-list {
+            max-height: 200px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+        .history-list::-webkit-scrollbar { width: 3px; }
+        .history-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
         .history-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 6px 12px;
-            border-bottom: 1px solid #eee;
+            padding: 8px 12px;
+            border-bottom: 1px solid rgba(255,255,255,0.04);
             font-size: 13px;
-            color: #333;
-            transition: background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+            color: rgba(255,255,255,0.7);
         }
         .history-item:last-child { border-bottom: none; }
-        .history-item .name { font-weight: 600; flex: 1; text-align: left; }
-        .history-item .comment-text { font-size: 11px; color: #888; max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; transition: color 0.3s ease; }
-        .history-item .score { font-weight: 700; color: #28a745; transition: color 0.3s ease; width: 60px; text-align: right; flex-shrink: 0; }
-        .history-item .time { font-size: 11px; color: #555; transition: color 0.3s ease; width: 65px; text-align: right; flex-shrink: 0; }
-        .history-item .date { font-size: 11px; color: #555; font-weight: 600; transition: color 0.3s ease; width: 80px; text-align: right; flex-shrink: 0; }
-        .history-item.delete .name { color: #dc3545; }
-        .history-item.delete .score { color: #dc3545; }
-        .history-empty { text-align: center; color: #888; padding: 15px; font-style: italic; font-size: 13px; transition: color 0.3s ease; }
-
+        .history-item .name { font-weight: 500; flex: 1; }
+        .history-item .comment-text { font-size: 11px; color: rgba(255,255,255,0.25); max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .history-item .score { font-weight: 600; color: #8fdfb0; width: 60px; text-align: right; flex-shrink: 0; }
+        .history-item .time { font-size: 11px; color: rgba(255,255,255,0.25); width: 65px; text-align: right; flex-shrink: 0; }
+        .history-item .date { font-size: 11px; color: rgba(255,255,255,0.3); width: 80px; text-align: right; flex-shrink: 0; }
+        .history-item.delete .name { color: #f8a0a0; }
+        .history-item.delete .score { color: #f8a0a0; }
+        .history-empty {
+            text-align: center;
+            color: rgba(255,255,255,0.2);
+            padding: 20px;
+            font-style: italic;
+            font-size: 13px;
+        }
+        
+        /* ===== ФУТЕР ===== */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-top: 16px;
+            margin-top: 16px;
+            border-top: 1px solid rgba(255,255,255,0.04);
+            color: rgba(255,255,255,0.3);
+            font-size: 12px;
+        }
+        .save-status {
+            color: #8fdfb0;
+        }
+        
+        /* ===== МОДАЛКИ ===== */
         .modal-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.6);
-            backdrop-filter: blur(4px);
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
             display: none;
             justify-content: center;
             align-items: center;
@@ -477,34 +491,41 @@
         }
         .modal-overlay.active { display: flex; }
         .modal-box {
-            background: white;
-            padding: 30px;
-            border-radius: 20px;
+            background: rgba(30,30,40,0.8);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            padding: 36px 32px;
+            border-radius: 24px;
             max-width: 420px;
             width: 90%;
             text-align: center;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
-            transition: background 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.5);
         }
-        .modal-box h2 { margin-bottom: 10px; transition: color 0.3s ease; }
-        .modal-box p { color: #555; margin-bottom: 15px; font-size: 16px; transition: color 0.3s ease; }
-        .modal-box .question { font-size: 24px; font-weight: 700; color: #333; margin: 15px 0; transition: color 0.3s ease; }
+        .modal-box h2 { margin-bottom: 8px; color: #fff; font-weight: 700; }
+        .modal-box p { color: rgba(255,255,255,0.5); margin-bottom: 16px; font-size: 15px; }
+        .modal-box .question { font-size: 28px; font-weight: 700; color: #ffd700; margin: 16px 0; }
         .modal-box input {
             width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #ddd;
-            border-radius: 12px;
+            padding: 14px;
+            border-radius: 14px;
             font-size: 18px;
             text-align: center;
-            margin-bottom: 15px;
-            transition: background 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: #fff;
+            outline: none;
+            margin-bottom: 16px;
         }
-        .modal-box input:focus { border-color: #dc3545; outline: none; box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.2); }
+        .modal-box input:focus {
+            border-color: rgba(102, 126, 234, 0.4);
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.08);
+        }
         .modal-box .btn-row { display: flex; gap: 10px; }
         .modal-box .btn-row .btn { flex: 1; }
-        .modal-box .error-msg { color: #dc3545; font-size: 14px; margin-top: 10px; display: none; }
+        .modal-box .error-msg { color: #f8a0a0; font-size: 14px; margin-top: 10px; display: none; }
         .modal-box .error-msg.show { display: block; }
-
+        
         .podium {
             display: flex;
             justify-content: center;
@@ -514,20 +535,20 @@
             flex-wrap: wrap;
         }
         .podium-item { text-align: center; min-width: 80px; }
-        .podium-item .medal { font-size: 36px; display: block; }
-        .podium-item .place { font-weight: 700; font-size: 14px; color: #555; transition: color 0.3s ease; }
-        .podium-item .podium-name { font-weight: 700; font-size: 16px; color: #333; margin-top: 2px; transition: color 0.3s ease; }
-        .podium-item .podium-score { font-size: 13px; color: #666; transition: color 0.3s ease; }
+        .podium-item .medal { font-size: 40px; display: block; }
+        .podium-item .place { font-weight: 600; font-size: 13px; color: rgba(255,255,255,0.3); margin-top: 4px; }
+        .podium-item .podium-name { font-weight: 700; font-size: 16px; color: #fff; margin-top: 2px; }
+        .podium-item .podium-score { font-size: 13px; color: rgba(255,255,255,0.4); }
         .podium-step {
             width: 100px;
-            border-radius: 8px 8px 0 0;
+            border-radius: 12px 12px 0 0;
             margin: 0 auto;
-            transition: height 0.5s ease;
+            transition: height 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         .podium-step.gold { background: linear-gradient(180deg, #ffd700, #f9a825); height: 100px; }
         .podium-step.silver { background: linear-gradient(180deg, #c0c0c0, #9e9e9e); height: 80px; }
         .podium-step.bronze { background: linear-gradient(180deg, #cd7f32, #a0522d); height: 60px; }
-
+        
         .confetti-container {
             position: fixed;
             top: 0;
@@ -550,139 +571,157 @@
             0% { transform: translateY(0) rotate(0deg); opacity: 1; }
             100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
         }
-
-        @media (max-width: 600px) {
-            .container { padding: 14px; }
-            .input-section { flex-direction: column; padding: 12px; }
+        
+        /* ===== АДАПТИВ ===== */
+        @media (max-width: 700px) {
+            .container { padding: 0 4px; }
+            .header h1 { font-size: 22px; }
+            .header .sub { font-size: 12px; }
+            .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+            .stat-card .num { font-size: 24px; }
+            .input-row { flex-direction: column; }
             .input-group { flex: 1 1 auto; width: 100%; }
             .btn { width: 100%; justify-content: center; }
             .actions .btn { min-width: 80px; }
-            .stats .stat-card { flex: 1 1 50px; min-width: 50px; padding: 6px 10px; }
-            .stat-card .num { font-size: 18px; }
-            h1 { font-size: 20px; }
-            .footer { flex-direction: column; align-items: stretch; text-align: center; }
-            .token-input input { font-size: 14px; }
-            .tabs { flex-wrap: wrap; }
-            .tab-btn { font-size: 12px; padding: 8px; }
-            .delete-section { flex-direction: column; }
-            .delete-section input { width: 100%; }
-            .modal-box { padding: 20px; }
-            .podium { gap: 10px; }
+            .leader-card .names { font-size: 22px; }
+            .history-item .date { width: 60px; font-size: 10px; }
+            .history-item .time { width: 55px; font-size: 10px; }
+            .history-item .score { width: 50px; }
+            .history-item .comment-text { max-width: 50px; }
             .podium-step { width: 70px; }
             .podium-item { min-width: 60px; }
-            .theme-toggle { top: 10px; right: 10px; font-size: 11px; padding: 4px 10px; }
-            .leader-card .leader-names { font-size: 18px; }
-            .leader-card .leader-names.small { font-size: 15px; }
-            .leader-card .leader-score { font-size: 15px; }
-            .history-item .score { width: 50px; }
-            .history-item .time { width: 55px; }
-            .history-item .date { width: 70px; }
-            .history-item .comment-text { max-width: 60px; }
-            .comment-cell { max-width: 80px; }
+            .modal-box { padding: 24px 20px; }
+        }
+        @media (max-width: 450px) {
+            .stats-grid { grid-template-columns: 1fr 1fr; }
+            .header { flex-direction: column; align-items: stretch; text-align: center; }
+            .theme-toggle { align-self: center; }
         }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <button class="theme-toggle" id="themeToggle">🌙 Сменить на тёмную тему</button>
-
-    <div class="offline-warning" id="offlineWarning">
-        ⚠️ Нет подключения к интернету. Данные сохраняются локально. <strong>Не закрывайте вкладку!</strong> 
-        Когда интернет появится — нажмите <span class="sync-hint">«Синхронизировать»</span> внизу страницы.
+    <!-- ХЕДЕР -->
+    <div class="header glass" style="padding: 20px 24px; margin-bottom: 24px;">
+        <div>
+            <h1>🎭 Фестиваль</h1>
+            <span class="sub">Подсчёт голосов жюри</span>
+        </div>
+        <button class="theme-toggle" id="themeToggle">🌙 Тёмная тема</button>
     </div>
 
-    <div class="toast-container" id="toastContainer"></div>
-
-    <h1>🎭 Фестиваль</h1>
-    <p class="subtitle">Выберите номинацию и введите оценки</p>
-
-    <div class="tabs" id="tabsContainer">
-        <button class="tab-btn active" data-tab="national">🎵 Национальный</button>
-        <button class="tab-btn" data-tab="free">🎸 Свободный</button>
-        <button class="tab-btn" data-tab="evening">🌙 Вечерний</button>
+    <!-- ОФЛАЙН ПРЕДУПРЕЖДЕНИЕ -->
+    <div class="glass" style="padding: 12px 20px; margin-bottom: 20px; border-color: rgba(255,193,7,0.2); display: none; background: rgba(255,193,7,0.05);" id="offlineWarning">
+        ⚠️ Нет подключения к интернету. Данные сохраняются локально. <strong style="color:#f0d080;">Не закрывайте вкладку!</strong> 
+        Когда интернет появится — нажмите <span style="color:#f0d080; font-weight:700;">«Синхронизировать»</span> внизу.
     </div>
 
-    <div id="statusBar" class="status-bar connecting">⏳ Подключение к GitHub...</div>
+    <!-- TOAST -->
+    <div class="toast-container" id="toastContainer" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;max-width:90%;"></div>
 
-    <div class="token-input" id="tokenBlock">
+    <!-- СТАТУС -->
+    <div id="statusBar" class="status-bar glass" style="margin-bottom: 20px;">⏳ Подключение к GitHub...</div>
+
+    <!-- ТОКЕН -->
+    <div class="token-input glass" id="tokenBlock">
         <label>🔑 Введите GitHub токен</label>
         <input type="password" id="tokenInput" placeholder="Вставьте токен (ghp_...)" autocomplete="off">
         <div class="hint">Токен нужен только для сохранения данных в GitHub.</div>
-        <button class="btn btn-primary" id="tokenBtn">✅ Подключиться</button>
+        <button class="btn" id="tokenBtn" style="margin-top:12px; width:100%;">✅ Подключиться</button>
     </div>
 
+    <!-- ОСНОВНОЙ КОНТЕНТ -->
     <div id="appContent" style="display: none;">
-        <div class="stats">
-            <div class="stat-card"><div class="num" id="statParticipants">0</div><div class="label">👤 Участников</div></div>
-            <div class="stat-card"><div class="num" id="statVotes">0</div><div class="label">📊 Оценок</div></div>
-            <div class="stat-card" style="background:#fff3cd;"><div class="num" id="statAvg">—</div><div class="label">🏆 Средний балл лидера</div></div>
+        <!-- СТАТИСТИКА -->
+        <div class="stats-grid" style="margin-bottom: 20px;">
+            <div class="stat-card glass-card"><div class="num" id="statParticipants">0</div><div class="label">👤 Участников</div></div>
+            <div class="stat-card glass-card"><div class="num" id="statVotes">0</div><div class="label">📊 Оценок</div></div>
+            <div class="stat-card glass-card"><div class="num" id="statAvg">—</div><div class="label">🏆 Средний балл лидера</div></div>
         </div>
 
-        <div class="leader-section" id="leaderSection">
-            <div class="leader-card" id="leaderCard">
-                <div class="leader-label">👑 Текущий лидер</div>
-                <div class="leader-empty" id="leaderEmpty">Нет данных</div>
-                <div id="leaderContent" style="display: none;">
-                    <div class="leader-names" id="leaderNames">—</div>
-                    <div class="leader-score" id="leaderScore">Средний балл: —</div>
+        <!-- ЛИДЕР -->
+        <div class="leader-card" id="leaderCard">
+            <div class="label">👑 Текущий лидер</div>
+            <div class="empty" id="leaderEmpty">Нет данных</div>
+            <div id="leaderContent" style="display: none;">
+                <div class="names" id="leaderNames">—</div>
+                <div class="score" id="leaderScore">Средний балл: —</div>
+            </div>
+        </div>
+
+        <!-- ВКЛАДКИ -->
+        <div class="tabs glass" style="display:flex; gap:6px; padding:4px; border-radius:14px; margin-bottom:20px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05);">
+            <button class="tab-btn active" data-tab="national" style="flex:1; padding:10px 12px; border:none; border-radius:12px; font-weight:700; font-size:14px; cursor:pointer; background:transparent; color:rgba(255,255,255,0.5); transition:all 0.3s ease;">🎵 Национальный</button>
+            <button class="tab-btn" data-tab="free" style="flex:1; padding:10px 12px; border:none; border-radius:12px; font-weight:700; font-size:14px; cursor:pointer; background:transparent; color:rgba(255,255,255,0.5); transition:all 0.3s ease;">🎸 Свободный</button>
+            <button class="tab-btn" data-tab="evening" style="flex:1; padding:10px 12px; border:none; border-radius:12px; font-weight:700; font-size:14px; cursor:pointer; background:transparent; color:rgba(255,255,255,0.5); transition:all 0.3s ease;">🌙 Вечерний</button>
+        </div>
+
+        <!-- ФОРМА ДОБАВЛЕНИЯ -->
+        <div class="section-glass">
+            <div class="input-row">
+                <div class="input-group">
+                    <label>👤 Имя участника</label>
+                    <input type="text" id="nameInput" placeholder="Например: Анна">
+                </div>
+                <div class="input-group" style="flex:0 0 120px;">
+                    <label>⭐ Оценка (0–10)</label>
+                    <input type="number" id="scoreInput" placeholder="10" min="0" max="10" step="0.1">
+                </div>
+                <div class="input-group" style="flex:0 0 auto;">
+                    <button class="btn btn-add" id="addBtn" style="margin-top: auto;">➕ Добавить</button>
                 </div>
             </div>
-        </div>
-
-        <div class="input-section">
-            <div class="input-group">
-                <label>👤 Имя участника</label>
-                <input type="text" id="nameInput" placeholder="Например: Анна">
-            </div>
-            <div class="input-group" style="flex:0 0 110px;">
-                <label>⭐ Оценка (0–10)</label>
-                <input type="number" id="scoreInput" placeholder="10" min="0" max="10" step="0.1">
-            </div>
-            <div class="input-group" style="flex:1 1 100%; margin-top: 4px;">
-                <label>💬 Комментарий (необязательно)</label>
+            <div style="margin-top: 10px;">
+                <label style="font-size:12px; color:rgba(255,255,255,0.3);">💬 Комментарий (необязательно)</label>
                 <input type="text" id="commentInput" class="comment-input" placeholder="Например: Отличное выступление!">
             </div>
-            <div class="input-group" style="flex:0 0 auto;">
-                <button class="btn btn-add" id="addBtn">➕ Добавить</button>
+        </div>
+
+        <!-- УДАЛЕНИЕ -->
+        <div class="section-glass" style="border-color: rgba(220,53,69,0.15);">
+            <label style="font-size:13px; color:#f08080; font-weight:500;">🗑️ Удалить участника</label>
+            <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
+                <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:12px 16px; border-radius:14px; font-size:14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); color:#fff; outline:none; min-width:120px;">
+                <button class="btn btn-delete btn-sm" id="deleteBtn">✕ Удалить</button>
             </div>
         </div>
 
-        <div class="delete-section">
-            <label>🗑️ Удалить участника:</label>
-            <input type="text" id="deleteName" placeholder="Введите имя">
-            <button class="btn btn-danger" id="deleteBtn">✕ Удалить</button>
-        </div>
-
-        <div class="table-wrap">
+        <!-- ТАБЛИЦА -->
+        <div class="table-wrap glass" style="padding:0; overflow:hidden; margin-bottom:20px;">
             <table>
                 <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>Все оценки</th><th>Комментарии</th></tr></thead>
                 <tbody id="tableBody"><tr><td colspan="5" class="empty-message">Нет данных</td></tr></tbody>
             </table>
         </div>
 
-        <div class="history-section" id="historySection">
-            <h3>📋 История голосований</h3>
+        <!-- ИСТОРИЯ -->
+        <div class="section-glass">
+            <div class="section-title">📋 История голосований</div>
             <div class="history-list" id="historyList">
                 <div class="history-empty">История пуста</div>
             </div>
         </div>
 
+        <!-- ДЕЙСТВИЯ -->
         <div class="actions">
             <button class="btn btn-warning" id="calcBtn">🏆 Победитель</button>
             <button class="btn btn-success" id="syncBtn">🔄 Синхронизировать</button>
             <button class="btn btn-clear" id="clearBtn">🗑️ Очистить всё</button>
         </div>
 
+        <!-- ФУТЕР -->
         <div class="footer">
             <span id="winnerDisplay">👑 Победитель: не определен</span>
             <span class="save-status" id="statusDisplay">☁️ Готов</span>
         </div>
-        <div class="sync-info">🔄 Автосинхронизация каждые 10 секунд | 💬 Комментарии</div>
+        <div style="text-align:center; margin-top:12px; font-size:11px; color:rgba(255,255,255,0.15);">
+            🔄 Автосинхронизация каждые 10 секунд · 💬 Комментарии
+        </div>
     </div>
 </div>
 
-<!-- Модальное окно для очистки -->
+<!-- МОДАЛКА ОЧИСТКИ -->
 <div class="modal-overlay" id="clearModal">
     <div class="modal-box">
         <h2>⚠️ Очистка данных</h2>
@@ -692,118 +731,51 @@
         <input type="number" id="captchaInput" placeholder="Введите ответ" autocomplete="off">
         <div class="btn-row">
             <button class="btn btn-danger" id="confirmClearBtn">🗑️ Очистить</button>
-            <button class="btn" id="cancelClearBtn" style="background: #6c757d;">Отмена</button>
+            <button class="btn btn-clear" id="cancelClearBtn">Отмена</button>
         </div>
         <div class="error-msg" id="captchaError">❌ Неправильный ответ! Попробуйте ещё раз.</div>
     </div>
 </div>
 
-<!-- Модальное окно для подиума -->
+<!-- МОДАЛКА ПОДИУМА -->
 <div class="modal-overlay" id="podiumModal">
     <div class="modal-box">
         <h2>🏆 Результаты!</h2>
         <div class="podium" id="podiumContainer"></div>
-        <button class="btn btn-primary" id="closePodiumBtn" style="margin-top: 15px; width: 100%;">👏 Отлично!</button>
+        <button class="btn btn-primary" id="closePodiumBtn" style="margin-top:16px; width:100%;">👏 Отлично!</button>
     </div>
 </div>
 
 <script>
     // ============================================================
-    // TOAST-УВЕДОМЛЕНИЯ
+    // TOAST
     // ============================================================
     function showToast(message, type) {
         var container = document.getElementById('toastContainer');
         var toast = document.createElement('div');
         toast.className = 'toast';
-        if (type) toast.classList.add(type);
+        toast.style.cssText = 'background:rgba(255,255,255,0.08); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); color:#fff; padding:12px 24px; border-radius:16px; font-weight:500; font-size:14px; box-shadow:0 20px 60px rgba(0,0,0,0.3); animation:toastIn 0.4s ease, toastOut 0.4s ease 3s forwards; pointer-events:auto; border:1px solid rgba(255,255,255,0.06); text-align:center;';
+        if (type === 'warning') toast.style.borderColor = 'rgba(255,193,7,0.3)';
+        if (type === 'error') toast.style.borderColor = 'rgba(220,53,69,0.3)';
+        if (type === 'info') toast.style.borderColor = 'rgba(23,162,184,0.3)';
         toast.textContent = message;
         container.appendChild(toast);
-        setTimeout(function() {
-            if (toast.parentNode) {
-                toast.remove();
-            }
-        }, 4000);
+        setTimeout(function() { if (toast.parentNode) toast.remove(); }, 4000);
     }
 
     // ============================================================
-    // ТЁМНАЯ ТЕМА
+    // ТЁМНАЯ ТЕМА (фикс для стилей)
     // ============================================================
     var themeToggle = document.getElementById('themeToggle');
-    var isDark = false;
-
-    if (localStorage.getItem('festival_theme') === 'dark') {
-        document.body.classList.add('dark-theme');
-        themeToggle.textContent = '☀️ Сменить на светлую тему';
-        isDark = true;
-    }
-
+    var isDark = true; // всегда тёмная
+    themeToggle.textContent = '☀️ Светлая тема';
     themeToggle.addEventListener('click', function() {
+        // Просто переключатель для удовольствия — меняем оттенки
+        document.body.style.background = isDark ? 'linear-gradient(145deg, #f5f5f7 0%, #e8e8ed 50%, #d4d4dc 100%)' : 'linear-gradient(145deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)';
+        document.body.style.color = isDark ? '#1a1a2e' : '#fff';
         isDark = !isDark;
-        if (isDark) {
-            document.body.classList.add('dark-theme');
-            themeToggle.textContent = '☀️ Сменить на светлую тему';
-            localStorage.setItem('festival_theme', 'dark');
-        } else {
-            document.body.classList.remove('dark-theme');
-            themeToggle.textContent = '🌙 Сменить на тёмную тему';
-            localStorage.setItem('festival_theme', 'light');
-        }
+        themeToggle.textContent = isDark ? '☀️ Светлая тема' : '🌙 Тёмная тема';
     });
-
-    // ============================================================
-    // ОТСЛЕЖИВАНИЕ ИНТЕРНЕТА
-    // ============================================================
-    var offlineWarning = document.getElementById('offlineWarning');
-
-    function updateOnlineStatus() {
-        if (!navigator.onLine) {
-            offlineWarning.classList.add('show');
-        } else {
-            offlineWarning.classList.remove('show');
-        }
-    }
-
-    window.addEventListener('online', updateOnlineStatus);
-    window.addEventListener('offline', updateOnlineStatus);
-    updateOnlineStatus();
-
-    // ============================================================
-    // ФЕЙЕРВЕРК / КОНФЕТТИ
-    // ============================================================
-    function fireConfetti() {
-        var container = document.createElement('div');
-        container.className = 'confetti-container';
-        document.body.appendChild(container);
-        
-        var colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff6fd8', '#ff9f43', '#a29bfe', '#fd79a8'];
-        
-        for (var i = 0; i < 120; i++) {
-            var piece = document.createElement('div');
-            piece.className = 'confetti-piece';
-            var size = Math.random() * 10 + 5;
-            var left = Math.random() * 100;
-            var delay = Math.random() * 2;
-            var duration = Math.random() * 2 + 2;
-            var color = colors[Math.floor(Math.random() * colors.length)];
-            var rotation = Math.random() * 360;
-            
-            piece.style.cssText = 
-                'left: ' + left + '%;' +
-                'width: ' + size + 'px;' +
-                'height: ' + size + 'px;' +
-                'background: ' + color + ';' +
-                'animation-delay: ' + delay + 's;' +
-                'animation-duration: ' + duration + 's;' +
-                'transform: rotate(' + rotation + 'deg);' +
-                'border-radius: ' + (Math.random() > 0.5 ? '50%' : '2px') + ';';
-            
-            container.appendChild(piece);
-        }
-        
-        setTimeout(function() {
-            container.remove();
-        }, 5000);
-    }
 
     // ============================================================
     // ОСНОВНОЙ КОД
@@ -829,7 +801,7 @@
     var isConnecting = false;
 
     // DOM
-    var tabsContainer = document.getElementById('tabsContainer');
+    var tabsContainer = document.querySelector('.tabs');
     var tokenBlock = document.getElementById('tokenBlock');
     var tokenInput = document.getElementById('tokenInput');
     var tokenBtn = document.getElementById('tokenBtn');
@@ -855,6 +827,7 @@
     var leaderScore = document.getElementById('leaderScore');
     var leaderEmpty = document.getElementById('leaderEmpty');
     var leaderContent = document.getElementById('leaderContent');
+    var offlineWarning = document.getElementById('offlineWarning');
 
     var clearModal = document.getElementById('clearModal');
     var captchaInput = document.getElementById('captchaInput');
@@ -866,21 +839,26 @@
     var podiumContainer = document.getElementById('podiumContainer');
     var closePodiumBtn = document.getElementById('closePodiumBtn');
 
-    // ========== ВКЛАДКИ ==========
+    // ===== ВКЛАДКИ =====
     tabsContainer.addEventListener('click', function(e) {
         var btn = e.target.closest('.tab-btn');
         if (!btn) return;
         var tab = btn.dataset.tab;
         if (tab === currentTab) return;
-        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); b.style.background = 'transparent'; b.style.color = 'rgba(255,255,255,0.5)'; });
         btn.classList.add('active');
+        btn.style.background = 'rgba(102,126,234,0.2)';
+        btn.style.color = '#fff';
         currentTab = tab;
         render();
         renderHistory();
         renderLeader();
     });
+    // Активируем первую вкладку
+    document.querySelector('.tab-btn.active').style.background = 'rgba(102,126,234,0.2)';
+    document.querySelector('.tab-btn.active').style.color = '#fff';
 
-    // ========== УДАЛЕНИЕ ==========
+    // ===== УДАЛЕНИЕ =====
     deleteBtn.addEventListener('click', function() {
         var name = deleteName.value.trim();
         if (!name) { showToast('Введите имя для удаления', 'warning'); return; }
@@ -911,7 +889,7 @@
         if (e.key === 'Enter') { e.preventDefault(); deleteBtn.click(); }
     });
 
-    // ========== ИСТОРИЯ ==========
+    // ===== ИСТОРИЯ =====
     function getFormattedDate() {
         var now = new Date();
         var day = String(now.getDate()).padStart(2, '0');
@@ -992,7 +970,7 @@
         historyList.innerHTML = html;
     }
 
-    // ========== ЛИДЕР ==========
+    // ===== ЛИДЕР =====
     function renderLeader() {
         var votes = allData[currentTab]?.votes || [];
         var participants = getUniqueParticipants(votes);
@@ -1042,9 +1020,11 @@
             
             var namesText = leaders.join(', ');
             if (namesText.length > 30) {
-                leaderNames.className = 'leader-names small';
+                leaderNames.className = 'names';
+                leaderNames.style.fontSize = '22px';
             } else {
-                leaderNames.className = 'leader-names';
+                leaderNames.className = 'names';
+                leaderNames.style.fontSize = '28px';
             }
             leaderNames.textContent = namesText;
             leaderScore.textContent = 'Средний балл: ' + maxAvg.toFixed(2);
@@ -1054,7 +1034,7 @@
         }
     }
 
-    // ========== ОЧИСТКА ВСЕГО ==========
+    // ===== ОЧИСТКА =====
     clearBtn.addEventListener('click', function() {
         var votes = allData[currentTab].votes;
         if (votes.length === 0) {
@@ -1105,7 +1085,7 @@
         if (e.target === clearModal) { cancelClearBtn.click(); }
     });
 
-    // ========== ПОДИУМ ==========
+    // ===== ПОДИУМ =====
     closePodiumBtn.addEventListener('click', function() {
         podiumModal.classList.remove('active');
     });
@@ -1177,21 +1157,21 @@
         }
 
         if (topGroups.length === 0) {
-            podiumContainer.innerHTML = '<p style="color: #888; padding: 20px;">Нет данных для отображения</p>';
+            podiumContainer.innerHTML = '<p style="color: rgba(255,255,255,0.3); padding: 20px;">Нет данных для отображения</p>';
         } else {
             podiumContainer.innerHTML = html;
         }
         podiumModal.classList.add('active');
     }
 
-    // ========== ОСТАЛЬНОЙ КОД ==========
+    // ===== ОСТАЛЬНОЙ КОД =====
     function setStatus(text, color) {
         statusDisplay.textContent = text;
-        statusDisplay.style.color = color || '#28a745';
+        statusDisplay.style.color = color || '#8fdfb0';
     }
 
     function setStatusBar(status, message) {
-        statusBar.className = 'status-bar ' + status;
+        statusBar.className = 'status-bar glass ' + status;
         statusBar.textContent = message;
     }
 
@@ -1252,13 +1232,13 @@
             var saveResponse = await fetch(url, { method: 'PUT', headers: { 'Authorization': 'token ' + githubToken, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) });
             if (saveResponse.ok) { 
                 setStatusBar('online', '☁️ Сохранено'); 
-                setStatus('☁️ Сохранено', '#28a745'); 
+                setStatus('☁️ Сохранено', '#8fdfb0'); 
             } else {
                 throw new Error('Ошибка сохранения');
             }
         } catch(e) { 
             setStatusBar('online', '☁️ Данные сохранены локально'); 
-            setStatus('💾 Сохранено локально', '#fd7e14');
+            setStatus('💾 Сохранено локально', 'rgba(255,255,255,0.5)');
             showToast('⚠️ Не удалось сохранить в GitHub, но данные сохранены локально', 'warning');
             setTimeout(function() {
                 if (githubToken) {
@@ -1297,11 +1277,11 @@
                 renderHistory();
                 renderLeader();
                 setStatusBar('online', '☁️ Автосинхронизация');
-                setStatus('☁️ Синхронизировано', '#17a2b8');
+                setStatus('☁️ Синхронизировано', '#8fdfb0');
             }
         } catch(e) { 
             setStatusBar('online', '☁️ Данные загружены из кэша');
-            setStatus('📂 Из кэша', '#fd7e14');
+            setStatus('📂 Из кэша', 'rgba(255,255,255,0.5)');
         }
     }
 
@@ -1526,6 +1506,41 @@
         isConnecting = false;
     }
 
+    function fireConfetti() {
+        var container = document.createElement('div');
+        container.className = 'confetti-container';
+        document.body.appendChild(container);
+        
+        var colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff6fd8', '#ff9f43', '#a29bfe', '#fd79a8'];
+        
+        for (var i = 0; i < 120; i++) {
+            var piece = document.createElement('div');
+            piece.className = 'confetti-piece';
+            var size = Math.random() * 10 + 5;
+            var left = Math.random() * 100;
+            var delay = Math.random() * 2;
+            var duration = Math.random() * 2 + 2;
+            var color = colors[Math.floor(Math.random() * colors.length)];
+            var rotation = Math.random() * 360;
+            
+            piece.style.cssText = 
+                'left: ' + left + '%;' +
+                'width: ' + size + 'px;' +
+                'height: ' + size + 'px;' +
+                'background: ' + color + ';' +
+                'animation-delay: ' + delay + 's;' +
+                'animation-duration: ' + duration + 's;' +
+                'transform: rotate(' + rotation + 'deg);' +
+                'border-radius: ' + (Math.random() > 0.5 ? '50%' : '2px') + ';';
+            
+            container.appendChild(piece);
+        }
+        
+        setTimeout(function() {
+            container.remove();
+        }, 5000);
+    }
+
     function init() {
         var savedToken = loadToken();
         if (savedToken) { 
@@ -1535,15 +1550,25 @@
             tokenBlock.style.display = 'block'; 
             appContent.style.display = 'none'; 
         }
+        
+        // Offline warning
+        function updateOnlineStatus() {
+            if (!navigator.onLine) {
+                offlineWarning.style.display = 'block';
+            } else {
+                offlineWarning.style.display = 'none';
+            }
+        }
+        window.addEventListener('online', updateOnlineStatus);
+        window.addEventListener('offline', updateOnlineStatus);
+        updateOnlineStatus();
     }
 
-    // Обработчики событий
+    // Обработчики
     tokenBtn.addEventListener('click', connectToGitHub);
-    
     tokenInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') { e.preventDefault(); connectToGitHub(); }
     });
-    
     addBtn.addEventListener('click', addVote);
     calcBtn.addEventListener('click', calculateWinner);
     syncBtn.addEventListener('click', syncData);
@@ -1551,11 +1576,9 @@
     nameInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') { e.preventDefault(); scoreInput.focus(); }
     });
-    
     scoreInput.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') { e.preventDefault(); commentInputField.focus(); }
     });
-    
     commentInputField.addEventListener('keydown', function(e) {
         if (e.key === 'Enter') { e.preventDefault(); addVote(); }
     });
@@ -1563,10 +1586,8 @@
     // Запуск
     init();
     
-    console.log('✅ Программа загружена!');
+    console.log('✅ Apple-style программа загружена!');
     console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
-    console.log('📅 Дата добавлена в историю голосований');
-    console.log('💬 Комментарии: можно добавлять к каждой оценке');
 </script>
 </body>
 </html>
