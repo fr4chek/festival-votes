@@ -10,7 +10,7 @@
         /* ===== ГЛОБАЛЬНЫЙ СТИЛЬ ===== */
         body {
             font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
-            background: linear-gradient(145deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%);
+            background: #0a0a0a;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -20,22 +20,25 @@
             color: #fff;
         }
         
-        /* Анимированный фон */
+        /* Анимированный фон — как у Apple */
         body::before {
             content: '';
             position: fixed;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(ellipse at 20% 50%, rgba(102, 126, 234, 0.15) 0%, transparent 60%),
-                        radial-gradient(ellipse at 80% 50%, rgba(118, 75, 162, 0.15) 0%, transparent 60%);
+            top: -30%;
+            left: -30%;
+            width: 160%;
+            height: 160%;
+            background: 
+                radial-gradient(ellipse at 20% 50%, rgba(80, 100, 200, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 80% 50%, rgba(150, 80, 200, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 50% 100%, rgba(255, 255, 255, 0.02) 0%, transparent 50%);
             z-index: 0;
-            animation: backgroundFloat 20s ease-in-out infinite alternate;
+            animation: backgroundFloat 30s ease-in-out infinite alternate;
+            pointer-events: none;
         }
         @keyframes backgroundFloat {
-            0% { transform: translate(0, 0) rotate(0deg); }
-            100% { transform: translate(-2%, 2%) rotate(2deg); }
+            0% { transform: translate(0, 0) rotate(0deg) scale(1); }
+            100% { transform: translate(-3%, 2%) rotate(2deg) scale(1.05); }
         }
         
         .container {
@@ -46,28 +49,22 @@
             width: 100%;
         }
         
-        /* ===== СТЕКЛЯННЫЙ ЭФФЕКТ ===== */
+        /* ===== СТЕКЛЯННЫЙ ЭФФЕКТ (Liquid Glass) ===== */
         .glass {
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(40px) saturate(1.4);
-            -webkit-backdrop-filter: blur(40px) saturate(1.4);
+            background: rgba(255, 255, 255, 0.04);
+            backdrop-filter: blur(60px) saturate(1.6);
+            -webkit-backdrop-filter: blur(60px) saturate(1.6);
             border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
-                        0 0 0 1px rgba(255, 255, 255, 0.02) inset;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            border: 0.5px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.6),
+                0 0 0 0.5px rgba(255, 255, 255, 0.02) inset,
+                0 0 40px rgba(255, 255, 255, 0.01) inset;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
         .glass:hover {
-            border-color: rgba(255, 255, 255, 0.15);
-        }
-        
-        .glass-card {
-            background: rgba(255, 255, 255, 0.04);
-            backdrop-filter: blur(20px) saturate(1.2);
-            -webkit-backdrop-filter: blur(20px) saturate(1.2);
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            border-color: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6), 0 0 0 0.5px rgba(255, 255, 255, 0.04) inset;
         }
         
         /* ===== ХЕДЕР ===== */
@@ -75,7 +72,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 24px;
+            padding: 20px 28px;
             margin-bottom: 24px;
             flex-wrap: wrap;
             gap: 12px;
@@ -91,28 +88,27 @@
         }
         .header .sub {
             font-size: 14px;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255,255,255,0.3);
             font-weight: 400;
         }
         
-        /* ===== ТЕМНАЯ ТЕМА (переключатель) ===== */
         .theme-toggle {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.04);
+            border: 0.5px solid rgba(255,255,255,0.06);
             border-radius: 30px;
-            padding: 8px 16px;
-            font-size: 14px;
+            padding: 8px 18px;
+            font-size: 13px;
             cursor: pointer;
-            color: #fff;
+            color: rgba(255,255,255,0.5);
             font-weight: 500;
             transition: all 0.3s ease;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
         .theme-toggle:hover {
-            background: rgba(255,255,255,0.15);
-            border-color: rgba(255,255,255,0.2);
-            transform: scale(1.02);
+            background: rgba(255,255,255,0.08);
+            border-color: rgba(255,255,255,0.1);
+            color: #fff;
         }
         
         /* ===== СТАТУС ===== */
@@ -123,26 +119,23 @@
             font-size: 13px;
             font-weight: 500;
             text-align: center;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.06);
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.4);
         }
-        .status-bar.online { border-color: rgba(40, 167, 69, 0.3); color: #8fdfb0; }
-        .status-bar.connecting { border-color: rgba(255, 193, 7, 0.3); color: #f0d080; }
-        .status-bar.saving { border-color: rgba(0, 123, 255, 0.3); color: #80c0f0; }
+        .status-bar.online { color: #8fdfb0; border-color: rgba(40,167,69,0.15); }
+        .status-bar.connecting { color: #f0d080; border-color: rgba(255,193,7,0.15); }
+        .status-bar.saving { color: #80c0f0; border-color: rgba(0,123,255,0.15); }
         
         /* ===== ВХОД С ТОКЕНОМ ===== */
         .token-input {
-            padding: 24px;
+            padding: 24px 28px;
             margin-bottom: 20px;
             border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.08);
         }
         .token-input label {
             display: block;
             font-weight: 600;
             font-size: 14px;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.5);
             margin-bottom: 8px;
         }
         .token-input input {
@@ -150,38 +143,106 @@
             padding: 14px 18px;
             border-radius: 14px;
             font-size: 16px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.04);
+            border: 0.5px solid rgba(255,255,255,0.06);
             color: #fff;
             transition: all 0.3s ease;
             outline: none;
         }
         .token-input input:focus {
-            border-color: rgba(102, 126, 234, 0.5);
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+            border-color: rgba(255,255,255,0.15);
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.02);
+        }
+        .token-input input::placeholder {
+            color: rgba(255,255,255,0.15);
         }
         .token-input .hint {
             font-size: 12px;
-            color: rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.15);
             margin-top: 8px;
         }
         
-        /* ===== БЛОКИ ===== */
-        .section-glass {
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 20px;
-            border: 1px solid rgba(255,255,255,0.06);
-            background: rgba(255,255,255,0.03);
-        }
-        
-        .section-title {
-            font-size: 13px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,0.3);
-            margin-bottom: 16px;
+        /* ===== КНОПКИ ===== */
+        .btn {
+            padding: 12px 28px;
+            border: none;
+            border-radius: 14px;
             font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            color: #fff;
+            background: rgba(255,255,255,0.06);
+            border: 0.5px solid rgba(255,255,255,0.06);
+            flex: 0 0 auto;
+            position: relative;
+            overflow: hidden;
+        }
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, transparent 60%);
+            pointer-events: none;
+        }
+        .btn:hover {
+            background: rgba(255,255,255,0.1);
+            transform: translateY(-1px);
+            border-color: rgba(255,255,255,0.1);
+        }
+        .btn:active { transform: scale(0.97); }
+        .btn-primary { background: rgba(102, 126, 234, 0.25); border-color: rgba(102, 126, 234, 0.2); }
+        .btn-primary:hover { background: rgba(102, 126, 234, 0.35); border-color: rgba(102, 126, 234, 0.3); }
+        .btn-add { background: rgba(40, 167, 69, 0.2); border-color: rgba(40, 167, 69, 0.15); }
+        .btn-add:hover { background: rgba(40, 167, 69, 0.3); border-color: rgba(40, 167, 69, 0.25); }
+        .btn-warning { background: rgba(255, 193, 7, 0.15); border-color: rgba(255, 193, 7, 0.1); color: #f0d080; }
+        .btn-warning:hover { background: rgba(255, 193, 7, 0.25); border-color: rgba(255, 193, 7, 0.2); }
+        .btn-success { background: rgba(23, 162, 184, 0.15); border-color: rgba(23, 162, 184, 0.1); color: #80c0f0; }
+        .btn-success:hover { background: rgba(23, 162, 184, 0.25); border-color: rgba(23, 162, 184, 0.2); }
+        .btn-danger { background: rgba(220, 53, 69, 0.15); border-color: rgba(220, 53, 69, 0.1); color: #f8a0a0; }
+        .btn-danger:hover { background: rgba(220, 53, 69, 0.25); border-color: rgba(220, 53, 69, 0.2); }
+        .btn-clear { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.04); color: rgba(255,255,255,0.3); }
+        .btn-clear:hover { background: rgba(255,255,255,0.06); border-color: rgba(255,255,255,0.06); }
+        .btn-sm { padding: 6px 16px; font-size: 12px; border-radius: 10px; }
+        
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .actions .btn { flex: 1 1 auto; min-width: 120px; text-align: center; }
+        
+        /* ===== ВКЛАДКИ ===== */
+        .tabs {
+            display: flex;
+            gap: 6px;
+            padding: 4px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            background: rgba(255,255,255,0.02);
+            border: 0.5px solid rgba(255,255,255,0.04);
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px 12px;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            background: transparent;
+            color: rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+        .tab-btn:hover { color: rgba(255,255,255,0.6); }
+        .tab-btn.active {
+            background: rgba(255,255,255,0.06);
+            color: #fff;
         }
         
         /* ===== СТАТИСТИКА ===== */
@@ -189,25 +250,26 @@
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
             gap: 12px;
+            margin-bottom: 20px;
         }
         .stat-card {
             text-align: center;
             padding: 16px 12px;
             border-radius: 16px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.05);
+            background: rgba(255,255,255,0.02);
+            border: 0.5px solid rgba(255,255,255,0.04);
         }
         .stat-card .num {
             font-size: 32px;
             font-weight: 700;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, #8a9ff0 0%, #a78bfa 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
         .stat-card .label {
             font-size: 12px;
-            color: rgba(255,255,255,0.4);
+            color: rgba(255,255,255,0.25);
             margin-top: 4px;
         }
         
@@ -215,14 +277,14 @@
         .leader-card {
             padding: 20px 24px;
             border-radius: 20px;
-            background: rgba(255,215,0,0.06);
-            border: 1px solid rgba(255,215,0,0.15);
+            background: rgba(255,215,0,0.04);
+            border: 0.5px solid rgba(255,215,0,0.08);
             text-align: center;
             margin-bottom: 20px;
         }
         .leader-card .label {
             font-size: 13px;
-            color: rgba(255,255,255,0.4);
+            color: rgba(255,255,255,0.25);
             font-weight: 500;
         }
         .leader-card .names {
@@ -234,15 +296,22 @@
         }
         .leader-card .score {
             font-size: 16px;
-            color: rgba(255,215,0,0.7);
+            color: rgba(255,215,0,0.5);
             font-weight: 500;
         }
         .leader-card .empty {
-            color: rgba(255,255,255,0.3);
+            color: rgba(255,255,255,0.15);
             font-size: 16px;
         }
         
         /* ===== ФОРМА ===== */
+        .section-glass {
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            background: rgba(255,255,255,0.02);
+            border: 0.5px solid rgba(255,255,255,0.04);
+        }
         .input-row {
             display: flex;
             flex-wrap: wrap;
@@ -259,120 +328,64 @@
         .input-group label {
             font-size: 12px;
             font-weight: 500;
-            color: rgba(255,255,255,0.5);
+            color: rgba(255,255,255,0.3);
         }
         .input-group input {
             padding: 12px 16px;
             border-radius: 14px;
             font-size: 15px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
+            background: rgba(255,255,255,0.03);
+            border: 0.5px solid rgba(255,255,255,0.04);
             color: #fff;
             transition: all 0.3s ease;
             outline: none;
             width: 100%;
         }
         .input-group input:focus {
-            border-color: rgba(102, 126, 234, 0.4);
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.08);
+            border-color: rgba(255,255,255,0.1);
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.02);
         }
         .input-group input::placeholder {
-            color: rgba(255,255,255,0.25);
+            color: rgba(255,255,255,0.1);
         }
         
         .comment-input {
             padding: 10px 16px;
             border-radius: 14px;
             font-size: 13px;
-            background: rgba(255,255,255,0.04);
-            border: 1px solid rgba(255,255,255,0.06);
-            color: #fff;
+            background: rgba(255,255,255,0.02);
+            border: 0.5px solid rgba(255,255,255,0.03);
+            color: rgba(255,255,255,0.7);
             width: 100%;
             outline: none;
             transition: all 0.3s ease;
             margin-top: 4px;
         }
         .comment-input:focus {
-            border-color: rgba(102, 126, 234, 0.3);
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.06);
+            border-color: rgba(255,255,255,0.08);
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.02);
         }
         .comment-input::placeholder {
-            color: rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.1);
         }
         
-        /* ===== КНОПКИ ===== */
-        .btn {
-            padding: 12px 28px;
-            border: none;
-            border-radius: 14px;
-            font-weight: 600;
-            font-size: 15px;
-            cursor: pointer;
-            transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            color: #fff;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            position: relative;
-            overflow: hidden;
-            flex: 0 0 auto;
+        .delete-section {
+            border-color: rgba(220,53,69,0.08);
         }
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.15) 0%, transparent 50%);
-            pointer-events: none;
-        }
-        .btn:hover {
-            transform: translateY(-2px) scale(1.01);
-            box-shadow: 0 20px 40px rgba(102, 126, 234, 0.25);
-        }
-        .btn:active {
-            transform: scale(0.97);
-        }
-        .btn-add { background: linear-gradient(135deg, #28a745 0%, #20c997 100%); }
-        .btn-add:hover { box-shadow: 0 20px 40px rgba(40, 167, 69, 0.3); }
-        .btn-warning { background: linear-gradient(135deg, #ffc107 0%, #fd7e14 100%); color: #1a1a2e; }
-        .btn-warning:hover { box-shadow: 0 20px 40px rgba(255, 193, 7, 0.3); }
-        .btn-success { background: linear-gradient(135deg, #17a2b8 0%, #0dcaf0 100%); }
-        .btn-success:hover { box-shadow: 0 20px 40px rgba(23, 162, 184, 0.3); }
-        .btn-danger { background: linear-gradient(135deg, #dc3545 0%, #e83e8c 100%); }
-        .btn-danger:hover { box-shadow: 0 20px 40px rgba(220, 53, 69, 0.3); }
-        .btn-clear { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); color: rgba(255,255,255,0.7); }
-        .btn-clear:hover { background: rgba(255,255,255,0.15); border-color: rgba(255,255,255,0.2); box-shadow: none; }
-        
-        .btn-sm {
-            padding: 6px 14px;
-            font-size: 12px;
-            border-radius: 10px;
-        }
-        .btn-delete {
-            background: rgba(220, 53, 69, 0.2);
-            border: 1px solid rgba(220, 53, 69, 0.2);
-            color: #f8a0a0;
-        }
-        .btn-delete:hover { background: rgba(220, 53, 69, 0.3); border-color: rgba(220, 53, 69, 0.4); box-shadow: none; }
-        
-        .actions {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            margin-top: 20px;
-        }
-        .actions .btn {
-            flex: 1 1 auto;
-            min-width: 120px;
-            text-align: center;
+        .delete-section label {
+            font-size: 13px;
+            color: rgba(255,255,255,0.3);
+            font-weight: 500;
         }
         
         /* ===== ТАБЛИЦА ===== */
         .table-wrap {
             overflow-x: auto;
             border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.06);
+            border: 0.5px solid rgba(255,255,255,0.04);
+            background: rgba(255,255,255,0.02);
+            padding: 0;
+            margin-bottom: 20px;
         }
         table {
             width: 100%;
@@ -383,45 +396,32 @@
             padding: 14px 12px;
             text-align: center;
             font-weight: 600;
-            color: rgba(255,255,255,0.4);
+            color: rgba(255,255,255,0.2);
             text-transform: uppercase;
             font-size: 11px;
             letter-spacing: 0.5px;
-            border-bottom: 1px solid rgba(255,255,255,0.05);
+            border-bottom: 0.5px solid rgba(255,255,255,0.03);
         }
         td {
             padding: 12px;
             text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
-            color: rgba(255,255,255,0.85);
+            border-bottom: 0.5px solid rgba(255,255,255,0.02);
+            color: rgba(255,255,255,0.7);
         }
         tr:hover td {
-            background: rgba(255,255,255,0.03);
+            background: rgba(255,255,255,0.02);
         }
         .winner-row td {
-            background: rgba(255,215,0,0.08) !important;
-            border-bottom: 2px solid rgba(255,215,0,0.2);
+            background: rgba(255,215,0,0.04) !important;
+            border-bottom: 1px solid rgba(255,215,0,0.08);
+            color: #ffd700;
         }
-        .winner-row td:first-child {
-            border-radius: 12px 0 0 12px;
-        }
-        .winner-row td:last-child {
-            border-radius: 0 12px 12px 0;
-        }
-        .total-cell {
-            font-weight: 700;
-            color: #fff;
-        }
-        .comment-cell {
-            font-size: 11px;
-            color: rgba(255,255,255,0.3);
-            max-width: 120px;
-            word-break: break-word;
-        }
+        .total-cell { font-weight: 700; color: #fff; }
+        .comment-cell { font-size: 11px; color: rgba(255,255,255,0.2); max-width: 120px; word-break: break-word; }
         .empty-message {
             text-align: center;
             padding: 40px;
-            color: rgba(255,255,255,0.25);
+            color: rgba(255,255,255,0.1);
             font-style: italic;
         }
         
@@ -431,28 +431,28 @@
             overflow-y: auto;
             padding-right: 4px;
         }
-        .history-list::-webkit-scrollbar { width: 3px; }
-        .history-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.15); border-radius: 4px; }
+        .history-list::-webkit-scrollbar { width: 2px; }
+        .history-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.05); border-radius: 4px; }
         .history-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 8px 12px;
-            border-bottom: 1px solid rgba(255,255,255,0.04);
+            border-bottom: 0.5px solid rgba(255,255,255,0.02);
             font-size: 13px;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255,255,255,0.5);
         }
         .history-item:last-child { border-bottom: none; }
         .history-item .name { font-weight: 500; flex: 1; }
-        .history-item .comment-text { font-size: 11px; color: rgba(255,255,255,0.25); max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .history-item .comment-text { font-size: 11px; color: rgba(255,255,255,0.15); max-width: 100px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .history-item .score { font-weight: 600; color: #8fdfb0; width: 60px; text-align: right; flex-shrink: 0; }
-        .history-item .time { font-size: 11px; color: rgba(255,255,255,0.25); width: 65px; text-align: right; flex-shrink: 0; }
-        .history-item .date { font-size: 11px; color: rgba(255,255,255,0.3); width: 80px; text-align: right; flex-shrink: 0; }
+        .history-item .time { font-size: 11px; color: rgba(255,255,255,0.15); width: 65px; text-align: right; flex-shrink: 0; }
+        .history-item .date { font-size: 11px; color: rgba(255,255,255,0.2); width: 80px; text-align: right; flex-shrink: 0; }
         .history-item.delete .name { color: #f8a0a0; }
         .history-item.delete .score { color: #f8a0a0; }
         .history-empty {
             text-align: center;
-            color: rgba(255,255,255,0.2);
+            color: rgba(255,255,255,0.1);
             padding: 20px;
             font-style: italic;
             font-size: 13px;
@@ -466,13 +466,11 @@
             gap: 12px;
             padding-top: 16px;
             margin-top: 16px;
-            border-top: 1px solid rgba(255,255,255,0.04);
-            color: rgba(255,255,255,0.3);
+            border-top: 0.5px solid rgba(255,255,255,0.03);
+            color: rgba(255,255,255,0.15);
             font-size: 12px;
         }
-        .save-status {
-            color: #8fdfb0;
-        }
+        .save-status { color: rgba(255,255,255,0.3); }
         
         /* ===== МОДАЛКИ ===== */
         .modal-overlay {
@@ -482,8 +480,8 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.7);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
             display: none;
             justify-content: center;
             align-items: center;
@@ -491,19 +489,19 @@
         }
         .modal-overlay.active { display: flex; }
         .modal-box {
-            background: rgba(30,30,40,0.8);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(60px);
+            -webkit-backdrop-filter: blur(60px);
             padding: 36px 32px;
             border-radius: 24px;
             max-width: 420px;
             width: 90%;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 0.5px solid rgba(255,255,255,0.06);
             box-shadow: 0 40px 100px rgba(0,0,0,0.5);
         }
         .modal-box h2 { margin-bottom: 8px; color: #fff; font-weight: 700; }
-        .modal-box p { color: rgba(255,255,255,0.5); margin-bottom: 16px; font-size: 15px; }
+        .modal-box p { color: rgba(255,255,255,0.3); margin-bottom: 16px; font-size: 15px; }
         .modal-box .question { font-size: 28px; font-weight: 700; color: #ffd700; margin: 16px 0; }
         .modal-box input {
             width: 100%;
@@ -511,15 +509,15 @@
             border-radius: 14px;
             font-size: 18px;
             text-align: center;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.03);
+            border: 0.5px solid rgba(255,255,255,0.06);
             color: #fff;
             outline: none;
             margin-bottom: 16px;
         }
         .modal-box input:focus {
-            border-color: rgba(102, 126, 234, 0.4);
-            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.08);
+            border-color: rgba(255,255,255,0.1);
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.02);
         }
         .modal-box .btn-row { display: flex; gap: 10px; }
         .modal-box .btn-row .btn { flex: 1; }
@@ -536,9 +534,9 @@
         }
         .podium-item { text-align: center; min-width: 80px; }
         .podium-item .medal { font-size: 40px; display: block; }
-        .podium-item .place { font-weight: 600; font-size: 13px; color: rgba(255,255,255,0.3); margin-top: 4px; }
+        .podium-item .place { font-weight: 600; font-size: 13px; color: rgba(255,255,255,0.2); margin-top: 4px; }
         .podium-item .podium-name { font-weight: 700; font-size: 16px; color: #fff; margin-top: 2px; }
-        .podium-item .podium-score { font-size: 13px; color: rgba(255,255,255,0.4); }
+        .podium-item .podium-score { font-size: 13px; color: rgba(255,255,255,0.3); }
         .podium-step {
             width: 100px;
             border-radius: 12px 12px 0 0;
@@ -572,11 +570,66 @@
             100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
         }
         
+        /* ===== TOAST ===== */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
+            max-width: 90%;
+        }
+        .toast {
+            background: rgba(255,255,255,0.04);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            color: rgba(255,255,255,0.8);
+            padding: 12px 24px;
+            border-radius: 16px;
+            font-weight: 500;
+            font-size: 14px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: toastIn 0.4s ease, toastOut 0.4s ease 3s forwards;
+            pointer-events: auto;
+            border: 0.5px solid rgba(255,255,255,0.06);
+            text-align: center;
+        }
+        .toast.warning { border-color: rgba(255,193,7,0.15); }
+        .toast.error { border-color: rgba(220,53,69,0.15); }
+        .toast.info { border-color: rgba(23,162,184,0.15); }
+        @keyframes toastIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes toastOut {
+            from { opacity: 1; transform: translateY(0); }
+            to { opacity: 0; transform: translateY(-20px); }
+        }
+        
+        .offline-warning {
+            padding: 12px 20px;
+            margin-bottom: 20px;
+            border-radius: 14px;
+            font-size: 13px;
+            text-align: center;
+            color: #f0d080;
+            background: rgba(255,193,7,0.04);
+            border: 0.5px solid rgba(255,193,7,0.06);
+            display: none;
+        }
+        .offline-warning.show { display: block; }
+        
         /* ===== АДАПТИВ ===== */
         @media (max-width: 700px) {
             .container { padding: 0 4px; }
             .header h1 { font-size: 22px; }
             .header .sub { font-size: 12px; }
+            .header { padding: 16px 20px; }
             .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
             .stat-card .num { font-size: 24px; }
             .input-row { flex-direction: column; }
@@ -591,6 +644,8 @@
             .podium-step { width: 70px; }
             .podium-item { min-width: 60px; }
             .modal-box { padding: 24px 20px; }
+            .section-glass { padding: 16px; }
+            .token-input { padding: 20px; }
         }
         @media (max-width: 450px) {
             .stats-grid { grid-template-columns: 1fr 1fr; }
@@ -603,7 +658,7 @@
 
 <div class="container">
     <!-- ХЕДЕР -->
-    <div class="header glass" style="padding: 20px 24px; margin-bottom: 24px;">
+    <div class="header glass">
         <div>
             <h1>🎭 Фестиваль</h1>
             <span class="sub">Подсчёт голосов жюри</span>
@@ -611,37 +666,34 @@
         <button class="theme-toggle" id="themeToggle">🌙 Тёмная тема</button>
     </div>
 
-    <!-- ОФЛАЙН ПРЕДУПРЕЖДЕНИЕ -->
-    <div class="glass" style="padding: 12px 20px; margin-bottom: 20px; border-color: rgba(255,193,7,0.2); display: none; background: rgba(255,193,7,0.05);" id="offlineWarning">
-        ⚠️ Нет подключения к интернету. Данные сохраняются локально. <strong style="color:#f0d080;">Не закрывайте вкладку!</strong> 
-        Когда интернет появится — нажмите <span style="color:#f0d080; font-weight:700;">«Синхронизировать»</span> внизу.
-    </div>
+    <!-- ОФЛАЙН -->
+    <div class="offline-warning" id="offlineWarning">⚠️ Нет интернета. Данные сохраняются локально. При появлении интернета нажмите «Синхронизировать».</div>
 
     <!-- TOAST -->
-    <div class="toast-container" id="toastContainer" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;max-width:90%;"></div>
+    <div class="toast-container" id="toastContainer"></div>
 
     <!-- СТАТУС -->
-    <div id="statusBar" class="status-bar glass" style="margin-bottom: 20px;">⏳ Подключение к GitHub...</div>
+    <div id="statusBar" class="status-bar glass">⏳ Подключение к GitHub...</div>
 
     <!-- ТОКЕН -->
     <div class="token-input glass" id="tokenBlock">
         <label>🔑 Введите GitHub токен</label>
         <input type="password" id="tokenInput" placeholder="Вставьте токен (ghp_...)" autocomplete="off">
         <div class="hint">Токен нужен только для сохранения данных в GitHub.</div>
-        <button class="btn" id="tokenBtn" style="margin-top:12px; width:100%;">✅ Подключиться</button>
+        <button class="btn btn-primary" id="tokenBtn" style="margin-top:12px; width:100%;">✅ Подключиться</button>
     </div>
 
     <!-- ОСНОВНОЙ КОНТЕНТ -->
     <div id="appContent" style="display: none;">
         <!-- СТАТИСТИКА -->
-        <div class="stats-grid" style="margin-bottom: 20px;">
-            <div class="stat-card glass-card"><div class="num" id="statParticipants">0</div><div class="label">👤 Участников</div></div>
-            <div class="stat-card glass-card"><div class="num" id="statVotes">0</div><div class="label">📊 Оценок</div></div>
-            <div class="stat-card glass-card"><div class="num" id="statAvg">—</div><div class="label">🏆 Средний балл лидера</div></div>
+        <div class="stats-grid">
+            <div class="stat-card"><div class="num" id="statParticipants">0</div><div class="label">👤 Участников</div></div>
+            <div class="stat-card"><div class="num" id="statVotes">0</div><div class="label">📊 Оценок</div></div>
+            <div class="stat-card"><div class="num" id="statAvg">—</div><div class="label">🏆 Средний балл лидера</div></div>
         </div>
 
         <!-- ЛИДЕР -->
-        <div class="leader-card" id="leaderCard">
+        <div class="leader-card">
             <div class="label">👑 Текущий лидер</div>
             <div class="empty" id="leaderEmpty">Нет данных</div>
             <div id="leaderContent" style="display: none;">
@@ -651,13 +703,13 @@
         </div>
 
         <!-- ВКЛАДКИ -->
-        <div class="tabs glass" style="display:flex; gap:6px; padding:4px; border-radius:14px; margin-bottom:20px; background:rgba(255,255,255,0.03); border:1px solid rgba(255,255,255,0.05);">
-            <button class="tab-btn active" data-tab="national" style="flex:1; padding:10px 12px; border:none; border-radius:12px; font-weight:700; font-size:14px; cursor:pointer; background:transparent; color:rgba(255,255,255,0.5); transition:all 0.3s ease;">🎵 Национальный</button>
-            <button class="tab-btn" data-tab="free" style="flex:1; padding:10px 12px; border:none; border-radius:12px; font-weight:700; font-size:14px; cursor:pointer; background:transparent; color:rgba(255,255,255,0.5); transition:all 0.3s ease;">🎸 Свободный</button>
-            <button class="tab-btn" data-tab="evening" style="flex:1; padding:10px 12px; border:none; border-radius:12px; font-weight:700; font-size:14px; cursor:pointer; background:transparent; color:rgba(255,255,255,0.5); transition:all 0.3s ease;">🌙 Вечерний</button>
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="national">🎵 Национальный</button>
+            <button class="tab-btn" data-tab="free">🎸 Свободный</button>
+            <button class="tab-btn" data-tab="evening">🌙 Вечерний</button>
         </div>
 
-        <!-- ФОРМА ДОБАВЛЕНИЯ -->
+        <!-- ФОРМА -->
         <div class="section-glass">
             <div class="input-row">
                 <div class="input-group">
@@ -673,22 +725,22 @@
                 </div>
             </div>
             <div style="margin-top: 10px;">
-                <label style="font-size:12px; color:rgba(255,255,255,0.3);">💬 Комментарий (необязательно)</label>
+                <label style="font-size:12px; color:rgba(255,255,255,0.2);">💬 Комментарий (необязательно)</label>
                 <input type="text" id="commentInput" class="comment-input" placeholder="Например: Отличное выступление!">
             </div>
         </div>
 
         <!-- УДАЛЕНИЕ -->
-        <div class="section-glass" style="border-color: rgba(220,53,69,0.15);">
-            <label style="font-size:13px; color:#f08080; font-weight:500;">🗑️ Удалить участника</label>
+        <div class="section-glass delete-section">
+            <label>🗑️ Удалить участника</label>
             <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
-                <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:12px 16px; border-radius:14px; font-size:14px; background:rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.06); color:#fff; outline:none; min-width:120px;">
-                <button class="btn btn-delete btn-sm" id="deleteBtn">✕ Удалить</button>
+                <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:12px 16px; border-radius:14px; font-size:14px; background:rgba(255,255,255,0.02); border:0.5px solid rgba(255,255,255,0.04); color:#fff; outline:none; min-width:120px;">
+                <button class="btn btn-danger btn-sm" id="deleteBtn">✕ Удалить</button>
             </div>
         </div>
 
         <!-- ТАБЛИЦА -->
-        <div class="table-wrap glass" style="padding:0; overflow:hidden; margin-bottom:20px;">
+        <div class="table-wrap">
             <table>
                 <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>Все оценки</th><th>Комментарии</th></tr></thead>
                 <tbody id="tableBody"><tr><td colspan="5" class="empty-message">Нет данных</td></tr></tbody>
@@ -697,7 +749,7 @@
 
         <!-- ИСТОРИЯ -->
         <div class="section-glass">
-            <div class="section-title">📋 История голосований</div>
+            <div style="font-size:13px; text-transform:uppercase; letter-spacing:1px; color:rgba(255,255,255,0.15); margin-bottom:12px; font-weight:600;">📋 История голосований</div>
             <div class="history-list" id="historyList">
                 <div class="history-empty">История пуста</div>
             </div>
@@ -715,13 +767,13 @@
             <span id="winnerDisplay">👑 Победитель: не определен</span>
             <span class="save-status" id="statusDisplay">☁️ Готов</span>
         </div>
-        <div style="text-align:center; margin-top:12px; font-size:11px; color:rgba(255,255,255,0.15);">
+        <div style="text-align:center; margin-top:12px; font-size:11px; color:rgba(255,255,255,0.06);">
             🔄 Автосинхронизация каждые 10 секунд · 💬 Комментарии
         </div>
     </div>
 </div>
 
-<!-- МОДАЛКА ОЧИСТКИ -->
+<!-- МОДАЛКИ -->
 <div class="modal-overlay" id="clearModal">
     <div class="modal-box">
         <h2>⚠️ Очистка данных</h2>
@@ -737,7 +789,6 @@
     </div>
 </div>
 
-<!-- МОДАЛКА ПОДИУМА -->
 <div class="modal-overlay" id="podiumModal">
     <div class="modal-box">
         <h2>🏆 Результаты!</h2>
@@ -754,28 +805,11 @@
         var container = document.getElementById('toastContainer');
         var toast = document.createElement('div');
         toast.className = 'toast';
-        toast.style.cssText = 'background:rgba(255,255,255,0.08); backdrop-filter:blur(20px); -webkit-backdrop-filter:blur(20px); color:#fff; padding:12px 24px; border-radius:16px; font-weight:500; font-size:14px; box-shadow:0 20px 60px rgba(0,0,0,0.3); animation:toastIn 0.4s ease, toastOut 0.4s ease 3s forwards; pointer-events:auto; border:1px solid rgba(255,255,255,0.06); text-align:center;';
-        if (type === 'warning') toast.style.borderColor = 'rgba(255,193,7,0.3)';
-        if (type === 'error') toast.style.borderColor = 'rgba(220,53,69,0.3)';
-        if (type === 'info') toast.style.borderColor = 'rgba(23,162,184,0.3)';
+        if (type) toast.classList.add(type);
         toast.textContent = message;
         container.appendChild(toast);
         setTimeout(function() { if (toast.parentNode) toast.remove(); }, 4000);
     }
-
-    // ============================================================
-    // ТЁМНАЯ ТЕМА (фикс для стилей)
-    // ============================================================
-    var themeToggle = document.getElementById('themeToggle');
-    var isDark = true; // всегда тёмная
-    themeToggle.textContent = '☀️ Светлая тема';
-    themeToggle.addEventListener('click', function() {
-        // Просто переключатель для удовольствия — меняем оттенки
-        document.body.style.background = isDark ? 'linear-gradient(145deg, #f5f5f7 0%, #e8e8ed 50%, #d4d4dc 100%)' : 'linear-gradient(145deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)';
-        document.body.style.color = isDark ? '#1a1a2e' : '#fff';
-        isDark = !isDark;
-        themeToggle.textContent = isDark ? '☀️ Светлая тема' : '🌙 Тёмная тема';
-    });
 
     // ============================================================
     // ОСНОВНОЙ КОД
@@ -845,18 +879,13 @@
         if (!btn) return;
         var tab = btn.dataset.tab;
         if (tab === currentTab) return;
-        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); b.style.background = 'transparent'; b.style.color = 'rgba(255,255,255,0.5)'; });
+        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
         btn.classList.add('active');
-        btn.style.background = 'rgba(102,126,234,0.2)';
-        btn.style.color = '#fff';
         currentTab = tab;
         render();
         renderHistory();
         renderLeader();
     });
-    // Активируем первую вкладку
-    document.querySelector('.tab-btn.active').style.background = 'rgba(102,126,234,0.2)';
-    document.querySelector('.tab-btn.active').style.color = '#fff';
 
     // ===== УДАЛЕНИЕ =====
     deleteBtn.addEventListener('click', function() {
@@ -1017,15 +1046,7 @@
         if (leaders.length > 0) {
             leaderEmpty.style.display = 'none';
             leaderContent.style.display = 'block';
-            
             var namesText = leaders.join(', ');
-            if (namesText.length > 30) {
-                leaderNames.className = 'names';
-                leaderNames.style.fontSize = '22px';
-            } else {
-                leaderNames.className = 'names';
-                leaderNames.style.fontSize = '28px';
-            }
             leaderNames.textContent = namesText;
             leaderScore.textContent = 'Средний балл: ' + maxAvg.toFixed(2);
         } else {
@@ -1099,7 +1120,6 @@
     function showPodium() {
         var votes = allData[currentTab]?.votes || [];
         var participants = getUniqueParticipants(votes);
-        
         if (participants.length === 0) {
             showToast('Нет данных для отображения', 'warning');
             return;
@@ -1157,7 +1177,7 @@
         }
 
         if (topGroups.length === 0) {
-            podiumContainer.innerHTML = '<p style="color: rgba(255,255,255,0.3); padding: 20px;">Нет данных для отображения</p>';
+            podiumContainer.innerHTML = '<p style="color: rgba(255,255,255,0.15); padding: 20px;">Нет данных для отображения</p>';
         } else {
             podiumContainer.innerHTML = html;
         }
@@ -1167,7 +1187,7 @@
     // ===== ОСТАЛЬНОЙ КОД =====
     function setStatus(text, color) {
         statusDisplay.textContent = text;
-        statusDisplay.style.color = color || '#8fdfb0';
+        statusDisplay.style.color = color || 'rgba(255,255,255,0.3)';
     }
 
     function setStatusBar(status, message) {
@@ -1238,7 +1258,7 @@
             }
         } catch(e) { 
             setStatusBar('online', '☁️ Данные сохранены локально'); 
-            setStatus('💾 Сохранено локально', 'rgba(255,255,255,0.5)');
+            setStatus('💾 Сохранено локально', 'rgba(255,255,255,0.3)');
             showToast('⚠️ Не удалось сохранить в GitHub, но данные сохранены локально', 'warning');
             setTimeout(function() {
                 if (githubToken) {
@@ -1281,7 +1301,7 @@
             }
         } catch(e) { 
             setStatusBar('online', '☁️ Данные загружены из кэша');
-            setStatus('📂 Из кэша', 'rgba(255,255,255,0.5)');
+            setStatus('📂 Из кэша', 'rgba(255,255,255,0.3)');
         }
     }
 
@@ -1551,17 +1571,26 @@
             appContent.style.display = 'none'; 
         }
         
-        // Offline warning
         function updateOnlineStatus() {
             if (!navigator.onLine) {
-                offlineWarning.style.display = 'block';
+                offlineWarning.classList.add('show');
             } else {
-                offlineWarning.style.display = 'none';
+                offlineWarning.classList.remove('show');
             }
         }
         window.addEventListener('online', updateOnlineStatus);
         window.addEventListener('offline', updateOnlineStatus);
         updateOnlineStatus();
+        
+        // Переключатель темы (чисто визуально, оставляем тёмную)
+        var themeToggle = document.getElementById('themeToggle');
+        themeToggle.addEventListener('click', function() {
+            // Просто для кайфа — меняем оттенки фона
+            var body = document.body;
+            var isDark = body.style.background === 'rgb(10, 10, 10)' || body.style.background === '';
+            body.style.background = isDark ? '#1a1a1a' : '#0a0a0a';
+            themeToggle.textContent = isDark ? '🌙 Тёмная тема' : '🌙 Тёмная тема';
+        });
     }
 
     // Обработчики
@@ -1586,8 +1615,7 @@
     // Запуск
     init();
     
-    console.log('✅ Apple-style программа загружена!');
-    console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
+    console.log('🍎 Apple-стиль загружен! Тёмное жидкое стекло.');
 </script>
 </body>
 </html>
