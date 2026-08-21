@@ -1,20 +1,4 @@
 {
-  "votes": [
-    {
-      "id": "1787336241244_7mfyt3",
-      "name": "Егор",
-      "score": 10,
-      "comment": ""
-    }
-  ],
-  "history": [
-    {
-      "type": "vote",
-      "name": "Егор",
-      "score": 10,
-      "comment": "",
-      "time": "21:17:21",
-      "date": "21.08.2026"
-    }
-  ]
+  "votes": [],
+  "history": []
 }
