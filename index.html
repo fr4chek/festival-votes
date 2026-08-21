@@ -75,7 +75,29 @@
         }
 
         /* ----- ГЛОБАЛЬНЫЙ ШРИФТ ----- */
-        html, body, .container, .btn, input, textarea, select, button, .header, .status-bar, .token-input, .section-glass, .stat-card, .leader-card, .tab-btn, table, th, td, .history-item, .modal-box, .color-option, .podium-item, .footer {
+        html,
+        body,
+        .container,
+        .btn,
+        input,
+        textarea,
+        select,
+        button,
+        .header,
+        .status-bar,
+        .token-input,
+        .section-glass,
+        .stat-card,
+        .leader-card,
+        .tab-btn,
+        table,
+        th,
+        td,
+        .history-item,
+        .modal-box,
+        .color-option,
+        .podium-item,
+        .footer {
             font-family: -apple-system, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
         }
 
@@ -89,7 +111,7 @@
             background: var(--bg-light);
             color: var(--text-light);
             transition: background 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                        color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
         }
 
@@ -122,7 +144,7 @@
             opacity: var(--overlay-opacity-light);
             z-index: 0;
             transition: background 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                        opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             pointer-events: none;
         }
 
@@ -148,7 +170,7 @@
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.04),
                 0 0 0 1px rgba(255, 255, 255, 0.04) inset,
                 0 0 40px rgba(255, 255, 255, 0.02);
@@ -164,11 +186,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(
-                ellipse at 30% 20%,
-                rgba(255, 255, 255, 0.1) 0%,
-                transparent 60%
-            );
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.1) 0%, transparent 60%);
             pointer-events: none;
             transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
@@ -180,11 +198,7 @@
             left: 0;
             right: 0;
             height: 30%;
-            background: linear-gradient(
-                to top,
-                rgba(255, 255, 255, 0.03) 0%,
-                transparent 100%
-            );
+            background: linear-gradient(to top, rgba(255, 255, 255, 0.03) 0%, transparent 100%);
             pointer-events: none;
             border-radius: 0 0 inherit inherit;
         }
@@ -192,17 +206,13 @@
         body.dark .liquid-glass {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.02);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.15),
                 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
         }
 
         body.dark .liquid-glass::before {
-            background: radial-gradient(
-                ellipse at 30% 20%,
-                rgba(255, 255, 255, 0.03) 0%,
-                transparent 60%
-            );
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
         }
 
         /* ----- КНОПКИ — ВСЕГДА БЕЛЫЕ ----- */
@@ -224,7 +234,7 @@
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.04),
                 0 0 0 1px rgba(255, 255, 255, 0.3) inset;
             color: #1c2a2a;
@@ -240,11 +250,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(
-                ellipse at 30% 20%,
-                rgba(255, 255, 255, 0.3) 0%,
-                transparent 60%
-            );
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.3) 0%, transparent 60%);
             pointer-events: none;
         }
 
@@ -257,7 +263,7 @@
             transform: scale(1.02);
             background: rgba(255, 255, 255, 0.95);
             border-color: rgba(255, 255, 255, 0.5);
-            box-shadow: 
+            box-shadow:
                 0 12px 48px rgba(0, 0, 0, 0.08),
                 0 0 0 1px rgba(255, 255, 255, 0.4) inset;
         }
@@ -265,24 +271,20 @@
         body.dark .btn {
             background: rgba(255, 255, 255, 0.85);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.1),
                 0 0 0 1px rgba(255, 255, 255, 0.2) inset;
             color: #1c2a2a;
         }
 
         body.dark .btn::before {
-            background: radial-gradient(
-                ellipse at 30% 20%,
-                rgba(255, 255, 255, 0.2) 0%,
-                transparent 60%
-            );
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.2) 0%, transparent 60%);
         }
 
         body.dark .btn:hover {
             background: rgba(255, 255, 255, 0.95);
             border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 
+            box-shadow:
                 0 12px 48px rgba(0, 0, 0, 0.15),
                 0 0 0 1px rgba(255, 255, 255, 0.3) inset;
         }
@@ -322,7 +324,7 @@
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.04),
                 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
             border-radius: 40px;
@@ -338,28 +340,20 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(
-                ellipse at 30% 20%,
-                rgba(255, 255, 255, 0.06) 0%,
-                transparent 60%
-            );
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.06) 0%, transparent 60%);
             pointer-events: none;
         }
 
         body.dark .header {
             background: rgba(255, 255, 255, 0.03);
             border: 1px solid rgba(255, 255, 255, 0.02);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.1),
                 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
         }
 
         body.dark .header::before {
-            background: radial-gradient(
-                ellipse at 30% 20%,
-                rgba(255, 255, 255, 0.02) 0%,
-                transparent 60%
-            );
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 60%);
         }
 
         .header h1 {
@@ -423,7 +417,7 @@
             cursor: pointer;
             color: var(--text-light);
             transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.04),
                 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
             position: relative;
@@ -438,11 +432,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(
-                ellipse at 30% 20%,
-                rgba(255, 255, 255, 0.08) 0%,
-                transparent 60%
-            );
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
             pointer-events: none;
         }
 
@@ -450,17 +440,13 @@
             background: rgba(255, 255, 255, 0.04);
             border-color: rgba(255, 255, 255, 0.02);
             color: var(--text-dark);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.1),
                 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
         }
 
         body.dark .theme-toggle::before {
-            background: radial-gradient(
-                ellipse at 30% 20%,
-                rgba(255, 255, 255, 0.02) 0%,
-                transparent 60%
-            );
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.02) 0%, transparent 60%);
         }
 
         .theme-toggle:hover {
@@ -493,7 +479,7 @@
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.04);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.03),
                 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
             position: relative;
@@ -508,11 +494,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(
-                ellipse at 30% 20%,
-                rgba(255, 255, 255, 0.06) 0%,
-                transparent 60%
-            );
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.06) 0%, transparent 60%);
             pointer-events: none;
         }
 
@@ -520,17 +502,13 @@
             color: var(--text-dark);
             background: rgba(255, 255, 255, 0.02);
             border-color: rgba(255, 255, 255, 0.02);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.08),
                 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
         }
 
         body.dark .status-bar::before {
-            background: radial-gradient(
-                ellipse at 30% 20%,
-                rgba(255, 255, 255, 0.015) 0%,
-                transparent 60%
-            );
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.015) 0%, transparent 60%);
         }
 
         .status-bar.online {
@@ -549,7 +527,7 @@
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.04);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.03),
                 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
             position: relative;
@@ -564,28 +542,20 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(
-                ellipse at 30% 20%,
-                rgba(255, 255, 255, 0.04) 0%,
-                transparent 60%
-            );
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.04) 0%, transparent 60%);
             pointer-events: none;
         }
 
         body.dark .token-input {
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid rgba(255, 255, 255, 0.02);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.08),
                 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
         }
 
         body.dark .token-input::before {
-            background: radial-gradient(
-                ellipse at 30% 20%,
-                rgba(255, 255, 255, 0.015) 0%,
-                transparent 60%
-            );
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.015) 0%, transparent 60%);
         }
 
         .token-input label {
@@ -647,7 +617,7 @@
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.03);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.02),
                 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
             position: relative;
@@ -661,28 +631,20 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(
-                ellipse at 30% 20%,
-                rgba(255, 255, 255, 0.03) 0%,
-                transparent 60%
-            );
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
             pointer-events: none;
         }
 
         body.dark .section-glass {
             background: rgba(255, 255, 255, 0.015);
             border: 1px solid rgba(255, 255, 255, 0.01);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.06),
                 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
         }
 
         body.dark .section-glass::before {
-            background: radial-gradient(
-                ellipse at 30% 20%,
-                rgba(255, 255, 255, 0.01) 0%,
-                transparent 60%
-            );
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.01) 0%, transparent 60%);
         }
 
         .section-title {
@@ -714,7 +676,7 @@
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.03);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.02),
                 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
             position: relative;
@@ -730,11 +692,7 @@
             left: -50%;
             width: 200%;
             height: 200%;
-            background: radial-gradient(
-                ellipse at 30% 20%,
-                rgba(255, 255, 255, 0.03) 0%,
-                transparent 60%
-            );
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.03) 0%, transparent 60%);
             pointer-events: none;
         }
 
@@ -752,17 +710,13 @@
         body.dark .stat-card {
             background: rgba(255, 255, 255, 0.015);
             border-color: rgba(255, 255, 255, 0.01);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.04),
                 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
         }
 
         body.dark .stat-card::before {
-            background: radial-gradient(
-                ellipse at 30% 20%,
-                rgba(255, 255, 255, 0.01) 0%,
-                transparent 60%
-            );
+            background: radial-gradient(ellipse at 30% 20%, rgba(255, 255, 255, 0.01) 0%, transparent 60%);
         }
 
         .stat-card .num {
@@ -995,7 +949,7 @@
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.04),
                 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
             color: #1c2a2a;
@@ -1004,7 +958,7 @@
         body.dark .tab-btn.active {
             background: rgba(255, 255, 255, 0.85);
             border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 
+            box-shadow:
                 0 8px 32px rgba(0, 0, 0, 0.08),
                 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
             color: #1c2a2a;
@@ -1111,8 +1065,12 @@
             border-bottom: 2px solid rgba(255, 215, 0, 0.15);
         }
 
-        .winner-row td:first-child { border-radius: 12px 0 0 12px; }
-        .winner-row td:last-child { border-radius: 0 12px 12px 0; }
+        .winner-row td:first-child {
+            border-radius: 12px 0 0 12px;
+        }
+        .winner-row td:last-child {
+            border-radius: 0 12px 12px 0;
+        }
 
         .total-cell {
             font-weight: 700;
@@ -1149,14 +1107,52 @@
             color: var(--text-dark);
         }
 
-        /* ----- история ----- */
+        /* ----- ИСТОРИЯ — с горизонтальной прокруткой ----- */
+        .history-wrap {
+            overflow-x: auto;
+            overflow-y: visible;
+            -webkit-overflow-scrolling: touch;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 4px 0;
+        }
+
+        .history-wrap::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .history-wrap::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+            border-radius: 4px;
+        }
+
+        .history-wrap::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        body.dark .history-wrap::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.04);
+        }
+
+        body.dark .history-wrap {
+            border-color: rgba(255, 255, 255, 0.01);
+            background: rgba(255, 255, 255, 0.01);
+        }
+
         .history-list {
+            display: flex;
+            flex-direction: column;
+            min-width: 500px;
             max-height: 200px;
             overflow-y: auto;
             padding-right: 4px;
         }
 
-        .history-list::-webkit-scrollbar { width: 4px; }
+        .history-list::-webkit-scrollbar {
+            width: 4px;
+        }
         .history-list::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.1);
             border-radius: 4px;
@@ -1175,6 +1171,8 @@
             font-size: 14px;
             color: var(--text-light);
             font-family: 'SF Pro Text', -apple-system, sans-serif;
+            flex-shrink: 0;
+            gap: 16px;
         }
 
         body.dark .history-item {
@@ -1182,18 +1180,23 @@
             border-bottom-color: rgba(255, 255, 255, 0.015);
         }
 
-        .history-item:last-child { border-bottom: none; }
+        .history-item:last-child {
+            border-bottom: none;
+        }
 
-        .history-item .name { 
-            font-weight: 500; 
-            flex: 1;
+        .history-item .name {
+            font-weight: 500;
+            flex: 0 0 120px;
             font-family: 'SF Pro Display', -apple-system, sans-serif;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
 
         .history-item .comment-text {
             font-size: 12px;
             color: var(--text-light);
-            max-width: 100px;
+            flex: 0 0 120px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -1208,9 +1211,8 @@
         .history-item .score {
             font-weight: 600;
             color: #34c759;
-            width: 60px;
+            flex: 0 0 60px;
             text-align: right;
-            flex-shrink: 0;
             font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
@@ -1221,9 +1223,8 @@
         .history-item .time {
             font-size: 12px;
             color: var(--text-light);
-            width: 65px;
+            flex: 0 0 65px;
             text-align: right;
-            flex-shrink: 0;
             font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
@@ -1234,9 +1235,8 @@
         .history-item .date {
             font-size: 12px;
             color: var(--text-light);
-            width: 80px;
+            flex: 0 0 80px;
             text-align: right;
-            flex-shrink: 0;
             font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
@@ -1244,8 +1244,12 @@
             color: var(--text-dark);
         }
 
-        .history-item.delete .name { color: #ff3b30; }
-        .history-item.delete .score { color: #ff3b30; }
+        .history-item.delete .name {
+            color: #ff3b30;
+        }
+        .history-item.delete .score {
+            color: #ff3b30;
+        }
 
         .history-empty {
             text-align: center;
@@ -1293,7 +1297,7 @@
             color: var(--text-dark);
         }
 
-        .save-status { 
+        .save-status {
             color: var(--accent-color, #0abab5);
             font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
@@ -1326,7 +1330,9 @@
             padding: 20px;
         }
 
-        .modal-overlay.active { display: flex; }
+        .modal-overlay.active {
+            display: flex;
+        }
 
         .modal-box {
             background: rgba(255, 255, 255, 0.2);
@@ -1357,7 +1363,9 @@
             font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
-        body.dark .modal-box h2 { color: var(--text-dark); }
+        body.dark .modal-box h2 {
+            color: var(--text-dark);
+        }
 
         .modal-box p {
             color: var(--text-light);
@@ -1366,7 +1374,9 @@
             font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
-        body.dark .modal-box p { color: var(--text-dark); }
+        body.dark .modal-box p {
+            color: var(--text-dark);
+        }
 
         .modal-box .question {
             font-size: 30px;
@@ -1376,7 +1386,9 @@
             font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
-        body.dark .modal-box .question { color: #FFD700; }
+        body.dark .modal-box .question {
+            color: #FFD700;
+        }
 
         .modal-box input {
             width: 100%;
@@ -1405,8 +1417,13 @@
             box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.06);
         }
 
-        .modal-box .btn-row { display: flex; gap: 12px; }
-        .modal-box .btn-row .btn { flex: 1; }
+        .modal-box .btn-row {
+            display: flex;
+            gap: 12px;
+        }
+        .modal-box .btn-row .btn {
+            flex: 1;
+        }
 
         .modal-box .error-msg {
             color: #ff3b30;
@@ -1415,7 +1432,9 @@
             display: none;
             font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
-        .modal-box .error-msg.show { display: block; }
+        .modal-box .error-msg.show {
+            display: block;
+        }
 
         /* ===== ПАЛИТРА ЦВЕТОВ ===== */
         .palette-section {
@@ -1527,13 +1546,16 @@
             flex-wrap: wrap;
         }
 
-        .podium-item { 
-            text-align: center; 
+        .podium-item {
+            text-align: center;
             min-width: 80px;
             font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
-        .podium-item .medal { font-size: 44px; display: block; }
+        .podium-item .medal {
+            font-size: 44px;
+            display: block;
+        }
 
         .podium-item .place {
             font-weight: 600;
@@ -1543,7 +1565,9 @@
             font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
-        body.dark .podium-item .place { color: var(--text-dark); }
+        body.dark .podium-item .place {
+            color: var(--text-dark);
+        }
 
         .podium-item .podium-name {
             font-weight: 700;
@@ -1553,7 +1577,9 @@
             font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
-        body.dark .podium-item .podium-name { color: #FFD700; }
+        body.dark .podium-item .podium-name {
+            color: #FFD700;
+        }
 
         .podium-item .podium-score {
             font-size: 14px;
@@ -1561,7 +1587,9 @@
             font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
-        body.dark .podium-item .podium-score { color: var(--text-dark); }
+        body.dark .podium-item .podium-score {
+            color: var(--text-dark);
+        }
 
         .podium-step {
             width: 100px;
@@ -1602,36 +1630,101 @@
         }
 
         @keyframes confettiFall {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(720deg);
+                opacity: 0;
+            }
         }
 
         /* ----- адаптив ----- */
         @media (max-width: 700px) {
-            .container { padding: 0 4px; }
-            .header h1 { font-size: 24px; }
-            .header .sub { font-size: 13px; }
-            .stats-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-            .stat-card .num { font-size: 28px; }
-            .input-row { flex-direction: column; }
-            .input-group { flex: 1 1 auto; width: 100%; }
-            .btn { width: 100%; }
-            .actions .btn { min-width: 80px; }
-            .leader-card .names { font-size: 24px; }
-            .history-item .date { width: 60px; font-size: 11px; }
-            .history-item .time { width: 55px; font-size: 11px; }
-            .history-item .score { width: 50px; }
-            .history-item .comment-text { max-width: 50px; }
-            .podium-step { width: 70px; }
-            .podium-item { min-width: 60px; }
-            .modal-box { padding: 28px 20px; max-width: 100%; }
-            .header { padding: 16px 20px; }
-            .section-glass { padding: 18px 16px; }
-            .token-input { padding: 20px 16px; }
-            .tabs .tab-btn { font-size: 12px; padding: 8px 10px; }
-            .header-right { width: 100%; justify-content: center; }
-            .palette-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
-            
+            .container {
+                padding: 0 4px;
+            }
+            .header h1 {
+                font-size: 24px;
+            }
+            .header .sub {
+                font-size: 13px;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+            .stat-card .num {
+                font-size: 28px;
+            }
+            .input-row {
+                flex-direction: column;
+            }
+            .input-group {
+                flex: 1 1 auto;
+                width: 100%;
+            }
+            .btn {
+                width: 100%;
+            }
+            .actions .btn {
+                min-width: 80px;
+            }
+            .leader-card .names {
+                font-size: 24px;
+            }
+            .history-item .date {
+                flex: 0 0 60px;
+                font-size: 11px;
+            }
+            .history-item .time {
+                flex: 0 0 55px;
+                font-size: 11px;
+            }
+            .history-item .score {
+                flex: 0 0 50px;
+            }
+            .history-item .comment-text {
+                flex: 0 0 60px;
+            }
+            .history-item .name {
+                flex: 0 0 80px;
+            }
+            .history-list {
+                min-width: 400px;
+            }
+            .podium-step {
+                width: 70px;
+            }
+            .podium-item {
+                min-width: 60px;
+            }
+            .modal-box {
+                padding: 28px 20px;
+                max-width: 100%;
+            }
+            .header {
+                padding: 16px 20px;
+            }
+            .section-glass {
+                padding: 18px 16px;
+            }
+            .token-input {
+                padding: 20px 16px;
+            }
+            .tabs .tab-btn {
+                font-size: 12px;
+                padding: 8px 10px;
+            }
+            .header-right {
+                width: 100%;
+                justify-content: center;
+            }
+            .palette-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            }
+
             .table-wrap {
                 margin: 0 -4px;
                 border-radius: 16px;
@@ -1640,1204 +1733,1280 @@
                 min-width: 500px;
                 font-size: 12px;
             }
-            th, td {
+            th,
+            td {
                 padding: 10px 8px;
             }
         }
 
         @media (max-width: 450px) {
-            .stats-grid { grid-template-columns: 1fr 1fr; }
-            .header { flex-direction: column; align-items: stretch; text-align: center; }
-            .theme-toggle { align-self: center; }
-            .header-right { flex-direction: column; align-items: stretch; }
-            .palette-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
-            .color-option { padding: 6px 10px; }
-            .color-name { font-size: 11px; }
+            .stats-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .header {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+            }
+            .theme-toggle {
+                align-self: center;
+            }
+            .header-right {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .palette-grid {
+                grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+            }
+            .color-option {
+                padding: 6px 10px;
+            }
+            .color-name {
+                font-size: 11px;
+            }
             table {
                 min-width: 400px;
                 font-size: 11px;
             }
-            th, td {
+            th,
+            td {
                 padding: 8px 6px;
+            }
+            .history-list {
+                min-width: 350px;
+            }
+            .history-item .name {
+                flex: 0 0 70px;
+                font-size: 12px;
+            }
+            .history-item .comment-text {
+                flex: 0 0 50px;
+                font-size: 10px;
+            }
+            .history-item .score {
+                flex: 0 0 45px;
+                font-size: 12px;
+            }
+            .history-item .time {
+                flex: 0 0 50px;
+                font-size: 10px;
+            }
+            .history-item .date {
+                flex: 0 0 55px;
+                font-size: 10px;
             }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <!-- ХЕДЕР -->
-    <div class="header">
-        <div class="header-left">
-            <div>
-                <h1>🎭 Фестиваль</h1>
-                <span class="sub">Подсчёт голосов жюри</span>
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="color-picker-wrapper">
-                <span class="color-picker-label">Сменить цвета</span>
-                <button class="btn btn-icon" id="colorPickerBtn" title="Выбрать цвета">
-                    <span>🎨</span>
-                    <span class="color-preview" id="accentPreview" style="background: #0abab5;"></span>
-                </button>
-            </div>
-            <button class="theme-toggle" id="themeToggle">🌙 Тёмная тема</button>
-        </div>
-    </div>
-
-    <!-- ОФЛАЙН ПРЕДУПРЕЖДЕНИЕ -->
-    <div class="glass" style="padding: 14px 24px; margin-bottom: 20px; border-color: rgba(255,149,0,0.2); display: none; background: rgba(255,149,0,0.04);" id="offlineWarning">
-        ⚠️ Нет подключения к интернету. Данные сохраняются локально. <strong style="color:#f08a00;">Не закрывайте вкладку!</strong> 
-        Когда интернет появится — нажмите <span style="color:#f08a00; font-weight:700;">«Синхронизировать»</span> внизу.
-    </div>
-
-    <!-- TOAST -->
-    <div id="toastContainer" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;max-width:90%;"></div>
-
-    <!-- СТАТУС -->
-    <div id="statusBar" class="status-bar" style="margin-bottom: 20px;">⏳ Подключение к GitHub...</div>
-
-    <!-- ТОКЕН -->
-    <div class="token-input" id="tokenBlock">
-        <label>🔑 Введите GitHub токен</label>
-        <input type="password" id="tokenInput" placeholder="Вставьте токен (ghp_...)" autocomplete="off">
-        <div class="hint">Токен нужен только для сохранения данных в GitHub.</div>
-        <button class="btn" id="tokenBtn" style="margin-top:14px; width:100%;">✅ Подключиться</button>
-    </div>
-
-    <!-- ОСНОВНОЙ КОНТЕНТ -->
-    <div id="appContent" style="display: none;">
-        <!-- СТАТИСТИКА -->
-        <div class="stats-grid" style="margin-bottom: 20px;">
-            <div class="stat-card"><div class="num" id="statParticipants">0</div><div class="label">👤 Участников</div></div>
-            <div class="stat-card"><div class="num" id="statVotes">0</div><div class="label">📊 Оценок</div></div>
-            <div class="stat-card"><div class="num" id="statAvg">—</div><div class="label">🏆 Средний балл лидера</div></div>
-        </div>
-
-        <!-- ЛИДЕР -->
-        <div class="leader-card" id="leaderCard">
-            <div class="label">👑 Текущий лидер</div>
-            <div class="empty" id="leaderEmpty">Нет данных</div>
-            <div id="leaderContent" style="display: none;">
-                <div class="names" id="leaderNames">—</div>
-                <div class="score" id="leaderScore">Средний балл: —</div>
-            </div>
-        </div>
-
-        <!-- ВКЛАДКИ -->
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="national">🎵 Национальный</button>
-            <button class="tab-btn" data-tab="free">🎸 Свободный</button>
-            <button class="tab-btn" data-tab="evening">🌙 Вечерний</button>
-        </div>
-
-        <!-- ФОРМА ДОБАВЛЕНИЯ -->
-        <div class="section-glass">
-            <div class="input-row">
-                <div class="input-group">
-                    <label>👤 Имя участника</label>
-                    <input type="text" id="nameInput" placeholder="Например: Анна">
-                </div>
-                <div class="input-group" style="flex:0 0 130px;">
-                    <label>⭐ Оценка (0–10)</label>
-                    <input type="number" id="scoreInput" placeholder="10" min="0" max="10" step="0.1">
-                </div>
-                <div class="input-group" style="flex:0 0 auto;">
-                    <button class="btn" id="addBtn" style="margin-top: auto;">➕ Добавить</button>
+    <div class="container">
+        <!-- ХЕДЕР -->
+        <div class="header">
+            <div class="header-left">
+                <div>
+                    <h1>🎭 Фестиваль</h1>
+                    <span class="sub">Подсчёт голосов жюри</span>
                 </div>
             </div>
-            <div style="margin-top: 10px;">
-                <label style="font-size:13px; color:var(--text-light);">💬 Комментарий (необязательно)</label>
-                <input type="text" id="commentInput" class="comment-input" placeholder="Например: Отличное выступление!">
+            <div class="header-right">
+                <div class="color-picker-wrapper">
+                    <span class="color-picker-label">Сменить цвета</span>
+                    <button class="btn btn-icon" id="colorPickerBtn" title="Выбрать цвета">
+                        <span>🎨</span>
+                        <span class="color-preview" id="accentPreview" style="background: #0abab5;"></span>
+                    </button>
+                </div>
+                <button class="theme-toggle" id="themeToggle">🌙 Тёмная тема</button>
             </div>
         </div>
 
-        <!-- УДАЛЕНИЕ -->
-        <div class="section-glass" style="border-color: rgba(255,59,48,0.06);">
-            <label style="font-size:14px; color:#ff3b30; font-weight:500;">🗑️ Удалить участника</label>
-            <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
-                <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.06); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.03); color:#1c2a2a; outline:none; min-width:120px; font-family:'SF Pro Text', sans-serif;">
-                <button class="btn btn-sm btn-delete" id="deleteBtn" style="min-width:auto;">✕ Удалить</button>
+        <!-- ОФЛАЙН ПРЕДУПРЕЖДЕНИЕ -->
+        <div class="glass" style="padding: 14px 24px; margin-bottom: 20px; border-color: rgba(255,149,0,0.2); display: none; background: rgba(255,149,0,0.04);" id="offlineWarning">
+            ⚠️ Нет подключения к интернету. Данные сохраняются локально. <strong style="color:#f08a00;">Не закрывайте вкладку!</strong>
+            Когда интернет появится — нажмите <span style="color:#f08a00; font-weight:700;">«Синхронизировать»</span> внизу.
+        </div>
+
+        <!-- TOAST -->
+        <div id="toastContainer" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;max-width:90%;"></div>
+
+        <!-- СТАТУС -->
+        <div id="statusBar" class="status-bar" style="margin-bottom: 20px;">⏳ Подключение к GitHub...</div>
+
+        <!-- ТОКЕН -->
+        <div class="token-input" id="tokenBlock">
+            <label>🔑 Введите GitHub токен</label>
+            <input type="password" id="tokenInput" placeholder="Вставьте токен (ghp_...)" autocomplete="off">
+            <div class="hint">Токен нужен только для сохранения данных в GitHub.</div>
+            <button class="btn" id="tokenBtn" style="margin-top:14px; width:100%;">✅ Подключиться</button>
+        </div>
+
+        <!-- ОСНОВНОЙ КОНТЕНТ -->
+        <div id="appContent" style="display: none;">
+            <!-- СТАТИСТИКА -->
+            <div class="stats-grid" style="margin-bottom: 20px;">
+                <div class="stat-card"><div class="num" id="statParticipants">0</div><div class="label">👤 Участников</div></div>
+                <div class="stat-card"><div class="num" id="statVotes">0</div><div class="label">📊 Оценок</div></div>
+                <div class="stat-card"><div class="num" id="statAvg">—</div><div class="label">🏆 Средний балл лидера</div></div>
             </div>
-        </div>
 
-        <!-- ТАБЛИЦА с горизонтальной прокруткой -->
-        <div class="table-wrap" style="margin-bottom:20px; padding:0;">
-            <table>
-                <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>Все оценки</th><th>Комментарии</th></tr></thead>
-                <tbody id="tableBody"><tr><td colspan="5" class="empty-message">Нет данных</td></tr></tbody>
-            </table>
-        </div>
-
-        <!-- ИСТОРИЯ -->
-        <div class="section-glass">
-            <div class="section-title">📋 История голосований</div>
-            <div class="history-list" id="historyList">
-                <div class="history-empty">История пуста</div>
+            <!-- ЛИДЕР -->
+            <div class="leader-card" id="leaderCard">
+                <div class="label">👑 Текущий лидер</div>
+                <div class="empty" id="leaderEmpty">Нет данных</div>
+                <div id="leaderContent" style="display: none;">
+                    <div class="names" id="leaderNames">—</div>
+                    <div class="score" id="leaderScore">Средний балл: —</div>
+                </div>
             </div>
-        </div>
 
-        <!-- ДЕЙСТВИЯ -->
-        <div class="actions">
-            <button class="btn" id="calcBtn">🏆 Победитель</button>
-            <button class="btn" id="syncBtn">🔄 Синхронизировать</button>
-            <button class="btn" id="clearBtn">🗑️ Очистить всё</button>
-        </div>
+            <!-- ВКЛАДКИ -->
+            <div class="tabs">
+                <button class="tab-btn active" data-tab="national">🎵 Национальный</button>
+                <button class="tab-btn" data-tab="free">🎸 Свободный</button>
+                <button class="tab-btn" data-tab="evening">🌙 Вечерний</button>
+            </div>
 
-        <!-- ФУТЕР -->
-        <div class="footer">
-            <span id="winnerDisplay">👑 Победитель: не определен</span>
-            <span class="save-status" id="statusDisplay">☁️ Готов</span>
-        </div>
-        <div style="text-align:center; margin-top:14px; font-size:12px; color:var(--text-light); font-family:'SF Pro Text', sans-serif;">
-            🔄 Автосинхронизация каждые 10 секунд · 💬 Комментарии
+            <!-- ФОРМА ДОБАВЛЕНИЯ -->
+            <div class="section-glass">
+                <div class="input-row">
+                    <div class="input-group">
+                        <label>👤 Имя участника</label>
+                        <input type="text" id="nameInput" placeholder="Например: Анна">
+                    </div>
+                    <div class="input-group" style="flex:0 0 130px;">
+                        <label>⭐ Оценка (0–10)</label>
+                        <input type="number" id="scoreInput" placeholder="10" min="0" max="10" step="0.1">
+                    </div>
+                    <div class="input-group" style="flex:0 0 auto;">
+                        <button class="btn" id="addBtn" style="margin-top: auto;">➕ Добавить</button>
+                    </div>
+                </div>
+                <div style="margin-top: 10px;">
+                    <label style="font-size:13px; color:var(--text-light);">💬 Комментарий (необязательно)</label>
+                    <input type="text" id="commentInput" class="comment-input" placeholder="Например: Отличное выступление!">
+                </div>
+            </div>
+
+            <!-- УДАЛЕНИЕ -->
+            <div class="section-glass" style="border-color: rgba(255,59,48,0.06);">
+                <label style="font-size:14px; color:#ff3b30; font-weight:500;">🗑️ Удалить участника</label>
+                <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
+                    <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.06); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.03); color:#1c2a2a; outline:none; min-width:120px; font-family:'SF Pro Text', sans-serif;">
+                    <button class="btn btn-sm btn-delete" id="deleteBtn" style="min-width:auto;">✕ Удалить</button>
+                </div>
+            </div>
+
+            <!-- ТАБЛИЦА с горизонтальной прокруткой -->
+            <div class="table-wrap" style="margin-bottom:20px; padding:0;">
+                <table>
+                    <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>Все оценки</th><th>Комментарии</th></tr></thead>
+                    <tbody id="tableBody"><tr><td colspan="5" class="empty-message">Нет данных</td></tr></tbody>
+                </table>
+            </div>
+
+            <!-- ИСТОРИЯ с горизонтальной прокруткой -->
+            <div class="section-glass">
+                <div class="section-title">📋 История голосований</div>
+                <div class="history-wrap">
+                    <div class="history-list" id="historyList">
+                        <div class="history-empty">История пуста</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ДЕЙСТВИЯ -->
+            <div class="actions">
+                <button class="btn" id="calcBtn">🏆 Победитель</button>
+                <button class="btn" id="syncBtn">🔄 Синхронизировать</button>
+                <button class="btn" id="clearBtn">🗑️ Очистить всё</button>
+            </div>
+
+            <!-- ФУТЕР -->
+            <div class="footer">
+                <span id="winnerDisplay">👑 Победитель: не определен</span>
+                <span class="save-status" id="statusDisplay">☁️ Готов</span>
+            </div>
+            <div style="text-align:center; margin-top:14px; font-size:12px; color:var(--text-light); font-family:'SF Pro Text', sans-serif;">
+                🔄 Автосинхронизация каждые 10 секунд · 💬 Комментарии
+            </div>
         </div>
     </div>
-</div>
 
-<!-- МОДАЛКА ВЫБОРА ЦВЕТА -->
-<div class="modal-overlay" id="colorModal">
-    <div class="modal-box">
-        <h2>🎨 Выбор цвета</h2>
-        <p>Выберите акцентный цвет для светлой и тёмной темы</p>
+    <!-- МОДАЛКА ВЫБОРА ЦВЕТА -->
+    <div class="modal-overlay" id="colorModal">
+        <div class="modal-box">
+            <h2>🎨 Выбор цвета</h2>
+            <p>Выберите акцентный цвет для светлой и тёмной темы</p>
 
-        <div class="palette-section">
-            <div class="palette-title">
-                ☀️ Светлая тема
-                <span class="current-color" id="lightPreview" style="background: #0abab5;"></span>
+            <div class="palette-section">
+                <div class="palette-title">
+                    ☀️ Светлая тема
+                    <span class="current-color" id="lightPreview" style="background: #0abab5;"></span>
+                </div>
+                <div class="palette-grid" id="lightPalette"></div>
             </div>
-            <div class="palette-grid" id="lightPalette"></div>
-        </div>
 
-        <div class="palette-section">
-            <div class="palette-title">
-                🌙 Тёмная тема
-                <span class="current-color" id="darkPreview" style="background: #0a0a12;"></span>
+            <div class="palette-section">
+                <div class="palette-title">
+                    🌙 Тёмная тема
+                    <span class="current-color" id="darkPreview" style="background: #0a0a12;"></span>
+                </div>
+                <div class="palette-grid" id="darkPalette"></div>
             </div>
-            <div class="palette-grid" id="darkPalette"></div>
-        </div>
 
-        <div class="btn-row" style="margin-top: 20px;">
-            <button class="btn" id="closeColorBtn">✅ Готово</button>
+            <div class="btn-row" style="margin-top: 20px;">
+                <button class="btn" id="closeColorBtn">✅ Готово</button>
+            </div>
         </div>
     </div>
-</div>
 
-<!-- МОДАЛКА ОЧИСТКИ -->
-<div class="modal-overlay" id="clearModal">
-    <div class="modal-box">
-        <h2>⚠️ Очистка данных</h2>
-        <p>Вы уверены, что хотите удалить ВСЕ данные в текущей номинации?</p>
-        <p>Для подтверждения решите пример:</p>
-        <div class="question">2 + 2 = ?</div>
-        <input type="number" id="captchaInput" placeholder="Введите ответ" autocomplete="off">
-        <div class="btn-row">
-            <button class="btn" id="confirmClearBtn">🗑️ Очистить</button>
-            <button class="btn" id="cancelClearBtn">Отмена</button>
+    <!-- МОДАЛКА ОЧИСТКИ -->
+    <div class="modal-overlay" id="clearModal">
+        <div class="modal-box">
+            <h2>⚠️ Очистка данных</h2>
+            <p>Вы уверены, что хотите удалить ВСЕ данные в текущей номинации?</p>
+            <p>Для подтверждения решите пример:</p>
+            <div class="question">2 + 2 = ?</div>
+            <input type="number" id="captchaInput" placeholder="Введите ответ" autocomplete="off">
+            <div class="btn-row">
+                <button class="btn" id="confirmClearBtn">🗑️ Очистить</button>
+                <button class="btn" id="cancelClearBtn">Отмена</button>
+            </div>
+            <div class="error-msg" id="captchaError">❌ Неправильный ответ! Попробуйте ещё раз.</div>
         </div>
-        <div class="error-msg" id="captchaError">❌ Неправильный ответ! Попробуйте ещё раз.</div>
     </div>
-</div>
 
-<!-- МОДАЛКА ПОДИУМА -->
-<div class="modal-overlay" id="podiumModal">
-    <div class="modal-box">
-        <h2>🏆 Результаты!</h2>
-        <div class="podium" id="podiumContainer"></div>
-        <button class="btn" id="closePodiumBtn" style="margin-top:18px; width:100%;">👏 Отлично!</button>
+    <!-- МОДАЛКА ПОДИУМА -->
+    <div class="modal-overlay" id="podiumModal">
+        <div class="modal-box">
+            <h2>🏆 Результаты!</h2>
+            <div class="podium" id="podiumContainer"></div>
+            <button class="btn" id="closePodiumBtn" style="margin-top:18px; width:100%;">👏 Отлично!</button>
+        </div>
     </div>
-</div>
 
-<script>
-    // ============================================================
-    // ПАЛИТРЫ ЦВЕТОВ
-    // ============================================================
-    const LIGHT_PALETTE = [
-        { hex: '#42826C', name: 'Тёмный изумруд' },
-        { hex: '#38705D', name: 'Изумруд' },
-        { hex: '#2F5F4E', name: 'Лесной' },
-        { hex: '#254E40', name: 'Тёмный лес' },
-        { hex: '#1C3E32', name: 'Глубокий лес' },
-        { hex: '#142F25', name: 'Очень тёмный' },
-        { hex: '#0B2019', name: 'Почти чёрный' }
-    ];
+    <script>
+        // ============================================================
+        // ПАЛИТРЫ ЦВЕТОВ
+        // ============================================================
+        const LIGHT_PALETTE = [
+            // Оригинальные цвета
+            { hex: '#42826C', name: 'Тёмный изумруд' },
+            { hex: '#38705D', name: 'Изумруд' },
+            { hex: '#2F5F4E', name: 'Лесной' },
+            { hex: '#254E40', name: 'Тёмный лес' },
+            { hex: '#1C3E32', name: 'Глубокий лес' },
+            { hex: '#142F25', name: 'Очень тёмный' },
+            { hex: '#0B2019', name: 'Почти чёрный' },
+            // Purple Skies
+            { hex: '#CAC7FF', name: 'Лавандовый' },
+            { hex: '#D7CDFE', name: 'Сиреневый' },
+            { hex: '#E4D3FC', name: 'Фиолетовый' },
+            { hex: '#F1DAFB', name: 'Розово-фиолетовый' },
+            { hex: '#FEE0F9', name: 'Нежно-розовый' }
+        ];
 
-    const DARK_PALETTE = [
-        { hex: '#708093', name: 'Светло-стальной' },
-        { hex: '#606E7F', name: 'Стальной' },
-        { hex: '#515D6C', name: 'Тёмный стальной' },
-        { hex: '#434D59', name: 'Графитовый' },
-        { hex: '#353D47', name: 'Тёмный графит' },
-        { hex: '#272E36', name: 'Очень тёмный' },
-        { hex: '#1A1F25', name: 'Глубокий тёмный' },
-        { hex: '#0E1216', name: 'Почти чёрный' },
-        { hex: '#040608', name: 'Чернильный' },
-        { hex: '#010101', name: 'Чёрный' }
-    ];
+        const DARK_PALETTE = [
+            { hex: '#708093', name: 'Светло-стальной' },
+            { hex: '#606E7F', name: 'Стальной' },
+            { hex: '#515D6C', name: 'Тёмный стальной' },
+            { hex: '#434D59', name: 'Графитовый' },
+            { hex: '#353D47', name: 'Тёмный графит' },
+            { hex: '#272E36', name: 'Очень тёмный' },
+            { hex: '#1A1F25', name: 'Глубокий тёмный' },
+            { hex: '#0E1216', name: 'Почти чёрный' },
+            { hex: '#040608', name: 'Чернильный' },
+            { hex: '#010101', name: 'Чёрный' }
+        ];
 
-    // ============================================================
-    // TOAST
-    // ============================================================
-    function showToast(message, type) {
-        var container = document.getElementById('toastContainer');
-        var toast = document.createElement('div');
-        toast.className = 'toast';
-        toast.style.cssText = 'background:rgba(255,255,255,0.4); backdrop-filter:blur(30px); -webkit-backdrop-filter:blur(30px); color:#1c2a2a; padding:14px 28px; border-radius:980px; font-weight:500; font-size:15px; box-shadow:0 20px 60px rgba(0,0,0,0.04); animation:toastIn 0.4s ease, toastOut 0.4s ease 3s forwards; pointer-events:auto; border:1px solid rgba(255,255,255,0.06); text-align:center; font-family:"SF Pro Text", sans-serif;';
-        if (document.body.classList.contains('dark')) {
-            toast.style.background = 'rgba(20,20,30,0.7)';
-            toast.style.color = '#ffffff';
-            toast.style.borderColor = 'rgba(255,255,255,0.03)';
+        // ============================================================
+        // TOAST
+        // ============================================================
+        function showToast(message, type) {
+            var container = document.getElementById('toastContainer');
+            var toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.style.cssText =
+                'background:rgba(255,255,255,0.4); backdrop-filter:blur(30px); -webkit-backdrop-filter:blur(30px); color:#1c2a2a; padding:14px 28px; border-radius:980px; font-weight:500; font-size:15px; box-shadow:0 20px 60px rgba(0,0,0,0.04); animation:toastIn 0.4s ease, toastOut 0.4s ease 3s forwards; pointer-events:auto; border:1px solid rgba(255,255,255,0.06); text-align:center; font-family:"SF Pro Text", sans-serif;';
+            if (document.body.classList.contains('dark')) {
+                toast.style.background = 'rgba(20,20,30,0.7)';
+                toast.style.color = '#ffffff';
+                toast.style.borderColor = 'rgba(255,255,255,0.03)';
+            }
+            if (type === 'warning') toast.style.borderColor = 'rgba(255,149,0,0.2)';
+            if (type === 'error') toast.style.borderColor = 'rgba(255,59,48,0.2)';
+            if (type === 'info') toast.style.borderColor = 'rgba(10,186,181,0.2)';
+            toast.textContent = message;
+            container.appendChild(toast);
+            setTimeout(function() { if (toast.parentNode) toast.remove(); }, 4000);
         }
-        if (type === 'warning') toast.style.borderColor = 'rgba(255,149,0,0.2)';
-        if (type === 'error') toast.style.borderColor = 'rgba(255,59,48,0.2)';
-        if (type === 'info') toast.style.borderColor = 'rgba(10,186,181,0.2)';
-        toast.textContent = message;
-        container.appendChild(toast);
-        setTimeout(function() { if (toast.parentNode) toast.remove(); }, 4000);
-    }
 
-    // ============================================================
-    // УПРАВЛЕНИЕ ЦВЕТАМИ
-    // ============================================================
-    let lightColor = '#0ABAB5';
-    let darkColor = '#0A0A12';
+        // ============================================================
+        // УПРАВЛЕНИЕ ЦВЕТАМИ
+        // ============================================================
+        let lightColor = '#0ABAB5';
+        let darkColor = '#0A0A12';
 
-    function setLightColor(color) {
-        lightColor = color;
-        document.documentElement.style.setProperty('--bg-light', color);
-        document.documentElement.style.setProperty('--accent-color', color);
-        if (!document.body.classList.contains('dark')) {
-            document.body.style.background = color;
-        }
-        document.getElementById('lightPreview').style.background = color;
-        document.getElementById('accentPreview').style.background = color;
-        document.querySelectorAll('#lightPalette .color-option').forEach(el => {
-            el.classList.toggle('active', el.dataset.color === color);
-        });
-        saveColors();
-    }
-
-    function setDarkColor(color) {
-        darkColor = color;
-        document.documentElement.style.setProperty('--bg-dark', color);
-        if (document.body.classList.contains('dark')) {
-            document.body.style.background = color;
+        function setLightColor(color) {
+            lightColor = color;
+            document.documentElement.style.setProperty('--bg-light', color);
             document.documentElement.style.setProperty('--accent-color', color);
+            if (!document.body.classList.contains('dark')) {
+                document.body.style.background = color;
+            }
+            document.getElementById('lightPreview').style.background = color;
+            document.getElementById('accentPreview').style.background = color;
+            document.querySelectorAll('#lightPalette .color-option').forEach(el => {
+                el.classList.toggle('active', el.dataset.color === color);
+            });
+            saveColors();
         }
-        document.getElementById('darkPreview').style.background = color;
-        document.querySelectorAll('#darkPalette .color-option').forEach(el => {
-            el.classList.toggle('active', el.dataset.color === color);
-        });
-        saveColors();
-    }
 
-    function saveColors() {
-        try {
-            localStorage.setItem('lightColor', lightColor);
-            localStorage.setItem('darkColor', darkColor);
-        } catch(e) {}
-    }
+        function setDarkColor(color) {
+            darkColor = color;
+            document.documentElement.style.setProperty('--bg-dark', color);
+            if (document.body.classList.contains('dark')) {
+                document.body.style.background = color;
+                document.documentElement.style.setProperty('--accent-color', color);
+            }
+            document.getElementById('darkPreview').style.background = color;
+            document.querySelectorAll('#darkPalette .color-option').forEach(el => {
+                el.classList.toggle('active', el.dataset.color === color);
+            });
+            saveColors();
+        }
 
-    function loadColors() {
-        try {
-            const savedLight = localStorage.getItem('lightColor');
-            const savedDark = localStorage.getItem('darkColor');
-            if (savedLight) {
-                lightColor = savedLight;
-                document.documentElement.style.setProperty('--bg-light', lightColor);
-                document.documentElement.style.setProperty('--accent-color', lightColor);
+        function saveColors() {
+            try {
+                localStorage.setItem('lightColor', lightColor);
+                localStorage.setItem('darkColor', darkColor);
+            } catch (e) {}
+        }
+
+        function loadColors() {
+            try {
+                const savedLight = localStorage.getItem('lightColor');
+                const savedDark = localStorage.getItem('darkColor');
+                if (savedLight) {
+                    lightColor = savedLight;
+                    document.documentElement.style.setProperty('--bg-light', lightColor);
+                    document.documentElement.style.setProperty('--accent-color', lightColor);
+                    document.body.style.background = lightColor;
+                    document.getElementById('lightPreview').style.background = lightColor;
+                    document.getElementById('accentPreview').style.background = lightColor;
+                }
+                if (savedDark) {
+                    darkColor = savedDark;
+                    document.documentElement.style.setProperty('--bg-dark', darkColor);
+                    document.getElementById('darkPreview').style.background = darkColor;
+                    if (document.body.classList.contains('dark')) {
+                        document.body.style.background = darkColor;
+                        document.documentElement.style.setProperty('--accent-color', darkColor);
+                    }
+                }
+            } catch (e) {}
+        }
+
+        function renderPalettes() {
+            const lightGrid = document.getElementById('lightPalette');
+            const darkGrid = document.getElementById('darkPalette');
+
+            lightGrid.innerHTML = '';
+            LIGHT_PALETTE.forEach(color => {
+                const el = document.createElement('div');
+                el.className = 'color-option' + (color.hex === lightColor ? ' active' : '');
+                el.dataset.color = color.hex;
+                el.innerHTML = `
+                        <span class="color-swatch" style="background: ${color.hex};"></span>
+                        <span class="color-name">${color.name}</span>
+                    `;
+                el.addEventListener('click', () => setLightColor(color.hex));
+                lightGrid.appendChild(el);
+            });
+
+            darkGrid.innerHTML = '';
+            DARK_PALETTE.forEach(color => {
+                const el = document.createElement('div');
+                el.className = 'color-option' + (color.hex === darkColor ? ' active' : '');
+                el.dataset.color = color.hex;
+                el.innerHTML = `
+                        <span class="color-swatch" style="background: ${color.hex};"></span>
+                        <span class="color-name">${color.name}</span>
+                    `;
+                el.addEventListener('click', () => setDarkColor(color.hex));
+                darkGrid.appendChild(el);
+            });
+        }
+
+        // ============================================================
+        // ТЁМНАЯ ТЕМА
+        // ============================================================
+        var themeToggle = document.getElementById('themeToggle');
+        var isDark = false;
+        themeToggle.textContent = '🌙 Тёмная тема';
+
+        themeToggle.addEventListener('click', function() {
+            document.body.classList.toggle('dark');
+            isDark = document.body.classList.contains('dark');
+            themeToggle.textContent = isDark ? '☀️ Светлая тема' : '🌙 Тёмная тема';
+            if (isDark) {
+                document.body.style.background = darkColor;
+                document.documentElement.style.setProperty('--accent-color', darkColor);
+            } else {
                 document.body.style.background = lightColor;
-                document.getElementById('lightPreview').style.background = lightColor;
-                document.getElementById('accentPreview').style.background = lightColor;
+                document.documentElement.style.setProperty('--accent-color', lightColor);
             }
-            if (savedDark) {
-                darkColor = savedDark;
-                document.documentElement.style.setProperty('--bg-dark', darkColor);
-                document.getElementById('darkPreview').style.background = darkColor;
-                if (document.body.classList.contains('dark')) {
-                    document.body.style.background = darkColor;
-                    document.documentElement.style.setProperty('--accent-color', darkColor);
-                }
-            }
-        } catch(e) {}
-    }
-
-    function renderPalettes() {
-        const lightGrid = document.getElementById('lightPalette');
-        const darkGrid = document.getElementById('darkPalette');
-
-        lightGrid.innerHTML = '';
-        LIGHT_PALETTE.forEach(color => {
-            const el = document.createElement('div');
-            el.className = 'color-option' + (color.hex === lightColor ? ' active' : '');
-            el.dataset.color = color.hex;
-            el.innerHTML = `
-                <span class="color-swatch" style="background: ${color.hex};"></span>
-                <span class="color-name">${color.name}</span>
-            `;
-            el.addEventListener('click', () => setLightColor(color.hex));
-            lightGrid.appendChild(el);
         });
 
-        darkGrid.innerHTML = '';
-        DARK_PALETTE.forEach(color => {
-            const el = document.createElement('div');
-            el.className = 'color-option' + (color.hex === darkColor ? ' active' : '');
-            el.dataset.color = color.hex;
-            el.innerHTML = `
-                <span class="color-swatch" style="background: ${color.hex};"></span>
-                <span class="color-name">${color.name}</span>
-            `;
-            el.addEventListener('click', () => setDarkColor(color.hex));
-            darkGrid.appendChild(el);
+        // ============================================================
+        // ЦВЕТОВАЯ КНОПКА
+        // ============================================================
+        document.getElementById('colorPickerBtn').addEventListener('click', function() {
+            document.getElementById('colorModal').classList.add('active');
+            renderPalettes();
         });
-    }
 
-    // ============================================================
-    // ТЁМНАЯ ТЕМА
-    // ============================================================
-    var themeToggle = document.getElementById('themeToggle');
-    var isDark = false;
-    themeToggle.textContent = '🌙 Тёмная тема';
-
-    themeToggle.addEventListener('click', function() {
-        document.body.classList.toggle('dark');
-        isDark = document.body.classList.contains('dark');
-        themeToggle.textContent = isDark ? '☀️ Светлая тема' : '🌙 Тёмная тема';
-        if (isDark) {
-            document.body.style.background = darkColor;
-            document.documentElement.style.setProperty('--accent-color', darkColor);
-        } else {
-            document.body.style.background = lightColor;
-            document.documentElement.style.setProperty('--accent-color', lightColor);
-        }
-    });
-
-    // ============================================================
-    // ЦВЕТОВАЯ КНОПКА
-    // ============================================================
-    document.getElementById('colorPickerBtn').addEventListener('click', function() {
-        document.getElementById('colorModal').classList.add('active');
-        renderPalettes();
-    });
-
-    document.getElementById('closeColorBtn').addEventListener('click', function() {
-        document.getElementById('colorModal').classList.remove('active');
-    });
-
-    document.getElementById('colorModal').addEventListener('click', function(e) {
-        if (e.target === this) {
-            this.classList.remove('active');
-        }
-    });
-
-    // ============================================================
-    // ОСНОВНОЙ КОД
-    // ============================================================
-    var REPO_OWNER = 'fr4chek';
-    var REPO_NAME = 'festival-votes';
-    var DATA_FILES = {
-        'national': 'data_national.json',
-        'free': 'data_free.json',
-        'evening': 'data_evening.json'
-    };
-
-    var currentTab = 'national';
-    var allData = { 
-        'national': { votes: [], history: [] }, 
-        'free': { votes: [], history: [] }, 
-        'evening': { votes: [], history: [] } 
-    };
-    var githubToken = '';
-    var winnerName = null;
-    var lastUpdateTime = {};
-    var autoSyncInterval = null;
-    var isConnecting = false;
-
-    // DOM
-    var tabsContainer = document.querySelector('.tabs');
-    var tokenBlock = document.getElementById('tokenBlock');
-    var tokenInput = document.getElementById('tokenInput');
-    var tokenBtn = document.getElementById('tokenBtn');
-    var appContent = document.getElementById('appContent');
-    var statusBar = document.getElementById('statusBar');
-    var nameInput = document.getElementById('nameInput');
-    var scoreInput = document.getElementById('scoreInput');
-    var commentInputField = document.getElementById('commentInput');
-    var tableBody = document.getElementById('tableBody');
-    var winnerDisplay = document.getElementById('winnerDisplay');
-    var statusDisplay = document.getElementById('statusDisplay');
-    var statParticipants = document.getElementById('statParticipants');
-    var statVotes = document.getElementById('statVotes');
-    var statAvg = document.getElementById('statAvg');
-    var addBtn = document.getElementById('addBtn');
-    var calcBtn = document.getElementById('calcBtn');
-    var syncBtn = document.getElementById('syncBtn');
-    var deleteBtn = document.getElementById('deleteBtn');
-    var deleteName = document.getElementById('deleteName');
-    var clearBtn = document.getElementById('clearBtn');
-    var historyList = document.getElementById('historyList');
-    var leaderNames = document.getElementById('leaderNames');
-    var leaderScore = document.getElementById('leaderScore');
-    var leaderEmpty = document.getElementById('leaderEmpty');
-    var leaderContent = document.getElementById('leaderContent');
-    var offlineWarning = document.getElementById('offlineWarning');
-
-    var clearModal = document.getElementById('clearModal');
-    var captchaInput = document.getElementById('captchaInput');
-    var confirmClearBtn = document.getElementById('confirmClearBtn');
-    var cancelClearBtn = document.getElementById('cancelClearBtn');
-    var captchaError = document.getElementById('captchaError');
-
-    var podiumModal = document.getElementById('podiumModal');
-    var podiumContainer = document.getElementById('podiumContainer');
-    var closePodiumBtn = document.getElementById('closePodiumBtn');
-
-    // ===== ВКЛАДКИ =====
-    tabsContainer.addEventListener('click', function(e) {
-        var btn = e.target.closest('.tab-btn');
-        if (!btn) return;
-        var tab = btn.dataset.tab;
-        if (tab === currentTab) return;
-        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
-        btn.classList.add('active');
-        currentTab = tab;
-        render();
-        renderHistory();
-        renderLeader();
-    });
-
-    // ===== УДАЛЕНИЕ =====
-    deleteBtn.addEventListener('click', function() {
-        var name = deleteName.value.trim();
-        if (!name) { showToast('Введите имя для удаления', 'warning'); return; }
-        var votes = allData[currentTab].votes;
-        var found = false;
-        for (var i = 0; i < votes.length; i++) {
-            if (votes[i].name === name) { found = true; break; }
-        }
-        if (!found) { showToast('Участник "' + name + '" не найден', 'warning'); deleteName.value = ''; return; }
-        if (!confirm('Удалить "' + name + '"?')) return;
-        var newVotes = [];
-        for (var j = 0; j < votes.length; j++) {
-            if (votes[j].name !== name) { newVotes.push(votes[j]); }
-        }
-        allData[currentTab].votes = newVotes;
-        if (winnerName === name) winnerName = null;
-        render();
-        addHistoryDelete(name);
-        renderHistory();
-        renderLeader();
-        lastUpdateTime[currentTab] = Date.now();
-        saveToGitHub(currentTab);
-        deleteName.value = '';
-        showToast('🗑️ Удалён: ' + name, 'error');
-    });
-
-    deleteName.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') { e.preventDefault(); deleteBtn.click(); }
-    });
-
-    // ===== ИСТОРИЯ =====
-    function getFormattedDate() {
-        var now = new Date();
-        var day = String(now.getDate()).padStart(2, '0');
-        var month = String(now.getMonth() + 1).padStart(2, '0');
-        var year = now.getFullYear();
-        return day + '.' + month + '.' + year;
-    }
-
-    function addHistory(name, score, comment) {
-        var now = new Date();
-        var time = now.toTimeString().slice(0, 8);
-        var date = getFormattedDate();
-        var tabData = allData[currentTab];
-        if (!tabData.history) tabData.history = [];
-        tabData.history.unshift({
-            type: 'vote',
-            name: name,
-            score: score,
-            comment: comment || '',
-            time: time,
-            date: date
+        document.getElementById('closeColorBtn').addEventListener('click', function() {
+            document.getElementById('colorModal').classList.remove('active');
         });
-        if (tabData.history.length > 50) {
-            tabData.history = tabData.history.slice(0, 50);
-        }
-        renderHistory();
-        saveToGitHub(currentTab);
-    }
 
-    function addHistoryDelete(name) {
-        var now = new Date();
-        var time = now.toTimeString().slice(0, 8);
-        var date = getFormattedDate();
-        var tabData = allData[currentTab];
-        if (!tabData.history) tabData.history = [];
-        tabData.history.unshift({
-            type: 'delete',
-            name: name,
-            time: time,
-            date: date
+        document.getElementById('colorModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                this.classList.remove('active');
+            }
         });
-        if (tabData.history.length > 50) {
-            tabData.history = tabData.history.slice(0, 50);
-        }
-        renderHistory();
-        saveToGitHub(currentTab);
-    }
 
-    function renderHistory() {
-        var history = allData[currentTab]?.history || [];
-        if (history.length === 0) {
-            historyList.innerHTML = '<div class="history-empty">История пуста</div>';
-            return;
-        }
-        var html = '';
-        for (var i = 0; i < history.length; i++) {
-            var item = history[i];
-            var isDelete = item.type === 'delete';
-            var deleteClass = isDelete ? 'delete' : '';
-            html += '<div class="history-item ' + deleteClass + '">';
-            if (isDelete) {
-                html += '<span class="name">🗑️ Удалён: ' + escapeHtml(item.name) + '</span>';
-                html += '<span class="comment-text"></span>';
-                html += '<span class="score"></span>';
-            } else {
-                html += '<span class="name">' + escapeHtml(item.name) + '</span>';
-                if (item.comment) {
-                    html += '<span class="comment-text">" ' + escapeHtml(item.comment) + '"</span>';
-                } else {
-                    html += '<span class="comment-text"></span>';
-                }
-                html += '<span class="score">+' + item.score.toFixed(1) + '</span>';
-            }
-            html += '<span class="time">' + escapeHtml(item.time) + '</span>';
-            html += '<span class="date">' + escapeHtml(item.date) + '</span>';
-            html += '</div>';
-        }
-        historyList.innerHTML = html;
-    }
+        // ============================================================
+        // ОСНОВНОЙ КОД
+        // ============================================================
+        var REPO_OWNER = 'fr4chek';
+        var REPO_NAME = 'festival-votes';
+        var DATA_FILES = {
+            'national': 'data_national.json',
+            'free': 'data_free.json',
+            'evening': 'data_evening.json'
+        };
 
-    // ===== ЛИДЕР =====
-    function renderLeader() {
-        var votes = allData[currentTab]?.votes || [];
-        var participants = getUniqueParticipants(votes);
-        
-        if (participants.length === 0) {
-            leaderEmpty.style.display = 'block';
-            leaderContent.style.display = 'none';
-            return;
-        }
+        var currentTab = 'national';
+        var allData = {
+            'national': { votes: [], history: [] },
+            'free': { votes: [], history: [] },
+            'evening': { votes: [], history: [] }
+        };
+        var githubToken = '';
+        var winnerName = null;
+        var lastUpdateTime = {};
+        var autoSyncInterval = null;
+        var isConnecting = false;
 
-        var averages = [];
-        var maxAvg = 0;
-        for (var i = 0; i < participants.length; i++) {
-            var p = participants[i];
-            var pVotes = [];
-            for (var j = 0; j < votes.length; j++) {
-                if (votes[j].name === p) {
-                    pVotes.push(votes[j]);
-                }
-            }
-            var total = 0;
-            for (var k = 0; k < pVotes.length; k++) {
-                total += pVotes[k].score;
-            }
-            var count = pVotes.length;
-            var avg = count > 0 ? total / count : 0;
-            averages.push({ name: p, avg: avg, count: count });
-            if (avg > maxAvg) maxAvg = avg;
-        }
+        // DOM
+        var tabsContainer = document.querySelector('.tabs');
+        var tokenBlock = document.getElementById('tokenBlock');
+        var tokenInput = document.getElementById('tokenInput');
+        var tokenBtn = document.getElementById('tokenBtn');
+        var appContent = document.getElementById('appContent');
+        var statusBar = document.getElementById('statusBar');
+        var nameInput = document.getElementById('nameInput');
+        var scoreInput = document.getElementById('scoreInput');
+        var commentInputField = document.getElementById('commentInput');
+        var tableBody = document.getElementById('tableBody');
+        var winnerDisplay = document.getElementById('winnerDisplay');
+        var statusDisplay = document.getElementById('statusDisplay');
+        var statParticipants = document.getElementById('statParticipants');
+        var statVotes = document.getElementById('statVotes');
+        var statAvg = document.getElementById('statAvg');
+        var addBtn = document.getElementById('addBtn');
+        var calcBtn = document.getElementById('calcBtn');
+        var syncBtn = document.getElementById('syncBtn');
+        var deleteBtn = document.getElementById('deleteBtn');
+        var deleteName = document.getElementById('deleteName');
+        var clearBtn = document.getElementById('clearBtn');
+        var historyList = document.getElementById('historyList');
+        var leaderNames = document.getElementById('leaderNames');
+        var leaderScore = document.getElementById('leaderScore');
+        var leaderEmpty = document.getElementById('leaderEmpty');
+        var leaderContent = document.getElementById('leaderContent');
+        var offlineWarning = document.getElementById('offlineWarning');
 
-        if (maxAvg === 0) {
-            leaderEmpty.style.display = 'block';
-            leaderContent.style.display = 'none';
-            return;
-        }
+        var clearModal = document.getElementById('clearModal');
+        var captchaInput = document.getElementById('captchaInput');
+        var confirmClearBtn = document.getElementById('confirmClearBtn');
+        var cancelClearBtn = document.getElementById('cancelClearBtn');
+        var captchaError = document.getElementById('captchaError');
 
-        var leaders = [];
-        for (var i = 0; i < averages.length; i++) {
-            if (averages[i].count > 0 && Math.abs(averages[i].avg - maxAvg) < 0.001) {
-                leaders.push(averages[i].name);
-            }
-        }
+        var podiumModal = document.getElementById('podiumModal');
+        var podiumContainer = document.getElementById('podiumContainer');
+        var closePodiumBtn = document.getElementById('closePodiumBtn');
 
-        if (leaders.length > 0) {
-            leaderEmpty.style.display = 'none';
-            leaderContent.style.display = 'block';
-            var namesText = leaders.join(', ');
-            if (namesText.length > 30) {
-                leaderNames.className = 'names';
-                leaderNames.style.fontSize = '22px';
-            } else {
-                leaderNames.className = 'names';
-                leaderNames.style.fontSize = '30px';
-            }
-            leaderNames.textContent = namesText;
-            leaderScore.textContent = 'Средний балл: ' + maxAvg.toFixed(2);
-        } else {
-            leaderEmpty.style.display = 'block';
-            leaderContent.style.display = 'none';
-        }
-    }
-
-    // ===== ОЧИСТКА =====
-    clearBtn.addEventListener('click', function() {
-        var votes = allData[currentTab].votes;
-        if (votes.length === 0) {
-            showToast('В текущей номинации нет данных для очистки', 'warning');
-            return;
-        }
-        captchaInput.value = '';
-        captchaError.classList.remove('show');
-        clearModal.classList.add('active');
-        setTimeout(function() { captchaInput.focus(); }, 300);
-    });
-
-    confirmClearBtn.addEventListener('click', function() {
-        var answer = captchaInput.value.trim();
-        if (answer === '4') {
-            clearModal.classList.remove('active');
-            allData[currentTab].votes = [];
-            allData[currentTab].history = [];
-            winnerName = null;
+        // ===== ВКЛАДКИ =====
+        tabsContainer.addEventListener('click', function(e) {
+            var btn = e.target.closest('.tab-btn');
+            if (!btn) return;
+            var tab = btn.dataset.tab;
+            if (tab === currentTab) return;
+            document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            currentTab = tab;
             render();
+            renderHistory();
+            renderLeader();
+        });
+
+        // ===== УДАЛЕНИЕ =====
+        deleteBtn.addEventListener('click', function() {
+            var name = deleteName.value.trim();
+            if (!name) { showToast('Введите имя для удаления', 'warning'); return; }
+            var votes = allData[currentTab].votes;
+            var found = false;
+            for (var i = 0; i < votes.length; i++) {
+                if (votes[i].name === name) { found = true; break; }
+            }
+            if (!found) { showToast('Участник "' + name + '" не найден', 'warning');
+                deleteName.value = ''; return; }
+            if (!confirm('Удалить "' + name + '"?')) return;
+            var newVotes = [];
+            for (var j = 0; j < votes.length; j++) {
+                if (votes[j].name !== name) { newVotes.push(votes[j]); }
+            }
+            allData[currentTab].votes = newVotes;
+            if (winnerName === name) winnerName = null;
+            render();
+            addHistoryDelete(name);
             renderHistory();
             renderLeader();
             lastUpdateTime[currentTab] = Date.now();
             saveToGitHub(currentTab);
-            showToast('🗑️ Всё очищено в номинации "' + getTabName(currentTab) + '"', 'error');
-        } else {
-            captchaError.classList.add('show');
+            deleteName.value = '';
+            showToast('🗑️ Удалён: ' + name, 'error');
+        });
+
+        deleteName.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault();
+                deleteBtn.click(); }
+        });
+
+        // ===== ИСТОРИЯ =====
+        function getFormattedDate() {
+            var now = new Date();
+            var day = String(now.getDate()).padStart(2, '0');
+            var month = String(now.getMonth() + 1).padStart(2, '0');
+            var year = now.getFullYear();
+            return day + '.' + month + '.' + year;
+        }
+
+        function addHistory(name, score, comment) {
+            var now = new Date();
+            var time = now.toTimeString().slice(0, 8);
+            var date = getFormattedDate();
+            var tabData = allData[currentTab];
+            if (!tabData.history) tabData.history = [];
+            tabData.history.unshift({
+                type: 'vote',
+                name: name,
+                score: score,
+                comment: comment || '',
+                time: time,
+                date: date
+            });
+            if (tabData.history.length > 50) {
+                tabData.history = tabData.history.slice(0, 50);
+            }
+            renderHistory();
+            saveToGitHub(currentTab);
+        }
+
+        function addHistoryDelete(name) {
+            var now = new Date();
+            var time = now.toTimeString().slice(0, 8);
+            var date = getFormattedDate();
+            var tabData = allData[currentTab];
+            if (!tabData.history) tabData.history = [];
+            tabData.history.unshift({
+                type: 'delete',
+                name: name,
+                time: time,
+                date: date
+            });
+            if (tabData.history.length > 50) {
+                tabData.history = tabData.history.slice(0, 50);
+            }
+            renderHistory();
+            saveToGitHub(currentTab);
+        }
+
+        function renderHistory() {
+            var history = allData[currentTab]?.history || [];
+            if (history.length === 0) {
+                historyList.innerHTML = '<div class="history-empty">История пуста</div>';
+                return;
+            }
+            var html = '';
+            for (var i = 0; i < history.length; i++) {
+                var item = history[i];
+                var isDelete = item.type === 'delete';
+                var deleteClass = isDelete ? 'delete' : '';
+                html += '<div class="history-item ' + deleteClass + '">';
+                if (isDelete) {
+                    html += '<span class="name">🗑️ Удалён: ' + escapeHtml(item.name) + '</span>';
+                    html += '<span class="comment-text"></span>';
+                    html += '<span class="score"></span>';
+                } else {
+                    html += '<span class="name">' + escapeHtml(item.name) + '</span>';
+                    if (item.comment) {
+                        html += '<span class="comment-text">" ' + escapeHtml(item.comment) + '"</span>';
+                    } else {
+                        html += '<span class="comment-text"></span>';
+                    }
+                    html += '<span class="score">+' + item.score.toFixed(1) + '</span>';
+                }
+                html += '<span class="time">' + escapeHtml(item.time) + '</span>';
+                html += '<span class="date">' + escapeHtml(item.date) + '</span>';
+                html += '</div>';
+            }
+            historyList.innerHTML = html;
+        }
+
+        // ===== ЛИДЕР =====
+        function renderLeader() {
+            var votes = allData[currentTab]?.votes || [];
+            var participants = getUniqueParticipants(votes);
+
+            if (participants.length === 0) {
+                leaderEmpty.style.display = 'block';
+                leaderContent.style.display = 'none';
+                return;
+            }
+
+            var averages = [];
+            var maxAvg = 0;
+            for (var i = 0; i < participants.length; i++) {
+                var p = participants[i];
+                var pVotes = [];
+                for (var j = 0; j < votes.length; j++) {
+                    if (votes[j].name === p) {
+                        pVotes.push(votes[j]);
+                    }
+                }
+                var total = 0;
+                for (var k = 0; k < pVotes.length; k++) {
+                    total += pVotes[k].score;
+                }
+                var count = pVotes.length;
+                var avg = count > 0 ? total / count : 0;
+                averages.push({ name: p, avg: avg, count: count });
+                if (avg > maxAvg) maxAvg = avg;
+            }
+
+            if (maxAvg === 0) {
+                leaderEmpty.style.display = 'block';
+                leaderContent.style.display = 'none';
+                return;
+            }
+
+            var leaders = [];
+            for (var i = 0; i < averages.length; i++) {
+                if (averages[i].count > 0 && Math.abs(averages[i].avg - maxAvg) < 0.001) {
+                    leaders.push(averages[i].name);
+                }
+            }
+
+            if (leaders.length > 0) {
+                leaderEmpty.style.display = 'none';
+                leaderContent.style.display = 'block';
+                var namesText = leaders.join(', ');
+                if (namesText.length > 30) {
+                    leaderNames.className = 'names';
+                    leaderNames.style.fontSize = '22px';
+                } else {
+                    leaderNames.className = 'names';
+                    leaderNames.style.fontSize = '30px';
+                }
+                leaderNames.textContent = namesText;
+                leaderScore.textContent = 'Средний балл: ' + maxAvg.toFixed(2);
+            } else {
+                leaderEmpty.style.display = 'block';
+                leaderContent.style.display = 'none';
+            }
+        }
+
+        // ===== ОЧИСТКА =====
+        clearBtn.addEventListener('click', function() {
+            var votes = allData[currentTab].votes;
+            if (votes.length === 0) {
+                showToast('В текущей номинации нет данных для очистки', 'warning');
+                return;
+            }
             captchaInput.value = '';
-            captchaInput.focus();
-            setTimeout(function() {
-                captchaError.classList.remove('show');
-            }, 3000);
-        }
-    });
+            captchaError.classList.remove('show');
+            clearModal.classList.add('active');
+            setTimeout(function() { captchaInput.focus(); }, 300);
+        });
 
-    cancelClearBtn.addEventListener('click', function() {
-        clearModal.classList.remove('active');
-        captchaInput.value = '';
-        captchaError.classList.remove('show');
-    });
-
-    captchaInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') { e.preventDefault(); confirmClearBtn.click(); }
-        if (e.key === 'Escape') { e.preventDefault(); cancelClearBtn.click(); }
-    });
-
-    clearModal.addEventListener('click', function(e) {
-        if (e.target === clearModal) { cancelClearBtn.click(); }
-    });
-
-    // ===== ПОДИУМ =====
-    closePodiumBtn.addEventListener('click', function() {
-        podiumModal.classList.remove('active');
-    });
-
-    podiumModal.addEventListener('click', function(e) {
-        if (e.target === podiumModal) {
-            podiumModal.classList.remove('active');
-        }
-    });
-
-    function showPodium() {
-        var votes = allData[currentTab]?.votes || [];
-        var participants = getUniqueParticipants(votes);
-        
-        if (participants.length === 0) {
-            showToast('Нет данных для отображения', 'warning');
-            return;
-        }
-
-        var averages = [];
-        for (var i = 0; i < participants.length; i++) {
-            var p = participants[i];
-            var pVotes = [];
-            for (var j = 0; j < votes.length; j++) {
-                if (votes[j].name === p) {
-                    pVotes.push(votes[j]);
-                }
-            }
-            var total = 0;
-            for (var k = 0; k < pVotes.length; k++) {
-                total += pVotes[k].score;
-            }
-            var count = pVotes.length;
-            var avg = count > 0 ? total / count : 0;
-            averages.push({ name: p, avg: avg, count: count });
-        }
-
-        averages.sort(function(a, b) { return b.avg - a.avg; });
-
-        var groups = [];
-        var currentGroup = null;
-        for (var g = 0; g < averages.length; g++) {
-            var item = averages[g];
-            if (item.count === 0) continue;
-            if (!currentGroup || Math.abs(currentGroup.avg - item.avg) > 0.001) {
-                currentGroup = { avg: item.avg, names: [item.name] };
-                groups.push(currentGroup);
-            } else {
-                currentGroup.names.push(item.name);
-            }
-        }
-
-        var topGroups = groups.slice(0, 3);
-        var medals = ['🥇', '🥈', '🥉'];
-        var steps = ['gold', 'silver', 'bronze'];
-        var stepHeights = [100, 80, 60];
-
-        var html = '';
-        for (var m = 0; m < topGroups.length; m++) {
-            var group = topGroups[m];
-            var names = group.names.join(', ');
-            html += '<div class="podium-item">';
-            html += '<span class="medal">' + medals[m] + '</span>';
-            html += '<div class="podium-step ' + steps[m] + '" style="height: ' + stepHeights[m] + 'px;"></div>';
-            html += '<div class="podium-name">' + escapeHtml(names) + '</div>';
-            html += '<div class="podium-score">' + group.avg.toFixed(2) + ' балла</div>';
-            html += '<div class="place">' + (m + 1) + '-е место</div>';
-            html += '</div>';
-        }
-
-        if (topGroups.length === 0) {
-            podiumContainer.innerHTML = '<p style="color: var(--text-light); padding: 20px; font-family:"SF Pro Text", sans-serif;">Нет данных для отображения</p>';
-        } else {
-            podiumContainer.innerHTML = html;
-        }
-        podiumModal.classList.add('active');
-    }
-
-    // ===== ОСТАЛЬНОЙ КОД =====
-    function setStatus(text, color) {
-        statusDisplay.textContent = text;
-        statusDisplay.style.color = color || 'var(--accent-color, #0abab5)';
-    }
-
-    function setStatusBar(status, message) {
-        statusBar.className = 'status-bar ' + status;
-        statusBar.textContent = message;
-    }
-
-    function getUniqueParticipants(votes) {
-        var set = new Set();
-        for (var i = 0; i < votes.length; i++) { set.add(votes[i].name); }
-        return Array.from(set).sort();
-    }
-
-    function escapeHtml(text) {
-        var div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
-    }
-
-    function saveToken(token) { 
-        try { localStorage.setItem('github_token', token); } catch(e) {} 
-    }
-
-    function loadToken() { 
-        try { return localStorage.getItem('github_token') || ''; } catch(e) { return ''; } 
-    }
-
-    function utf8ToBase64(str) {
-        var encoder = new TextEncoder();
-        var bytes = encoder.encode(str);
-        var binary = '';
-        for (var i = 0; i < bytes.length; i++) { binary += String.fromCharCode(bytes[i]); }
-        return btoa(binary);
-    }
-
-    function base64ToUtf8(base64) {
-        var binary = atob(base64);
-        var bytes = new Uint8Array(binary.length);
-        for (var i = 0; i < binary.length; i++) { bytes[i] = binary.charCodeAt(i); }
-        var decoder = new TextDecoder('utf-8');
-        return decoder.decode(bytes);
-    }
-
-    function getDataFilePath(tab) { return DATA_FILES[tab] || 'data.json'; }
-
-    async function saveToGitHub(tab) {
-        if (!githubToken) return;
-        var filePath = getDataFilePath(tab);
-        var dataToSave = {
-            votes: allData[tab]?.votes || [],
-            history: allData[tab]?.history || []
-        };
-        try {
-            setStatusBar('saving', '💾 Сохранение...');
-            var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
-            var loadResponse = await fetch(url, { headers: { 'Authorization': 'token ' + githubToken, 'Accept': 'application/vnd.github.v3+json' } });
-            var remoteSha = null;
-            if (loadResponse.ok) { var loadData = await loadResponse.json(); remoteSha = loadData.sha; }
-            var content = utf8ToBase64(JSON.stringify(dataToSave, null, 2));
-            var body = { message: 'Обновление данных', content: content };
-            if (remoteSha) { body.sha = remoteSha; }
-            var saveResponse = await fetch(url, { method: 'PUT', headers: { 'Authorization': 'token ' + githubToken, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) });
-            if (saveResponse.ok) { 
-                setStatusBar('online', '☁️ Сохранено'); 
-                setStatus('☁️ Сохранено', 'var(--accent-color, #0abab5)'); 
-            } else {
-                throw new Error('Ошибка сохранения');
-            }
-        } catch(e) { 
-            setStatusBar('online', '☁️ Данные сохранены локально'); 
-            setStatus('💾 Сохранено локально', '#8a8a9a');
-            showToast('⚠️ Не удалось сохранить в GitHub, но данные сохранены локально', 'warning');
-            setTimeout(function() {
-                if (githubToken) {
-                    saveToGitHub(tab);
-                }
-            }, 5000);
-        }
-    }
-
-    async function loadFromGitHub(tab) {
-        if (!githubToken) return;
-        var filePath = getDataFilePath(tab);
-        try {
-            var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
-            var response = await fetch(url, { headers: { 'Authorization': 'token ' + githubToken, 'Accept': 'application/vnd.github.v3+json' } });
-            if (response.status === 404) { 
-                allData[tab] = { votes: [], history: [] }; 
-                render(); 
-                renderHistory();
-                renderLeader();
-                return; 
-            }
-            if (!response.ok) { throw new Error('Ошибка загрузки'); }
-            var data = await response.json();
-            var content = base64ToUtf8(data.content);
-            var jsonData = JSON.parse(content);
-            if (jsonData) {
-                if (lastUpdateTime[tab] && Date.now() - lastUpdateTime[tab] < 3000) {
-                    return;
-                }
-                allData[tab] = { 
-                    votes: jsonData.votes || [], 
-                    history: jsonData.history || [] 
-                };
+        confirmClearBtn.addEventListener('click', function() {
+            var answer = captchaInput.value.trim();
+            if (answer === '4') {
+                clearModal.classList.remove('active');
+                allData[currentTab].votes = [];
+                allData[currentTab].history = [];
+                winnerName = null;
                 render();
                 renderHistory();
                 renderLeader();
-                setStatusBar('online', '☁️ Автосинхронизация');
-                setStatus('☁️ Синхронизировано', 'var(--accent-color, #0abab5)');
+                lastUpdateTime[currentTab] = Date.now();
+                saveToGitHub(currentTab);
+                showToast('🗑️ Всё очищено в номинации "' + getTabName(currentTab) + '"', 'error');
+            } else {
+                captchaError.classList.add('show');
+                captchaInput.value = '';
+                captchaInput.focus();
+                setTimeout(function() {
+                    captchaError.classList.remove('show');
+                }, 3000);
             }
-        } catch(e) { 
-            setStatusBar('online', '☁️ Данные загружены из кэша');
-            setStatus('📂 Из кэша', '#8a8a9a');
-        }
-    }
+        });
 
-    function render() {
-        var votes = allData[currentTab]?.votes || [];
-        var participants = getUniqueParticipants(votes);
-        statParticipants.textContent = participants.length;
-        statVotes.textContent = votes.length;
-        if (participants.length === 0) {
-            tableBody.innerHTML = '<tr><td colspan="5" class="empty-message">Нет данных</td></tr>';
-            winnerDisplay.textContent = '👑 Победитель: не определен';
-            statAvg.textContent = '—';
-            return;
-        }
-        var html = '', averages = [];
-        for (var i = 0; i < participants.length; i++) {
-            var p = participants[i];
-            var pVotes = [];
-            var allComments = [];
-            for (var j = 0; j < votes.length; j++) {
-                if (votes[j].name === p) {
-                    pVotes.push(votes[j]);
-                    if (votes[j].comment) {
-                        allComments.push(votes[j].comment);
+        cancelClearBtn.addEventListener('click', function() {
+            clearModal.classList.remove('active');
+            captchaInput.value = '';
+            captchaError.classList.remove('show');
+        });
+
+        captchaInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault();
+                confirmClearBtn.click(); }
+            if (e.key === 'Escape') { e.preventDefault();
+                cancelClearBtn.click(); }
+        });
+
+        clearModal.addEventListener('click', function(e) {
+            if (e.target === clearModal) { cancelClearBtn.click(); }
+        });
+
+        // ===== ПОДИУМ =====
+        closePodiumBtn.addEventListener('click', function() {
+            podiumModal.classList.remove('active');
+        });
+
+        podiumModal.addEventListener('click', function(e) {
+            if (e.target === podiumModal) {
+                podiumModal.classList.remove('active');
+            }
+        });
+
+        function showPodium() {
+            var votes = allData[currentTab]?.votes || [];
+            var participants = getUniqueParticipants(votes);
+
+            if (participants.length === 0) {
+                showToast('Нет данных для отображения', 'warning');
+                return;
+            }
+
+            var averages = [];
+            for (var i = 0; i < participants.length; i++) {
+                var p = participants[i];
+                var pVotes = [];
+                for (var j = 0; j < votes.length; j++) {
+                    if (votes[j].name === p) {
+                        pVotes.push(votes[j]);
                     }
                 }
+                var total = 0;
+                for (var k = 0; k < pVotes.length; k++) {
+                    total += pVotes[k].score;
+                }
+                var count = pVotes.length;
+                var avg = count > 0 ? total / count : 0;
+                averages.push({ name: p, avg: avg, count: count });
             }
-            var total = 0, scores = [];
-            for (var k = 0; k < pVotes.length; k++) {
-                total += pVotes[k].score;
-                scores.push(pVotes[k].score.toFixed(1));
-            }
-            var count = pVotes.length, avg = count > 0 ? total / count : 0;
-            averages.push({ name: p, avg: avg, count: count });
-            var commentsText = allComments.join('; ');
-            html += '<tr><td><strong>' + escapeHtml(p) + '</strong></td><td class="total-cell">' + (count > 0 ? avg.toFixed(2) : '—') + '</td><td>' + count + '</td><td>' + scores.join(', ') + '</td><td class="comment-cell">' + escapeHtml(commentsText) + '</td></tr>';
-        }
-        tableBody.innerHTML = html;
-        if (winnerName) {
-            var rows = tableBody.querySelectorAll('tr');
-            for (var r = 0; r < rows.length; r++) {
-                var firstTd = rows[r].querySelector('td:first-child');
-                if (firstTd && firstTd.textContent.trim() === winnerName) { rows[r].classList.add('winner-row'); }
-            }
-        }
-        var sorted = averages.slice().sort(function(a, b) { return b.avg - a.avg; });
-        statAvg.textContent = (sorted.length > 0 && sorted[0].count > 0) ? sorted[0].avg.toFixed(2) : '—';
-        if (winnerName) {
-            var winner = null;
-            for (var w = 0; w < averages.length; w++) {
-                if (averages[w].name === winnerName) {
-                    winner = averages[w];
-                    break;
+
+            averages.sort(function(a, b) { return b.avg - a.avg; });
+
+            var groups = [];
+            var currentGroup = null;
+            for (var g = 0; g < averages.length; g++) {
+                var item = averages[g];
+                if (item.count === 0) continue;
+                if (!currentGroup || Math.abs(currentGroup.avg - item.avg) > 0.001) {
+                    currentGroup = { avg: item.avg, names: [item.name] };
+                    groups.push(currentGroup);
+                } else {
+                    currentGroup.names.push(item.name);
                 }
             }
-            if (winner && winner.count > 0) {
-                winnerDisplay.textContent = '👑 Победитель: ' + winnerName + ' (' + winner.avg.toFixed(2) + ')';
+
+            var topGroups = groups.slice(0, 3);
+            var medals = ['🥇', '🥈', '🥉'];
+            var steps = ['gold', 'silver', 'bronze'];
+            var stepHeights = [100, 80, 60];
+
+            var html = '';
+            for (var m = 0; m < topGroups.length; m++) {
+                var group = topGroups[m];
+                var names = group.names.join(', ');
+                html += '<div class="podium-item">';
+                html += '<span class="medal">' + medals[m] + '</span>';
+                html += '<div class="podium-step ' + steps[m] + '" style="height: ' + stepHeights[m] + 'px;"></div>';
+                html += '<div class="podium-name">' + escapeHtml(names) + '</div>';
+                html += '<div class="podium-score">' + group.avg.toFixed(2) + ' балла</div>';
+                html += '<div class="place">' + (m + 1) + '-е место</div>';
+                html += '</div>';
+            }
+
+            if (topGroups.length === 0) {
+                podiumContainer.innerHTML =
+                    '<p style="color: var(--text-light); padding: 20px; font-family:'SF Pro Text", sans-serif;">Нет данных для отображения</p>';
+            } else {
+                podiumContainer.innerHTML = html;
+            }
+            podiumModal.classList.add('active');
+        }
+
+        // ===== ОСТАЛЬНОЙ КОД =====
+        function setStatus(text, color) {
+            statusDisplay.textContent = text;
+            statusDisplay.style.color = color || 'var(--accent-color, #0abab5)';
+        }
+
+        function setStatusBar(status, message) {
+            statusBar.className = 'status-bar ' + status;
+            statusBar.textContent = message;
+        }
+
+        function getUniqueParticipants(votes) {
+            var set = new Set();
+            for (var i = 0; i < votes.length; i++) { set.add(votes[i].name); }
+            return Array.from(set).sort();
+        }
+
+        function escapeHtml(text) {
+            var div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function saveToken(token) {
+            try { localStorage.setItem('github_token', token); } catch (e) {}
+        }
+
+        function loadToken() {
+            try { return localStorage.getItem('github_token') || ''; } catch (e) { return ''; }
+        }
+
+        function utf8ToBase64(str) {
+            var encoder = new TextEncoder();
+            var bytes = encoder.encode(str);
+            var binary = '';
+            for (var i = 0; i < bytes.length; i++) { binary += String.fromCharCode(bytes[i]); }
+            return btoa(binary);
+        }
+
+        function base64ToUtf8(base64) {
+            var binary = atob(base64);
+            var bytes = new Uint8Array(binary.length);
+            for (var i = 0; i < binary.length; i++) { bytes[i] = binary.charCodeAt(i); }
+            var decoder = new TextDecoder('utf-8');
+            return decoder.decode(bytes);
+        }
+
+        function getDataFilePath(tab) { return DATA_FILES[tab] || 'data.json'; }
+
+        async function saveToGitHub(tab) {
+            if (!githubToken) return;
+            var filePath = getDataFilePath(tab);
+            var dataToSave = {
+                votes: allData[tab]?.votes || [],
+                history: allData[tab]?.history || []
+            };
+            try {
+                setStatusBar('saving', '💾 Сохранение...');
+                var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
+                var loadResponse = await fetch(url, { headers: { 'Authorization': 'token ' + githubToken,
+                        'Accept': 'application/vnd.github.v3+json' } });
+                var remoteSha = null;
+                if (loadResponse.ok) { var loadData = await loadResponse.json();
+                    remoteSha = loadData.sha; }
+                var content = utf8ToBase64(JSON.stringify(dataToSave, null, 2));
+                var body = { message: 'Обновление данных', content: content };
+                if (remoteSha) { body.sha = remoteSha; }
+                var saveResponse = await fetch(url, {
+                    method: 'PUT',
+                    headers: { 'Authorization': 'token ' + githubToken, 'Content-Type': 'application/json',
+                        'Accept': 'application/vnd.github.v3+json' },
+                    body: JSON.stringify(body)
+                });
+                if (saveResponse.ok) {
+                    setStatusBar('online', '☁️ Сохранено');
+                    setStatus('☁️ Сохранено', 'var(--accent-color, #0abab5)');
+                } else {
+                    throw new Error('Ошибка сохранения');
+                }
+            } catch (e) {
+                setStatusBar('online', '☁️ Данные сохранены локально');
+                setStatus('💾 Сохранено локально', '#8a8a9a');
+                showToast('⚠️ Не удалось сохранить в GitHub, но данные сохранены локально', 'warning');
+                setTimeout(function() {
+                    if (githubToken) {
+                        saveToGitHub(tab);
+                    }
+                }, 5000);
+            }
+        }
+
+        async function loadFromGitHub(tab) {
+            if (!githubToken) return;
+            var filePath = getDataFilePath(tab);
+            try {
+                var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
+                var response = await fetch(url, { headers: { 'Authorization': 'token ' + githubToken,
+                        'Accept': 'application/vnd.github.v3+json' } });
+                if (response.status === 404) {
+                    allData[tab] = { votes: [], history: [] };
+                    render();
+                    renderHistory();
+                    renderLeader();
+                    return;
+                }
+                if (!response.ok) { throw new Error('Ошибка загрузки'); }
+                var data = await response.json();
+                var content = base64ToUtf8(data.content);
+                var jsonData = JSON.parse(content);
+                if (jsonData) {
+                    if (lastUpdateTime[tab] && Date.now() - lastUpdateTime[tab] < 3000) {
+                        return;
+                    }
+                    allData[tab] = {
+                        votes: jsonData.votes || [],
+                        history: jsonData.history || []
+                    };
+                    render();
+                    renderHistory();
+                    renderLeader();
+                    setStatusBar('online', '☁️ Автосинхронизация');
+                    setStatus('☁️ Синхронизировано', 'var(--accent-color, #0abab5)');
+                }
+            } catch (e) {
+                setStatusBar('online', '☁️ Данные загружены из кэша');
+                setStatus('📂 Из кэша', '#8a8a9a');
+            }
+        }
+
+        function render() {
+            var votes = allData[currentTab]?.votes || [];
+            var participants = getUniqueParticipants(votes);
+            statParticipants.textContent = participants.length;
+            statVotes.textContent = votes.length;
+            if (participants.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5" class="empty-message">Нет данных</td></tr>';
+                winnerDisplay.textContent = '👑 Победитель: не определен';
+                statAvg.textContent = '—';
+                return;
+            }
+            var html = '',
+                averages = [];
+            for (var i = 0; i < participants.length; i++) {
+                var p = participants[i];
+                var pVotes = [];
+                var allComments = [];
+                for (var j = 0; j < votes.length; j++) {
+                    if (votes[j].name === p) {
+                        pVotes.push(votes[j]);
+                        if (votes[j].comment) {
+                            allComments.push(votes[j].comment);
+                        }
+                    }
+                }
+                var total = 0,
+                    scores = [];
+                for (var k = 0; k < pVotes.length; k++) {
+                    total += pVotes[k].score;
+                    scores.push(pVotes[k].score.toFixed(1));
+                }
+                var count = pVotes.length,
+                    avg = count > 0 ? total / count : 0;
+                averages.push({ name: p, avg: avg, count: count });
+                var commentsText = allComments.join('; ');
+                html += '<tr><td><strong>' + escapeHtml(p) + '</strong></td><td class="total-cell">' + (count > 0 ? avg
+                    .toFixed(2) : '—') + '</td><td>' + count + '</td><td>' + scores.join(', ') +
+                    '</td><td class="comment-cell">' + escapeHtml(commentsText) + '</td></tr>';
+            }
+            tableBody.innerHTML = html;
+            if (winnerName) {
+                var rows = tableBody.querySelectorAll('tr');
+                for (var r = 0; r < rows.length; r++) {
+                    var firstTd = rows[r].querySelector('td:first-child');
+                    if (firstTd && firstTd.textContent.trim() === winnerName) { rows[r].classList.add('winner-row'); }
+                }
+            }
+            var sorted = averages.slice().sort(function(a, b) { return b.avg - a.avg; });
+            statAvg.textContent = (sorted.length > 0 && sorted[0].count > 0) ? sorted[0].avg.toFixed(2) : '—';
+            if (winnerName) {
+                var winner = null;
+                for (var w = 0; w < averages.length; w++) {
+                    if (averages[w].name === winnerName) {
+                        winner = averages[w];
+                        break;
+                    }
+                }
+                if (winner && winner.count > 0) {
+                    winnerDisplay.textContent = '👑 Победитель: ' + winnerName + ' (' + winner.avg.toFixed(2) + ')';
+                } else {
+                    winnerDisplay.textContent = '👑 Победитель: не определен';
+                }
             } else {
                 winnerDisplay.textContent = '👑 Победитель: не определен';
             }
-        } else {
-            winnerDisplay.textContent = '👑 Победитель: не определен';
         }
-    }
 
-    function getTabName(tab) {
-        var names = { 'national': 'Национальный', 'free': 'Свободный', 'evening': 'Вечерний' };
-        return names[tab] || tab;
-    }
+        function getTabName(tab) {
+            var names = { 'national': 'Национальный', 'free': 'Свободный', 'evening': 'Вечерний' };
+            return names[tab] || tab;
+        }
 
-    async function addVote() {
-        var name = nameInput.value.trim();
-        var score = parseFloat(scoreInput.value);
-        var comment = commentInputField.value.trim();
-        
-        if (!name) { showToast('Введите имя участника', 'warning'); nameInput.focus(); return; }
-        if (isNaN(score) || score < 0 || score > 10) { showToast('Оценка должна быть от 0 до 10', 'warning'); scoreInput.focus(); return; }
-        
-        var votes = allData[currentTab].votes;
-        votes.push({ 
-            id: Date.now() + '_' + Math.random().toString(36).substr(2, 6), 
-            name: name, 
-            score: score,
-            comment: comment || ''
-        });
-        nameInput.value = ''; 
-        scoreInput.value = ''; 
-        commentInputField.value = '';
-        nameInput.focus();
-        render();
-        renderHistory();
-        renderLeader();
-        addHistory(name, score, comment);
-        lastUpdateTime[currentTab] = Date.now();
-        await saveToGitHub(currentTab);
-        showToast('✅ ' + name + ' +' + score.toFixed(1) + (comment ? ' 💬 ' + comment : ''), '');
-    }
+        async function addVote() {
+            var name = nameInput.value.trim();
+            var score = parseFloat(scoreInput.value);
+            var comment = commentInputField.value.trim();
 
-    function calculateWinner() {
-        var votes = allData[currentTab]?.votes || [];
-        var participants = getUniqueParticipants(votes);
-        if (participants.length === 0) { showToast('Нет данных для подсчёта', 'warning'); return; }
-        
-        var averages = [];
-        for (var i = 0; i < participants.length; i++) {
-            var p = participants[i];
-            var pVotes = [];
-            for (var j = 0; j < votes.length; j++) {
-                if (votes[j].name === p) {
-                    pVotes.push(votes[j]);
-                }
-            }
-            var total = 0;
-            for (var k = 0; k < pVotes.length; k++) {
-                total += pVotes[k].score;
-            }
-            var count = pVotes.length;
-            averages.push({ name: p, avg: count > 0 ? total / count : 0, count: count });
-        }
-        
-        var sorted = averages.slice().sort(function(a, b) { return b.avg - a.avg; });
-        if (sorted.length === 0 || sorted[0].count === 0) { showToast('Нет оценок для подсчёта', 'warning'); return; }
-        
-        var winner = sorted[0];
-        var isTie = false;
-        var tieNames = [winner.name];
-        var tieAvg = winner.avg;
-        
-        for (var t = 1; t < sorted.length; t++) {
-            if (sorted[t].count > 0 && Math.abs(sorted[t].avg - winner.avg) < 0.001) {
-                isTie = true;
-                tieNames.push(sorted[t].name);
-            } else {
-                break;
-            }
-        }
-        
-        fireConfetti();
-        
-        if (isTie) {
-            winnerName = null;
-            winnerDisplay.textContent = '🤝 Ничья! (' + tieNames.join(', ') + ')';
-            render();
-            renderHistory();
-            renderLeader();
-            showPodium();
-            showToast('🤝 Ничья между: ' + tieNames.join(', '), 'info');
-        } else {
-            winnerName = winner.name;
-            winnerDisplay.textContent = '👑 Победитель: ' + winner.name + ' (' + winner.avg.toFixed(2) + ')';
-            render();
-            renderHistory();
-            renderLeader();
-            showPodium();
-            showToast('🏆 Победитель: ' + winner.name + ' (' + winner.avg.toFixed(2) + ')', '');
-        }
-    }
+            if (!name) { showToast('Введите имя участника', 'warning');
+                nameInput.focus(); return; }
+            if (isNaN(score) || score < 0 || score > 10) { showToast('Оценка должна быть от 0 до 10', 'warning');
+                scoreInput.focus(); return; }
 
-    async function syncData() {
-        if (!githubToken) { showToast('Сначала подключитесь к GitHub', 'warning'); return; }
-        showToast('🔄 Синхронизация...', 'info');
-        await loadFromGitHub(currentTab);
-        showToast('✅ Синхронизация завершена', '');
-    }
-
-    async function connectToGitHub() {
-        if (isConnecting) return;
-        
-        var token = tokenInput.value.trim();
-        if (!token) { 
-            showToast('Введите GitHub токен', 'warning'); 
-            return; 
-        }
-        if (!token.startsWith('ghp_')) { 
-            showToast('Токен должен начинаться с "ghp_"', 'warning'); 
-            return; 
-        }
-        
-        isConnecting = true;
-        githubToken = token; 
-        saveToken(token);
-        
-        setStatusBar('connecting', '⏳ Подключение к GitHub...');
-        
-        try {
-            var testResponse = await fetch('https://api.github.com/user', {
-                headers: { 'Authorization': 'token ' + githubToken }
+            var votes = allData[currentTab].votes;
+            votes.push({
+                id: Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                name: name,
+                score: score,
+                comment: comment || ''
             });
-            
-            if (!testResponse.ok) {
-                if (testResponse.status === 401) {
-                    showToast('❌ Неверный токен! Проверьте и попробуйте снова.', 'error');
-                } else {
-                    showToast('❌ Ошибка подключения: ' + testResponse.status, 'error');
+            nameInput.value = '';
+            scoreInput.value = '';
+            commentInputField.value = '';
+            nameInput.focus();
+            render();
+            renderHistory();
+            renderLeader();
+            addHistory(name, score, comment);
+            lastUpdateTime[currentTab] = Date.now();
+            await saveToGitHub(currentTab);
+            showToast('✅ ' + name + ' +' + score.toFixed(1) + (comment ? ' 💬 ' + comment : ''), '');
+        }
+
+        function calculateWinner() {
+            var votes = allData[currentTab]?.votes || [];
+            var participants = getUniqueParticipants(votes);
+            if (participants.length === 0) { showToast('Нет данных для подсчёта', 'warning'); return; }
+
+            var averages = [];
+            for (var i = 0; i < participants.length; i++) {
+                var p = participants[i];
+                var pVotes = [];
+                for (var j = 0; j < votes.length; j++) {
+                    if (votes[j].name === p) {
+                        pVotes.push(votes[j]);
+                    }
                 }
-                isConnecting = false;
+                var total = 0;
+                for (var k = 0; k < pVotes.length; k++) {
+                    total += pVotes[k].score;
+                }
+                var count = pVotes.length;
+                averages.push({ name: p, avg: count > 0 ? total / count : 0, count: count });
+            }
+
+            var sorted = averages.slice().sort(function(a, b) { return b.avg - a.avg; });
+            if (sorted.length === 0 || sorted[0].count === 0) { showToast('Нет оценок для подсчёта', 'warning'); return; }
+
+            var winner = sorted[0];
+            var isTie = false;
+            var tieNames = [winner.name];
+            var tieAvg = winner.avg;
+
+            for (var t = 1; t < sorted.length; t++) {
+                if (sorted[t].count > 0 && Math.abs(sorted[t].avg - winner.avg) < 0.001) {
+                    isTie = true;
+                    tieNames.push(sorted[t].name);
+                } else {
+                    break;
+                }
+            }
+
+            fireConfetti();
+
+            if (isTie) {
+                winnerName = null;
+                winnerDisplay.textContent = '🤝 Ничья! (' + tieNames.join(', ') + ')';
+                render();
+                renderHistory();
+                renderLeader();
+                showPodium();
+                showToast('🤝 Ничья между: ' + tieNames.join(', '), 'info');
+            } else {
+                winnerName = winner.name;
+                winnerDisplay.textContent = '👑 Победитель: ' + winner.name + ' (' + winner.avg.toFixed(2) + ')';
+                render();
+                renderHistory();
+                renderLeader();
+                showPodium();
+                showToast('🏆 Победитель: ' + winner.name + ' (' + winner.avg.toFixed(2) + ')', '');
+            }
+        }
+
+        async function syncData() {
+            if (!githubToken) { showToast('Сначала подключитесь к GitHub', 'warning'); return; }
+            showToast('🔄 Синхронизация...', 'info');
+            await loadFromGitHub(currentTab);
+            showToast('✅ Синхронизация завершена', '');
+        }
+
+        async function connectToGitHub() {
+            if (isConnecting) return;
+
+            var token = tokenInput.value.trim();
+            if (!token) {
+                showToast('Введите GitHub токен', 'warning');
                 return;
             }
-            
-            tokenBlock.style.display = 'none'; 
-            appContent.style.display = 'block';
-            
-            await loadFromGitHub('national');
-            await loadFromGitHub('free');
-            await loadFromGitHub('evening');
-            render();
-            renderHistory();
-            renderLeader();
-            showToast('✅ Подключено к GitHub!', '');
-            
-            if (autoSyncInterval) clearInterval(autoSyncInterval);
-            autoSyncInterval = setInterval(function() {
-                if (githubToken) {
-                    loadFromGitHub(currentTab);
-                }
-            }, 10000);
-            
-        } catch(e) {
-            showToast('❌ Ошибка подключения: ' + e.message, 'error');
-        }
-        
-        isConnecting = false;
-    }
-
-    function fireConfetti() {
-        var container = document.createElement('div');
-        container.className = 'confetti-container';
-        document.body.appendChild(container);
-        
-        var colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff6fd8', '#ff9f43', '#a29bfe', '#fd79a8'];
-        
-        for (var i = 0; i < 120; i++) {
-            var piece = document.createElement('div');
-            piece.className = 'confetti-piece';
-            var size = Math.random() * 10 + 5;
-            var left = Math.random() * 100;
-            var delay = Math.random() * 2;
-            var duration = Math.random() * 2 + 2;
-            var color = colors[Math.floor(Math.random() * colors.length)];
-            var rotation = Math.random() * 360;
-            
-            piece.style.cssText = 
-                'left: ' + left + '%;' +
-                'width: ' + size + 'px;' +
-                'height: ' + size + 'px;' +
-                'background: ' + color + ';' +
-                'animation-delay: ' + delay + 's;' +
-                'animation-duration: ' + duration + 's;' +
-                'transform: rotate(' + rotation + 'deg);' +
-                'border-radius: ' + (Math.random() > 0.5 ? '50%' : '2px') + ';';
-            
-            container.appendChild(piece);
-        }
-        
-        setTimeout(function() {
-            container.remove();
-        }, 5000);
-    }
-
-    function init() {
-        loadColors();
-        renderPalettes();
-        
-        var savedToken = loadToken();
-        if (savedToken) { 
-            tokenInput.value = savedToken; 
-            connectToGitHub(); 
-        } else { 
-            tokenBlock.style.display = 'block'; 
-            appContent.style.display = 'none'; 
-        }
-        
-        function updateOnlineStatus() {
-            if (!navigator.onLine) {
-                offlineWarning.style.display = 'block';
-            } else {
-                offlineWarning.style.display = 'none';
+            if (!token.startsWith('ghp_')) {
+                showToast('Токен должен начинаться с "ghp_"', 'warning');
+                return;
             }
+
+            isConnecting = true;
+            githubToken = token;
+            saveToken(token);
+
+            setStatusBar('connecting', '⏳ Подключение к GitHub...');
+
+            try {
+                var testResponse = await fetch('https://api.github.com/user', {
+                    headers: { 'Authorization': 'token ' + githubToken }
+                });
+
+                if (!testResponse.ok) {
+                    if (testResponse.status === 401) {
+                        showToast('❌ Неверный токен! Проверьте и попробуйте снова.', 'error');
+                    } else {
+                        showToast('❌ Ошибка подключения: ' + testResponse.status, 'error');
+                    }
+                    isConnecting = false;
+                    return;
+                }
+
+                tokenBlock.style.display = 'none';
+                appContent.style.display = 'block';
+
+                await loadFromGitHub('national');
+                await loadFromGitHub('free');
+                await loadFromGitHub('evening');
+                render();
+                renderHistory();
+                renderLeader();
+                showToast('✅ Подключено к GitHub!', '');
+
+                if (autoSyncInterval) clearInterval(autoSyncInterval);
+                autoSyncInterval = setInterval(function() {
+                    if (githubToken) {
+                        loadFromGitHub(currentTab);
+                    }
+                }, 10000);
+
+            } catch (e) {
+                showToast('❌ Ошибка подключения: ' + e.message, 'error');
+            }
+
+            isConnecting = false;
         }
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
-        updateOnlineStatus();
-    }
 
-    // Обработчики
-    tokenBtn.addEventListener('click', connectToGitHub);
-    tokenInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') { e.preventDefault(); connectToGitHub(); }
-    });
-    addBtn.addEventListener('click', addVote);
-    calcBtn.addEventListener('click', calculateWinner);
-    syncBtn.addEventListener('click', syncData);
-    
-    nameInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') { e.preventDefault(); scoreInput.focus(); }
-    });
-    scoreInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') { e.preventDefault(); commentInputField.focus(); }
-    });
-    commentInputField.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') { e.preventDefault(); addVote(); }
-    });
+        function fireConfetti() {
+            var container = document.createElement('div');
+            container.className = 'confetti-container';
+            document.body.appendChild(container);
 
-    init();
-    
-    console.log('✅ Apple-style программа загружена!');
-    console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
-</script>
+            var colors = ['#ff6b6b', '#ffd93d', '#6bcb77', '#4d96ff', '#ff6fd8', '#ff9f43', '#a29bfe', '#fd79a8'];
+
+            for (var i = 0; i < 120; i++) {
+                var piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                var size = Math.random() * 10 + 5;
+                var left = Math.random() * 100;
+                var delay = Math.random() * 2;
+                var duration = Math.random() * 2 + 2;
+                var color = colors[Math.floor(Math.random() * colors.length)];
+                var rotation = Math.random() * 360;
+
+                piece.style.cssText =
+                    'left: ' + left + '%;' +
+                    'width: ' + size + 'px;' +
+                    'height: ' + size + 'px;' +
+                    'background: ' + color + ';' +
+                    'animation-delay: ' + delay + 's;' +
+                    'animation-duration: ' + duration + 's;' +
+                    'transform: rotate(' + rotation + 'deg);' +
+                    'border-radius: ' + (Math.random() > 0.5 ? '50%' : '2px') + ';';
+
+                container.appendChild(piece);
+            }
+
+            setTimeout(function() {
+                container.remove();
+            }, 5000);
+        }
+
+        function init() {
+            loadColors();
+            renderPalettes();
+
+            var savedToken = loadToken();
+            if (savedToken) {
+                tokenInput.value = savedToken;
+                connectToGitHub();
+            } else {
+                tokenBlock.style.display = 'block';
+                appContent.style.display = 'none';
+            }
+
+            function updateOnlineStatus() {
+                if (!navigator.onLine) {
+                    offlineWarning.style.display = 'block';
+                } else {
+                    offlineWarning.style.display = 'none';
+                }
+            }
+            window.addEventListener('online', updateOnlineStatus);
+            window.addEventListener('offline', updateOnlineStatus);
+            updateOnlineStatus();
+        }
+
+        // Обработчики
+        tokenBtn.addEventListener('click', connectToGitHub);
+        tokenInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault();
+                connectToGitHub(); }
+        });
+        addBtn.addEventListener('click', addVote);
+        calcBtn.addEventListener('click', calculateWinner);
+        syncBtn.addEventListener('click', syncData);
+
+        nameInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault();
+                scoreInput.focus(); }
+        });
+        scoreInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault();
+                commentInputField.focus(); }
+        });
+        commentInputField.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault();
+                addVote(); }
+        });
+
+        init();
+
+        console.log('✅ Apple-style программа загружена!');
+        console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
+    </script>
 </body>
 </html>
