@@ -19,15 +19,15 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            background: #c8e6e0;
+            background: #0abab5;
             color: #1c2a2a;
             transition: background 0.4s ease;
         }
 
-        /* ----- тёмная тема (чуть светлее) ----- */
+        /* ----- тёмная тема ----- */
         body.dark {
-            background: #1a1a24;
-            color: #e8e8ed;
+            background: #0a0a12;
+            color: #e0e0e0;
         }
 
         /* ----- главный контейнер ----- */
@@ -39,39 +39,39 @@
             z-index: 2;
         }
 
-        /* ----- стеклянная оболочка (светлая тиффани) ----- */
+        /* ----- стеклянная оболочка (светлая) ----- */
         .glass {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.45);
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border-radius: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.35);
             box-shadow: 0 30px 80px rgba(0, 0, 0, 0.04),
-                        0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+                        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
             transition: all 0.4s ease;
         }
 
-        /* ----- стеклянная оболочка (тёмная, чуть светлее) ----- */
+        /* ----- стеклянная оболочка (тёмная) ----- */
         body.dark .glass {
-            background: rgba(35, 35, 50, 0.7);
+            background: rgba(10, 10, 18, 0.8);
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
-                        0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6),
+                        0 0 0 1px rgba(255, 255, 255, 0.02) inset;
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(20px) saturate(140%);
             -webkit-backdrop-filter: blur(20px) saturate(140%);
             border-radius: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
         }
 
         body.dark .glass-card {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
             border-color: rgba(255, 255, 255, 0.04);
         }
 
@@ -89,9 +89,9 @@
             border: none;
             cursor: pointer;
             transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            background: #0071e3;
+            background: #0abab5;
             color: #fff;
-            box-shadow: 0 4px 12px rgba(0, 113, 227, 0.25);
+            box-shadow: 0 4px 12px rgba(10, 186, 181, 0.3);
             position: relative;
             overflow: hidden;
             text-decoration: none;
@@ -109,12 +109,21 @@
 
         .btn:hover {
             transform: scale(1.02);
-            box-shadow: 0 8px 28px rgba(0, 113, 227, 0.35);
-            background: #0077ed;
+            box-shadow: 0 8px 28px rgba(10, 186, 181, 0.4);
+            background: #0cc8c2;
         }
 
         .btn:active {
             transform: scale(0.96);
+        }
+
+        body.dark .btn {
+            background: #0abab5;
+            box-shadow: 0 4px 12px rgba(10, 186, 181, 0.25);
+        }
+        body.dark .btn:hover {
+            background: #0cc8c2;
+            box-shadow: 0 8px 28px rgba(10, 186, 181, 0.35);
         }
 
         .btn-secondary {
@@ -129,21 +138,21 @@
         }
 
         body.dark .btn-secondary {
-            background: rgba(255, 255, 255, 0.08);
-            color: #e8e8ed;
+            background: rgba(255, 255, 255, 0.06);
+            color: #e0e0e0;
         }
         body.dark .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.16);
+            background: rgba(255, 255, 255, 0.12);
         }
 
         .btn-success {
-            background: #34c759;
+            background: #0abab5;
             color: #fff;
-            box-shadow: 0 4px 12px rgba(52, 199, 89, 0.3);
+            box-shadow: 0 4px 12px rgba(10, 186, 181, 0.3);
         }
         .btn-success:hover {
-            background: #30b350;
-            box-shadow: 0 8px 28px rgba(52, 199, 89, 0.4);
+            background: #0cc8c2;
+            box-shadow: 0 8px 28px rgba(10, 186, 181, 0.4);
         }
 
         .btn-warning {
@@ -179,11 +188,11 @@
 
         body.dark .btn-clear {
             background: rgba(255, 255, 255, 0.04);
-            color: #e8e8ed;
+            color: #e0e0e0;
             border-color: rgba(255, 255, 255, 0.06);
         }
         body.dark .btn-clear:hover {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .btn-sm {
@@ -211,12 +220,12 @@
         }
 
         body.dark .header h1 {
-            color: #e8e8ed;
+            color: #e0e0e0;
         }
 
         .header .sub {
             font-size: 15px;
-            color: #4a6a6a;
+            color: #1c3a3a;
             font-weight: 400;
         }
 
@@ -239,7 +248,7 @@
         body.dark .theme-toggle {
             background: rgba(255, 255, 255, 0.06);
             border-color: rgba(255, 255, 255, 0.06);
-            color: #e8e8ed;
+            color: #e0e0e0;
         }
 
         .theme-toggle:hover {
@@ -259,21 +268,21 @@
             font-weight: 500;
             text-align: center;
             color: #1c2a2a;
-            background: rgba(255, 255, 255, 0.45);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         body.dark .status-bar {
-            color: #e8e8ed;
+            color: #e0e0e0;
             background: rgba(255, 255, 255, 0.04);
             border-color: rgba(255, 255, 255, 0.04);
         }
 
         .status-bar.online {
-            border-color: rgba(52, 199, 89, 0.3);
+            border-color: rgba(10, 186, 181, 0.3);
         }
         body.dark .status-bar.online {
-            border-color: rgba(52, 199, 89, 0.2);
+            border-color: rgba(10, 186, 181, 0.2);
         }
 
         /* ----- токен ----- */
@@ -287,7 +296,7 @@
             display: block;
             font-weight: 600;
             font-size: 14px;
-            color: #4a6a6a;
+            color: #1c3a3a;
             margin-bottom: 8px;
         }
 
@@ -300,7 +309,7 @@
             padding: 16px 20px;
             border-radius: 980px;
             font-size: 16px;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.55);
             border: 1px solid rgba(0, 0, 0, 0.04);
             color: #1c2a2a;
             transition: all 0.3s ease;
@@ -309,18 +318,18 @@
 
         body.dark .token-input input {
             background: rgba(255, 255, 255, 0.05);
-            color: #e8e8ed;
+            color: #e0e0e0;
             border-color: rgba(255, 255, 255, 0.04);
         }
 
         .token-input input:focus {
-            border-color: #0071e3;
-            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
+            border-color: #0abab5;
+            box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.15);
         }
 
         .token-input .hint {
             font-size: 13px;
-            color: #4a6a6a;
+            color: #1c3a3a;
             margin-top: 10px;
         }
 
@@ -333,10 +342,10 @@
             padding: 24px 28px;
             margin-bottom: 20px;
             border-radius: 32px;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.25);
             backdrop-filter: blur(20px) saturate(140%);
             -webkit-backdrop-filter: blur(20px) saturate(140%);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         body.dark .section-glass {
@@ -348,7 +357,7 @@
             font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 0.04em;
-            color: #4a6a6a;
+            color: #1c3a3a;
             margin-bottom: 16px;
             font-weight: 600;
         }
@@ -368,8 +377,8 @@
             text-align: center;
             padding: 18px 12px;
             border-radius: 24px;
-            background: rgba(255, 255, 255, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.12);
         }
 
         body.dark .stat-card {
@@ -384,12 +393,12 @@
         }
 
         body.dark .stat-card .num {
-            color: #e8e8ed;
+            color: #e0e0e0;
         }
 
         .stat-card .label {
             font-size: 13px;
-            color: #4a6a6a;
+            color: #1c3a3a;
             margin-top: 4px;
         }
 
@@ -414,7 +423,7 @@
 
         .leader-card .label {
             font-size: 14px;
-            color: #4a6a6a;
+            color: #1c3a3a;
             font-weight: 500;
         }
 
@@ -436,7 +445,7 @@
 
         .leader-card .score {
             font-size: 17px;
-            color: #4a6a6a;
+            color: #1c3a3a;
             font-weight: 500;
         }
 
@@ -445,7 +454,7 @@
         }
 
         .leader-card .empty {
-            color: #4a6a6a;
+            color: #1c3a3a;
             font-size: 16px;
         }
 
@@ -472,7 +481,7 @@
         .input-group label {
             font-size: 13px;
             font-weight: 500;
-            color: #4a6a6a;
+            color: #1c3a3a;
         }
 
         body.dark .input-group label {
@@ -483,7 +492,7 @@
             padding: 14px 20px;
             border-radius: 980px;
             font-size: 16px;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.45);
             border: 1px solid rgba(0, 0, 0, 0.04);
             color: #1c2a2a;
             transition: all 0.3s ease;
@@ -493,17 +502,17 @@
 
         body.dark .input-group input {
             background: rgba(255, 255, 255, 0.05);
-            color: #e8e8ed;
+            color: #e0e0e0;
             border-color: rgba(255, 255, 255, 0.04);
         }
 
         .input-group input:focus {
-            border-color: #0071e3;
-            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.08);
+            border-color: #0abab5;
+            box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.12);
         }
 
         .input-group input::placeholder {
-            color: #6a8a8a;
+            color: #4a6a6a;
         }
 
         body.dark .input-group input::placeholder {
@@ -514,7 +523,7 @@
             padding: 12px 20px;
             border-radius: 980px;
             font-size: 14px;
-            background: rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.3);
             border: 1px solid rgba(0, 0, 0, 0.04);
             color: #1c2a2a;
             width: 100%;
@@ -525,17 +534,17 @@
 
         body.dark .comment-input {
             background: rgba(255, 255, 255, 0.04);
-            color: #e8e8ed;
+            color: #e0e0e0;
             border-color: rgba(255, 255, 255, 0.04);
         }
 
         .comment-input:focus {
-            border-color: #0071e3;
-            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.06);
+            border-color: #0abab5;
+            box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.08);
         }
 
         .comment-input::placeholder {
-            color: #6a8a8a;
+            color: #4a6a6a;
         }
 
         body.dark .comment-input::placeholder {
@@ -548,8 +557,8 @@
             gap: 4px;
             padding: 4px;
             border-radius: 980px;
-            background: rgba(255, 255, 255, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             margin-bottom: 20px;
         }
 
@@ -567,7 +576,7 @@
             font-size: 14px;
             cursor: pointer;
             background: transparent;
-            color: #4a6a6a;
+            color: #1c3a3a;
             transition: all 0.3s ease;
         }
 
@@ -576,13 +585,13 @@
         }
 
         .tab-btn.active {
-            background: #0071e3;
+            background: #0abab5;
             color: #fff;
-            box-shadow: 0 2px 12px rgba(0, 113, 227, 0.2);
+            box-shadow: 0 2px 12px rgba(10, 186, 181, 0.25);
         }
 
         body.dark .tab-btn.active {
-            background: #0077ed;
+            background: #0abab5;
             color: #fff;
         }
 
@@ -599,7 +608,7 @@
             overflow-x: auto;
             border-radius: 24px;
             border: 1px solid rgba(0, 0, 0, 0.04);
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.12);
         }
 
         body.dark .table-wrap {
@@ -617,7 +626,7 @@
             padding: 16px 14px;
             text-align: center;
             font-weight: 600;
-            color: #4a6a6a;
+            color: #1c3a3a;
             text-transform: uppercase;
             font-size: 11px;
             letter-spacing: 0.04em;
@@ -637,7 +646,7 @@
         }
 
         body.dark td {
-            color: #e8e8ed;
+            color: #e0e0e0;
             border-bottom-color: rgba(255, 255, 255, 0.04);
         }
 
@@ -661,7 +670,7 @@
 
         .comment-cell {
             font-size: 12px;
-            color: #4a6a6a;
+            color: #1c3a3a;
             max-width: 120px;
             word-break: break-word;
         }
@@ -673,7 +682,7 @@
         .empty-message {
             text-align: center;
             padding: 40px;
-            color: #4a6a6a;
+            color: #1c3a3a;
             font-style: italic;
         }
 
@@ -709,7 +718,7 @@
         }
 
         body.dark .history-item {
-            color: #e8e8ed;
+            color: #e0e0e0;
             border-bottom-color: rgba(255, 255, 255, 0.04);
         }
 
@@ -719,7 +728,7 @@
 
         .history-item .comment-text {
             font-size: 12px;
-            color: #4a6a6a;
+            color: #1c3a3a;
             max-width: 100px;
             white-space: nowrap;
             overflow: hidden;
@@ -732,7 +741,7 @@
 
         .history-item .score {
             font-weight: 600;
-            color: #34c759;
+            color: #0abab5;
             width: 60px;
             text-align: right;
             flex-shrink: 0;
@@ -740,7 +749,7 @@
 
         .history-item .time {
             font-size: 12px;
-            color: #4a6a6a;
+            color: #1c3a3a;
             width: 65px;
             text-align: right;
             flex-shrink: 0;
@@ -752,7 +761,7 @@
 
         .history-item .date {
             font-size: 12px;
-            color: #4a6a6a;
+            color: #1c3a3a;
             width: 80px;
             text-align: right;
             flex-shrink: 0;
@@ -767,7 +776,7 @@
 
         .history-empty {
             text-align: center;
-            color: #4a6a6a;
+            color: #1c3a3a;
             padding: 20px;
             font-style: italic;
             font-size: 14px;
@@ -796,7 +805,7 @@
             padding-top: 18px;
             margin-top: 18px;
             border-top: 1px solid rgba(0, 0, 0, 0.04);
-            color: #4a6a6a;
+            color: #1c3a3a;
             font-size: 13px;
         }
 
@@ -805,7 +814,7 @@
             color: #6a6a7a;
         }
 
-        .save-status { color: #34c759; }
+        .save-status { color: #0abab5; }
 
         .actions {
             display: flex;
@@ -838,7 +847,7 @@
         .modal-overlay.active { display: flex; }
 
         .modal-box {
-            background: rgba(255, 255, 255, 0.65);
+            background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(50px) saturate(180%);
             -webkit-backdrop-filter: blur(50px) saturate(180%);
             padding: 40px 36px;
@@ -846,12 +855,12 @@
             max-width: 440px;
             width: 100%;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 40px 100px rgba(0, 0, 0, 0.06);
         }
 
         body.dark .modal-box {
-            background: rgba(45, 45, 60, 0.85);
+            background: rgba(20, 20, 30, 0.85);
             border-color: rgba(255, 255, 255, 0.06);
         }
 
@@ -862,10 +871,10 @@
             font-size: 26px;
         }
 
-        body.dark .modal-box h2 { color: #e8e8ed; }
+        body.dark .modal-box h2 { color: #e0e0e0; }
 
         .modal-box p {
-            color: #4a6a6a;
+            color: #1c3a3a;
             margin-bottom: 16px;
             font-size: 15px;
         }
@@ -879,7 +888,7 @@
             margin: 16px 0;
         }
 
-        body.dark .modal-box .question { color: #ffd700; }
+        body.dark .modal-box .question { color: #0abab5; }
 
         .modal-box input {
             width: 100%;
@@ -887,7 +896,7 @@
             border-radius: 980px;
             font-size: 18px;
             text-align: center;
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.45);
             border: 1px solid rgba(0, 0, 0, 0.04);
             color: #1c2a2a;
             outline: none;
@@ -896,13 +905,13 @@
 
         body.dark .modal-box input {
             background: rgba(255, 255, 255, 0.05);
-            color: #e8e8ed;
+            color: #e0e0e0;
             border-color: rgba(255, 255, 255, 0.04);
         }
 
         .modal-box input:focus {
-            border-color: #0071e3;
-            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.08);
+            border-color: #0abab5;
+            box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.1);
         }
 
         .modal-box .btn-row { display: flex; gap: 12px; }
@@ -933,7 +942,7 @@
         .podium-item .place {
             font-weight: 600;
             font-size: 13px;
-            color: #4a6a6a;
+            color: #1c3a3a;
             margin-top: 4px;
         }
 
@@ -946,11 +955,11 @@
             margin-top: 2px;
         }
 
-        body.dark .podium-item .podium-name { color: #e8e8ed; }
+        body.dark .podium-item .podium-name { color: #e0e0e0; }
 
         .podium-item .podium-score {
             font-size: 14px;
-            color: #4a6a6a;
+            color: #1c3a3a;
         }
 
         body.dark .podium-item .podium-score { color: #6a6a7a; }
@@ -1104,7 +1113,7 @@
                 </div>
             </div>
             <div style="margin-top: 10px;">
-                <label style="font-size:13px; color:#4a6a6a;">💬 Комментарий (необязательно)</label>
+                <label style="font-size:13px; color:#1c3a3a;">💬 Комментарий (необязательно)</label>
                 <input type="text" id="commentInput" class="comment-input" placeholder="Например: Отличное выступление!">
             </div>
         </div>
@@ -1113,7 +1122,7 @@
         <div class="section-glass" style="border-color: rgba(255,59,48,0.08);">
             <label style="font-size:14px; color:#ff3b30; font-weight:500;">🗑️ Удалить участника</label>
             <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
-                <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.35); border:1px solid rgba(0,0,0,0.04); color:#1c2a2a; outline:none; min-width:120px;">
+                <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.3); border:1px solid rgba(0,0,0,0.04); color:#1c2a2a; outline:none; min-width:120px;">
                 <button class="btn btn-danger btn-sm" id="deleteBtn" style="min-width:auto;">✕ Удалить</button>
             </div>
         </div>
@@ -1146,7 +1155,7 @@
             <span id="winnerDisplay">👑 Победитель: не определен</span>
             <span class="save-status" id="statusDisplay">☁️ Готов</span>
         </div>
-        <div style="text-align:center; margin-top:14px; font-size:12px; color:#4a6a6a;">
+        <div style="text-align:center; margin-top:14px; font-size:12px; color:#1c3a3a;">
             🔄 Автосинхронизация каждые 10 секунд · 💬 Комментарии
         </div>
     </div>
@@ -1185,15 +1194,15 @@
         var container = document.getElementById('toastContainer');
         var toast = document.createElement('div');
         toast.className = 'toast';
-        toast.style.cssText = 'background:rgba(255,255,255,0.65); backdrop-filter:blur(30px); -webkit-backdrop-filter:blur(30px); color:#1c2a2a; padding:14px 28px; border-radius:980px; font-weight:500; font-size:15px; box-shadow:0 20px 60px rgba(0,0,0,0.04); animation:toastIn 0.4s ease, toastOut 0.4s ease 3s forwards; pointer-events:auto; border:1px solid rgba(255,255,255,0.25); text-align:center;';
+        toast.style.cssText = 'background:rgba(255,255,255,0.6); backdrop-filter:blur(30px); -webkit-backdrop-filter:blur(30px); color:#1c2a2a; padding:14px 28px; border-radius:980px; font-weight:500; font-size:15px; box-shadow:0 20px 60px rgba(0,0,0,0.04); animation:toastIn 0.4s ease, toastOut 0.4s ease 3s forwards; pointer-events:auto; border:1px solid rgba(255,255,255,0.2); text-align:center;';
         if (document.body.classList.contains('dark')) {
-            toast.style.background = 'rgba(45,45,60,0.85)';
-            toast.style.color = '#e8e8ed';
+            toast.style.background = 'rgba(20,20,30,0.85)';
+            toast.style.color = '#e0e0e0';
             toast.style.borderColor = 'rgba(255,255,255,0.06)';
         }
         if (type === 'warning') toast.style.borderColor = 'rgba(255,149,0,0.3)';
         if (type === 'error') toast.style.borderColor = 'rgba(255,59,48,0.3)';
-        if (type === 'info') toast.style.borderColor = 'rgba(0,113,227,0.3)';
+        if (type === 'info') toast.style.borderColor = 'rgba(10,186,181,0.3)';
         toast.textContent = message;
         container.appendChild(toast);
         setTimeout(function() { if (toast.parentNode) toast.remove(); }, 4000);
@@ -1209,7 +1218,7 @@
     themeToggle.addEventListener('click', function() {
         document.body.classList.toggle('dark');
         isDark = document.body.classList.contains('dark');
-        themeToggle.textContent = isDark ? '☀️ Светлая тема (Тиффани)' : '🌙 Тёмная тема';
+        themeToggle.textContent = isDark ? '☀️ Светлая тема' : '🌙 Тёмная тема';
     });
 
     // ============================================================
@@ -1586,7 +1595,7 @@
         }
 
         if (topGroups.length === 0) {
-            podiumContainer.innerHTML = '<p style="color: #4a6a6a; padding: 20px;">Нет данных для отображения</p>';
+            podiumContainer.innerHTML = '<p style="color: #1c3a3a; padding: 20px;">Нет данных для отображения</p>';
         } else {
             podiumContainer.innerHTML = html;
         }
@@ -1596,7 +1605,7 @@
     // ===== ОСТАЛЬНОЙ КОД =====
     function setStatus(text, color) {
         statusDisplay.textContent = text;
-        statusDisplay.style.color = color || '#34c759';
+        statusDisplay.style.color = color || '#0abab5';
     }
 
     function setStatusBar(status, message) {
@@ -1661,7 +1670,7 @@
             var saveResponse = await fetch(url, { method: 'PUT', headers: { 'Authorization': 'token ' + githubToken, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) });
             if (saveResponse.ok) { 
                 setStatusBar('online', '☁️ Сохранено'); 
-                setStatus('☁️ Сохранено', '#34c759'); 
+                setStatus('☁️ Сохранено', '#0abab5'); 
             } else {
                 throw new Error('Ошибка сохранения');
             }
@@ -1706,7 +1715,7 @@
                 renderHistory();
                 renderLeader();
                 setStatusBar('online', '☁️ Автосинхронизация');
-                setStatus('☁️ Синхронизировано', '#34c759');
+                setStatus('☁️ Синхронизировано', '#0abab5');
             }
         } catch(e) { 
             setStatusBar('online', '☁️ Данные загружены из кэша');
