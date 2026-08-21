@@ -12,20 +12,75 @@
             box-sizing: border-box;
         }
 
+        /* ----- Шрифт San Francisco ----- */
+        @font-face {
+            font-family: 'SF Pro Display';
+            src: local('SF Pro Display'), local('SFProDisplay-Regular');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'SF Pro Display';
+            src: local('SF Pro Display Medium'), local('SFProDisplay-Medium');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'SF Pro Display';
+            src: local('SF Pro Display Semibold'), local('SFProDisplay-Semibold');
+            font-weight: 600;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'SF Pro Display';
+            src: local('SF Pro Display Bold'), local('SFProDisplay-Bold');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'SF Pro Text';
+            src: local('SF Pro Text'), local('SFProText-Regular');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'SF Pro Text';
+            src: local('SF Pro Text Medium'), local('SFProText-Medium');
+            font-weight: 500;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'SF Pro Text';
+            src: local('SF Pro Text Semibold'), local('SFProText-Semibold');
+            font-weight: 600;
+            font-style: normal;
+        }
+
         /* ----- Переменные для цветов ----- */
         :root {
             --bg-light: #0abab5;
             --bg-dark: #0a0a12;
             --accent-color: #0abab5;
             --text-light: #ffffff;
-            --text-dark: #B8860B;
+            --text-dark: #ffffff;
             --bg-image: url('https://i.pinimg.com/originals/2b/eb/2c/2beb2c21cc6bc0aceeeda066965a3199.png');
             --overlay-opacity-light: 0.78;
             --overlay-opacity-dark: 0.90;
         }
 
+        /* ----- ГЛОБАЛЬНЫЙ ШРИФТ ----- */
+        html, body, .container, .btn, input, textarea, select, button, .header, .status-bar, .token-input, .section-glass, .stat-card, .leader-card, .tab-btn, table, th, td, .history-item, .modal-box, .color-option, .podium-item, .footer {
+            font-family: -apple-system, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+        }
+
         body {
-            font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
+            font-family: -apple-system, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -312,6 +367,7 @@
             font-weight: 700;
             letter-spacing: -0.02em;
             color: var(--text-light);
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .header h1 {
@@ -322,10 +378,37 @@
             font-size: 15px;
             color: var(--text-light);
             font-weight: 400;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .header .sub {
             color: var(--text-dark);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .color-picker-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .color-picker-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-light);
+            opacity: 0.8;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
+        }
+
+        body.dark .color-picker-label {
+            color: var(--text-dark);
+            opacity: 0.8;
         }
 
         .theme-toggle {
@@ -345,6 +428,7 @@
                 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
             position: relative;
             overflow: hidden;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         .theme-toggle::before {
@@ -414,6 +498,7 @@
                 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
             position: relative;
             overflow: hidden;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         .status-bar::before {
@@ -469,6 +554,7 @@
                 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
             position: relative;
             overflow: hidden;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         .token-input::before {
@@ -508,6 +594,7 @@
             font-size: 14px;
             color: var(--text-light);
             margin-bottom: 8px;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .token-input label {
@@ -526,6 +613,7 @@
             color: #1c2a2a;
             transition: all 0.3s ease;
             outline: none;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .token-input input {
@@ -543,6 +631,7 @@
             font-size: 13px;
             color: var(--text-light);
             margin-top: 10px;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .token-input .hint {
@@ -603,6 +692,7 @@
             color: var(--text-light);
             margin-bottom: 16px;
             font-weight: 600;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .section-title {
@@ -630,6 +720,7 @@
             position: relative;
             overflow: hidden;
             transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         .stat-card::before {
@@ -678,6 +769,7 @@
             font-size: 36px;
             font-weight: 700;
             color: var(--text-light);
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .stat-card .num {
@@ -688,6 +780,7 @@
             font-size: 13px;
             color: var(--text-light);
             margin-top: 4px;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .stat-card .label {
@@ -704,6 +797,7 @@
             margin-bottom: 20px;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .leader-card {
@@ -715,6 +809,7 @@
             font-size: 14px;
             color: var(--text-light);
             font-weight: 500;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .leader-card .label {
@@ -727,6 +822,7 @@
             color: #FFD700;
             letter-spacing: -0.02em;
             margin: 6px 0 2px;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .leader-card .names {
@@ -737,6 +833,7 @@
             font-size: 17px;
             color: #FFD700;
             font-weight: 500;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .leader-card .score {
@@ -746,6 +843,7 @@
         .leader-card .empty {
             color: var(--text-light);
             font-size: 16px;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .leader-card .empty {
@@ -772,6 +870,7 @@
             font-size: 13px;
             font-weight: 500;
             color: var(--text-light);
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .input-group label {
@@ -790,6 +889,7 @@
             transition: all 0.3s ease;
             outline: none;
             width: 100%;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .input-group input {
@@ -806,6 +906,7 @@
         .input-group input::placeholder {
             color: var(--text-light);
             opacity: 0.5;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .input-group input::placeholder {
@@ -826,6 +927,7 @@
             outline: none;
             transition: all 0.3s ease;
             margin-top: 6px;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .comment-input {
@@ -842,6 +944,7 @@
         .comment-input::placeholder {
             color: var(--text-light);
             opacity: 0.5;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .comment-input::placeholder {
@@ -880,6 +983,7 @@
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .tab-btn {
@@ -959,6 +1063,7 @@
             min-width: 600px;
             border-collapse: collapse;
             font-size: 14px;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         th {
@@ -971,6 +1076,7 @@
             letter-spacing: 0.04em;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
             white-space: nowrap;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark th {
@@ -984,6 +1090,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
             color: var(--text-light);
             white-space: nowrap;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark td {
@@ -1010,6 +1117,7 @@
         .total-cell {
             font-weight: 700;
             color: #FFD700 !important;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .total-cell {
@@ -1022,6 +1130,7 @@
             max-width: 120px;
             word-break: break-word;
             white-space: normal;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .comment-cell {
@@ -1033,6 +1142,7 @@
             padding: 40px;
             color: var(--text-light);
             font-style: italic;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .empty-message {
@@ -1064,6 +1174,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
             font-size: 14px;
             color: var(--text-light);
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .history-item {
@@ -1073,7 +1184,11 @@
 
         .history-item:last-child { border-bottom: none; }
 
-        .history-item .name { font-weight: 500; flex: 1; }
+        .history-item .name { 
+            font-weight: 500; 
+            flex: 1;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
+        }
 
         .history-item .comment-text {
             font-size: 12px;
@@ -1082,6 +1197,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .history-item .comment-text {
@@ -1095,6 +1211,7 @@
             width: 60px;
             text-align: right;
             flex-shrink: 0;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .history-item .score {
@@ -1107,6 +1224,7 @@
             width: 65px;
             text-align: right;
             flex-shrink: 0;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .history-item .time {
@@ -1119,6 +1237,7 @@
             width: 80px;
             text-align: right;
             flex-shrink: 0;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .history-item .date {
@@ -1134,6 +1253,7 @@
             padding: 20px;
             font-style: italic;
             font-size: 14px;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .history-empty {
@@ -1147,6 +1267,7 @@
             color: #ff3b30;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
         .section-glass .btn-delete:hover {
             background: rgba(255, 59, 48, 0.12);
@@ -1164,6 +1285,7 @@
             border-top: 1px solid rgba(255, 255, 255, 0.04);
             color: var(--text-light);
             font-size: 13px;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .footer {
@@ -1171,7 +1293,10 @@
             color: var(--text-dark);
         }
 
-        .save-status { color: var(--accent-color, #0abab5); }
+        .save-status { 
+            color: var(--accent-color, #0abab5);
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
+        }
 
         .actions {
             display: flex;
@@ -1216,6 +1341,7 @@
             box-shadow: 0 40px 100px rgba(0, 0, 0, 0.04);
             max-height: 90vh;
             overflow-y: auto;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .modal-box {
@@ -1228,6 +1354,7 @@
             color: var(--text-light);
             font-weight: 700;
             font-size: 24px;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .modal-box h2 { color: var(--text-dark); }
@@ -1236,6 +1363,7 @@
             color: var(--text-light);
             margin-bottom: 16px;
             font-size: 14px;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .modal-box p { color: var(--text-dark); }
@@ -1245,6 +1373,7 @@
             font-weight: 700;
             color: #FFD700;
             margin: 16px 0;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .modal-box .question { color: #FFD700; }
@@ -1262,6 +1391,7 @@
             color: #1c2a2a;
             outline: none;
             margin-bottom: 16px;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .modal-box input {
@@ -1283,6 +1413,7 @@
             font-size: 14px;
             margin-top: 12px;
             display: none;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
         .modal-box .error-msg.show { display: block; }
 
@@ -1303,6 +1434,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .palette-title {
@@ -1336,6 +1468,7 @@
             background: rgba(255, 255, 255, 0.06);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .color-option {
@@ -1377,6 +1510,7 @@
             font-size: 13px;
             font-weight: 500;
             color: var(--text-light);
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .color-name {
@@ -1393,7 +1527,11 @@
             flex-wrap: wrap;
         }
 
-        .podium-item { text-align: center; min-width: 80px; }
+        .podium-item { 
+            text-align: center; 
+            min-width: 80px;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
+        }
 
         .podium-item .medal { font-size: 44px; display: block; }
 
@@ -1402,6 +1540,7 @@
             font-size: 13px;
             color: var(--text-light);
             margin-top: 4px;
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .podium-item .place { color: var(--text-dark); }
@@ -1411,6 +1550,7 @@
             font-size: 17px;
             color: #FFD700;
             margin-top: 2px;
+            font-family: 'SF Pro Display', -apple-system, sans-serif;
         }
 
         body.dark .podium-item .podium-name { color: #FFD700; }
@@ -1418,6 +1558,7 @@
         .podium-item .podium-score {
             font-size: 14px;
             color: var(--text-light);
+            font-family: 'SF Pro Text', -apple-system, sans-serif;
         }
 
         body.dark .podium-item .podium-score { color: var(--text-dark); }
@@ -1534,10 +1675,13 @@
             </div>
         </div>
         <div class="header-right">
-            <button class="btn btn-icon" id="colorPickerBtn" title="Выбрать цвета">
-                <span>🎨</span>
-                <span class="color-preview" id="accentPreview" style="background: #0abab5;"></span>
-            </button>
+            <div class="color-picker-wrapper">
+                <span class="color-picker-label">Сменить цвета</span>
+                <button class="btn btn-icon" id="colorPickerBtn" title="Выбрать цвета">
+                    <span>🎨</span>
+                    <span class="color-preview" id="accentPreview" style="background: #0abab5;"></span>
+                </button>
+            </div>
             <button class="theme-toggle" id="themeToggle">🌙 Тёмная тема</button>
         </div>
     </div>
@@ -1613,7 +1757,7 @@
         <div class="section-glass" style="border-color: rgba(255,59,48,0.06);">
             <label style="font-size:14px; color:#ff3b30; font-weight:500;">🗑️ Удалить участника</label>
             <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
-                <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.06); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.03); color:#1c2a2a; outline:none; min-width:120px;">
+                <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.06); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.03); color:#1c2a2a; outline:none; min-width:120px; font-family:'SF Pro Text', sans-serif;">
                 <button class="btn btn-sm btn-delete" id="deleteBtn" style="min-width:auto;">✕ Удалить</button>
             </div>
         </div>
@@ -1646,7 +1790,7 @@
             <span id="winnerDisplay">👑 Победитель: не определен</span>
             <span class="save-status" id="statusDisplay">☁️ Готов</span>
         </div>
-        <div style="text-align:center; margin-top:14px; font-size:12px; color:var(--text-light);">
+        <div style="text-align:center; margin-top:14px; font-size:12px; color:var(--text-light); font-family:'SF Pro Text', sans-serif;">
             🔄 Автосинхронизация каждые 10 секунд · 💬 Комментарии
         </div>
     </div>
@@ -1739,7 +1883,7 @@
         var container = document.getElementById('toastContainer');
         var toast = document.createElement('div');
         toast.className = 'toast';
-        toast.style.cssText = 'background:rgba(255,255,255,0.4); backdrop-filter:blur(30px); -webkit-backdrop-filter:blur(30px); color:#1c2a2a; padding:14px 28px; border-radius:980px; font-weight:500; font-size:15px; box-shadow:0 20px 60px rgba(0,0,0,0.04); animation:toastIn 0.4s ease, toastOut 0.4s ease 3s forwards; pointer-events:auto; border:1px solid rgba(255,255,255,0.06); text-align:center;';
+        toast.style.cssText = 'background:rgba(255,255,255,0.4); backdrop-filter:blur(30px); -webkit-backdrop-filter:blur(30px); color:#1c2a2a; padding:14px 28px; border-radius:980px; font-weight:500; font-size:15px; box-shadow:0 20px 60px rgba(0,0,0,0.04); animation:toastIn 0.4s ease, toastOut 0.4s ease 3s forwards; pointer-events:auto; border:1px solid rgba(255,255,255,0.06); text-align:center; font-family:"SF Pro Text", sans-serif;';
         if (document.body.classList.contains('dark')) {
             toast.style.background = 'rgba(20,20,30,0.7)';
             toast.style.color = '#ffffff';
@@ -2262,7 +2406,7 @@
         }
 
         if (topGroups.length === 0) {
-            podiumContainer.innerHTML = '<p style="color: var(--text-light); padding: 20px;">Нет данных для отображения</p>';
+            podiumContainer.innerHTML = '<p style="color: var(--text-light); padding: 20px; font-family:"SF Pro Text", sans-serif;">Нет данных для отображения</p>';
         } else {
             podiumContainer.innerHTML = html;
         }
