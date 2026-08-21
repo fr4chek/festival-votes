@@ -1,44 +1,4 @@
 {
-  "votes": [
-    {
-      "id": "1787235492237_nzek56",
-      "name": "АНна",
-      "score": 10,
-      "comment": ""
-    },
-    {
-      "id": "1787235565534_ho81h6",
-      "name": "Егор",
-      "score": 10,
-      "comment": ""
-    }
-  ],
-  "history": [
-    {
-      "type": "vote",
-      "name": "Егор",
-      "score": 10,
-      "comment": "",
-      "time": "17:19:25"
-    },
-    {
-      "type": "vote",
-      "name": "АНна",
-      "score": 10,
-      "comment": "",
-      "time": "17:18:12"
-    },
-    {
-      "type": "delete",
-      "name": "Саша",
-      "time": "17:16:54"
-    },
-    {
-      "type": "vote",
-      "name": "Саша",
-      "score": 10,
-      "comment": "прапрапрап",
-      "time": "17:15:24"
-    }
-  ]
+  "votes": [],
+  "history": []
 }
