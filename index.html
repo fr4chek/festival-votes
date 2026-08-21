@@ -63,12 +63,38 @@
         }
 
         /* ----- Глобальное применение шрифта ----- */
-        html, body, .container, .btn, input, textarea, select, button,
-        .header, .status-bar, .token-input, .section-glass, .stat-card,
-        .leader-card, .tab-btn, table, th, td, .history-item, .modal-box,
-        .color-option, .podium-item, .footer, .footer-bottom,
-        .color-picker-label, .theme-toggle, .hint, .save-status,
-        #winnerDisplay, #statusDisplay, .palette-title, .color-name {
+        html,
+        body,
+        .container,
+        .btn,
+        input,
+        textarea,
+        select,
+        button,
+        .header,
+        .status-bar,
+        .token-input,
+        .section-glass,
+        .stat-card,
+        .leader-card,
+        .tab-btn,
+        table,
+        th,
+        td,
+        .history-item,
+        .modal-box,
+        .color-option,
+        .podium-item,
+        .footer,
+        .footer-bottom,
+        .color-picker-label,
+        .theme-toggle,
+        .hint,
+        .save-status,
+        #winnerDisplay,
+        #statusDisplay,
+        .palette-title,
+        .color-name {
             font-family: -apple-system, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
         }
 
@@ -94,7 +120,7 @@
             background: var(--bg-light);
             color: var(--text-light);
             transition: background 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                        color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
         }
 
@@ -127,7 +153,7 @@
             opacity: var(--overlay-opacity-light);
             z-index: 0;
             transition: background 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                        opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             pointer-events: none;
         }
 
@@ -1659,12 +1685,24 @@
                 </div>
             </div>
 
-            <!-- УДАЛЕНИЕ -->
+            <!-- УДАЛЕНИЕ с подтверждением -->
             <div class="section-glass" style="border-color: rgba(255,59,48,0.06);">
                 <label style="font-size:14px; color:#ff3b30; font-weight:500;">🗑️ Удалить участника</label>
                 <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
                     <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.06); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.03); color:#1c2a2a; outline:none; min-width:120px; font-family:'SF Pro Text', sans-serif;">
                     <button class="btn btn-sm btn-delete" id="deleteBtn" style="min-width:auto;">✕ Удалить</button>
+                </div>
+            </div>
+
+            <!-- МОДАЛКА ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ -->
+            <div class="modal-overlay" id="deleteConfirmModal">
+                <div class="modal-box">
+                    <h2>⚠️ Подтверждение удаления</h2>
+                    <p>Вы уверены, что хотите удалить участника <strong id="deleteConfirmName" style="color:#FFD700;"></strong>?</p>
+                    <div class="btn-row">
+                        <button class="btn btn-danger" id="confirmDeleteBtn">🗑️ Удалить</button>
+                        <button class="btn btn-secondary" id="cancelDeleteBtn">↩️ Отменить удаление</button>
+                    </div>
                 </div>
             </div>
 
@@ -1739,8 +1777,8 @@
             <div class="question">2 + 2 = ?</div>
             <input type="number" id="captchaInput" placeholder="Введите ответ" autocomplete="off">
             <div class="btn-row">
-                <button class="btn" id="confirmClearBtn">🗑️ Очистить</button>
-                <button class="btn" id="cancelClearBtn">Отмена</button>
+                <button class="btn btn-danger" id="confirmClearBtn">🗑️ Очистить</button>
+                <button class="btn btn-secondary" id="cancelClearBtn">↩️ Отменить удаление</button>
             </div>
             <div class="error-msg" id="captchaError">❌ Неправильный ответ! Попробуйте ещё раз.</div>
         </div>
@@ -1760,7 +1798,6 @@
         // ПАЛИТРЫ ЦВЕТОВ (ОБНОВЛЕННЫЕ)
         // ============================================================
         const LIGHT_PALETTE = [
-            { hex: '#38705D', name: 'Изумруд' },
             { hex: '#254E40', name: 'Тёмный лес' },
             { hex: '#1C3E32', name: 'Глубокий лес' },
             { hex: '#1C4E4F', name: 'Тёмный аквамарин' },
@@ -1798,7 +1835,7 @@
         // ============================================================
         // УПРАВЛЕНИЕ ЦВЕТАМИ
         // ============================================================
-        let lightColor = '#38705D';
+        let lightColor = '#254E40';
         let darkColor = '#0A2D2E';
 
         function setLightColor(color) {
@@ -1933,6 +1970,61 @@
         });
 
         // ============================================================
+        // МОДАЛКА ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ
+        // ============================================================
+        var deleteConfirmModal = document.getElementById('deleteConfirmModal');
+        var deleteConfirmName = document.getElementById('deleteConfirmName');
+        var confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        var cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        var pendingDeleteName = '';
+
+        // Функция показа модалки удаления
+        function showDeleteConfirm(name) {
+            pendingDeleteName = name;
+            deleteConfirmName.textContent = name;
+            deleteConfirmModal.classList.add('active');
+        }
+
+        // Подтверждение удаления
+        confirmDeleteBtn.addEventListener('click', function() {
+            if (!pendingDeleteName) return;
+            var name = pendingDeleteName;
+            var votes = allData[currentTab].votes;
+            var newVotes = [];
+            for (var j = 0; j < votes.length; j++) {
+                if (votes[j].name !== name) { newVotes.push(votes[j]); }
+            }
+            allData[currentTab].votes = newVotes;
+            if (winnerName === name) winnerName = null;
+            render();
+            addHistoryDelete(name);
+            renderHistory();
+            renderLeader();
+            lastUpdateTime[currentTab] = Date.now();
+            saveToGitHub(currentTab);
+            deleteName.value = '';
+            showToast('🗑️ Удалён: ' + name, 'error');
+            deleteConfirmModal.classList.remove('active');
+            pendingDeleteName = '';
+        });
+
+        // Отмена удаления
+        cancelDeleteBtn.addEventListener('click', function() {
+            deleteConfirmModal.classList.remove('active');
+            pendingDeleteName = '';
+            showToast('↩️ Удаление отменено', 'info');
+        });
+
+        // Закрытие по клику вне модалки
+        deleteConfirmModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                deleteConfirmModal.classList.remove('active');
+                pendingDeleteName = '';
+                showToast('↩️ Удаление отменено', 'info');
+            }
+        });
+
+        // ============================================================
         // ОСНОВНОЙ КОД
         // ============================================================
         var REPO_OWNER = 'fr4chek';
@@ -2008,7 +2100,7 @@
             renderLeader();
         });
 
-        // ===== УДАЛЕНИЕ =====
+        // ===== УДАЛЕНИЕ С ПОДТВЕРЖДЕНИЕМ =====
         deleteBtn.addEventListener('click', function() {
             var name = deleteName.value.trim();
             if (!name) { showToast('Введите имя для удаления', 'warning'); return; }
@@ -2019,21 +2111,8 @@
             }
             if (!found) { showToast('Участник "' + name + '" не найден', 'warning');
                 deleteName.value = ''; return; }
-            if (!confirm('Удалить "' + name + '"?')) return;
-            var newVotes = [];
-            for (var j = 0; j < votes.length; j++) {
-                if (votes[j].name !== name) { newVotes.push(votes[j]); }
-            }
-            allData[currentTab].votes = newVotes;
-            if (winnerName === name) winnerName = null;
-            render();
-            addHistoryDelete(name);
-            renderHistory();
-            renderLeader();
-            lastUpdateTime[currentTab] = Date.now();
-            saveToGitHub(currentTab);
-            deleteName.value = '';
-            showToast('🗑️ Удалён: ' + name, 'error');
+            // Показываем модалку подтверждения
+            showDeleteConfirm(name);
         });
 
         deleteName.addEventListener('keydown', function(e) {
@@ -2755,5 +2834,4 @@
         console.log('✅ Apple-style программа загружена!');
         console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
     </script>
-</body>
-</html>
+</body
