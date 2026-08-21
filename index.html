@@ -12,6 +12,32 @@
             box-sizing: border-box;
         }
 
+        /* ----- Шрифт Friz Quadrata ----- */
+        @font-face {
+            font-family: 'Friz Quadrata';
+            src: local('Friz Quadrata'), local('FrizQuadrata'),
+                 local('Friz Quadrata Regular'), local('FrizQuadrata-Regular');
+            font-weight: 400;
+            font-style: normal;
+        }
+
+        @font-face {
+            font-family: 'Friz Quadrata';
+            src: local('Friz Quadrata Bold'), local('FrizQuadrata-Bold');
+            font-weight: 700;
+            font-style: normal;
+        }
+
+        /* ----- Глобальное применение шрифта ----- */
+        html, body, .container, .btn, input, textarea, select, button,
+        .header, .status-bar, .token-input, .section-glass, .stat-card,
+        .leader-card, .tab-btn, table, th, td, .history-item, .modal-box,
+        .color-option, .podium-item, .footer, .footer-bottom,
+        .color-picker-label, .theme-toggle, .hint, .save-status,
+        #winnerDisplay, #statusDisplay, .palette-title, .color-name {
+            font-family: 'Friz Quadrata', 'Georgia', 'Times New Roman', serif;
+        }
+
         /* ----- Переменные для цветов ----- */
         :root {
             --bg-light: #0abab5;
@@ -25,7 +51,7 @@
         }
 
         body {
-            font-family: -apple-system, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
+            font-family: 'Friz Quadrata', 'Georgia', 'Times New Roman', serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -109,6 +135,7 @@
             transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
             overflow: hidden;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         .btn:active {
@@ -175,6 +202,7 @@
             position: relative;
             overflow: hidden;
             transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .header {
@@ -188,6 +216,7 @@
             font-weight: 700;
             letter-spacing: -0.02em;
             color: var(--text-light);
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .header h1 {
@@ -198,6 +227,7 @@
             font-size: 15px;
             color: var(--text-light);
             font-weight: 400;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .header .sub {
@@ -222,6 +252,7 @@
             font-weight: 500;
             color: var(--text-light);
             opacity: 0.8;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .color-picker-label {
@@ -244,6 +275,7 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(255, 255, 255, 0.04) inset;
             position: relative;
             overflow: hidden;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .theme-toggle {
@@ -287,6 +319,7 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
             position: relative;
             overflow: hidden;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .token-input {
@@ -301,6 +334,7 @@
             font-size: 14px;
             color: var(--text-light);
             margin-bottom: 8px;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .token-input label {
@@ -319,6 +353,7 @@
             color: #1c2a2a;
             transition: all 0.3s ease;
             outline: none;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .token-input input {
@@ -336,6 +371,7 @@
             font-size: 13px;
             color: var(--text-light);
             margin-top: 10px;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .token-input .hint {
@@ -354,6 +390,7 @@
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.02), 0 0 0 1px rgba(255, 255, 255, 0.02) inset;
             position: relative;
             overflow: hidden;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .section-glass {
@@ -369,6 +406,7 @@
             color: var(--text-light);
             margin-bottom: 16px;
             font-weight: 600;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .section-title {
@@ -394,6 +432,7 @@
             position: relative;
             overflow: hidden;
             transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .stat-card {
@@ -406,6 +445,7 @@
             font-size: 36px;
             font-weight: 700;
             color: var(--text-light);
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .stat-card .num {
@@ -416,6 +456,7 @@
             font-size: 13px;
             color: var(--text-light);
             margin-top: 4px;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .stat-card .label {
@@ -432,6 +473,7 @@
             margin-bottom: 20px;
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .leader-card {
@@ -443,6 +485,7 @@
             font-size: 14px;
             color: var(--text-light);
             font-weight: 500;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .leader-card .label {
@@ -455,6 +498,7 @@
             color: #FFD700;
             letter-spacing: -0.02em;
             margin: 6px 0 2px;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .leader-card .names {
@@ -465,6 +509,7 @@
             font-size: 17px;
             color: #FFD700;
             font-weight: 500;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .leader-card .score {
@@ -474,6 +519,7 @@
         .leader-card .empty {
             color: var(--text-light);
             font-size: 16px;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .leader-card .empty {
@@ -500,6 +546,7 @@
             font-size: 13px;
             font-weight: 500;
             color: var(--text-light);
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .input-group label {
@@ -518,6 +565,7 @@
             transition: all 0.3s ease;
             outline: none;
             width: 100%;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .input-group input {
@@ -534,6 +582,7 @@
         .input-group input::placeholder {
             color: var(--text-light);
             opacity: 0.5;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .input-group input::placeholder {
@@ -554,6 +603,7 @@
             outline: none;
             transition: all 0.3s ease;
             margin-top: 6px;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .comment-input {
@@ -570,6 +620,7 @@
         .comment-input::placeholder {
             color: var(--text-light);
             opacity: 0.5;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .comment-input::placeholder {
@@ -588,6 +639,7 @@
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.03);
             margin-bottom: 20px;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .tabs {
@@ -608,6 +660,7 @@
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .tab-btn {
@@ -653,6 +706,7 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             -webkit-overflow-scrolling: touch;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         .table-wrap::-webkit-scrollbar {
@@ -683,6 +737,7 @@
             min-width: 600px;
             border-collapse: collapse;
             font-size: 14px;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         th {
@@ -695,6 +750,7 @@
             letter-spacing: 0.04em;
             border-bottom: 1px solid rgba(255, 255, 255, 0.04);
             white-space: nowrap;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark th {
@@ -708,6 +764,7 @@
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
             color: var(--text-light);
             white-space: nowrap;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark td {
@@ -738,6 +795,7 @@
         .total-cell {
             font-weight: 700;
             color: #FFD700 !important;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .total-cell {
@@ -750,6 +808,7 @@
             max-width: 120px;
             word-break: break-word;
             white-space: normal;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .comment-cell {
@@ -761,6 +820,7 @@
             padding: 40px;
             color: var(--text-light);
             font-style: italic;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .empty-message {
@@ -776,6 +836,7 @@
             border: 1px solid rgba(255, 255, 255, 0.03);
             background: rgba(255, 255, 255, 0.02);
             padding: 4px 0;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         .history-wrap::-webkit-scrollbar {
@@ -832,6 +893,7 @@
             color: var(--text-light);
             flex-shrink: 0;
             gap: 16px;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .history-item {
@@ -849,6 +911,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         .history-item .comment-text {
@@ -858,6 +921,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .history-item .comment-text {
@@ -870,6 +934,7 @@
             color: #34c759;
             flex: 0 0 60px;
             text-align: right;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .history-item .score {
@@ -881,6 +946,7 @@
             color: var(--text-light);
             flex: 0 0 65px;
             text-align: right;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .history-item .time {
@@ -892,6 +958,7 @@
             color: var(--text-light);
             flex: 0 0 80px;
             text-align: right;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .history-item .date {
@@ -911,6 +978,7 @@
             padding: 20px;
             font-style: italic;
             font-size: 14px;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .history-empty {
@@ -924,6 +992,7 @@
             color: #ff3b30;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
         .section-glass .btn-delete:hover {
             background: rgba(255, 59, 48, 0.12);
@@ -936,13 +1005,14 @@
             justify-content: center;
             align-items: center;
             flex-wrap: wrap;
-            gap: 16px;
+            gap: 12px;
             padding-top: 18px;
             margin-top: 18px;
             border-top: 1px solid rgba(255, 255, 255, 0.04);
             color: var(--text-light);
             font-size: 13px;
             text-align: center;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .footer {
@@ -955,7 +1025,12 @@
         }
 
         .save-status {
-            color: var(--accent-color, #0abab5);
+            color: var(--text-light);
+            font-family: 'Friz Quadrata', 'Georgia', serif;
+        }
+
+        body.dark .save-status {
+            color: var(--text-dark);
         }
 
         .actions {
@@ -1003,6 +1078,7 @@
             box-shadow: 0 40px 100px rgba(0, 0, 0, 0.04);
             max-height: 90vh;
             overflow-y: auto;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .modal-box {
@@ -1015,6 +1091,7 @@
             color: var(--text-light);
             font-weight: 700;
             font-size: 24px;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .modal-box h2 {
@@ -1025,6 +1102,7 @@
             color: var(--text-light);
             margin-bottom: 16px;
             font-size: 14px;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .modal-box p {
@@ -1036,6 +1114,7 @@
             font-weight: 700;
             color: #FFD700;
             margin: 16px 0;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .modal-box .question {
@@ -1055,6 +1134,7 @@
             color: #1c2a2a;
             outline: none;
             margin-bottom: 16px;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .modal-box input {
@@ -1081,6 +1161,7 @@
             font-size: 14px;
             margin-top: 12px;
             display: none;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
         .modal-box .error-msg.show {
             display: block;
@@ -1103,6 +1184,7 @@
             display: flex;
             align-items: center;
             gap: 12px;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .palette-title {
@@ -1136,6 +1218,7 @@
             background: rgba(255, 255, 255, 0.06);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .color-option {
@@ -1177,6 +1260,7 @@
             font-size: 13px;
             font-weight: 500;
             color: var(--text-light);
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .color-name {
@@ -1191,11 +1275,13 @@
             gap: 20px;
             padding: 20px 0;
             flex-wrap: wrap;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         .podium-item {
             text-align: center;
             min-width: 80px;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         .podium-item .medal {
@@ -1208,6 +1294,7 @@
             font-size: 13px;
             color: var(--text-light);
             margin-top: 4px;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .podium-item .place {
@@ -1219,6 +1306,7 @@
             font-size: 17px;
             color: #FFD700;
             margin-top: 2px;
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .podium-item .podium-name {
@@ -1228,6 +1316,7 @@
         .podium-item .podium-score {
             font-size: 14px;
             color: var(--text-light);
+            font-family: 'Friz Quadrata', 'Georgia', serif;
         }
 
         body.dark .podium-item .podium-score {
@@ -1540,7 +1629,7 @@
             <div class="section-glass" style="border-color: rgba(255,59,48,0.06);">
                 <label style="font-size:14px; color:#ff3b30; font-weight:500;">🗑️ Удалить участника</label>
                 <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
-                    <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.06); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.03); color:#1c2a2a; outline:none; min-width:120px;">
+                    <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.06); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.03); color:#1c2a2a; outline:none; min-width:120px; font-family:'Friz Quadrata', serif;">
                     <button class="btn btn-sm btn-delete" id="deleteBtn" style="min-width:auto;">✕ Удалить</button>
                 </div>
             </div>
@@ -1570,12 +1659,11 @@
                 <button class="btn" id="clearBtn">🗑️ Очистить всё</button>
             </div>
 
-            <!-- ФУТЕР - теперь всё в одной строке по центру -->
+            <!-- ФУТЕР -->
             <div class="footer">
                 <span id="winnerDisplay">👑 Победитель: не определен</span>
-                <span>·</span>
                 <span>🔄 Автосинхронизация</span>
-                <span class="save-status" id="statusDisplay">☁️ Готов</span>
+                <span class="save-status" id="statusDisplay">☁️ Синхронизировано</span>
             </div>
         </div>
     </div>
@@ -1635,36 +1723,16 @@
 
     <script>
         // ============================================================
-        // ПАЛИТРЫ ЦВЕТОВ
+        // ПАЛИТРЫ ЦВЕТОВ (ОБНОВЛЕННЫЕ)
         // ============================================================
         const LIGHT_PALETTE = [
-            // Оригинальные цвета
-            { hex: '#42826C', name: 'Тёмный изумруд' },
-            { hex: '#38705D', name: 'Изумруд' },
-            { hex: '#2F5F4E', name: 'Лесной' },
-            { hex: '#254E40', name: 'Тёмный лес' },
-            { hex: '#1C3E32', name: 'Глубокий лес' },
-            { hex: '#142F25', name: 'Очень тёмный' },
-            { hex: '#0B2019', name: 'Почти чёрный' },
-            // Purple Skies
-            { hex: '#CAC7FF', name: 'Лавандовый' },
-            { hex: '#D7CDFE', name: 'Сиреневый' },
-            { hex: '#E4D3FC', name: 'Фиолетовый' },
-            { hex: '#F1DAFB', name: 'Розово-фиолетовый' },
-            { hex: '#FEE0F9', name: 'Нежно-розовый' }
+            // Только один цвет — базовый
+            { hex: '#0ABAB5', name: 'Бирюзовый' }
         ];
 
         const DARK_PALETTE = [
-            { hex: '#708093', name: 'Светло-стальной' },
-            { hex: '#606E7F', name: 'Стальной' },
-            { hex: '#515D6C', name: 'Тёмный стальной' },
-            { hex: '#434D59', name: 'Графитовый' },
-            { hex: '#353D47', name: 'Тёмный графит' },
-            { hex: '#272E36', name: 'Очень тёмный' },
-            { hex: '#1A1F25', name: 'Глубокий тёмный' },
-            { hex: '#0E1216', name: 'Почти чёрный' },
-            { hex: '#040608', name: 'Чернильный' },
-            { hex: '#010101', name: 'Чёрный' }
+            // Только один цвет — базовый
+            { hex: '#0A0A12', name: 'Тёмный' }
         ];
 
         // ============================================================
@@ -1675,7 +1743,7 @@
             var toast = document.createElement('div');
             toast.className = 'toast';
             toast.style.cssText =
-                'background:rgba(255,255,255,0.4); backdrop-filter:blur(30px); -webkit-backdrop-filter:blur(30px); color:#1c2a2a; padding:14px 28px; border-radius:980px; font-weight:500; font-size:15px; box-shadow:0 20px 60px rgba(0,0,0,0.04); animation:toastIn 0.4s ease, toastOut 0.4s ease 3s forwards; pointer-events:auto; border:1px solid rgba(255,255,255,0.06); text-align:center; font-family:"SF Pro Text", sans-serif;';
+                'background:rgba(255,255,255,0.4); backdrop-filter:blur(30px); -webkit-backdrop-filter:blur(30px); color:#1c2a2a; padding:14px 28px; border-radius:980px; font-weight:500; font-size:15px; box-shadow:0 20px 60px rgba(0,0,0,0.04); animation:toastIn 0.4s ease, toastOut 0.4s ease 3s forwards; pointer-events:auto; border:1px solid rgba(255,255,255,0.06); text-align:center; font-family:"Friz Quadrata", serif;';
             if (document.body.classList.contains('dark')) {
                 toast.style.background = 'rgba(20,20,30,0.7)';
                 toast.style.color = '#ffffff';
@@ -2205,7 +2273,7 @@
 
             if (topGroups.length === 0) {
                 podiumContainer.innerHTML =
-                    '<p style="color: var(--text-light); padding: 20px;">Нет данных для отображения</p>';
+                    '<p style="color: var(--text-light); padding: 20px; font-family:"Friz Quadrata", serif;">Нет данных для отображения</p>';
             } else {
                 podiumContainer.innerHTML = html;
             }
@@ -2215,7 +2283,7 @@
         // ===== ОСТАЛЬНОЙ КОД =====
         function setStatus(text, color) {
             statusDisplay.textContent = text;
-            statusDisplay.style.color = color || 'var(--accent-color, #0abab5)';
+            statusDisplay.style.color = color || 'var(--text-light)';
         }
 
         function setStatusBar(status, message) {
@@ -2268,7 +2336,6 @@
                 history: allData[tab]?.history || []
             };
             try {
-                // Статус-бар скрыт
                 var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
                 var loadResponse = await fetch(url, { headers: { 'Authorization': 'token ' + githubToken,
                         'Accept': 'application/vnd.github.v3+json' } });
@@ -2285,7 +2352,7 @@
                     body: JSON.stringify(body)
                 });
                 if (saveResponse.ok) {
-                    setStatus('☁️ Сохранено', 'var(--accent-color, #0abab5)');
+                    setStatus('☁️ Синхронизировано', 'var(--text-light)');
                 } else {
                     throw new Error('Ошибка сохранения');
                 }
@@ -2329,7 +2396,7 @@
                     render();
                     renderHistory();
                     renderLeader();
-                    setStatus('☁️ Синхронизировано', 'var(--accent-color, #0abab5)');
+                    setStatus('☁️ Синхронизировано', 'var(--text-light)');
                 }
             } catch (e) {
                 setStatus('📂 Из кэша', '#8a8a9a');
@@ -2521,8 +2588,6 @@
             isConnecting = true;
             githubToken = token;
             saveToken(token);
-
-            // Статус-бар скрыт
 
             try {
                 var testResponse = await fetch('https://api.github.com/user', {
