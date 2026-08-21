@@ -17,7 +17,7 @@
             --bg-light: #0abab5;
             --bg-dark: #0a0a12;
             --accent-color: #0abab5;
-            --text-light: #1c2a2a;
+            --text-light: #B8860B;
             --text-dark: #ffffff;
         }
 
@@ -697,12 +697,12 @@
 
         .leader-card .score {
             font-size: 17px;
-            color: #B8860B;
+            color: #FFD700;
             font-weight: 500;
         }
 
         body.dark .leader-card .score {
-            color: #ffffff;
+            color: #FFD700;
         }
 
         .leader-card .empty {
@@ -1453,7 +1453,6 @@
             .header-right { width: 100%; justify-content: center; }
             .palette-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
             
-            /* Таблица с прокруткой на телефонах */
             .table-wrap {
                 margin: 0 -4px;
                 border-radius: 16px;
@@ -2030,7 +2029,7 @@
                 } else {
                     html += '<span class="comment-text"></span>';
                 }
-                html += '<span class="score">+' + item.score.toFixed(1) + '</span>'; // Зелёный цвет через CSS
+                html += '<span class="score">+' + item.score.toFixed(1) + '</span>';
             }
             html += '<span class="time">' + escapeHtml(item.time) + '</span>';
             html += '<span class="date">' + escapeHtml(item.date) + '</span>';
