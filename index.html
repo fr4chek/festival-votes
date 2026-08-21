@@ -12,6 +12,15 @@
             box-sizing: border-box;
         }
 
+        /* ----- Переменные для цветов ----- */
+        :root {
+            --bg-light: #0abab5;
+            --bg-dark: #0a0a12;
+            --accent-color: #0abab5;
+            --text-light: #1c2a2a;
+            --text-dark: #ffffff;
+        }
+
         body {
             font-family: -apple-system, 'SF Pro Display', 'Helvetica Neue', sans-serif;
             min-height: 100vh;
@@ -19,18 +28,17 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            background: #0abab5;
-            color: #1c2a2a;
-            transition: background 0.4s ease, color 0.4s ease;
+            background: var(--bg-light);
+            color: var(--text-light);
+            transition: background 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+                        color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        /* ----- тёмная тема (базовая) ----- */
         body.dark {
-            background: #0a0a12;
-            color: #ffffff;
+            background: var(--bg-dark);
+            color: var(--text-dark);
         }
 
-        /* ----- главный контейнер ----- */
         .container {
             max-width: 980px;
             width: 100%;
@@ -39,42 +47,72 @@
             z-index: 2;
         }
 
-        /* ----- стеклянная оболочка ----- */
-        .glass {
-            background: rgba(255, 255, 255, 0.35);
+        /* ============================================================
+           LIQUID GLASS
+           ============================================================ */
+        .liquid-glass {
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border-radius: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.04),
-                        0 0 0 1px rgba(255, 255, 255, 0.08) inset;
-            transition: all 0.4s ease;
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.04),
+                0 0 0 1px rgba(255, 255, 255, 0.05) inset,
+                0 0 40px rgba(255, 255, 255, 0.02);
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
         }
 
-        body.dark .glass {
-            background: rgba(10, 10, 18, 0.7);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
-                        0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+        .liquid-glass::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                ellipse at 30% 20%,
+                rgba(255, 255, 255, 0.15) 0%,
+                transparent 60%
+            );
+            pointer-events: none;
+            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(20px) saturate(140%);
-            -webkit-backdrop-filter: blur(20px) saturate(140%);
-            border-radius: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
+        .liquid-glass::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30%;
+            background: linear-gradient(
+                to top,
+                rgba(255, 255, 255, 0.04) 0%,
+                transparent 100%
+            );
+            pointer-events: none;
+            border-radius: 0 0 inherit inherit;
         }
 
-        body.dark .glass-card {
+        body.dark .liquid-glass {
             background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.02) inset;
         }
 
-        /* ---------- СТЕКЛЯННЫЕ КНОПКИ С АНИМАЦИЕЙ APPLE ---------- */
+        body.dark .liquid-glass::before {
+            background: radial-gradient(
+                ellipse at 30% 20%,
+                rgba(255, 255, 255, 0.04) 0%,
+                transparent 60%
+            );
+        }
+
+        /* ----- КНОПКИ — ВСЕГДА БЕЛЫЕ ----- */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -87,46 +125,36 @@
             letter-spacing: 0.01em;
             border: none;
             cursor: pointer;
-            position: relative;
-            overflow: hidden;
             text-decoration: none;
             min-width: 120px;
-            /* Стеклянный эффект */
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06),
-                        0 0 0 1px rgba(255, 255, 255, 0.15) inset;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.04),
+                0 0 0 1px rgba(255, 255, 255, 0.3) inset;
             color: #1c2a2a;
             transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
         }
 
-        /* Глянцевый блик на кнопке */
         .btn::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: -100%;
+            top: -50%;
+            left: -50%;
             width: 200%;
-            height: 100%;
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.1) 30%, 
-                rgba(255, 255, 255, 0.3) 50%, 
-                rgba(255, 255, 255, 0.1) 70%, 
-                transparent 100%
+            height: 200%;
+            background: radial-gradient(
+                ellipse at 30% 20%,
+                rgba(255, 255, 255, 0.3) 0%,
+                transparent 60%
             );
-            transform: skewX(-25deg);
-            transition: all 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             pointer-events: none;
         }
 
-        .btn:hover::before {
-            left: 100%;
-        }
-
-        /* Анимация нажатия как у Apple */
         .btn:active {
             transform: scale(0.94);
             transition-duration: 0.08s;
@@ -134,179 +162,36 @@
 
         .btn:hover {
             transform: scale(1.02);
-            background: rgba(255, 255, 255, 0.35);
-            border-color: rgba(255, 255, 255, 0.4);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.08),
-                        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(255, 255, 255, 0.5);
+            box-shadow: 
+                0 12px 48px rgba(0, 0, 0, 0.08),
+                0 0 0 1px rgba(255, 255, 255, 0.4) inset;
         }
 
-        /* Тёмная тема для стеклянных кнопок */
         body.dark .btn {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2),
-                        0 0 0 1px rgba(255, 255, 255, 0.04) inset;
-            color: #ffffff;
-        }
-
-        body.dark .btn:hover {
-            background: rgba(255, 255, 255, 0.16);
-            border-color: rgba(255, 255, 255, 0.15);
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3),
-                        0 0 0 1px rgba(255, 255, 255, 0.08) inset;
-        }
-
-        body.dark .btn:active {
-            transform: scale(0.94);
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+            color: #1c2a2a;
         }
 
         body.dark .btn::before {
-            background: linear-gradient(90deg, 
-                transparent 0%, 
-                rgba(255, 255, 255, 0.05) 30%, 
-                rgba(255, 255, 255, 0.15) 50%, 
-                rgba(255, 255, 255, 0.05) 70%, 
-                transparent 100%
+            background: radial-gradient(
+                ellipse at 30% 20%,
+                rgba(255, 255, 255, 0.2) 0%,
+                transparent 60%
             );
         }
 
-        /* Цветные кнопки сохраняют стеклянный эффект */
-        .btn-success {
-            background: rgba(10, 186, 181, 0.3);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(10, 186, 181, 0.2);
-            box-shadow: 0 8px 32px rgba(10, 186, 181, 0.15),
-                        0 0 0 1px rgba(10, 186, 181, 0.1) inset;
-            color: #1c2a2a;
-        }
-
-        .btn-success:hover {
-            background: rgba(10, 186, 181, 0.4);
-            border-color: rgba(10, 186, 181, 0.3);
-            box-shadow: 0 12px 40px rgba(10, 186, 181, 0.2),
-                        0 0 0 1px rgba(10, 186, 181, 0.15) inset;
-        }
-
-        body.dark .btn-success {
-            background: rgba(10, 186, 181, 0.15);
-            border: 1px solid rgba(10, 186, 181, 0.15);
-            box-shadow: 0 8px 32px rgba(10, 186, 181, 0.1),
-                        0 0 0 1px rgba(10, 186, 181, 0.05) inset;
-            color: #ffffff;
-        }
-
-        body.dark .btn-success:hover {
-            background: rgba(10, 186, 181, 0.25);
-            border-color: rgba(10, 186, 181, 0.25);
-        }
-
-        .btn-warning {
-            background: rgba(184, 134, 11, 0.2);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(184, 134, 11, 0.15);
-            box-shadow: 0 8px 32px rgba(184, 134, 11, 0.1),
-                        0 0 0 1px rgba(184, 134, 11, 0.08) inset;
-            color: #B8860B;
-        }
-
-        .btn-warning:hover {
-            background: rgba(184, 134, 11, 0.3);
-            border-color: rgba(184, 134, 11, 0.25);
-            box-shadow: 0 12px 40px rgba(184, 134, 11, 0.15),
-                        0 0 0 1px rgba(184, 134, 11, 0.12) inset;
-        }
-
-        body.dark .btn-warning {
-            background: rgba(184, 134, 11, 0.1);
-            border: 1px solid rgba(184, 134, 11, 0.1);
-            color: #FFD700;
-        }
-
-        body.dark .btn-warning:hover {
-            background: rgba(184, 134, 11, 0.2);
-            border-color: rgba(184, 134, 11, 0.2);
-        }
-
-        .btn-danger {
-            background: rgba(255, 59, 48, 0.15);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 59, 48, 0.1);
-            box-shadow: 0 8px 32px rgba(255, 59, 48, 0.08),
-                        0 0 0 1px rgba(255, 59, 48, 0.06) inset;
-            color: #ff3b30;
-        }
-
-        .btn-danger:hover {
-            background: rgba(255, 59, 48, 0.25);
-            border-color: rgba(255, 59, 48, 0.2);
-            box-shadow: 0 12px 40px rgba(255, 59, 48, 0.12),
-                        0 0 0 1px rgba(255, 59, 48, 0.1) inset;
-        }
-
-        body.dark .btn-danger {
-            background: rgba(255, 59, 48, 0.08);
-            border: 1px solid rgba(255, 59, 48, 0.08);
-            color: #ff6b6b;
-        }
-
-        body.dark .btn-danger:hover {
-            background: rgba(255, 59, 48, 0.16);
-            border-color: rgba(255, 59, 48, 0.16);
-        }
-
-        .btn-clear {
-            background: rgba(0, 0, 0, 0.04);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.02),
-                        0 0 0 1px rgba(0, 0, 0, 0.03) inset;
-            color: #1c2a2a;
-        }
-
-        .btn-clear:hover {
-            background: rgba(0, 0, 0, 0.08);
-            border-color: rgba(0, 0, 0, 0.1);
-        }
-
-        body.dark .btn-clear {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            color: #ffffff;
-        }
-
-        body.dark .btn-clear:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.08);
-        }
-
-        .btn-secondary {
-            background: rgba(0, 0, 0, 0.04);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(0, 0, 0, 0.06);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.02),
-                        0 0 0 1px rgba(0, 0, 0, 0.03) inset;
-            color: #1c2a2a;
-        }
-
-        .btn-secondary:hover {
-            background: rgba(0, 0, 0, 0.08);
-            border-color: rgba(0, 0, 0, 0.1);
-        }
-
-        body.dark .btn-secondary {
-            background: rgba(255, 255, 255, 0.04);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            color: #ffffff;
-        }
-
-        body.dark .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.08);
-            border-color: rgba(255, 255, 255, 0.08);
+        body.dark .btn:hover {
+            background: rgba(255, 255, 255, 0.95);
+            border-color: rgba(255, 255, 255, 0.4);
+            box-shadow: 
+                0 12px 48px rgba(0, 0, 0, 0.15),
+                0 0 0 1px rgba(255, 255, 255, 0.3) inset;
         }
 
         .btn-sm {
@@ -340,19 +225,48 @@
             margin-bottom: 24px;
             flex-wrap: wrap;
             gap: 12px;
+            background: rgba(255, 255, 255, 0.12);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.04),
+                0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+            border-radius: 40px;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
 
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                ellipse at 30% 20%,
+                rgba(255, 255, 255, 0.08) 0%,
+                transparent 60%
+            );
+            pointer-events: none;
         }
 
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            flex-wrap: wrap;
+        body.dark .header {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+        }
+
+        body.dark .header::before {
+            background: radial-gradient(
+                ellipse at 30% 20%,
+                rgba(255, 255, 255, 0.03) 0%,
+                transparent 60%
+            );
         }
 
         .header h1 {
@@ -377,35 +291,65 @@
         }
 
         .theme-toggle {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.08);
             border-radius: 980px;
             padding: 10px 22px;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
             color: #B8860B;
-            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04),
-                        0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.04),
+                0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .theme-toggle::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                ellipse at 30% 20%,
+                rgba(255, 255, 255, 0.1) 0%,
+                transparent 60%
+            );
+            pointer-events: none;
         }
 
         body.dark .theme-toggle {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.04);
             color: #ffffff;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+        }
+
+        body.dark .theme-toggle::before {
+            background: radial-gradient(
+                ellipse at 30% 20%,
+                rgba(255, 255, 255, 0.03) 0%,
+                transparent 60%
+            );
         }
 
         .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.25);
             transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.18);
+            border-color: rgba(255, 255, 255, 0.12);
         }
 
         body.dark .theme-toggle:hover {
-            background: rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.06);
             transform: scale(1.02);
         }
 
@@ -423,24 +367,54 @@
             font-weight: 500;
             text-align: center;
             color: #B8860B;
-            background: rgba(255, 255, 255, 0.3);
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.03),
+                0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .status-bar::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                ellipse at 30% 20%,
+                rgba(255, 255, 255, 0.08) 0%,
+                transparent 60%
+            );
+            pointer-events: none;
         }
 
         body.dark .status-bar {
             color: #ffffff;
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(255, 255, 255, 0.03);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.08),
+                0 0 0 1px rgba(255, 255, 255, 0.01) inset;
+        }
+
+        body.dark .status-bar::before {
+            background: radial-gradient(
+                ellipse at 30% 20%,
+                rgba(255, 255, 255, 0.02) 0%,
+                transparent 60%
+            );
         }
 
         .status-bar.online {
-            border-color: rgba(10, 186, 181, 0.3);
+            border-color: rgba(10, 186, 181, 0.2);
         }
         body.dark .status-bar.online {
-            border-color: rgba(10, 186, 181, 0.2);
+            border-color: rgba(10, 186, 181, 0.1);
         }
 
         /* ----- токен ----- */
@@ -448,6 +422,46 @@
             padding: 28px 32px;
             margin-bottom: 20px;
             border-radius: 32px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.03),
+                0 0 0 1px rgba(255, 255, 255, 0.03) inset;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .token-input::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                ellipse at 30% 20%,
+                rgba(255, 255, 255, 0.06) 0%,
+                transparent 60%
+            );
+            pointer-events: none;
+        }
+
+        body.dark .token-input {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.08),
+                0 0 0 1px rgba(255, 255, 255, 0.01) inset;
+        }
+
+        body.dark .token-input::before {
+            background: radial-gradient(
+                ellipse at 30% 20%,
+                rgba(255, 255, 255, 0.02) 0%,
+                transparent 60%
+            );
         }
 
         .token-input label {
@@ -467,24 +481,24 @@
             padding: 16px 20px;
             border-radius: 980px;
             font-size: 16px;
-            background: rgba(255, 255, 255, 0.4);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             color: #1c2a2a;
             transition: all 0.3s ease;
             outline: none;
         }
 
         body.dark .token-input input {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
             color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.03);
         }
 
         .token-input input:focus {
             border-color: var(--accent-color, #0abab5);
-            box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.15);
+            box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.1);
         }
 
         .token-input .hint {
@@ -502,15 +516,46 @@
             padding: 24px 28px;
             margin-bottom: 20px;
             border-radius: 32px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(20px) saturate(140%);
-            -webkit-backdrop-filter: blur(20px) saturate(140%);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(40px) saturate(180%);
+            -webkit-backdrop-filter: blur(40px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.02),
+                0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section-glass::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                ellipse at 30% 20%,
+                rgba(255, 255, 255, 0.04) 0%,
+                transparent 60%
+            );
+            pointer-events: none;
         }
 
         body.dark .section-glass {
-            background: rgba(255, 255, 255, 0.03);
-            border-color: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.02);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.06),
+                0 0 0 1px rgba(255, 255, 255, 0.01) inset;
+        }
+
+        body.dark .section-glass::before {
+            background: radial-gradient(
+                ellipse at 30% 20%,
+                rgba(255, 255, 255, 0.015) 0%,
+                transparent 60%
+            );
         }
 
         .section-title {
@@ -537,15 +582,58 @@
             text-align: center;
             padding: 18px 12px;
             border-radius: 24px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px) saturate(180%);
+            -webkit-backdrop-filter: blur(20px) saturate(180%);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.02),
+                0 0 0 1px rgba(255, 255, 255, 0.02) inset;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .stat-card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(
+                ellipse at 30% 20%,
+                rgba(255, 255, 255, 0.04) 0%,
+                transparent 60%
+            );
+            pointer-events: none;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .stat-card:active {
+            transform: scale(0.94);
+            transition-duration: 0.08s;
         }
 
         body.dark .stat-card {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.02);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.04),
+                0 0 0 1px rgba(255, 255, 255, 0.01) inset;
+        }
+
+        body.dark .stat-card::before {
+            background: radial-gradient(
+                ellipse at 30% 20%,
+                rgba(255, 255, 255, 0.015) 0%,
+                transparent 60%
+            );
         }
 
         .stat-card .num {
@@ -568,7 +656,7 @@
             color: #ffffff;
         }
 
-        /* ----- лидер ----- */
+        /* ----- лидер (имя золотое) ----- */
         .leader-card {
             padding: 24px 28px;
             border-radius: 32px;
@@ -576,8 +664,8 @@
             border: 1px solid rgba(255, 215, 0, 0.08);
             text-align: center;
             margin-bottom: 20px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
 
         body.dark .leader-card {
@@ -656,10 +744,10 @@
             padding: 14px 20px;
             border-radius: 980px;
             font-size: 16px;
-            background: rgba(255, 255, 255, 0.35);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.12);
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             color: #1c2a2a;
             transition: all 0.3s ease;
             outline: none;
@@ -667,14 +755,14 @@
         }
 
         body.dark .input-group input {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
             color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.03);
         }
 
         .input-group input:focus {
             border-color: var(--accent-color, #0abab5);
-            box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.12);
+            box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.1);
         }
 
         .input-group input::placeholder {
@@ -691,10 +779,10 @@
             padding: 12px 20px;
             border-radius: 980px;
             font-size: 14px;
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.04);
             color: #1c2a2a;
             width: 100%;
             outline: none;
@@ -703,14 +791,14 @@
         }
 
         body.dark .comment-input {
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.03);
             color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.02);
         }
 
         .comment-input:focus {
             border-color: var(--accent-color, #0abab5);
-            box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.08);
+            box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.06);
         }
 
         .comment-input::placeholder {
@@ -729,16 +817,16 @@
             gap: 4px;
             padding: 4px;
             border-radius: 980px;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.08);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.04);
             margin-bottom: 20px;
         }
 
         body.dark .tabs {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.02);
         }
 
         .tab-btn {
@@ -761,20 +849,23 @@
         }
 
         .tab-btn.active {
-            background: rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.06),
-                        0 0 0 1px rgba(255, 255, 255, 0.1) inset;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.04),
+                0 0 0 1px rgba(255, 255, 255, 0.1) inset;
             color: #1c2a2a;
         }
 
         body.dark .tab-btn.active {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.06);
-            color: #ffffff;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            background: rgba(255, 255, 255, 0.85);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.08),
+                0 0 0 1px rgba(255, 255, 255, 0.05) inset;
+            color: #1c2a2a;
         }
 
         .tab-btn:active {
@@ -790,23 +881,44 @@
             background: rgba(255, 255, 255, 0.04);
         }
 
-        /* ----- таблица ----- */
+        /* ----- таблица с горизонтальной прокруткой ----- */
         .table-wrap {
             overflow-x: auto;
+            overflow-y: visible;
             border-radius: 24px;
-            border: 1px solid rgba(255, 255, 255, 0.08);
-            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.04);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .table-wrap::-webkit-scrollbar {
+            height: 4px;
+        }
+
+        .table-wrap::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.04);
+            border-radius: 4px;
+        }
+
+        .table-wrap::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 4px;
+        }
+
+        body.dark .table-wrap::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.06);
         }
 
         body.dark .table-wrap {
-            border-color: rgba(255, 255, 255, 0.04);
-            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.01);
         }
 
         table {
             width: 100%;
+            min-width: 600px;
             border-collapse: collapse;
             font-size: 14px;
         }
@@ -819,28 +931,30 @@
             text-transform: uppercase;
             font-size: 11px;
             letter-spacing: 0.04em;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            white-space: nowrap;
         }
 
         body.dark th {
             color: #ffffff;
-            border-bottom-color: rgba(255, 255, 255, 0.04);
+            border-bottom-color: rgba(255, 255, 255, 0.03);
         }
 
         td {
             padding: 14px 12px;
             text-align: center;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
             color: #B8860B;
+            white-space: nowrap;
         }
 
         body.dark td {
             color: #ffffff;
-            border-bottom-color: rgba(255, 255, 255, 0.04);
+            border-bottom-color: rgba(255, 255, 255, 0.02);
         }
 
         tr:hover td {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
         }
 
         body.dark tr:hover td {
@@ -855,8 +969,8 @@
         .winner-row td:first-child { border-radius: 12px 0 0 12px; }
         .winner-row td:last-child { border-radius: 0 12px 12px 0; }
 
-        .total-cell { 
-            font-weight: 700; 
+        .total-cell {
+            font-weight: 700;
             color: #FFD700 !important;
         }
 
@@ -869,6 +983,7 @@
             color: #B8860B;
             max-width: 120px;
             word-break: break-word;
+            white-space: normal;
         }
 
         body.dark .comment-cell {
@@ -908,14 +1023,14 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.04);
             font-size: 14px;
             color: #B8860B;
         }
 
         body.dark .history-item {
             color: #ffffff;
-            border-bottom-color: rgba(255, 255, 255, 0.04);
+            border-bottom-color: rgba(255, 255, 255, 0.02);
         }
 
         .history-item:last-child { border-bottom: none; }
@@ -935,12 +1050,17 @@
             color: #ffffff;
         }
 
+        /* ----- В ИСТОРИИ ГОЛОСОВАНИЯ — ЗЕЛЁНЫЙ (+10.0) ----- */
         .history-item .score {
             font-weight: 600;
-            color: #FFD700;
+            color: #34c759;
             width: 60px;
             text-align: right;
             flex-shrink: 0;
+        }
+
+        body.dark .history-item .score {
+            color: #34c759;
         }
 
         .history-item .time {
@@ -1003,13 +1123,13 @@
             gap: 12px;
             padding-top: 18px;
             margin-top: 18px;
-            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            border-top: 1px solid rgba(255, 255, 255, 0.06);
             color: #B8860B;
             font-size: 13px;
         }
 
         body.dark .footer {
-            border-top-color: rgba(255, 255, 255, 0.04);
+            border-top-color: rgba(255, 255, 255, 0.02);
             color: #ffffff;
         }
 
@@ -1033,7 +1153,7 @@
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.2);
+            background: rgba(0, 0, 0, 0.15);
             backdrop-filter: blur(30px) saturate(140%);
             -webkit-backdrop-filter: blur(30px) saturate(140%);
             display: none;
@@ -1046,7 +1166,7 @@
         .modal-overlay.active { display: flex; }
 
         .modal-box {
-            background: rgba(255, 255, 255, 0.5);
+            background: rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(50px) saturate(180%);
             -webkit-backdrop-filter: blur(50px) saturate(180%);
             padding: 40px 36px;
@@ -1054,15 +1174,15 @@
             max-width: 520px;
             width: 100%;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.04);
             max-height: 90vh;
             overflow-y: auto;
         }
 
         body.dark .modal-box {
-            background: rgba(20, 20, 30, 0.85);
-            border-color: rgba(255, 255, 255, 0.06);
+            background: rgba(20, 20, 30, 0.7);
+            border-color: rgba(255, 255, 255, 0.04);
         }
 
         .modal-box h2 {
@@ -1097,24 +1217,24 @@
             border-radius: 980px;
             font-size: 18px;
             text-align: center;
-            background: rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.15);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.06);
             color: #1c2a2a;
             outline: none;
             margin-bottom: 16px;
         }
 
         body.dark .modal-box input {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
             color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.04);
+            border-color: rgba(255, 255, 255, 0.03);
         }
 
         .modal-box input:focus {
             border-color: var(--accent-color, #0abab5);
-            box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.1);
+            box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.06);
         }
 
         .modal-box .btn-row { display: flex; gap: 12px; }
@@ -1175,22 +1295,22 @@
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             border: 2px solid transparent;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
 
         body.dark .color-option {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.03);
         }
 
         .color-option:hover {
             transform: scale(1.02);
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.2);
         }
 
         body.dark .color-option:hover {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.06);
         }
 
         .color-option:active {
@@ -1200,7 +1320,7 @@
 
         .color-option.active {
             border-color: var(--accent-color, #0abab5);
-            box-shadow: 0 0 0 3px rgba(10, 186, 181, 0.2);
+            box-shadow: 0 0 0 3px rgba(10, 186, 181, 0.15);
         }
 
         .color-swatch {
@@ -1332,6 +1452,19 @@
             .tabs .tab-btn { font-size: 12px; padding: 8px 10px; }
             .header-right { width: 100%; justify-content: center; }
             .palette-grid { grid-template-columns: repeat(auto-fill, minmax(100px, 1fr)); }
+            
+            /* Таблица с прокруткой на телефонах */
+            .table-wrap {
+                margin: 0 -4px;
+                border-radius: 16px;
+            }
+            table {
+                min-width: 500px;
+                font-size: 12px;
+            }
+            th, td {
+                padding: 10px 8px;
+            }
         }
 
         @media (max-width: 450px) {
@@ -1342,6 +1475,13 @@
             .palette-grid { grid-template-columns: repeat(auto-fill, minmax(90px, 1fr)); }
             .color-option { padding: 6px 10px; }
             .color-name { font-size: 11px; }
+            table {
+                min-width: 400px;
+                font-size: 11px;
+            }
+            th, td {
+                padding: 8px 6px;
+            }
         }
     </style>
 </head>
@@ -1349,7 +1489,7 @@
 
 <div class="container">
     <!-- ХЕДЕР -->
-    <div class="header glass" style="padding: 20px 32px; margin-bottom: 24px;">
+    <div class="header">
         <div class="header-left">
             <div>
                 <h1>🎭 Фестиваль</h1>
@@ -1378,7 +1518,7 @@
     <div id="statusBar" class="status-bar" style="margin-bottom: 20px;">⏳ Подключение к GitHub...</div>
 
     <!-- ТОКЕН -->
-    <div class="token-input glass" id="tokenBlock">
+    <div class="token-input" id="tokenBlock">
         <label>🔑 Введите GitHub токен</label>
         <input type="password" id="tokenInput" placeholder="Вставьте токен (ghp_...)" autocomplete="off">
         <div class="hint">Токен нужен только для сохранения данных в GitHub.</div>
@@ -1423,7 +1563,7 @@
                     <input type="number" id="scoreInput" placeholder="10" min="0" max="10" step="0.1">
                 </div>
                 <div class="input-group" style="flex:0 0 auto;">
-                    <button class="btn btn-success" id="addBtn" style="margin-top: auto;">➕ Добавить</button>
+                    <button class="btn" id="addBtn" style="margin-top: auto;">➕ Добавить</button>
                 </div>
             </div>
             <div style="margin-top: 10px;">
@@ -1436,13 +1576,13 @@
         <div class="section-glass" style="border-color: rgba(255,59,48,0.08);">
             <label style="font-size:14px; color:#ff3b30; font-weight:500;">🗑️ Удалить участника</label>
             <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
-                <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.2); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.1); color:#1c2a2a; outline:none; min-width:120px;">
-                <button class="btn btn-danger btn-sm" id="deleteBtn" style="min-width:auto;">✕ Удалить</button>
+                <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.1); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.04); color:#1c2a2a; outline:none; min-width:120px;">
+                <button class="btn btn-sm btn-delete" id="deleteBtn" style="min-width:auto;">✕ Удалить</button>
             </div>
         </div>
 
-        <!-- ТАБЛИЦА -->
-        <div class="table-wrap" style="margin-bottom:20px; padding:0; overflow:hidden;">
+        <!-- ТАБЛИЦА с горизонтальной прокруткой -->
+        <div class="table-wrap" style="margin-bottom:20px; padding:0;">
             <table>
                 <thead><tr><th>Участник</th><th>Средний балл</th><th>Кол-во</th><th>Все оценки</th><th>Комментарии</th></tr></thead>
                 <tbody id="tableBody"><tr><td colspan="5" class="empty-message">Нет данных</td></tr></tbody>
@@ -1459,9 +1599,9 @@
 
         <!-- ДЕЙСТВИЯ -->
         <div class="actions">
-            <button class="btn btn-warning" id="calcBtn">🏆 Победитель</button>
-            <button class="btn btn-secondary" id="syncBtn">🔄 Синхронизировать</button>
-            <button class="btn btn-clear" id="clearBtn">🗑️ Очистить всё</button>
+            <button class="btn" id="calcBtn">🏆 Победитель</button>
+            <button class="btn" id="syncBtn">🔄 Синхронизировать</button>
+            <button class="btn" id="clearBtn">🗑️ Очистить всё</button>
         </div>
 
         <!-- ФУТЕР -->
@@ -1481,26 +1621,20 @@
         <h2>🎨 Выбор цвета</h2>
         <p>Выберите акцентный цвет для светлой и тёмной темы</p>
 
-        <!-- Светлая палитра -->
         <div class="palette-section">
             <div class="palette-title">
                 ☀️ Светлая тема
                 <span class="current-color" id="lightPreview" style="background: #0abab5;"></span>
             </div>
-            <div class="palette-grid" id="lightPalette">
-                <!-- будет заполнено JS -->
-            </div>
+            <div class="palette-grid" id="lightPalette"></div>
         </div>
 
-        <!-- Тёмная палитра -->
         <div class="palette-section">
             <div class="palette-title">
                 🌙 Тёмная тема
-                <span class="current-color" id="darkPreview" style="background: #0abab5;"></span>
+                <span class="current-color" id="darkPreview" style="background: #0a0a12;"></span>
             </div>
-            <div class="palette-grid" id="darkPalette">
-                <!-- будет заполнено JS -->
-            </div>
+            <div class="palette-grid" id="darkPalette"></div>
         </div>
 
         <div class="btn-row" style="margin-top: 20px;">
@@ -1518,8 +1652,8 @@
         <div class="question">2 + 2 = ?</div>
         <input type="number" id="captchaInput" placeholder="Введите ответ" autocomplete="off">
         <div class="btn-row">
-            <button class="btn btn-danger" id="confirmClearBtn">🗑️ Очистить</button>
-            <button class="btn btn-secondary" id="cancelClearBtn">Отмена</button>
+            <button class="btn" id="confirmClearBtn">🗑️ Очистить</button>
+            <button class="btn" id="cancelClearBtn">Отмена</button>
         </div>
         <div class="error-msg" id="captchaError">❌ Неправильный ответ! Попробуйте ещё раз.</div>
     </div>
@@ -1586,12 +1720,15 @@
     // УПРАВЛЕНИЕ ЦВЕТАМИ
     // ============================================================
     let lightColor = '#0ABAB5';
-    let darkColor = '#0ABAB5';
+    let darkColor = '#0A0A12';
 
     function setLightColor(color) {
         lightColor = color;
+        document.documentElement.style.setProperty('--bg-light', color);
         document.documentElement.style.setProperty('--accent-color', color);
-        document.body.style.background = color;
+        if (!document.body.classList.contains('dark')) {
+            document.body.style.background = color;
+        }
         document.getElementById('lightPreview').style.background = color;
         document.getElementById('accentPreview').style.background = color;
         document.querySelectorAll('#lightPalette .color-option').forEach(el => {
@@ -1602,14 +1739,15 @@
 
     function setDarkColor(color) {
         darkColor = color;
-        document.documentElement.style.setProperty('--dark-accent', color);
+        document.documentElement.style.setProperty('--bg-dark', color);
+        if (document.body.classList.contains('dark')) {
+            document.body.style.background = color;
+            document.documentElement.style.setProperty('--accent-color', color);
+        }
         document.getElementById('darkPreview').style.background = color;
         document.querySelectorAll('#darkPalette .color-option').forEach(el => {
             el.classList.toggle('active', el.dataset.color === color);
         });
-        if (document.body.classList.contains('dark')) {
-            document.documentElement.style.setProperty('--accent-color', color);
-        }
         saveColors();
     }
 
@@ -1626,6 +1764,7 @@
             const savedDark = localStorage.getItem('darkColor');
             if (savedLight) {
                 lightColor = savedLight;
+                document.documentElement.style.setProperty('--bg-light', lightColor);
                 document.documentElement.style.setProperty('--accent-color', lightColor);
                 document.body.style.background = lightColor;
                 document.getElementById('lightPreview').style.background = lightColor;
@@ -1633,9 +1772,10 @@
             }
             if (savedDark) {
                 darkColor = savedDark;
-                document.documentElement.style.setProperty('--dark-accent', darkColor);
+                document.documentElement.style.setProperty('--bg-dark', darkColor);
                 document.getElementById('darkPreview').style.background = darkColor;
                 if (document.body.classList.contains('dark')) {
+                    document.body.style.background = darkColor;
                     document.documentElement.style.setProperty('--accent-color', darkColor);
                 }
             }
@@ -1684,14 +1824,12 @@
         document.body.classList.toggle('dark');
         isDark = document.body.classList.contains('dark');
         themeToggle.textContent = isDark ? '☀️ Светлая тема' : '🌙 Тёмная тема';
-        if (isDark && darkColor) {
+        if (isDark) {
+            document.body.style.background = darkColor;
             document.documentElement.style.setProperty('--accent-color', darkColor);
-        } else if (!isDark && lightColor) {
+        } else {
+            document.body.style.background = lightColor;
             document.documentElement.style.setProperty('--accent-color', lightColor);
-            document.body.style.background = lightColor;
-        }
-        if (!isDark) {
-            document.body.style.background = lightColor;
         }
     });
 
@@ -1892,7 +2030,7 @@
                 } else {
                     html += '<span class="comment-text"></span>';
                 }
-                html += '<span class="score">+' + item.score.toFixed(1) + '</span>';
+                html += '<span class="score">+' + item.score.toFixed(1) + '</span>'; // Зелёный цвет через CSS
             }
             html += '<span class="time">' + escapeHtml(item.time) + '</span>';
             html += '<span class="date">' + escapeHtml(item.date) + '</span>';
