@@ -270,33 +270,9 @@
             transition-duration: 0.08s;
         }
 
-        /* ----- статус ----- */
+        /* ----- статус (скрыт) ----- */
         .status-bar {
-            padding: 14px 24px;
-            margin-bottom: 20px;
-            border-radius: 30px;
-            font-size: 14px;
-            font-weight: 500;
-            text-align: center;
-            color: var(--text-light);
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(40px) saturate(180%);
-            -webkit-backdrop-filter: blur(40px) saturate(180%);
-            border: 1px solid rgba(255, 255, 255, 0.04);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03), 0 0 0 1px rgba(255, 255, 255, 0.03) inset;
-            position: relative;
-            overflow: hidden;
-        }
-
-        body.dark .status-bar {
-            color: var(--text-dark);
-            background: rgba(255, 255, 255, 0.02);
-            border-color: rgba(255, 255, 255, 0.02);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.01) inset;
-        }
-
-        .status-bar.online {
-            border-color: rgba(10, 186, 181, 0.15);
+            display: none;
         }
 
         /* ----- токен ----- */
@@ -957,19 +933,25 @@
         /* ----- футер ----- */
         .footer {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
+            align-items: center;
             flex-wrap: wrap;
-            gap: 12px;
+            gap: 16px;
             padding-top: 18px;
             margin-top: 18px;
             border-top: 1px solid rgba(255, 255, 255, 0.04);
             color: var(--text-light);
             font-size: 13px;
+            text-align: center;
         }
 
         body.dark .footer {
             border-top-color: rgba(255, 255, 255, 0.02);
             color: var(--text-dark);
+        }
+
+        .footer span {
+            display: inline-block;
         }
 
         .save-status {
@@ -1398,6 +1380,11 @@
             td {
                 padding: 10px 8px;
             }
+
+            .footer {
+                flex-direction: column;
+                gap: 8px;
+            }
         }
 
         @media (max-width: 450px) {
@@ -1491,8 +1478,8 @@
         <!-- TOAST -->
         <div id="toastContainer" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;max-width:90%;"></div>
 
-        <!-- СТАТУС -->
-        <div id="statusBar" class="status-bar" style="margin-bottom: 20px;">⏳ Подключение к GitHub...</div>
+        <!-- СТАТУС (скрыт) -->
+        <div id="statusBar" class="status-bar"></div>
 
         <!-- ТОКЕН -->
         <div class="token-input" id="tokenBlock">
@@ -1583,13 +1570,12 @@
                 <button class="btn" id="clearBtn">🗑️ Очистить всё</button>
             </div>
 
-            <!-- ФУТЕР -->
+            <!-- ФУТЕР - теперь всё в одной строке по центру -->
             <div class="footer">
                 <span id="winnerDisplay">👑 Победитель: не определен</span>
+                <span>·</span>
+                <span>🔄 Автосинхронизация</span>
                 <span class="save-status" id="statusDisplay">☁️ Готов</span>
-            </div>
-            <div style="text-align:center; margin-top:14px; font-size:12px; color:var(--text-light);">
-                🔄 Автосинхронизация каждые 10 секунд · 💬 Комментарии
             </div>
         </div>
     </div>
@@ -2233,8 +2219,7 @@
         }
 
         function setStatusBar(status, message) {
-            statusBar.className = 'status-bar ' + status;
-            statusBar.textContent = message;
+            // Статус-бар скрыт, ничего не делаем
         }
 
         function getUniqueParticipants(votes) {
@@ -2283,7 +2268,7 @@
                 history: allData[tab]?.history || []
             };
             try {
-                setStatusBar('saving', '💾 Сохранение...');
+                // Статус-бар скрыт
                 var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
                 var loadResponse = await fetch(url, { headers: { 'Authorization': 'token ' + githubToken,
                         'Accept': 'application/vnd.github.v3+json' } });
@@ -2300,13 +2285,11 @@
                     body: JSON.stringify(body)
                 });
                 if (saveResponse.ok) {
-                    setStatusBar('online', '☁️ Сохранено');
                     setStatus('☁️ Сохранено', 'var(--accent-color, #0abab5)');
                 } else {
                     throw new Error('Ошибка сохранения');
                 }
             } catch (e) {
-                setStatusBar('online', '☁️ Данные сохранены локально');
                 setStatus('💾 Сохранено локально', '#8a8a9a');
                 showToast('⚠️ Не удалось сохранить в GitHub, но данные сохранены локально', 'warning');
                 setTimeout(function() {
@@ -2346,11 +2329,9 @@
                     render();
                     renderHistory();
                     renderLeader();
-                    setStatusBar('online', '☁️ Автосинхронизация');
                     setStatus('☁️ Синхронизировано', 'var(--accent-color, #0abab5)');
                 }
             } catch (e) {
-                setStatusBar('online', '☁️ Данные загружены из кэша');
                 setStatus('📂 Из кэша', '#8a8a9a');
             }
         }
@@ -2541,7 +2522,7 @@
             githubToken = token;
             saveToken(token);
 
-            setStatusBar('connecting', '⏳ Подключение к GitHub...');
+            // Статус-бар скрыт
 
             try {
                 var testResponse = await fetch('https://api.github.com/user', {
