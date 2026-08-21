@@ -19,15 +19,15 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            background: #e8e8ed;
-            color: #1c1c1e;
+            background: #c8e6e0;
+            color: #1c2a2a;
             transition: background 0.4s ease;
         }
 
-        /* ----- тёмная тема ----- */
+        /* ----- тёмная тема (чуть светлее) ----- */
         body.dark {
-            background: #0a0a0a;
-            color: #f5f5f7;
+            background: #1a1a24;
+            color: #e8e8ed;
         }
 
         /* ----- главный контейнер ----- */
@@ -39,40 +39,40 @@
             z-index: 2;
         }
 
-        /* ----- стеклянная оболочка (светлая) ----- */
+        /* ----- стеклянная оболочка (светлая тиффани) ----- */
         .glass {
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border-radius: 40px;
-            border: 1px solid rgba(255, 255, 255, 0.5);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.06),
-                        0 0 0 1px rgba(255, 255, 255, 0.2) inset;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.04),
+                        0 0 0 1px rgba(255, 255, 255, 0.15) inset;
             transition: all 0.4s ease;
         }
 
-        /* ----- стеклянная оболочка (тёмная) ----- */
+        /* ----- стеклянная оболочка (тёмная, чуть светлее) ----- */
         body.dark .glass {
-            background: rgba(30, 30, 40, 0.7);
+            background: rgba(35, 35, 50, 0.7);
             backdrop-filter: blur(40px) saturate(180%);
             -webkit-backdrop-filter: blur(40px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.06);
-            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.6),
-                        0 0 0 1px rgba(255, 255, 255, 0.04) inset;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5),
+                        0 0 0 1px rgba(255, 255, 255, 0.03) inset;
         }
 
         .glass-card {
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.35);
             backdrop-filter: blur(20px) saturate(140%);
             -webkit-backdrop-filter: blur(20px) saturate(140%);
             border-radius: 28px;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.03);
         }
 
         body.dark .glass-card {
-            background: rgba(255, 255, 255, 0.06);
-            border-color: rgba(255, 255, 255, 0.06);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.04);
         }
 
         /* ---------- КНОПКИ В СТИЛЕ APPLE ---------- */
@@ -119,7 +119,7 @@
 
         .btn-secondary {
             background: rgba(0, 0, 0, 0.06);
-            color: #1c1c1e;
+            color: #1c2a2a;
             box-shadow: none;
         }
         .btn-secondary:hover {
@@ -129,11 +129,11 @@
         }
 
         body.dark .btn-secondary {
-            background: rgba(255, 255, 255, 0.1);
-            color: #f5f5f7;
+            background: rgba(255, 255, 255, 0.08);
+            color: #e8e8ed;
         }
         body.dark .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.18);
+            background: rgba(255, 255, 255, 0.16);
         }
 
         .btn-success {
@@ -168,7 +168,7 @@
 
         .btn-clear {
             background: rgba(0, 0, 0, 0.04);
-            color: #1c1c1e;
+            color: #1c2a2a;
             box-shadow: none;
             border: 1px solid rgba(0, 0, 0, 0.06);
         }
@@ -178,8 +178,8 @@
         }
 
         body.dark .btn-clear {
-            background: rgba(255, 255, 255, 0.05);
-            color: #f5f5f7;
+            background: rgba(255, 255, 255, 0.04);
+            color: #e8e8ed;
             border-color: rgba(255, 255, 255, 0.06);
         }
         body.dark .btn-clear:hover {
@@ -207,39 +207,39 @@
             font-size: 32px;
             font-weight: 700;
             letter-spacing: -0.02em;
-            color: #1c1c1e;
+            color: #1c2a2a;
         }
 
         body.dark .header h1 {
-            color: #f5f5f7;
+            color: #e8e8ed;
         }
 
         .header .sub {
             font-size: 15px;
-            color: #6e6e73;
+            color: #4a6a6a;
             font-weight: 400;
         }
 
         body.dark .header .sub {
-            color: #8e8e93;
+            color: #8a8a9a;
         }
 
         .theme-toggle {
-            background: rgba(0, 0, 0, 0.05);
+            background: rgba(0, 0, 0, 0.04);
             border: 1px solid rgba(0, 0, 0, 0.06);
             border-radius: 980px;
             padding: 8px 20px;
             font-size: 14px;
             font-weight: 500;
             cursor: pointer;
-            color: #1c1c1e;
+            color: #1c2a2a;
             transition: all 0.3s ease;
         }
 
         body.dark .theme-toggle {
             background: rgba(255, 255, 255, 0.06);
             border-color: rgba(255, 255, 255, 0.06);
-            color: #f5f5f7;
+            color: #e8e8ed;
         }
 
         .theme-toggle:hover {
@@ -258,14 +258,14 @@
             font-size: 14px;
             font-weight: 500;
             text-align: center;
-            color: #1c1c1e;
-            background: rgba(255, 255, 255, 0.5);
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: #1c2a2a;
+            background: rgba(255, 255, 255, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.25);
         }
 
         body.dark .status-bar {
-            color: #f5f5f7;
-            background: rgba(255, 255, 255, 0.05);
+            color: #e8e8ed;
+            background: rgba(255, 255, 255, 0.04);
             border-color: rgba(255, 255, 255, 0.04);
         }
 
@@ -287,12 +287,12 @@
             display: block;
             font-weight: 600;
             font-size: 14px;
-            color: #6e6e73;
+            color: #4a6a6a;
             margin-bottom: 8px;
         }
 
         body.dark .token-input label {
-            color: #8e8e93;
+            color: #8a8a9a;
         }
 
         .token-input input {
@@ -300,32 +300,32 @@
             padding: 16px 20px;
             border-radius: 980px;
             font-size: 16px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.6);
             border: 1px solid rgba(0, 0, 0, 0.04);
-            color: #1c1c1e;
+            color: #1c2a2a;
             transition: all 0.3s ease;
             outline: none;
         }
 
         body.dark .token-input input {
             background: rgba(255, 255, 255, 0.05);
-            color: #f5f5f7;
+            color: #e8e8ed;
             border-color: rgba(255, 255, 255, 0.04);
         }
 
         .token-input input:focus {
             border-color: #0071e3;
-            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.12);
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
         }
 
         .token-input .hint {
             font-size: 13px;
-            color: #6e6e73;
+            color: #4a6a6a;
             margin-top: 10px;
         }
 
         body.dark .token-input .hint {
-            color: #6e6e73;
+            color: #6a6a7a;
         }
 
         /* ----- секции ----- */
@@ -333,14 +333,14 @@
             padding: 24px 28px;
             margin-bottom: 20px;
             border-radius: 32px;
-            background: rgba(255, 255, 255, 0.35);
+            background: rgba(255, 255, 255, 0.3);
             backdrop-filter: blur(20px) saturate(140%);
             -webkit-backdrop-filter: blur(20px) saturate(140%);
-            border: 1px solid rgba(255, 255, 255, 0.25);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         body.dark .section-glass {
-            background: rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.03);
             border-color: rgba(255, 255, 255, 0.04);
         }
 
@@ -348,13 +348,13 @@
             font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 0.04em;
-            color: #6e6e73;
+            color: #4a6a6a;
             margin-bottom: 16px;
             font-weight: 600;
         }
 
         body.dark .section-title {
-            color: #6e6e73;
+            color: #6a6a7a;
         }
 
         /* ----- статистика ----- */
@@ -368,8 +368,8 @@
             text-align: center;
             padding: 18px 12px;
             border-radius: 24px;
-            background: rgba(255, 255, 255, 0.35);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
         }
 
         body.dark .stat-card {
@@ -380,29 +380,29 @@
         .stat-card .num {
             font-size: 36px;
             font-weight: 700;
-            color: #1c1c1e;
+            color: #1c2a2a;
         }
 
         body.dark .stat-card .num {
-            color: #f5f5f7;
+            color: #e8e8ed;
         }
 
         .stat-card .label {
             font-size: 13px;
-            color: #6e6e73;
+            color: #4a6a6a;
             margin-top: 4px;
         }
 
         body.dark .stat-card .label {
-            color: #6e6e73;
+            color: #6a6a7a;
         }
 
         /* ----- лидер ----- */
         .leader-card {
             padding: 24px 28px;
             border-radius: 32px;
-            background: rgba(255, 215, 0, 0.05);
-            border: 1px solid rgba(255, 215, 0, 0.1);
+            background: rgba(255, 215, 0, 0.04);
+            border: 1px solid rgba(255, 215, 0, 0.08);
             text-align: center;
             margin-bottom: 20px;
         }
@@ -414,18 +414,18 @@
 
         .leader-card .label {
             font-size: 14px;
-            color: #6e6e73;
+            color: #4a6a6a;
             font-weight: 500;
         }
 
         body.dark .leader-card .label {
-            color: #6e6e73;
+            color: #6a6a7a;
         }
 
         .leader-card .names {
             font-size: 30px;
             font-weight: 700;
-            color: #1c1c1e;
+            color: #1c2a2a;
             letter-spacing: -0.02em;
             margin: 6px 0 2px;
         }
@@ -436,21 +436,21 @@
 
         .leader-card .score {
             font-size: 17px;
-            color: #6e6e73;
+            color: #4a6a6a;
             font-weight: 500;
         }
 
         body.dark .leader-card .score {
-            color: #8e8e93;
+            color: #8a8a9a;
         }
 
         .leader-card .empty {
-            color: #6e6e73;
+            color: #4a6a6a;
             font-size: 16px;
         }
 
         body.dark .leader-card .empty {
-            color: #6e6e73;
+            color: #6a6a7a;
         }
 
         /* ----- форма ----- */
@@ -472,20 +472,20 @@
         .input-group label {
             font-size: 13px;
             font-weight: 500;
-            color: #6e6e73;
+            color: #4a6a6a;
         }
 
         body.dark .input-group label {
-            color: #6e6e73;
+            color: #6a6a7a;
         }
 
         .input-group input {
             padding: 14px 20px;
             border-radius: 980px;
             font-size: 16px;
-            background: rgba(255, 255, 255, 0.6);
+            background: rgba(255, 255, 255, 0.5);
             border: 1px solid rgba(0, 0, 0, 0.04);
-            color: #1c1c1e;
+            color: #1c2a2a;
             transition: all 0.3s ease;
             outline: none;
             width: 100%;
@@ -493,30 +493,30 @@
 
         body.dark .input-group input {
             background: rgba(255, 255, 255, 0.05);
-            color: #f5f5f7;
+            color: #e8e8ed;
             border-color: rgba(255, 255, 255, 0.04);
         }
 
         .input-group input:focus {
             border-color: #0071e3;
-            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.1);
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.08);
         }
 
         .input-group input::placeholder {
-            color: #8e8e93;
+            color: #6a8a8a;
         }
 
         body.dark .input-group input::placeholder {
-            color: #6e6e73;
+            color: #5a5a6a;
         }
 
         .comment-input {
             padding: 12px 20px;
             border-radius: 980px;
             font-size: 14px;
-            background: rgba(255, 255, 255, 0.4);
+            background: rgba(255, 255, 255, 0.35);
             border: 1px solid rgba(0, 0, 0, 0.04);
-            color: #1c1c1e;
+            color: #1c2a2a;
             width: 100%;
             outline: none;
             transition: all 0.3s ease;
@@ -525,21 +525,21 @@
 
         body.dark .comment-input {
             background: rgba(255, 255, 255, 0.04);
-            color: #f5f5f7;
+            color: #e8e8ed;
             border-color: rgba(255, 255, 255, 0.04);
         }
 
         .comment-input:focus {
             border-color: #0071e3;
-            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.08);
+            box-shadow: 0 0 0 4px rgba(0, 113, 227, 0.06);
         }
 
         .comment-input::placeholder {
-            color: #8e8e93;
+            color: #6a8a8a;
         }
 
         body.dark .comment-input::placeholder {
-            color: #6e6e73;
+            color: #5a5a6a;
         }
 
         /* ----- вкладки (как Apple Segments) ----- */
@@ -548,13 +548,13 @@
             gap: 4px;
             padding: 4px;
             border-radius: 980px;
-            background: rgba(255, 255, 255, 0.35);
-            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.15);
             margin-bottom: 20px;
         }
 
         body.dark .tabs {
-            background: rgba(255, 255, 255, 0.05);
+            background: rgba(255, 255, 255, 0.04);
             border-color: rgba(255, 255, 255, 0.04);
         }
 
@@ -567,12 +567,12 @@
             font-size: 14px;
             cursor: pointer;
             background: transparent;
-            color: #6e6e73;
+            color: #4a6a6a;
             transition: all 0.3s ease;
         }
 
         body.dark .tab-btn {
-            color: #6e6e73;
+            color: #6a6a7a;
         }
 
         .tab-btn.active {
@@ -599,7 +599,7 @@
             overflow-x: auto;
             border-radius: 24px;
             border: 1px solid rgba(0, 0, 0, 0.04);
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.15);
         }
 
         body.dark .table-wrap {
@@ -617,7 +617,7 @@
             padding: 16px 14px;
             text-align: center;
             font-weight: 600;
-            color: #6e6e73;
+            color: #4a6a6a;
             text-transform: uppercase;
             font-size: 11px;
             letter-spacing: 0.04em;
@@ -625,7 +625,7 @@
         }
 
         body.dark th {
-            color: #6e6e73;
+            color: #6a6a7a;
             border-bottom-color: rgba(255, 255, 255, 0.04);
         }
 
@@ -633,11 +633,11 @@
             padding: 14px 12px;
             text-align: center;
             border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-            color: #1c1c1e;
+            color: #1c2a2a;
         }
 
         body.dark td {
-            color: #f5f5f7;
+            color: #e8e8ed;
             border-bottom-color: rgba(255, 255, 255, 0.04);
         }
 
@@ -661,24 +661,24 @@
 
         .comment-cell {
             font-size: 12px;
-            color: #6e6e73;
+            color: #4a6a6a;
             max-width: 120px;
             word-break: break-word;
         }
 
         body.dark .comment-cell {
-            color: #6e6e73;
+            color: #6a6a7a;
         }
 
         .empty-message {
             text-align: center;
             padding: 40px;
-            color: #6e6e73;
+            color: #4a6a6a;
             font-style: italic;
         }
 
         body.dark .empty-message {
-            color: #6e6e73;
+            color: #6a6a7a;
         }
 
         /* ----- история ----- */
@@ -690,7 +690,7 @@
 
         .history-list::-webkit-scrollbar { width: 4px; }
         .history-list::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.1);
+            background: rgba(0, 0, 0, 0.08);
             border-radius: 4px;
         }
 
@@ -705,11 +705,11 @@
             padding: 10px 14px;
             border-bottom: 1px solid rgba(0, 0, 0, 0.04);
             font-size: 14px;
-            color: #1c1c1e;
+            color: #1c2a2a;
         }
 
         body.dark .history-item {
-            color: #f5f5f7;
+            color: #e8e8ed;
             border-bottom-color: rgba(255, 255, 255, 0.04);
         }
 
@@ -719,7 +719,7 @@
 
         .history-item .comment-text {
             font-size: 12px;
-            color: #6e6e73;
+            color: #4a6a6a;
             max-width: 100px;
             white-space: nowrap;
             overflow: hidden;
@@ -727,7 +727,7 @@
         }
 
         body.dark .history-item .comment-text {
-            color: #6e6e73;
+            color: #6a6a7a;
         }
 
         .history-item .score {
@@ -740,26 +740,26 @@
 
         .history-item .time {
             font-size: 12px;
-            color: #6e6e73;
+            color: #4a6a6a;
             width: 65px;
             text-align: right;
             flex-shrink: 0;
         }
 
         body.dark .history-item .time {
-            color: #6e6e73;
+            color: #6a6a7a;
         }
 
         .history-item .date {
             font-size: 12px;
-            color: #6e6e73;
+            color: #4a6a6a;
             width: 80px;
             text-align: right;
             flex-shrink: 0;
         }
 
         body.dark .history-item .date {
-            color: #6e6e73;
+            color: #6a6a7a;
         }
 
         .history-item.delete .name { color: #ff3b30; }
@@ -767,20 +767,20 @@
 
         .history-empty {
             text-align: center;
-            color: #6e6e73;
+            color: #4a6a6a;
             padding: 20px;
             font-style: italic;
             font-size: 14px;
         }
 
         body.dark .history-empty {
-            color: #6e6e73;
+            color: #6a6a7a;
         }
 
         /* ----- удаление ----- */
         .section-glass .btn-delete {
             background: rgba(255, 59, 48, 0.08);
-            border: 1px solid rgba(255, 59, 48, 0.12);
+            border: 1px solid rgba(255, 59, 48, 0.1);
             color: #ff3b30;
         }
         .section-glass .btn-delete:hover {
@@ -796,13 +796,13 @@
             padding-top: 18px;
             margin-top: 18px;
             border-top: 1px solid rgba(0, 0, 0, 0.04);
-            color: #6e6e73;
+            color: #4a6a6a;
             font-size: 13px;
         }
 
         body.dark .footer {
             border-top-color: rgba(255, 255, 255, 0.04);
-            color: #6e6e73;
+            color: #6a6a7a;
         }
 
         .save-status { color: #34c759; }
@@ -825,7 +825,7 @@
         .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.25);
+            background: rgba(0, 0, 0, 0.15);
             backdrop-filter: blur(30px) saturate(140%);
             -webkit-backdrop-filter: blur(30px) saturate(140%);
             display: none;
@@ -838,7 +838,7 @@
         .modal-overlay.active { display: flex; }
 
         .modal-box {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.65);
             backdrop-filter: blur(50px) saturate(180%);
             -webkit-backdrop-filter: blur(50px) saturate(180%);
             padding: 40px 36px;
@@ -846,36 +846,36 @@
             max-width: 440px;
             width: 100%;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.06);
         }
 
         body.dark .modal-box {
-            background: rgba(40, 40, 50, 0.85);
+            background: rgba(45, 45, 60, 0.85);
             border-color: rgba(255, 255, 255, 0.06);
         }
 
         .modal-box h2 {
             margin-bottom: 8px;
-            color: #1c1c1e;
+            color: #1c2a2a;
             font-weight: 700;
             font-size: 26px;
         }
 
-        body.dark .modal-box h2 { color: #f5f5f7; }
+        body.dark .modal-box h2 { color: #e8e8ed; }
 
         .modal-box p {
-            color: #6e6e73;
+            color: #4a6a6a;
             margin-bottom: 16px;
             font-size: 15px;
         }
 
-        body.dark .modal-box p { color: #8e8e93; }
+        body.dark .modal-box p { color: #8a8a9a; }
 
         .modal-box .question {
             font-size: 30px;
             font-weight: 700;
-            color: #1c1c1e;
+            color: #1c2a2a;
             margin: 16px 0;
         }
 
@@ -889,14 +889,14 @@
             text-align: center;
             background: rgba(255, 255, 255, 0.5);
             border: 1px solid rgba(0, 0, 0, 0.04);
-            color: #1c1c1e;
+            color: #1c2a2a;
             outline: none;
             margin-bottom: 16px;
         }
 
         body.dark .modal-box input {
             background: rgba(255, 255, 255, 0.05);
-            color: #f5f5f7;
+            color: #e8e8ed;
             border-color: rgba(255, 255, 255, 0.04);
         }
 
@@ -933,27 +933,27 @@
         .podium-item .place {
             font-weight: 600;
             font-size: 13px;
-            color: #6e6e73;
+            color: #4a6a6a;
             margin-top: 4px;
         }
 
-        body.dark .podium-item .place { color: #6e6e73; }
+        body.dark .podium-item .place { color: #6a6a7a; }
 
         .podium-item .podium-name {
             font-weight: 700;
             font-size: 17px;
-            color: #1c1c1e;
+            color: #1c2a2a;
             margin-top: 2px;
         }
 
-        body.dark .podium-item .podium-name { color: #f5f5f7; }
+        body.dark .podium-item .podium-name { color: #e8e8ed; }
 
         .podium-item .podium-score {
             font-size: 14px;
-            color: #6e6e73;
+            color: #4a6a6a;
         }
 
-        body.dark .podium-item .podium-score { color: #6e6e73; }
+        body.dark .podium-item .podium-score { color: #6a6a7a; }
 
         .podium-step {
             width: 100px;
@@ -1104,16 +1104,16 @@
                 </div>
             </div>
             <div style="margin-top: 10px;">
-                <label style="font-size:13px; color:#6e6e73;">💬 Комментарий (необязательно)</label>
+                <label style="font-size:13px; color:#4a6a6a;">💬 Комментарий (необязательно)</label>
                 <input type="text" id="commentInput" class="comment-input" placeholder="Например: Отличное выступление!">
             </div>
         </div>
 
         <!-- УДАЛЕНИЕ -->
-        <div class="section-glass" style="border-color: rgba(255,59,48,0.1);">
+        <div class="section-glass" style="border-color: rgba(255,59,48,0.08);">
             <label style="font-size:14px; color:#ff3b30; font-weight:500;">🗑️ Удалить участника</label>
             <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
-                <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.4); border:1px solid rgba(0,0,0,0.04); color:#1c1c1e; outline:none; min-width:120px;">
+                <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.35); border:1px solid rgba(0,0,0,0.04); color:#1c2a2a; outline:none; min-width:120px;">
                 <button class="btn btn-danger btn-sm" id="deleteBtn" style="min-width:auto;">✕ Удалить</button>
             </div>
         </div>
@@ -1146,7 +1146,7 @@
             <span id="winnerDisplay">👑 Победитель: не определен</span>
             <span class="save-status" id="statusDisplay">☁️ Готов</span>
         </div>
-        <div style="text-align:center; margin-top:14px; font-size:12px; color:#6e6e73;">
+        <div style="text-align:center; margin-top:14px; font-size:12px; color:#4a6a6a;">
             🔄 Автосинхронизация каждые 10 секунд · 💬 Комментарии
         </div>
     </div>
@@ -1185,10 +1185,10 @@
         var container = document.getElementById('toastContainer');
         var toast = document.createElement('div');
         toast.className = 'toast';
-        toast.style.cssText = 'background:rgba(255,255,255,0.7); backdrop-filter:blur(30px); -webkit-backdrop-filter:blur(30px); color:#1c1c1e; padding:14px 28px; border-radius:980px; font-weight:500; font-size:15px; box-shadow:0 20px 60px rgba(0,0,0,0.06); animation:toastIn 0.4s ease, toastOut 0.4s ease 3s forwards; pointer-events:auto; border:1px solid rgba(255,255,255,0.3); text-align:center;';
+        toast.style.cssText = 'background:rgba(255,255,255,0.65); backdrop-filter:blur(30px); -webkit-backdrop-filter:blur(30px); color:#1c2a2a; padding:14px 28px; border-radius:980px; font-weight:500; font-size:15px; box-shadow:0 20px 60px rgba(0,0,0,0.04); animation:toastIn 0.4s ease, toastOut 0.4s ease 3s forwards; pointer-events:auto; border:1px solid rgba(255,255,255,0.25); text-align:center;';
         if (document.body.classList.contains('dark')) {
-            toast.style.background = 'rgba(40,40,50,0.85)';
-            toast.style.color = '#f5f5f7';
+            toast.style.background = 'rgba(45,45,60,0.85)';
+            toast.style.color = '#e8e8ed';
             toast.style.borderColor = 'rgba(255,255,255,0.06)';
         }
         if (type === 'warning') toast.style.borderColor = 'rgba(255,149,0,0.3)';
@@ -1209,7 +1209,7 @@
     themeToggle.addEventListener('click', function() {
         document.body.classList.toggle('dark');
         isDark = document.body.classList.contains('dark');
-        themeToggle.textContent = isDark ? '☀️ Светлая тема' : '🌙 Тёмная тема';
+        themeToggle.textContent = isDark ? '☀️ Светлая тема (Тиффани)' : '🌙 Тёмная тема';
     });
 
     // ============================================================
@@ -1586,7 +1586,7 @@
         }
 
         if (topGroups.length === 0) {
-            podiumContainer.innerHTML = '<p style="color: #6e6e73; padding: 20px;">Нет данных для отображения</p>';
+            podiumContainer.innerHTML = '<p style="color: #4a6a6a; padding: 20px;">Нет данных для отображения</p>';
         } else {
             podiumContainer.innerHTML = html;
         }
@@ -1667,7 +1667,7 @@
             }
         } catch(e) { 
             setStatusBar('online', '☁️ Данные сохранены локально'); 
-            setStatus('💾 Сохранено локально', '#8e8e93');
+            setStatus('💾 Сохранено локально', '#8a8a9a');
             showToast('⚠️ Не удалось сохранить в GitHub, но данные сохранены локально', 'warning');
             setTimeout(function() {
                 if (githubToken) {
@@ -1710,7 +1710,7 @@
             }
         } catch(e) { 
             setStatusBar('online', '☁️ Данные загружены из кэша');
-            setStatus('📂 Из кэша', '#8e8e93');
+            setStatus('📂 Из кэша', '#8a8a9a');
         }
     }
 
