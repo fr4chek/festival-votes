@@ -21,10 +21,10 @@
             padding: 20px;
             background: #0abab5;
             color: #1c2a2a;
-            transition: background 0.4s ease;
+            transition: background 0.4s ease, color 0.4s ease;
         }
 
-        /* ----- тёмная тема ----- */
+        /* ----- тёмная тема (базовая) ----- */
         body.dark {
             background: #0a0a12;
             color: #e0e0e0;
@@ -89,7 +89,7 @@
             border: none;
             cursor: pointer;
             transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-            background: #0abab5;
+            background: var(--accent-color, #0abab5);
             color: #fff;
             box-shadow: 0 4px 12px rgba(10, 186, 181, 0.3);
             position: relative;
@@ -110,7 +110,7 @@
         .btn:hover {
             transform: scale(1.02);
             box-shadow: 0 8px 28px rgba(10, 186, 181, 0.4);
-            background: #0cc8c2;
+            background: var(--accent-color, #0cc8c2);
         }
 
         .btn:active {
@@ -118,11 +118,11 @@
         }
 
         body.dark .btn {
-            background: #0abab5;
+            background: var(--accent-color, #0abab5);
             box-shadow: 0 4px 12px rgba(10, 186, 181, 0.25);
         }
         body.dark .btn:hover {
-            background: #0cc8c2;
+            background: var(--accent-color, #0cc8c2);
             box-shadow: 0 8px 28px rgba(10, 186, 181, 0.35);
         }
 
@@ -146,12 +146,12 @@
         }
 
         .btn-success {
-            background: #0abab5;
+            background: var(--accent-color, #0abab5);
             color: #fff;
             box-shadow: 0 4px 12px rgba(10, 186, 181, 0.3);
         }
         .btn-success:hover {
-            background: #0cc8c2;
+            background: var(--accent-color, #0cc8c2);
             box-shadow: 0 8px 28px rgba(10, 186, 181, 0.4);
         }
 
@@ -201,6 +201,22 @@
             min-width: auto;
         }
 
+        .btn-icon {
+            padding: 8px 16px;
+            min-width: auto;
+            font-size: 14px;
+        }
+
+        .color-preview {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+
         /* ----- хедер ----- */
         .header {
             display: flex;
@@ -210,6 +226,19 @@
             margin-bottom: 24px;
             flex-wrap: wrap;
             gap: 12px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
         }
 
         .header h1 {
@@ -323,7 +352,7 @@
         }
 
         .token-input input:focus {
-            border-color: #0abab5;
+            border-color: var(--accent-color, #0abab5);
             box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.15);
         }
 
@@ -507,7 +536,7 @@
         }
 
         .input-group input:focus {
-            border-color: #0abab5;
+            border-color: var(--accent-color, #0abab5);
             box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.12);
         }
 
@@ -539,7 +568,7 @@
         }
 
         .comment-input:focus {
-            border-color: #0abab5;
+            border-color: var(--accent-color, #0abab5);
             box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.08);
         }
 
@@ -551,7 +580,7 @@
             color: #5a5a6a;
         }
 
-        /* ----- вкладки (как Apple Segments) ----- */
+        /* ----- вкладки ----- */
         .tabs {
             display: flex;
             gap: 4px;
@@ -585,13 +614,13 @@
         }
 
         .tab-btn.active {
-            background: #0abab5;
+            background: var(--accent-color, #0abab5);
             color: #fff;
             box-shadow: 0 2px 12px rgba(10, 186, 181, 0.25);
         }
 
         body.dark .tab-btn.active {
-            background: #0abab5;
+            background: var(--accent-color, #0abab5);
             color: #fff;
         }
 
@@ -741,7 +770,7 @@
 
         .history-item .score {
             font-weight: 600;
-            color: #0abab5;
+            color: var(--accent-color, #0abab5);
             width: 60px;
             text-align: right;
             flex-shrink: 0;
@@ -814,7 +843,7 @@
             color: #6a6a7a;
         }
 
-        .save-status { color: #0abab5; }
+        .save-status { color: var(--accent-color, #0abab5); }
 
         .actions {
             display: flex;
@@ -852,11 +881,13 @@
             -webkit-backdrop-filter: blur(50px) saturate(180%);
             padding: 40px 36px;
             border-radius: 40px;
-            max-width: 440px;
+            max-width: 520px;
             width: 100%;
             text-align: center;
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 40px 100px rgba(0, 0, 0, 0.06);
+            max-height: 90vh;
+            overflow-y: auto;
         }
 
         body.dark .modal-box {
@@ -868,7 +899,7 @@
             margin-bottom: 8px;
             color: #1c2a2a;
             font-weight: 700;
-            font-size: 26px;
+            font-size: 24px;
         }
 
         body.dark .modal-box h2 { color: #e0e0e0; }
@@ -876,7 +907,7 @@
         .modal-box p {
             color: #1c3a3a;
             margin-bottom: 16px;
-            font-size: 15px;
+            font-size: 14px;
         }
 
         body.dark .modal-box p { color: #8a8a9a; }
@@ -888,7 +919,7 @@
             margin: 16px 0;
         }
 
-        body.dark .modal-box .question { color: #0abab5; }
+        body.dark .modal-box .question { color: var(--accent-color, #0abab5); }
 
         .modal-box input {
             width: 100%;
@@ -910,7 +941,7 @@
         }
 
         .modal-box input:focus {
-            border-color: #0abab5;
+            border-color: var(--accent-color, #0abab5);
             box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.1);
         }
 
@@ -924,6 +955,107 @@
             display: none;
         }
         .modal-box .error-msg.show { display: block; }
+
+        /* ===== ПАЛИТРА ЦВЕТОВ ===== */
+        .palette-section {
+            margin-bottom: 24px;
+        }
+
+        .palette-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .palette-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1c2a2a;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        body.dark .palette-title {
+            color: #e0e0e0;
+        }
+
+        .palette-title .current-color {
+            display: inline-block;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            flex-shrink: 0;
+        }
+
+        .palette-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 8px;
+        }
+
+        .color-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        body.dark .color-option {
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .color-option:hover {
+            transform: scale(1.03);
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        body.dark .color-option:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .color-option.active {
+            border-color: var(--accent-color, #0abab5);
+            box-shadow: 0 0 0 3px rgba(10, 186, 181, 0.2);
+        }
+
+        .color-swatch {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        body.dark .color-swatch {
+            border-color: rgba(255, 255, 255, 0.06);
+        }
+
+        .color-hex {
+            font-size: 13px;
+            font-weight: 500;
+            color: #1c2a2a;
+            font-family: 'SF Mono', monospace;
+        }
+
+        body.dark .color-hex {
+            color: #e0e0e0;
+        }
+
+        .color-name {
+            font-size: 11px;
+            color: #6a8a8a;
+            margin-left: auto;
+        }
+
+        body.dark .color-name {
+            color: #6a6a7a;
+        }
 
         /* ----- подиум ----- */
         .podium {
@@ -1025,17 +1157,23 @@
             .history-item .comment-text { max-width: 50px; }
             .podium-step { width: 70px; }
             .podium-item { min-width: 60px; }
-            .modal-box { padding: 28px 20px; }
+            .modal-box { padding: 28px 20px; max-width: 100%; }
             .header { padding: 16px 20px; }
             .section-glass { padding: 18px 16px; }
             .token-input { padding: 20px 16px; }
             .tabs .tab-btn { font-size: 12px; padding: 8px 10px; }
+            .header-right { width: 100%; justify-content: center; }
+            .palette-grid { grid-template-columns: repeat(auto-fill, minmax(80px, 1fr)); }
         }
 
         @media (max-width: 450px) {
             .stats-grid { grid-template-columns: 1fr 1fr; }
             .header { flex-direction: column; align-items: stretch; text-align: center; }
             .theme-toggle { align-self: center; }
+            .header-right { flex-direction: column; align-items: stretch; }
+            .palette-grid { grid-template-columns: repeat(auto-fill, minmax(70px, 1fr)); }
+            .color-option { padding: 6px 10px; }
+            .color-hex { font-size: 11px; }
         }
     </style>
 </head>
@@ -1044,11 +1182,19 @@
 <div class="container">
     <!-- ХЕДЕР -->
     <div class="header glass" style="padding: 20px 32px; margin-bottom: 24px;">
-        <div>
-            <h1>🎭 Фестиваль</h1>
-            <span class="sub">Подсчёт голосов жюри</span>
+        <div class="header-left">
+            <div>
+                <h1>🎭 Фестиваль</h1>
+                <span class="sub">Подсчёт голосов жюри</span>
+            </div>
         </div>
-        <button class="theme-toggle" id="themeToggle">🌙 Тёмная тема</button>
+        <div class="header-right">
+            <button class="btn btn-icon" id="colorPickerBtn" title="Выбрать цвета">
+                <span>🎨</span>
+                <span class="color-preview" id="accentPreview" style="background: #0abab5;"></span>
+            </button>
+            <button class="theme-toggle" id="themeToggle">🌙 Тёмная тема</button>
+        </div>
     </div>
 
     <!-- ОФЛАЙН ПРЕДУПРЕЖДЕНИЕ -->
@@ -1161,6 +1307,42 @@
     </div>
 </div>
 
+<!-- МОДАЛКА ВЫБОРА ЦВЕТА -->
+<div class="modal-overlay" id="colorModal">
+    <div class="modal-box">
+        <h2>🎨 Выбор цвета</h2>
+        <p>Выберите акцентный цвет для светлой и тёмной темы</p>
+
+        <!-- Светлая палитра -->
+        <div class="palette-section">
+            <div class="palette-title">
+                ☀️ Светлая тема
+                <span class="current-color" id="lightPreview" style="background: #0abab5;"></span>
+                <span style="font-size:13px; font-weight:400; color:#6a8a8a;" id="lightHex">#0ABAB5</span>
+            </div>
+            <div class="palette-grid" id="lightPalette">
+                <!-- будет заполнено JS -->
+            </div>
+        </div>
+
+        <!-- Тёмная палитра -->
+        <div class="palette-section">
+            <div class="palette-title">
+                🌙 Тёмная тема
+                <span class="current-color" id="darkPreview" style="background: #0abab5;"></span>
+                <span style="font-size:13px; font-weight:400; color:#6a8a8a;" id="darkHex">#0ABAB5</span>
+            </div>
+            <div class="palette-grid" id="darkPalette">
+                <!-- будет заполнено JS -->
+            </div>
+        </div>
+
+        <div class="btn-row" style="margin-top: 20px;">
+            <button class="btn" id="closeColorBtn">✅ Готово</button>
+        </div>
+    </div>
+</div>
+
 <!-- МОДАЛКА ОЧИСТКИ -->
 <div class="modal-overlay" id="clearModal">
     <div class="modal-box">
@@ -1188,6 +1370,32 @@
 
 <script>
     // ============================================================
+    // ПАЛИТРЫ ЦВЕТОВ
+    // ============================================================
+    const LIGHT_PALETTE = [
+        { hex: '#42826C', name: 'Тёмный изумруд' },
+        { hex: '#38705D', name: 'Изумруд' },
+        { hex: '#2F5F4E', name: 'Лесной' },
+        { hex: '#254E40', name: 'Тёмный лес' },
+        { hex: '#1C3E32', name: 'Глубокий лес' },
+        { hex: '#142F25', name: 'Очень тёмный' },
+        { hex: '#0B2019', name: 'Почти чёрный' }
+    ];
+
+    const DARK_PALETTE = [
+        { hex: '#708093', name: 'Светло-стальной' },
+        { hex: '#606E7F', name: 'Стальной' },
+        { hex: '#515D6C', name: 'Тёмный стальной' },
+        { hex: '#434D59', name: 'Графитовый' },
+        { hex: '#353D47', name: 'Тёмный графит' },
+        { hex: '#272E36', name: 'Очень тёмный' },
+        { hex: '#1A1F25', name: 'Глубокий тёмный' },
+        { hex: '#0E1216', name: 'Почти чёрный' },
+        { hex: '#040608', name: 'Чернильный' },
+        { hex: '#010101', name: 'Чёрный' }
+    ];
+
+    // ============================================================
     // TOAST
     // ============================================================
     function showToast(message, type) {
@@ -1209,6 +1417,96 @@
     }
 
     // ============================================================
+    // УПРАВЛЕНИЕ ЦВЕТАМИ
+    // ============================================================
+    let lightColor = '#0ABAB5';
+    let darkColor = '#0ABAB5';
+
+    function setLightColor(color) {
+        lightColor = color;
+        document.documentElement.style.setProperty('--accent-color', color);
+        document.getElementById('lightPreview').style.background = color;
+        document.getElementById('lightHex').textContent = color.toUpperCase();
+        document.getElementById('accentPreview').style.background = color;
+        // Обновляем активный класс в палитре
+        document.querySelectorAll('#lightPalette .color-option').forEach(el => {
+            el.classList.toggle('active', el.dataset.color === color);
+        });
+        saveColors();
+    }
+
+    function setDarkColor(color) {
+        darkColor = color;
+        document.documentElement.style.setProperty('--dark-accent', color);
+        document.getElementById('darkPreview').style.background = color;
+        document.getElementById('darkHex').textContent = color.toUpperCase();
+        document.querySelectorAll('#darkPalette .color-option').forEach(el => {
+            el.classList.toggle('active', el.dataset.color === color);
+        });
+        saveColors();
+    }
+
+    function saveColors() {
+        try {
+            localStorage.setItem('lightColor', lightColor);
+            localStorage.setItem('darkColor', darkColor);
+        } catch(e) {}
+    }
+
+    function loadColors() {
+        try {
+            const savedLight = localStorage.getItem('lightColor');
+            const savedDark = localStorage.getItem('darkColor');
+            if (savedLight) {
+                lightColor = savedLight;
+                document.documentElement.style.setProperty('--accent-color', lightColor);
+                document.getElementById('lightPreview').style.background = lightColor;
+                document.getElementById('lightHex').textContent = lightColor.toUpperCase();
+                document.getElementById('accentPreview').style.background = lightColor;
+            }
+            if (savedDark) {
+                darkColor = savedDark;
+                document.documentElement.style.setProperty('--dark-accent', darkColor);
+                document.getElementById('darkPreview').style.background = darkColor;
+                document.getElementById('darkHex').textContent = darkColor.toUpperCase();
+            }
+        } catch(e) {}
+    }
+
+    function renderPalettes() {
+        const lightGrid = document.getElementById('lightPalette');
+        const darkGrid = document.getElementById('darkPalette');
+
+        lightGrid.innerHTML = '';
+        LIGHT_PALETTE.forEach(color => {
+            const el = document.createElement('div');
+            el.className = 'color-option' + (color.hex === lightColor ? ' active' : '');
+            el.dataset.color = color.hex;
+            el.innerHTML = `
+                <span class="color-swatch" style="background: ${color.hex};"></span>
+                <span class="color-hex">${color.hex}</span>
+                <span class="color-name">${color.name}</span>
+            `;
+            el.addEventListener('click', () => setLightColor(color.hex));
+            lightGrid.appendChild(el);
+        });
+
+        darkGrid.innerHTML = '';
+        DARK_PALETTE.forEach(color => {
+            const el = document.createElement('div');
+            el.className = 'color-option' + (color.hex === darkColor ? ' active' : '');
+            el.dataset.color = color.hex;
+            el.innerHTML = `
+                <span class="color-swatch" style="background: ${color.hex};"></span>
+                <span class="color-hex">${color.hex}</span>
+                <span class="color-name">${color.name}</span>
+            `;
+            el.addEventListener('click', () => setDarkColor(color.hex));
+            darkGrid.appendChild(el);
+        });
+    }
+
+    // ============================================================
     // ТЁМНАЯ ТЕМА
     // ============================================================
     var themeToggle = document.getElementById('themeToggle');
@@ -1219,6 +1517,30 @@
         document.body.classList.toggle('dark');
         isDark = document.body.classList.contains('dark');
         themeToggle.textContent = isDark ? '☀️ Светлая тема' : '🌙 Тёмная тема';
+        // Применяем акцентный цвет для тёмной темы
+        if (isDark && darkColor) {
+            document.documentElement.style.setProperty('--accent-color', darkColor);
+        } else if (!isDark && lightColor) {
+            document.documentElement.style.setProperty('--accent-color', lightColor);
+        }
+    });
+
+    // ============================================================
+    // ЦВЕТОВАЯ КНОПКА
+    // ============================================================
+    document.getElementById('colorPickerBtn').addEventListener('click', function() {
+        document.getElementById('colorModal').classList.add('active');
+        renderPalettes();
+    });
+
+    document.getElementById('closeColorBtn').addEventListener('click', function() {
+        document.getElementById('colorModal').classList.remove('active');
+    });
+
+    document.getElementById('colorModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.remove('active');
+        }
     });
 
     // ============================================================
@@ -1605,7 +1927,7 @@
     // ===== ОСТАЛЬНОЙ КОД =====
     function setStatus(text, color) {
         statusDisplay.textContent = text;
-        statusDisplay.style.color = color || '#0abab5';
+        statusDisplay.style.color = color || 'var(--accent-color, #0abab5)';
     }
 
     function setStatusBar(status, message) {
@@ -1670,7 +1992,7 @@
             var saveResponse = await fetch(url, { method: 'PUT', headers: { 'Authorization': 'token ' + githubToken, 'Content-Type': 'application/json', 'Accept': 'application/vnd.github.v3+json' }, body: JSON.stringify(body) });
             if (saveResponse.ok) { 
                 setStatusBar('online', '☁️ Сохранено'); 
-                setStatus('☁️ Сохранено', '#0abab5'); 
+                setStatus('☁️ Сохранено', 'var(--accent-color, #0abab5)'); 
             } else {
                 throw new Error('Ошибка сохранения');
             }
@@ -1715,7 +2037,7 @@
                 renderHistory();
                 renderLeader();
                 setStatusBar('online', '☁️ Автосинхронизация');
-                setStatus('☁️ Синхронизировано', '#0abab5');
+                setStatus('☁️ Синхронизировано', 'var(--accent-color, #0abab5)');
             }
         } catch(e) { 
             setStatusBar('online', '☁️ Данные загружены из кэша');
@@ -1980,6 +2302,10 @@
     }
 
     function init() {
+        // Загружаем сохранённые цвета
+        loadColors();
+        renderPalettes();
+        
         var savedToken = loadToken();
         if (savedToken) { 
             tokenInput.value = savedToken; 
