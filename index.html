@@ -63,38 +63,12 @@
         }
 
         /* ----- Глобальное применение шрифта ----- */
-        html,
-        body,
-        .container,
-        .btn,
-        input,
-        textarea,
-        select,
-        button,
-        .header,
-        .status-bar,
-        .token-input,
-        .section-glass,
-        .stat-card,
-        .leader-card,
-        .tab-btn,
-        table,
-        th,
-        td,
-        .history-item,
-        .modal-box,
-        .color-option,
-        .podium-item,
-        .footer,
-        .footer-bottom,
-        .color-picker-label,
-        .theme-toggle,
-        .hint,
-        .save-status,
-        #winnerDisplay,
-        #statusDisplay,
-        .palette-title,
-        .color-name {
+        html, body, .container, .btn, input, textarea, select, button,
+        .header, .status-bar, .token-input, .section-glass, .stat-card,
+        .leader-card, .tab-btn, table, th, td, .history-item, .modal-box,
+        .color-option, .podium-item, .footer, .footer-bottom,
+        .color-picker-label, .theme-toggle, .hint, .save-status,
+        #winnerDisplay, #statusDisplay, .palette-title, .color-name {
             font-family: -apple-system, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
         }
 
@@ -120,7 +94,7 @@
             background: var(--bg-light);
             color: var(--text-light);
             transition: background 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                        color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
         }
 
@@ -153,7 +127,7 @@
             opacity: var(--overlay-opacity-light);
             z-index: 0;
             transition: background 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                        opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             pointer-events: none;
         }
 
@@ -1798,6 +1772,10 @@
         // ПАЛИТРЫ ЦВЕТОВ (ОБНОВЛЕННЫЕ)
         // ============================================================
         const LIGHT_PALETTE = [
+            // Новые бирюзовые
+            { hex: '#0ABAB5', name: 'Бирюзовый' },
+            { hex: '#0DEAE4', name: 'Светлый бирюзовый' },
+            // Остальные
             { hex: '#254E40', name: 'Тёмный лес' },
             { hex: '#1C3E32', name: 'Глубокий лес' },
             { hex: '#1C4E4F', name: 'Тёмный аквамарин' },
@@ -1835,7 +1813,7 @@
         // ============================================================
         // УПРАВЛЕНИЕ ЦВЕТАМИ
         // ============================================================
-        let lightColor = '#254E40';
+        let lightColor = '#0ABAB5';
         let darkColor = '#0A2D2E';
 
         function setLightColor(color) {
@@ -2834,4 +2812,5 @@
         console.log('✅ Apple-style программа загружена!');
         console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
     </script>
-</body
+</body>
+</html>
