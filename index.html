@@ -362,12 +362,7 @@
             transition-duration: 0.08s;
         }
 
-        /* ----- статус (скрыт) ----- */
-        .status-bar {
-            display: none;
-        }
-
-        /* ----- токен ----- */
+        /* ----- токен (скрыт при офлайн-входе) ----- */
         .token-input {
             padding: 28px 32px;
             margin-bottom: 20px;
@@ -436,6 +431,29 @@
 
         body.dark .token-input .hint {
             color: var(--text-dark);
+        }
+
+        .offline-mode-badge {
+            display: none;
+            background: rgba(255, 149, 0, 0.15);
+            border: 1px solid rgba(255, 149, 0, 0.2);
+            border-radius: 20px;
+            padding: 6px 16px;
+            font-size: 12px;
+            color: #f0d080;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        body.dark .offline-mode-badge {
+            background: rgba(255, 149, 0, 0.08);
+            border-color: rgba(255, 149, 0, 0.12);
+            color: #f0d080;
+        }
+
+        .offline-mode-badge.show {
+            display: inline-block;
         }
 
         /* ----- секции ----- */
@@ -1659,6 +1677,7 @@
                     </button>
                 </div>
                 <button class="theme-toggle" id="themeToggle">🌙 Тёмная тема</button>
+                <span class="offline-mode-badge" id="offlineBadge">📡 Офлайн-режим</span>
             </div>
         </div>
 
@@ -1686,6 +1705,7 @@
             <input type="password" id="tokenInput" placeholder="Вставьте токен (ghp_...)" autocomplete="off">
             <div class="hint">Токен нужен только для сохранения данных в GitHub.</div>
             <button class="btn" id="tokenBtn" style="margin-top:14px; width:100%;">✅ Подключиться</button>
+            <button class="btn btn-secondary" id="skipTokenBtn" style="margin-top:10px; width:100%; background:rgba(255,255,255,0.1);">⏩ Войти без интернета</button>
         </div>
 
         <!-- ОСНОВНОЙ КОНТЕНТ -->
@@ -1953,14 +1973,12 @@
             for (var i = 0; i < queueCopy.length; i++) {
                 var item = queueCopy[i];
                 try {
-                    // Добавляем голос в нужную номинацию
                     var targetTab = item.tab || 'national';
                     if (!allData[targetTab]) {
                         allData[targetTab] = { votes: [], history: [] };
                     }
                     allData[targetTab].votes.push(item.data);
 
-                    // Сохраняем в историю
                     var now = new Date();
                     var time = now.toTimeString().slice(0, 8);
                     var date = getFormattedDate();
@@ -1979,7 +1997,6 @@
                     }
 
                     successCount++;
-                    // Удаляем из очереди
                     offlineQueue = offlineQueue.filter(function(q) { return q.id !== item.id; });
                     saveOfflineQueue();
 
@@ -1989,13 +2006,10 @@
                 }
             }
 
-            // Сохраняем все данные локально
             saveAllDataToLocalStorage();
 
-            // Отправляем на GitHub
             if (successCount > 0) {
                 await saveToGitHub(currentTab);
-                // Обновляем отображение
                 render();
                 renderHistory();
                 renderLeader();
@@ -2008,7 +2022,6 @@
             isProcessingQueue = false;
             updateQueueBanner();
 
-            // Если остались голоса в очереди, пробуем снова через 5 секунд
             if (offlineQueue.length > 0) {
                 setTimeout(processOfflineQueue, 5000);
             }
@@ -2253,12 +2266,14 @@
         var lastUpdateTime = {};
         var autoSyncInterval = null;
         var isConnecting = false;
+        var isOfflineMode = false;
 
         // DOM
         var tabsContainer = document.querySelector('.tabs');
         var tokenBlock = document.getElementById('tokenBlock');
         var tokenInput = document.getElementById('tokenInput');
         var tokenBtn = document.getElementById('tokenBtn');
+        var skipTokenBtn = document.getElementById('skipTokenBtn');
         var appContent = document.getElementById('appContent');
         var statusBar = document.getElementById('statusBar');
         var nameInput = document.getElementById('nameInput');
@@ -2282,6 +2297,7 @@
         var leaderEmpty = document.getElementById('leaderEmpty');
         var leaderContent = document.getElementById('leaderContent');
         var offlineWarning = document.getElementById('offlineWarning');
+        var offlineBadge = document.getElementById('offlineBadge');
 
         var clearModal = document.getElementById('clearModal');
         var captchaInput = document.getElementById('captchaInput');
@@ -2296,6 +2312,20 @@
         // Кнопка синхронизации очереди
         document.getElementById('syncQueueBtn').addEventListener('click', function() {
             processOfflineQueue();
+        });
+
+        // ===== ОФЛАЙН-ВХОД =====
+        skipTokenBtn.addEventListener('click', function() {
+            isOfflineMode = true;
+            githubToken = '';
+            tokenBlock.style.display = 'none';
+            appContent.style.display = 'block';
+            offlineBadge.classList.add('show');
+            loadAllDataFromLocalStorage();
+            render();
+            renderHistory();
+            renderLeader();
+            showToast('📡 Режим офлайн. Данные сохраняются локально.', 'info');
         });
 
         // ===== ВКЛАДКИ =====
@@ -2359,7 +2389,9 @@
             }
             renderHistory();
             saveAllDataToLocalStorage();
-            saveToGitHub(currentTab);
+            if (githubToken && navigator.onLine) {
+                saveToGitHub(currentTab);
+            }
         }
 
         function addHistoryDelete(name) {
@@ -2379,7 +2411,9 @@
             }
             renderHistory();
             saveAllDataToLocalStorage();
-            saveToGitHub(currentTab);
+            if (githubToken && navigator.onLine) {
+                saveToGitHub(currentTab);
+            }
         }
 
         function renderHistory() {
@@ -2502,7 +2536,9 @@
                 renderLeader();
                 lastUpdateTime[currentTab] = Date.now();
                 saveAllDataToLocalStorage();
-                saveToGitHub(currentTab);
+                if (githubToken && navigator.onLine) {
+                    saveToGitHub(currentTab);
+                }
                 showToast('🗑️ Всё очищено в номинации "' + getTabName(currentTab) + '"', 'error');
             } else {
                 captchaError.classList.add('show');
@@ -2820,14 +2856,18 @@
                 comment: comment || ''
             };
 
-            // Если нет интернета или нет GitHub токена — добавляем в очередь
-            if (!navigator.onLine || !githubToken) {
+            // Если офлайн-режим или нет интернета — добавляем в очередь
+            if (isOfflineMode || !navigator.onLine || !githubToken) {
                 addToOfflineQueue(voteData);
                 nameInput.value = '';
                 scoreInput.value = '';
                 commentInputField.value = '';
                 nameInput.focus();
-                showToast('📦 Голос добавлен в офлайн-очередь (' + offlineQueue.length + ' голосов)', 'warning');
+                if (isOfflineMode) {
+                    showToast('📡 Офлайн-режим. Голос добавлен в очередь (' + offlineQueue.length + ' голосов)', 'warning');
+                } else {
+                    showToast('📦 Голос добавлен в офлайн-очередь (' + offlineQueue.length + ' голосов)', 'warning');
+                }
                 return;
             }
 
@@ -2909,11 +2949,15 @@
         }
 
         async function syncData() {
-            if (!githubToken) { showToast('Сначала подключитесь к GitHub', 'warning'); return; }
+            if (!githubToken && !isOfflineMode) { showToast('Сначала подключитесь к GitHub', 'warning'); return; }
+            if (isOfflineMode) {
+                showToast('📡 Вы в офлайн-режиме. Подключитесь к интернету и нажмите "Подключиться" для синхронизации.',
+                    'warning');
+                return;
+            }
             showToast('🔄 Синхронизация...', 'info');
             saveAllDataToLocalStorage();
             await loadFromGitHub(currentTab);
-            // После загрузки с GitHub пробуем обработать очередь
             await processOfflineQueue();
             showToast('✅ Синхронизация завершена', '');
         }
@@ -2946,12 +2990,15 @@
                     } else {
                         showToast('❌ Ошибка подключения: ' + testResponse.status, 'error');
                     }
+                    githubToken = '';
                     isConnecting = false;
                     return;
                 }
 
                 tokenBlock.style.display = 'none';
                 appContent.style.display = 'block';
+                offlineBadge.classList.remove('show');
+                isOfflineMode = false;
 
                 loadAllDataFromLocalStorage();
 
@@ -2959,7 +3006,6 @@
                 await loadFromGitHub('free');
                 await loadFromGitHub('evening');
 
-                // После загрузки с GitHub пробуем обработать очередь
                 await processOfflineQueue();
 
                 render();
@@ -2971,7 +3017,6 @@
                 autoSyncInterval = setInterval(function() {
                     if (githubToken && navigator.onLine) {
                         loadFromGitHub(currentTab);
-                        // Проверяем очередь каждые 10 секунд
                         if (offlineQueue.length > 0) {
                             processOfflineQueue();
                         }
@@ -2980,6 +3025,7 @@
 
             } catch (e) {
                 showToast('❌ Ошибка подключения: ' + e.message, 'error');
+                githubToken = '';
             }
 
             isConnecting = false;
@@ -3028,7 +3074,13 @@
             var savedToken = loadToken();
             if (savedToken) {
                 tokenInput.value = savedToken;
-                connectToGitHub();
+                // Пытаемся подключиться, но если нет интернета — показываем форму
+                if (navigator.onLine) {
+                    connectToGitHub();
+                } else {
+                    // Если нет интернета, предлагаем офлайн-вход
+                    showToast('🌐 Нет интернета. Нажмите "Войти без интернета" для работы офлайн.', 'warning');
+                }
             } else {
                 tokenBlock.style.display = 'block';
                 appContent.style.display = 'none';
@@ -3037,14 +3089,12 @@
             function updateOnlineStatus() {
                 if (!navigator.onLine) {
                     offlineWarning.style.display = 'block';
-                    // Показываем баннер очереди если есть голоса
                     if (offlineQueue.length > 0) {
                         document.getElementById('offlineQueueBanner').style.display = 'block';
                     }
                 } else {
                     offlineWarning.style.display = 'none';
-                    // При появлении интернета пытаемся синхронизировать
-                    if (githubToken) {
+                    if (githubToken && !isOfflineMode) {
                         saveAllDataToLocalStorage();
                         loadFromGitHub(currentTab);
                         if (offlineQueue.length > 0) {
@@ -3056,17 +3106,19 @@
 
             window.addEventListener('online', function() {
                 updateOnlineStatus();
-                // При появлении интернета пробуем обработать очередь
-                if (githubToken && offlineQueue.length > 0) {
+                if (githubToken && !isOfflineMode && offlineQueue.length > 0) {
                     setTimeout(processOfflineQueue, 2000);
+                }
+                // Если был офлайн-режим и появился интернет — предлагаем подключиться
+                if (isOfflineMode && navigator.onLine) {
+                    showToast('🌐 Интернет появился! Нажмите "Подключиться" для синхронизации.', 'info');
                 }
             });
             window.addEventListener('offline', updateOnlineStatus);
             updateOnlineStatus();
 
-            // Периодически проверяем очередь (каждые 30 секунд)
             setInterval(function() {
-                if (navigator.onLine && githubToken && offlineQueue.length > 0) {
+                if (navigator.onLine && githubToken && !isOfflineMode && offlineQueue.length > 0) {
                     processOfflineQueue();
                 }
             }, 30000);
@@ -3099,6 +3151,7 @@
 
         console.log('✅ Apple-style программа загружена!');
         console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
+        console.log('📡 Офлайн-режим:', isOfflineMode ? 'ВКЛЮЧЕН' : 'ВЫКЛЮЧЕН');
     </script>
 </body>
 </html>
