@@ -641,13 +641,13 @@
 
         .input-group input::placeholder {
             color: var(--text-light);
-            opacity: 0.5;
+            opacity: 0.6;
             font-family: 'SF Pro Text', sans-serif;
         }
 
         body.dark .input-group input::placeholder {
             color: var(--text-dark);
-            opacity: 0.5;
+            opacity: 0.6;
         }
 
         .comment-input {
@@ -1045,7 +1045,18 @@
             color: var(--text-dark);
         }
 
-        /* ----- удаление (КРАСНАЯ КНОПКА) ----- */
+        /* ----- удаление (КРАСНАЯ КНОПКА И НАДПИСЬ) ----- */
+        .delete-section-label {
+            font-size: 14px;
+            color: #ff3b30;
+            font-weight: 500;
+            font-family: 'SF Pro Text', sans-serif;
+        }
+
+        body.dark .delete-section-label {
+            color: #ff6b6b;
+        }
+
         .section-glass .btn-delete {
             background: rgba(255, 59, 48, 0.15);
             border: 1px solid rgba(255, 59, 48, 0.2);
@@ -1687,7 +1698,7 @@
 
             <!-- УДАЛЕНИЕ с подтверждением -->
             <div class="section-glass" style="border-color: rgba(255,59,48,0.06);">
-                <label style="font-size:14px; color:#ff3b30; font-weight:500;">🗑️ Удалить участника</label>
+                <label class="delete-section-label">🗑️ Удалить участника</label>
                 <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
                     <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.06); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.03); color:#1c2a2a; outline:none; min-width:120px; font-family:'SF Pro Text', sans-serif;">
                     <button class="btn btn-sm btn-delete" id="deleteBtn" style="min-width:auto;">✕ Удалить</button>
