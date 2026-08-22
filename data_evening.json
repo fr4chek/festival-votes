@@ -1,34 +1,4 @@
 {
-  "votes": [
-    {
-      "id": "1787390683999_ft8i4a",
-      "name": "Егор",
-      "score": 10,
-      "comment": ""
-    },
-    {
-      "id": "1787390701715_m546s4",
-      "name": "Я",
-      "score": 10,
-      "comment": ""
-    }
-  ],
-  "history": [
-    {
-      "type": "vote",
-      "name": "Я",
-      "score": 10,
-      "comment": "",
-      "time": "12:25:01",
-      "date": "22.08.2026"
-    },
-    {
-      "type": "vote",
-      "name": "Егор",
-      "score": 10,
-      "comment": "",
-      "time": "12:24:44",
-      "date": "22.08.2026"
-    }
-  ]
+  "votes": [],
+  "history": []
 }
