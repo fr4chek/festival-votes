@@ -410,7 +410,7 @@
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.04);
-            color: #ffffff;
+            color: #1c2a2a;
             transition: all 0.3s ease;
             outline: none;
             font-family: 'SF Pro Text', sans-serif;
@@ -586,7 +586,7 @@
             color: var(--text-dark);
         }
 
-        /* ----- форма (ВВОД БЕЛЫЙ) ----- */
+        /* ----- форма ----- */
         .input-row {
             display: flex;
             flex-wrap: wrap;
@@ -621,7 +621,7 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.04);
-            color: #ffffff;
+            color: #1c2a2a;
             transition: all 0.3s ease;
             outline: none;
             width: 100%;
@@ -640,12 +640,14 @@
         }
 
         .input-group input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: var(--text-light);
+            opacity: 0.6;
             font-family: 'SF Pro Text', sans-serif;
         }
 
         body.dark .input-group input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
+            color: var(--text-dark);
+            opacity: 0.6;
         }
 
         .comment-input {
@@ -656,7 +658,7 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.03);
-            color: #ffffff;
+            color: #1c2a2a;
             width: 100%;
             outline: none;
             transition: all 0.3s ease;
@@ -676,12 +678,14 @@
         }
 
         .comment-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
+            color: var(--text-light);
+            opacity: 0.5;
             font-family: 'SF Pro Text', sans-serif;
         }
 
         body.dark .comment-input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
+            color: var(--text-dark);
+            opacity: 0.5;
         }
 
         /* ----- вкладки ----- */
@@ -1053,39 +1057,6 @@
             color: #ff6b6b;
         }
 
-        .delete-input {
-            flex: 1;
-            padding: 14px 20px;
-            border-radius: 980px;
-            font-size: 15px;
-            background: rgba(255, 255, 255, 0.06);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            color: #ffffff;
-            outline: none;
-            min-width: 120px;
-            font-family: 'SF Pro Text', sans-serif;
-        }
-
-        body.dark .delete-input {
-            background: rgba(255, 255, 255, 0.02);
-            color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.015);
-        }
-
-        .delete-input::placeholder {
-            color: rgba(255, 255, 255, 0.5);
-        }
-
-        body.dark .delete-input::placeholder {
-            color: rgba(255, 255, 255, 0.4);
-        }
-
-        .delete-input:focus {
-            border-color: var(--accent-color, #0abab5);
-            box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.08);
-        }
-
         .section-glass .btn-delete {
             background: rgba(255, 59, 48, 0.15);
             border: 1px solid rgba(255, 59, 48, 0.2);
@@ -1231,7 +1202,7 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.04);
-            color: #ffffff;
+            color: #1c2a2a;
             outline: none;
             margin-bottom: 16px;
             font-family: 'SF Pro Text', sans-serif;
@@ -1729,7 +1700,7 @@
             <div class="section-glass" style="border-color: rgba(255,59,48,0.06);">
                 <label class="delete-section-label">🗑️ Удалить участника</label>
                 <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
-                    <input type="text" id="deleteName" class="delete-input" placeholder="Введите имя">
+                    <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.06); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.03); color:#1c2a2a; outline:none; min-width:120px; font-family:'SF Pro Text', sans-serif;">
                     <button class="btn btn-sm btn-delete" id="deleteBtn" style="min-width:auto;">✕ Удалить</button>
                 </div>
             </div>
@@ -1835,13 +1806,11 @@
 
     <script>
         // ============================================================
-        // ПАЛИТРЫ ЦВЕТОВ (ОБНОВЛЕННЫЕ)
+        // ПАЛИТРЫ ЦВЕТОВ
         // ============================================================
         const LIGHT_PALETTE = [
-            // Бирюзовые
             { hex: '#0ABAB5', name: 'Бирюзовый' },
             { hex: '#0DEAE4', name: 'Светлый бирюзовый' },
-            // Остальные
             { hex: '#254E40', name: 'Тёмный лес' },
             { hex: '#1C3E32', name: 'Глубокий лес' },
             { hex: '#1C4E4F', name: 'Тёмный аквамарин' },
@@ -1874,6 +1843,35 @@
             toast.textContent = message;
             container.appendChild(toast);
             setTimeout(function() { if (toast.parentNode) toast.remove(); }, 4000);
+        }
+
+        // ============================================================
+        // УПРАВЛЕНИЕ ДАННЫМИ (СОХРАНЕНИЕ В LOCALSTORAGE)
+        // ============================================================
+        function saveAllDataToLocalStorage() {
+            try {
+                localStorage.setItem('allData', JSON.stringify(allData));
+            } catch (e) {
+                console.warn('Не удалось сохранить данные в localStorage');
+            }
+        }
+
+        function loadAllDataFromLocalStorage() {
+            try {
+                var saved = localStorage.getItem('allData');
+                if (saved) {
+                    var parsed = JSON.parse(saved);
+                    // Объединяем с существующими данными
+                    for (var key in parsed) {
+                        if (allData[key]) {
+                            allData[key].votes = parsed[key].votes || [];
+                            allData[key].history = parsed[key].history || [];
+                        }
+                    }
+                }
+            } catch (e) {
+                console.warn('Не удалось загрузить данные из localStorage');
+            }
         }
 
         // ============================================================
@@ -2022,14 +2020,12 @@
         var cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
         var pendingDeleteName = '';
 
-        // Функция показа модалки удаления
         function showDeleteConfirm(name) {
             pendingDeleteName = name;
             deleteConfirmName.textContent = name;
             deleteConfirmModal.classList.add('active');
         }
 
-        // Подтверждение удаления
         confirmDeleteBtn.addEventListener('click', function() {
             if (!pendingDeleteName) return;
             var name = pendingDeleteName;
@@ -2045,6 +2041,7 @@
             renderHistory();
             renderLeader();
             lastUpdateTime[currentTab] = Date.now();
+            saveAllDataToLocalStorage();
             saveToGitHub(currentTab);
             deleteName.value = '';
             showToast('🗑️ Удалён: ' + name, 'error');
@@ -2052,14 +2049,12 @@
             pendingDeleteName = '';
         });
 
-        // Отмена удаления
         cancelDeleteBtn.addEventListener('click', function() {
             deleteConfirmModal.classList.remove('active');
             pendingDeleteName = '';
             showToast('↩️ Удаление отменено', 'info');
         });
 
-        // Закрытие по клику вне модалки
         deleteConfirmModal.addEventListener('click', function(e) {
             if (e.target === this) {
                 deleteConfirmModal.classList.remove('active');
@@ -2090,6 +2085,7 @@
         var lastUpdateTime = {};
         var autoSyncInterval = null;
         var isConnecting = false;
+        var isInitialLoad = true;
 
         // DOM
         var tabsContainer = document.querySelector('.tabs');
@@ -2155,7 +2151,6 @@
             }
             if (!found) { showToast('Участник "' + name + '" не найден', 'warning');
                 deleteName.value = ''; return; }
-            // Показываем модалку подтверждения
             showDeleteConfirm(name);
         });
 
@@ -2191,6 +2186,7 @@
                 tabData.history = tabData.history.slice(0, 50);
             }
             renderHistory();
+            saveAllDataToLocalStorage();
             saveToGitHub(currentTab);
         }
 
@@ -2210,6 +2206,7 @@
                 tabData.history = tabData.history.slice(0, 50);
             }
             renderHistory();
+            saveAllDataToLocalStorage();
             saveToGitHub(currentTab);
         }
 
@@ -2332,6 +2329,7 @@
                 renderHistory();
                 renderLeader();
                 lastUpdateTime[currentTab] = Date.now();
+                saveAllDataToLocalStorage();
                 saveToGitHub(currentTab);
                 showToast('🗑️ Всё очищено в номинации "' + getTabName(currentTab) + '"', 'error');
             } else {
@@ -2448,7 +2446,7 @@
         }
 
         function setStatusBar(status, message) {
-            // Статус-бар скрыт, ничего не делаем
+            // Статус-бар скрыт
         }
 
         function getUniqueParticipants(votes) {
@@ -2519,11 +2517,6 @@
                 }
             } catch (e) {
                 setStatus('☁️ Синхронизировано', 'var(--text-light)');
-                setTimeout(function() {
-                    if (githubToken) {
-                        saveToGitHub(tab);
-                    }
-                }, 5000);
             }
         }
 
@@ -2549,17 +2542,22 @@
                     if (lastUpdateTime[tab] && Date.now() - lastUpdateTime[tab] < 3000) {
                         return;
                     }
-                    allData[tab] = {
-                        votes: jsonData.votes || [],
-                        history: jsonData.history || []
-                    };
+                    // Обновляем данные из GitHub, но сохраняем локальные, если они новее
+                    if (jsonData.votes) {
+                        allData[tab].votes = jsonData.votes;
+                    }
+                    if (jsonData.history) {
+                        allData[tab].history = jsonData.history;
+                    }
                     render();
                     renderHistory();
                     renderLeader();
+                    saveAllDataToLocalStorage();
                     setStatus('☁️ Синхронизировано', 'var(--text-light)');
+                    showToast('✅ Данные синхронизированы с GitHub', 'info');
                 }
             } catch (e) {
-                setStatus('☁️ Синхронизировано', 'var(--text-light)');
+                setStatus('📂 Из кэша', '#8a8a9a');
             }
         }
 
@@ -2661,6 +2659,7 @@
             renderLeader();
             addHistory(name, score, comment);
             lastUpdateTime[currentTab] = Date.now();
+            saveAllDataToLocalStorage();
             await saveToGitHub(currentTab);
             showToast('✅ ' + name + ' +' + score.toFixed(1) + (comment ? ' 💬 ' + comment : ''), '');
         }
@@ -2728,6 +2727,9 @@
         async function syncData() {
             if (!githubToken) { showToast('Сначала подключитесь к GitHub', 'warning'); return; }
             showToast('🔄 Синхронизация...', 'info');
+            // Сначала сохраняем локальные данные
+            saveAllDataToLocalStorage();
+            // Затем загружаем с GitHub
             await loadFromGitHub(currentTab);
             showToast('✅ Синхронизация завершена', '');
         }
@@ -2767,9 +2769,14 @@
                 tokenBlock.style.display = 'none';
                 appContent.style.display = 'block';
 
+                // Загружаем локальные данные
+                loadAllDataFromLocalStorage();
+
+                // Загружаем с GitHub
                 await loadFromGitHub('national');
                 await loadFromGitHub('free');
                 await loadFromGitHub('evening');
+
                 render();
                 renderHistory();
                 renderLeader();
@@ -2777,7 +2784,7 @@
 
                 if (autoSyncInterval) clearInterval(autoSyncInterval);
                 autoSyncInterval = setInterval(function() {
-                    if (githubToken) {
+                    if (githubToken && navigator.onLine) {
                         loadFromGitHub(currentTab);
                     }
                 }, 10000);
@@ -2844,7 +2851,14 @@
                     offlineWarning.style.display = 'none';
                 }
             }
-            window.addEventListener('online', updateOnlineStatus);
+            window.addEventListener('online', function() {
+                updateOnlineStatus();
+                // При появлении интернета пытаемся синхронизировать
+                if (githubToken) {
+                    saveAllDataToLocalStorage();
+                    loadFromGitHub(currentTab);
+                }
+            });
             window.addEventListener('offline', updateOnlineStatus);
             updateOnlineStatus();
         }
