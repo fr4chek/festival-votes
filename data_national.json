@@ -35,9 +35,23 @@
       "name": "Егор",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1787406491434_xumsxv",
+      "name": "Егор1",
+      "score": 10,
+      "comment": "папаппраппрапа"
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Егор1",
+      "score": 10,
+      "comment": "папаппраппрапа",
+      "time": "16:48:11",
+      "date": "22.08.2026"
+    },
     {
       "type": "vote",
       "name": "Егор",
