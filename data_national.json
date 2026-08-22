@@ -1,13 +1,12 @@
 {
-  "votes": [
-    {
-      "id": "1787409920412_w8dt3u",
-      "name": "Егор",
-      "score": 10,
-      "comment": "иавава"
-    }
-  ],
+  "votes": [],
   "history": [
+    {
+      "type": "delete",
+      "name": "Егор",
+      "time": "17:46:14",
+      "date": "22.08.2026"
+    },
     {
       "type": "vote",
       "name": "Егор",
