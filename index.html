@@ -301,6 +301,23 @@
             flex-wrap: wrap;
         }
 
+        .viewer-badge {
+            display: none;
+            background: rgba(255, 215, 0, 0.12);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            border-radius: 20px;
+            padding: 4px 14px;
+            font-size: 12px;
+            color: #ffd700;
+            font-weight: 500;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .viewer-badge.show {
+            display: inline-block;
+        }
+
         .color-picker-wrapper {
             display: flex;
             align-items: center;
@@ -362,7 +379,7 @@
             transition-duration: 0.08s;
         }
 
-        /* ----- токен (скрыт при офлайн-входе) ----- */
+        /* ----- токен ----- */
         .token-input {
             padding: 28px 32px;
             margin-bottom: 20px;
@@ -433,26 +450,54 @@
             color: var(--text-dark);
         }
 
-        .offline-mode-badge {
+        .token-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .token-buttons .btn {
+            flex: 1;
+        }
+
+        .btn-viewer {
+            background: rgba(255, 215, 0, 0.12);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            color: #ffd700;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .btn-viewer:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: rgba(255, 215, 0, 0.25);
+        }
+
+        body.dark .btn-viewer {
+            background: rgba(255, 215, 0, 0.06);
+            border-color: rgba(255, 215, 0, 0.08);
+            color: #ffd700;
+        }
+
+        body.dark .btn-viewer:hover {
+            background: rgba(255, 215, 0, 0.12);
+            border-color: rgba(255, 215, 0, 0.15);
+        }
+
+        .viewer-badge {
             display: none;
-            background: rgba(255, 149, 0, 0.15);
-            border: 1px solid rgba(255, 149, 0, 0.2);
+            background: rgba(255, 215, 0, 0.12);
+            border: 1px solid rgba(255, 215, 0, 0.2);
             border-radius: 20px;
-            padding: 6px 16px;
+            padding: 4px 14px;
             font-size: 12px;
-            color: #f0d080;
+            color: #ffd700;
             font-weight: 500;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
         }
 
-        body.dark .offline-mode-badge {
-            background: rgba(255, 149, 0, 0.08);
-            border-color: rgba(255, 149, 0, 0.12);
-            color: #f0d080;
-        }
-
-        .offline-mode-badge.show {
+        .viewer-badge.show {
             display: inline-block;
         }
 
@@ -644,6 +689,7 @@
             outline: none;
             width: 100%;
             font-family: 'SF Pro Text', sans-serif;
+            max-length: 50;
         }
 
         body.dark .input-group input {
@@ -682,6 +728,7 @@
             transition: all 0.3s ease;
             margin-top: 6px;
             font-family: 'SF Pro Text', sans-serif;
+            max-length: 200;
         }
 
         body.dark .comment-input {
@@ -1136,37 +1183,8 @@
             text-align: center;
         }
 
-        /* ----- ОФЛАЙН ОЧЕРЕДЬ (баннер) ----- */
-        .offline-queue-banner {
-            display: none;
-            background: rgba(255, 149, 0, 0.12);
-            border: 1px solid rgba(255, 149, 0, 0.25);
-            border-radius: 16px;
-            padding: 12px 20px;
-            margin-bottom: 16px;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            font-size: 13px;
-            color: #f0d080;
-            text-align: center;
-        }
-
-        body.dark .offline-queue-banner {
-            background: rgba(255, 149, 0, 0.06);
-            border-color: rgba(255, 149, 0, 0.15);
-            color: #f0d080;
-        }
-
-        .offline-queue-banner strong {
-            color: #ffd700;
-        }
-
-        .offline-queue-banner .count {
-            background: rgba(255, 215, 0, 0.15);
-            padding: 2px 10px;
-            border-radius: 12px;
-            font-weight: 600;
-            margin: 0 4px;
+        .viewer-hidden {
+            display: none !important;
         }
 
         /* ----- модалки ----- */
@@ -1677,14 +1695,8 @@
                     </button>
                 </div>
                 <button class="theme-toggle" id="themeToggle">🌙 Тёмная тема</button>
-                <span class="offline-mode-badge" id="offlineBadge">📡 Офлайн-режим</span>
+                <span class="viewer-badge" id="viewerBadge">👀 Режим зрителя</span>
             </div>
-        </div>
-
-        <!-- ОФЛАЙН ОЧЕРЕДЬ (баннер) -->
-        <div class="offline-queue-banner" id="offlineQueueBanner">
-            📦 <strong>Офлайн-очередь:</strong> <span class="count" id="queueCount">0</span> голосов ожидают синхронизации
-            <button class="btn btn-sm" id="syncQueueBtn" style="margin-left:12px; padding:4px 16px; font-size:12px; min-width:auto;">🔄 Отправить сейчас</button>
         </div>
 
         <!-- ОФЛАЙН ПРЕДУПРЕЖДЕНИЕ -->
@@ -1704,8 +1716,10 @@
             <label>🔑 Введите GitHub токен</label>
             <input type="password" id="tokenInput" placeholder="Вставьте токен (ghp_...)" autocomplete="off">
             <div class="hint">Токен нужен только для сохранения данных в GitHub.</div>
-            <button class="btn" id="tokenBtn" style="margin-top:14px; width:100%;">✅ Подключиться</button>
-            <button class="btn btn-secondary" id="skipTokenBtn" style="margin-top:10px; width:100%; background:rgba(255,255,255,0.1);">⏩ Войти без интернета</button>
+            <div class="token-buttons">
+                <button class="btn" id="tokenBtn">✅ Подключиться</button>
+                <button class="btn btn-viewer" id="viewerBtn">👀 Войти как зритель</button>
+            </div>
         </div>
 
         <!-- ОСНОВНОЙ КОНТЕНТ -->
@@ -1734,12 +1748,12 @@
                 <button class="tab-btn" data-tab="evening">🌙 Вечерний</button>
             </div>
 
-            <!-- ФОРМА ДОБАВЛЕНИЯ -->
-            <div class="section-glass">
+            <!-- ФОРМА ДОБАВЛЕНИЯ (скрывается для зрителей) -->
+            <div class="section-glass" id="addSection">
                 <div class="input-row">
                     <div class="input-group">
                         <label>👤 Имя участника</label>
-                        <input type="text" id="nameInput" placeholder="Например: Анна">
+                        <input type="text" id="nameInput" placeholder="Например: Анна" maxlength="50">
                     </div>
                     <div class="input-group" style="flex:0 0 130px;">
                         <label>⭐ Оценка (0–10)</label>
@@ -1751,15 +1765,15 @@
                 </div>
                 <div style="margin-top: 10px;">
                     <label style="font-size:13px; color:var(--text-light);">💬 Комментарий (необязательно)</label>
-                    <input type="text" id="commentInput" class="comment-input" placeholder="Например: Отличное выступление!">
+                    <input type="text" id="commentInput" class="comment-input" placeholder="Например: Отличное выступление!" maxlength="200">
                 </div>
             </div>
 
-            <!-- УДАЛЕНИЕ с подтверждением -->
-            <div class="section-glass" style="border-color: rgba(255,59,48,0.06);">
+            <!-- УДАЛЕНИЕ (скрывается для зрителей) -->
+            <div class="section-glass" id="deleteSection" style="border-color: rgba(255,59,48,0.06);">
                 <label class="delete-section-label">🗑️ Удалить участника</label>
                 <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
-                    <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.06); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.03); color:#1c2a2a; outline:none; min-width:120px; font-family:'SF Pro Text', sans-serif;">
+                    <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.06); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.03); color:#1c2a2a; outline:none; min-width:120px; font-family:'SF Pro Text', sans-serif;" maxlength="50">
                     <button class="btn btn-sm btn-delete" id="deleteBtn" style="min-width:auto;">✕ Удалить</button>
                 </div>
             </div>
@@ -1794,8 +1808,8 @@
                 </div>
             </div>
 
-            <!-- ДЕЙСТВИЯ -->
-            <div class="actions">
+            <!-- ДЕЙСТВИЯ (скрываются для зрителей) -->
+            <div class="actions" id="actionsSection">
                 <button class="btn" id="calcBtn">🏆 Победитель</button>
                 <button class="btn" id="syncBtn">🔄 Синхронизировать</button>
                 <button class="btn" id="clearBtn">🗑️ Очистить всё</button>
@@ -1865,11 +1879,42 @@
 
     <script>
         // ============================================================
-        // РЕГИСТРАЦИЯ SERVICE WORKER ДЛЯ ОФЛАЙН-РЕЖИМА
+        // ЗАЩИТА ОТ XSS И ВРЕДОНОСНОГО КОДА
         // ============================================================
-        if ('serviceWorker' in navigator) {
-            // Пропускаем, так как нам нужен простой HTML-файл
-            console.log('✅ Service Worker доступен');
+        function sanitizeInput(input) {
+            if (typeof input !== 'string') return '';
+            // Удаляем HTML-теги
+            var text = input.replace(/<[^>]*>/g, '');
+            // Удаляем потенциально опасные символы
+            text = text.replace(/[<>]/g, '');
+            // Ограничиваем длину
+            if (text.length > 500) text = text.substring(0, 500);
+            return text.trim();
+        }
+
+        function sanitizeName(name) {
+            if (typeof name !== 'string') return '';
+            var text = name.replace(/<[^>]*>/g, '');
+            text = text.replace(/[<>]/g, '');
+            // Разрешаем буквы, цифры, пробелы, дефис, точку, апостроф
+            text = text.replace(/[^a-zA-Zа-яА-ЯёЁ0-9\s\-\.']/g, '');
+            if (text.length > 50) text = text.substring(0, 50);
+            return text.trim();
+        }
+
+        function sanitizeComment(comment) {
+            if (typeof comment !== 'string') return '';
+            var text = comment.replace(/<[^>]*>/g, '');
+            text = text.replace(/[<>]/g, '');
+            if (text.length > 200) text = text.substring(0, 200);
+            return text.trim();
+        }
+
+        function escapeHtml(text) {
+            if (!text) return '';
+            var div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
         }
 
         // ============================================================
@@ -1913,130 +1958,7 @@
         }
 
         // ============================================================
-        // УПРАВЛЕНИЕ ДАННЫМИ И ОФЛАЙН-ОЧЕРЕДЬЮ
-        // ============================================================
-        var offlineQueue = [];
-        var isProcessingQueue = false;
-
-        function loadOfflineQueue() {
-            try {
-                var saved = localStorage.getItem('offlineQueue');
-                if (saved) {
-                    offlineQueue = JSON.parse(saved);
-                }
-            } catch (e) {
-                offlineQueue = [];
-            }
-            updateQueueBanner();
-        }
-
-        function saveOfflineQueue() {
-            try {
-                localStorage.setItem('offlineQueue', JSON.stringify(offlineQueue));
-            } catch (e) {}
-            updateQueueBanner();
-        }
-
-        function addToOfflineQueue(voteData) {
-            offlineQueue.push({
-                id: Date.now() + '_' + Math.random().toString(36).substr(2, 6),
-                tab: currentTab,
-                data: voteData,
-                timestamp: Date.now()
-            });
-            saveOfflineQueue();
-            showToast('📦 Голос сохранён в офлайн-очереди. Будет синхронизирован при подключении к интернету.', 'warning');
-        }
-
-        function updateQueueBanner() {
-            var banner = document.getElementById('offlineQueueBanner');
-            var countEl = document.getElementById('queueCount');
-            if (offlineQueue.length > 0) {
-                banner.style.display = 'block';
-                countEl.textContent = offlineQueue.length;
-            } else {
-                banner.style.display = 'none';
-            }
-        }
-
-        async function processOfflineQueue() {
-            if (isProcessingQueue) return;
-            if (offlineQueue.length === 0) return;
-            if (!navigator.onLine) {
-                showToast('🌐 Нет интернета. Очередь будет обработана при подключении.', 'warning');
-                return;
-            }
-            if (!githubToken) {
-                showToast('⚠️ Подключитесь к GitHub для синхронизации офлайн-голосов.', 'warning');
-                return;
-            }
-
-            isProcessingQueue = true;
-            showToast('🔄 Синхронизация офлайн-очереди... (' + offlineQueue.length + ' голосов)', 'info');
-
-            var successCount = 0;
-            var failCount = 0;
-            var queueCopy = offlineQueue.slice();
-
-            for (var i = 0; i < queueCopy.length; i++) {
-                var item = queueCopy[i];
-                try {
-                    var targetTab = item.tab || 'national';
-                    if (!allData[targetTab]) {
-                        allData[targetTab] = { votes: [], history: [] };
-                    }
-                    allData[targetTab].votes.push(item.data);
-
-                    var now = new Date();
-                    var time = now.toTimeString().slice(0, 8);
-                    var date = getFormattedDate();
-                    if (!allData[targetTab].history) allData[targetTab].history = [];
-                    allData[targetTab].history.unshift({
-                        type: 'vote',
-                        name: item.data.name,
-                        score: item.data.score,
-                        comment: item.data.comment || '',
-                        time: time,
-                        date: date,
-                        synced: true
-                    });
-                    if (allData[targetTab].history.length > 50) {
-                        allData[targetTab].history = allData[targetTab].history.slice(0, 50);
-                    }
-
-                    successCount++;
-                    offlineQueue = offlineQueue.filter(function(q) { return q.id !== item.id; });
-                    saveOfflineQueue();
-
-                } catch (e) {
-                    failCount++;
-                    console.warn('Ошибка синхронизации голоса:', e);
-                }
-            }
-
-            saveAllDataToLocalStorage();
-
-            if (successCount > 0) {
-                await saveToGitHub(currentTab);
-                render();
-                renderHistory();
-                renderLeader();
-                showToast('✅ Синхронизировано ' + successCount + ' голосов' + (failCount > 0 ? ' (' + failCount +
-                    ' ошибок)' : ''), 'info');
-            } else if (failCount > 0) {
-                showToast('⚠️ Не удалось синхронизировать ' + failCount + ' голосов', 'error');
-            }
-
-            isProcessingQueue = false;
-            updateQueueBanner();
-
-            if (offlineQueue.length > 0) {
-                setTimeout(processOfflineQueue, 5000);
-            }
-        }
-
-        // ============================================================
-        // УПРАВЛЕНИЕ ДАННЫМИ (СОХРАНЕНИЕ В LOCALSTORAGE)
+        // УПРАВЛЕНИЕ ДАННЫМИ
         // ============================================================
         function saveAllDataToLocalStorage() {
             try {
@@ -2274,14 +2196,14 @@
         var lastUpdateTime = {};
         var autoSyncInterval = null;
         var isConnecting = false;
-        var isOfflineMode = false;
+        var isViewerMode = false;
 
         // DOM
         var tabsContainer = document.querySelector('.tabs');
         var tokenBlock = document.getElementById('tokenBlock');
         var tokenInput = document.getElementById('tokenInput');
         var tokenBtn = document.getElementById('tokenBtn');
-        var skipTokenBtn = document.getElementById('skipTokenBtn');
+        var viewerBtn = document.getElementById('viewerBtn');
         var appContent = document.getElementById('appContent');
         var statusBar = document.getElementById('statusBar');
         var nameInput = document.getElementById('nameInput');
@@ -2305,7 +2227,10 @@
         var leaderEmpty = document.getElementById('leaderEmpty');
         var leaderContent = document.getElementById('leaderContent');
         var offlineWarning = document.getElementById('offlineWarning');
-        var offlineBadge = document.getElementById('offlineBadge');
+        var viewerBadge = document.getElementById('viewerBadge');
+        var addSection = document.getElementById('addSection');
+        var deleteSection = document.getElementById('deleteSection');
+        var actionsSection = document.getElementById('actionsSection');
 
         var clearModal = document.getElementById('clearModal');
         var captchaInput = document.getElementById('captchaInput');
@@ -2317,23 +2242,23 @@
         var podiumContainer = document.getElementById('podiumContainer');
         var closePodiumBtn = document.getElementById('closePodiumBtn');
 
-        // Кнопка синхронизации очереди
-        document.getElementById('syncQueueBtn').addEventListener('click', function() {
-            processOfflineQueue();
-        });
-
-        // ===== ОФЛАЙН-ВХОД =====
-        skipTokenBtn.addEventListener('click', function() {
-            isOfflineMode = true;
+        // ===== РЕЖИМ ЗРИТЕЛЯ =====
+        viewerBtn.addEventListener('click', function() {
+            isViewerMode = true;
             githubToken = '';
             tokenBlock.style.display = 'none';
             appContent.style.display = 'block';
-            offlineBadge.classList.add('show');
+            viewerBadge.classList.add('show');
+            // Скрываем управляющие элементы
+            addSection.style.display = 'none';
+            deleteSection.style.display = 'none';
+            actionsSection.style.display = 'none';
+            // Показываем только просмотр
             loadAllDataFromLocalStorage();
             render();
             renderHistory();
             renderLeader();
-            showToast('📡 Режим офлайн. Данные сохраняются локально.', 'info');
+            showToast('👀 Режим зрителя. Вы можете только просматривать данные.', 'info');
         });
 
         // ===== ВКЛАДКИ =====
@@ -2352,6 +2277,10 @@
 
         // ===== УДАЛЕНИЕ С ПОДТВЕРЖДЕНИЕМ =====
         deleteBtn.addEventListener('click', function() {
+            if (isViewerMode) {
+                showToast('👀 В режиме зрителя удаление недоступно', 'warning');
+                return;
+            }
             var name = deleteName.value.trim();
             if (!name) { showToast('Введите имя для удаления', 'warning'); return; }
             var votes = allData[currentTab].votes;
@@ -2521,6 +2450,10 @@
 
         // ===== ОЧИСТКА =====
         clearBtn.addEventListener('click', function() {
+            if (isViewerMode) {
+                showToast('👀 В режиме зрителя очистка недоступна', 'warning');
+                return;
+            }
             var votes = allData[currentTab].votes;
             if (votes.length === 0) {
                 showToast('В текущей номинации нет данных для очистки', 'warning');
@@ -2533,6 +2466,11 @@
         });
 
         confirmClearBtn.addEventListener('click', function() {
+            if (isViewerMode) {
+                showToast('👀 В режиме зрителя очистка недоступна', 'warning');
+                clearModal.classList.remove('active');
+                return;
+            }
             var answer = captchaInput.value.trim();
             if (answer === '4') {
                 clearModal.classList.remove('active');
@@ -2671,12 +2609,6 @@
             return Array.from(set).sort();
         }
 
-        function escapeHtml(text) {
-            var div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
-        }
-
         function saveToken(token) {
             try { localStorage.setItem('github_token', token); } catch (e) {}
         }
@@ -2704,7 +2636,7 @@
         function getDataFilePath(tab) { return DATA_FILES[tab] || 'data.json'; }
 
         async function saveToGitHub(tab) {
-            if (!githubToken) return;
+            if (!githubToken || isViewerMode) return;
             var filePath = getDataFilePath(tab);
             var dataToSave = {
                 votes: allData[tab]?.votes || [],
@@ -2848,9 +2780,14 @@
         }
 
         async function addVote() {
-            var name = nameInput.value.trim();
+            if (isViewerMode) {
+                showToast('👀 В режиме зрителя добавление голосов недоступно', 'warning');
+                return;
+            }
+
+            var name = sanitizeName(nameInput.value);
             var score = parseFloat(scoreInput.value);
-            var comment = commentInputField.value.trim();
+            var comment = sanitizeComment(commentInputField.value);
 
             if (!name) { showToast('Введите имя участника', 'warning');
                 nameInput.focus(); return; }
@@ -2864,22 +2801,6 @@
                 comment: comment || ''
             };
 
-            // Если офлайн-режим или нет интернета — добавляем в очередь
-            if (isOfflineMode || !navigator.onLine || !githubToken) {
-                addToOfflineQueue(voteData);
-                nameInput.value = '';
-                scoreInput.value = '';
-                commentInputField.value = '';
-                nameInput.focus();
-                if (isOfflineMode) {
-                    showToast('📡 Офлайн-режим. Голос добавлен в очередь (' + offlineQueue.length + ' голосов)', 'warning');
-                } else {
-                    showToast('📦 Голос добавлен в офлайн-очередь (' + offlineQueue.length + ' голосов)', 'warning');
-                }
-                return;
-            }
-
-            // Если интернет есть — добавляем напрямую
             var votes = allData[currentTab].votes;
             votes.push(voteData);
             nameInput.value = '';
@@ -2892,7 +2813,9 @@
             addHistory(name, score, comment);
             lastUpdateTime[currentTab] = Date.now();
             saveAllDataToLocalStorage();
-            await saveToGitHub(currentTab);
+            if (githubToken && navigator.onLine) {
+                await saveToGitHub(currentTab);
+            }
             showToast('✅ ' + name + ' +' + score.toFixed(1) + (comment ? ' 💬 ' + comment : ''), '');
         }
 
@@ -2957,16 +2880,14 @@
         }
 
         async function syncData() {
-            if (!githubToken && !isOfflineMode) { showToast('Сначала подключитесь к GitHub', 'warning'); return; }
-            if (isOfflineMode) {
-                showToast('📡 Вы в офлайн-режиме. Подключитесь к интернету и нажмите "Подключиться" для синхронизации.',
-                    'warning');
+            if (isViewerMode) {
+                showToast('👀 В режиме зрителя синхронизация недоступна', 'warning');
                 return;
             }
+            if (!githubToken) { showToast('Сначала подключитесь к GitHub', 'warning'); return; }
             showToast('🔄 Синхронизация...', 'info');
             saveAllDataToLocalStorage();
             await loadFromGitHub(currentTab);
-            await processOfflineQueue();
             showToast('✅ Синхронизация завершена', '');
         }
 
@@ -3005,16 +2926,18 @@
 
                 tokenBlock.style.display = 'none';
                 appContent.style.display = 'block';
-                offlineBadge.classList.remove('show');
-                isOfflineMode = false;
+                viewerBadge.classList.remove('show');
+                isViewerMode = false;
+                // Показываем управляющие элементы
+                addSection.style.display = 'block';
+                deleteSection.style.display = 'block';
+                actionsSection.style.display = 'block';
 
                 loadAllDataFromLocalStorage();
 
                 await loadFromGitHub('national');
                 await loadFromGitHub('free');
                 await loadFromGitHub('evening');
-
-                await processOfflineQueue();
 
                 render();
                 renderHistory();
@@ -3025,9 +2948,6 @@
                 autoSyncInterval = setInterval(function() {
                     if (githubToken && navigator.onLine) {
                         loadFromGitHub(currentTab);
-                        if (offlineQueue.length > 0) {
-                            processOfflineQueue();
-                        }
                     }
                 }, 10000);
 
@@ -3077,7 +2997,6 @@
         function init() {
             loadColors();
             renderPalettes();
-            loadOfflineQueue();
 
             var savedToken = loadToken();
             if (savedToken) {
@@ -3085,7 +3004,7 @@
                 if (navigator.onLine) {
                     connectToGitHub();
                 } else {
-                    showToast('🌐 Нет интернета. Нажмите "Войти без интернета" для работы офлайн.', 'warning');
+                    showToast('🌐 Нет интернета. Подключитесь позже.', 'warning');
                 }
             } else {
                 tokenBlock.style.display = 'block';
@@ -3095,38 +3014,18 @@
             function updateOnlineStatus() {
                 if (!navigator.onLine) {
                     offlineWarning.style.display = 'block';
-                    if (offlineQueue.length > 0) {
-                        document.getElementById('offlineQueueBanner').style.display = 'block';
-                    }
                 } else {
                     offlineWarning.style.display = 'none';
-                    if (githubToken && !isOfflineMode) {
+                    if (githubToken && !isViewerMode) {
                         saveAllDataToLocalStorage();
                         loadFromGitHub(currentTab);
-                        if (offlineQueue.length > 0) {
-                            setTimeout(processOfflineQueue, 2000);
-                        }
                     }
                 }
             }
 
-            window.addEventListener('online', function() {
-                updateOnlineStatus();
-                if (githubToken && !isOfflineMode && offlineQueue.length > 0) {
-                    setTimeout(processOfflineQueue, 2000);
-                }
-                if (isOfflineMode && navigator.onLine) {
-                    showToast('🌐 Интернет появился! Нажмите "Подключиться" для синхронизации.', 'info');
-                }
-            });
+            window.addEventListener('online', updateOnlineStatus);
             window.addEventListener('offline', updateOnlineStatus);
             updateOnlineStatus();
-
-            setInterval(function() {
-                if (navigator.onLine && githubToken && !isOfflineMode && offlineQueue.length > 0) {
-                    processOfflineQueue();
-                }
-            }, 30000);
         }
 
         // Обработчики
@@ -3156,7 +3055,7 @@
 
         console.log('✅ Apple-style программа загружена!');
         console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
-        console.log('📡 Офлайн-режим:', isOfflineMode ? 'ВКЛЮЧЕН' : 'ВЫКЛЮЧЕН');
+        console.log('👀 Режим зрителя:', isViewerMode ? 'ВКЛЮЧЕН' : 'ВЫКЛЮЧЕН');
     </script>
 </body>
 </html>
