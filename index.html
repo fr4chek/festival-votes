@@ -410,7 +410,7 @@
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.04);
-            color: #1c2a2a;
+            color: #ffffff;
             transition: all 0.3s ease;
             outline: none;
             font-family: 'SF Pro Text', sans-serif;
@@ -586,7 +586,7 @@
             color: var(--text-dark);
         }
 
-        /* ----- форма ----- */
+        /* ----- форма (ВВОД БЕЛЫЙ) ----- */
         .input-row {
             display: flex;
             flex-wrap: wrap;
@@ -621,7 +621,7 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.04);
-            color: #1c2a2a;
+            color: #ffffff;
             transition: all 0.3s ease;
             outline: none;
             width: 100%;
@@ -640,14 +640,12 @@
         }
 
         .input-group input::placeholder {
-            color: var(--text-light);
-            opacity: 0.6;
+            color: rgba(255, 255, 255, 0.5);
             font-family: 'SF Pro Text', sans-serif;
         }
 
         body.dark .input-group input::placeholder {
-            color: var(--text-dark);
-            opacity: 0.6;
+            color: rgba(255, 255, 255, 0.4);
         }
 
         .comment-input {
@@ -658,7 +656,7 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.03);
-            color: #1c2a2a;
+            color: #ffffff;
             width: 100%;
             outline: none;
             transition: all 0.3s ease;
@@ -678,14 +676,12 @@
         }
 
         .comment-input::placeholder {
-            color: var(--text-light);
-            opacity: 0.5;
+            color: rgba(255, 255, 255, 0.5);
             font-family: 'SF Pro Text', sans-serif;
         }
 
         body.dark .comment-input::placeholder {
-            color: var(--text-dark);
-            opacity: 0.5;
+            color: rgba(255, 255, 255, 0.4);
         }
 
         /* ----- вкладки ----- */
@@ -1057,6 +1053,39 @@
             color: #ff6b6b;
         }
 
+        .delete-input {
+            flex: 1;
+            padding: 14px 20px;
+            border-radius: 980px;
+            font-size: 15px;
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            color: #ffffff;
+            outline: none;
+            min-width: 120px;
+            font-family: 'SF Pro Text', sans-serif;
+        }
+
+        body.dark .delete-input {
+            background: rgba(255, 255, 255, 0.02);
+            color: #ffffff;
+            border-color: rgba(255, 255, 255, 0.015);
+        }
+
+        .delete-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        body.dark .delete-input::placeholder {
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .delete-input:focus {
+            border-color: var(--accent-color, #0abab5);
+            box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.08);
+        }
+
         .section-glass .btn-delete {
             background: rgba(255, 59, 48, 0.15);
             border: 1px solid rgba(255, 59, 48, 0.2);
@@ -1202,7 +1231,7 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.04);
-            color: #1c2a2a;
+            color: #ffffff;
             outline: none;
             margin-bottom: 16px;
             font-family: 'SF Pro Text', sans-serif;
@@ -1700,7 +1729,7 @@
             <div class="section-glass" style="border-color: rgba(255,59,48,0.06);">
                 <label class="delete-section-label">🗑️ Удалить участника</label>
                 <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
-                    <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.06); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.03); color:#1c2a2a; outline:none; min-width:120px; font-family:'SF Pro Text', sans-serif;">
+                    <input type="text" id="deleteName" class="delete-input" placeholder="Введите имя">
                     <button class="btn btn-sm btn-delete" id="deleteBtn" style="min-width:auto;">✕ Удалить</button>
                 </div>
             </div>
@@ -2486,13 +2515,10 @@
                 if (saveResponse.ok) {
                     setStatus('☁️ Синхронизировано', 'var(--text-light)');
                 } else {
-                    // Просто обновляем статус, без показа ошибки
                     setStatus('☁️ Синхронизировано', 'var(--text-light)');
                 }
             } catch (e) {
-                // Ничего не показываем, просто обновляем статус
                 setStatus('☁️ Синхронизировано', 'var(--text-light)');
-                // Пытаемся снова через 5 секунд
                 setTimeout(function() {
                     if (githubToken) {
                         saveToGitHub(tab);
