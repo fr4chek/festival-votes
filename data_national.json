@@ -1,4 +1,20 @@
 {
-  "votes": [],
-  "history": []
+  "votes": [
+    {
+      "id": "1787391137797_tdshwc",
+      "name": "Я поступил в вуз",
+      "score": 10,
+      "comment": ""
+    }
+  ],
+  "history": [
+    {
+      "type": "vote",
+      "name": "Я поступил в вуз",
+      "score": 10,
+      "comment": "",
+      "time": "12:32:17",
+      "date": "22.08.2026"
+    }
+  ]
 }
