@@ -5,9 +5,23 @@
       "name": "Леонид",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1787404334929_hhaqd2",
+      "name": "Николай",
+      "score": 7,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Николай",
+      "score": 7,
+      "comment": "",
+      "time": "16:12:14",
+      "date": "22.08.2026"
+    },
     {
       "type": "vote",
       "name": "Леонид",
