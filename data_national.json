@@ -29,9 +29,23 @@
       "name": "Арсен",
       "score": 4,
       "comment": ""
+    },
+    {
+      "id": "1787406096781_k5g2s8",
+      "name": "Егор",
+      "score": 10,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Егор",
+      "score": 10,
+      "comment": "",
+      "time": "16:41:36",
+      "date": "22.08.2026"
+    },
     {
       "type": "delete",
       "name": "Егор",
