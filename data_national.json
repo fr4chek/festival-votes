@@ -1,19 +1,12 @@
 {
-  "votes": [
-    {
-      "id": "1787410680354_dkqqsf",
-      "name": "Егор",
-      "score": 10,
-      "comment": "папаапап"
-    },
-    {
-      "id": "1787410711115_q5pec2",
-      "name": "Егор",
-      "score": 1,
-      "comment": ""
-    }
-  ],
+  "votes": [],
   "history": [
+    {
+      "type": "delete",
+      "name": "Егор",
+      "time": "17:59:18",
+      "date": "22.08.2026"
+    },
     {
       "type": "vote",
       "name": "Егор",
