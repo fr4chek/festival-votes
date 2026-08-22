@@ -5,9 +5,23 @@
       "name": "Егор",
       "score": 10,
       "comment": "папаапап"
+    },
+    {
+      "id": "1787410711115_q5pec2",
+      "name": "Егор",
+      "score": 1,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Егор",
+      "score": 1,
+      "comment": "",
+      "time": "17:58:31",
+      "date": "22.08.2026"
+    },
     {
       "type": "vote",
       "name": "Егор",
