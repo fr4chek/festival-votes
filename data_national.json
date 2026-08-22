@@ -23,9 +23,23 @@
       "name": "Николай",
       "score": 8,
       "comment": ""
+    },
+    {
+      "id": "1787404367699_9neg2q",
+      "name": "Арсен",
+      "score": 4,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Арсен",
+      "score": 4,
+      "comment": "",
+      "time": "16:12:47",
+      "date": "22.08.2026"
+    },
     {
       "type": "vote",
       "name": "Николай",
