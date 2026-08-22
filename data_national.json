@@ -17,9 +17,23 @@
       "name": "Леонид",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1787404358676_s4b8yu",
+      "name": "Николай",
+      "score": 8,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Николай",
+      "score": 8,
+      "comment": "",
+      "time": "16:12:38",
+      "date": "22.08.2026"
+    },
     {
       "type": "vote",
       "name": "Леонид",
