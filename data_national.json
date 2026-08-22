@@ -5,9 +5,23 @@
       "name": "Анна",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1787403868838_ani8y9",
+      "name": "Екатерина",
+      "score": 6,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Екатерина",
+      "score": 6,
+      "comment": "",
+      "time": "16:04:28",
+      "date": "22.08.2026"
+    },
     {
       "type": "vote",
       "name": "Анна",
