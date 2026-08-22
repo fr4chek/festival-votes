@@ -11,9 +11,23 @@
       "name": "Екатерина",
       "score": 6,
       "comment": ""
+    },
+    {
+      "id": "1787403877136_02otth",
+      "name": "Валентина",
+      "score": 8,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Валентина",
+      "score": 8,
+      "comment": "",
+      "time": "16:04:37",
+      "date": "22.08.2026"
+    },
     {
       "type": "vote",
       "name": "Екатерина",
