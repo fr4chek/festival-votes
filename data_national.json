@@ -17,9 +17,23 @@
       "name": "Валентина",
       "score": 8,
       "comment": ""
+    },
+    {
+      "id": "1787403894820_uif1dl",
+      "name": "Ефросинья",
+      "score": 9,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Ефросинья",
+      "score": 9,
+      "comment": "",
+      "time": "16:04:54",
+      "date": "22.08.2026"
+    },
     {
       "type": "vote",
       "name": "Валентина",
