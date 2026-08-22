@@ -1,34 +1,4 @@
 {
-  "votes": [
-    {
-      "id": "1787409987477_8sx13y",
-      "name": "Дима",
-      "score": 10,
-      "comment": ""
-    }
-  ],
-  "history": [
-    {
-      "type": "vote",
-      "name": "Дима",
-      "score": 10,
-      "comment": "",
-      "time": "17:46:27",
-      "date": "22.08.2026"
-    },
-    {
-      "type": "delete",
-      "name": "Егор",
-      "time": "17:46:14",
-      "date": "22.08.2026"
-    },
-    {
-      "type": "vote",
-      "name": "Егор",
-      "score": 10,
-      "comment": "иавава",
-      "time": "17:45:20",
-      "date": "22.08.2026"
-    }
-  ]
+  "votes": [],
+  "history": []
 }
