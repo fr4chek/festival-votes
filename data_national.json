@@ -5,9 +5,23 @@
       "name": "Я поступил в вуз",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1787391418042_cjx10g",
+      "name": "ДА",
+      "score": 10,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "ДА",
+      "score": 10,
+      "comment": "",
+      "time": "12:36:58",
+      "date": "22.08.2026"
+    },
     {
       "type": "vote",
       "name": "Я поступил в вуз",
