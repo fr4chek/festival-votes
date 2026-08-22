@@ -11,9 +11,23 @@
       "name": "Анка",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1787408105443_kiqdo3",
+      "name": "ЕГор",
+      "score": 10,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "ЕГор",
+      "score": 10,
+      "comment": "",
+      "time": "17:15:05",
+      "date": "22.08.2026"
+    },
     {
       "type": "vote",
       "name": "Анка",
