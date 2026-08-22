@@ -1,6 +1,21 @@
 {
-  "votes": [],
+  "votes": [
+    {
+      "id": "1787410780437_po377q",
+      "name": "Егор",
+      "score": 5,
+      "comment": ""
+    }
+  ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Егор",
+      "score": 5,
+      "comment": "",
+      "time": "17:59:40",
+      "date": "22.08.2026"
+    },
     {
       "type": "delete",
       "name": "Егор",
