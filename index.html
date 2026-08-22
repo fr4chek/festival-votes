@@ -63,12 +63,38 @@
         }
 
         /* ----- Глобальное применение шрифта ----- */
-        html, body, .container, .btn, input, textarea, select, button,
-        .header, .status-bar, .token-input, .section-glass, .stat-card,
-        .leader-card, .tab-btn, table, th, td, .history-item, .modal-box,
-        .color-option, .podium-item, .footer, .footer-bottom,
-        .color-picker-label, .theme-toggle, .hint, .save-status,
-        #winnerDisplay, #statusDisplay, .palette-title, .color-name {
+        html,
+        body,
+        .container,
+        .btn,
+        input,
+        textarea,
+        select,
+        button,
+        .header,
+        .status-bar,
+        .token-input,
+        .section-glass,
+        .stat-card,
+        .leader-card,
+        .tab-btn,
+        table,
+        th,
+        td,
+        .history-item,
+        .modal-box,
+        .color-option,
+        .podium-item,
+        .footer,
+        .footer-bottom,
+        .color-picker-label,
+        .theme-toggle,
+        .hint,
+        .save-status,
+        #winnerDisplay,
+        #statusDisplay,
+        .palette-title,
+        .color-name {
             font-family: -apple-system, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
         }
 
@@ -94,7 +120,7 @@
             background: var(--bg-light);
             color: var(--text-light);
             transition: background 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                        color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                color 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             position: relative;
         }
 
@@ -127,7 +153,7 @@
             opacity: var(--overlay-opacity-light);
             z-index: 0;
             transition: background 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                        opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+                opacity 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
             pointer-events: none;
         }
 
@@ -145,7 +171,7 @@
             margin: 0 auto;
         }
 
-        /* ----- КНОПКИ ----- */
+        /* ----- КНОПКИ (БЕЛЫЕ) ----- */
         .btn {
             display: inline-flex;
             align-items: center;
@@ -1019,18 +1045,18 @@
             color: var(--text-dark);
         }
 
-        /* ----- удаление ----- */
+        /* ----- удаление (КРАСНАЯ КНОПКА) ----- */
         .section-glass .btn-delete {
-            background: rgba(255, 59, 48, 0.06);
-            border: 1px solid rgba(255, 59, 48, 0.04);
+            background: rgba(255, 59, 48, 0.15);
+            border: 1px solid rgba(255, 59, 48, 0.2);
             color: #ff3b30;
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             font-family: 'SF Pro Text', sans-serif;
         }
         .section-glass .btn-delete:hover {
-            background: rgba(255, 59, 48, 0.12);
-            border-color: rgba(255, 59, 48, 0.08);
+            background: rgba(255, 59, 48, 0.25);
+            border-color: rgba(255, 59, 48, 0.3);
         }
 
         /* ----- футер ----- */
@@ -1772,7 +1798,7 @@
         // ПАЛИТРЫ ЦВЕТОВ (ОБНОВЛЕННЫЕ)
         // ============================================================
         const LIGHT_PALETTE = [
-            // Новые бирюзовые
+            // Бирюзовые
             { hex: '#0ABAB5', name: 'Бирюзовый' },
             { hex: '#0DEAE4', name: 'Светлый бирюзовый' },
             // Остальные
