@@ -1118,6 +1118,39 @@
             text-align: center;
         }
 
+        /* ----- ОФЛАЙН ОЧЕРЕДЬ (баннер) ----- */
+        .offline-queue-banner {
+            display: none;
+            background: rgba(255, 149, 0, 0.12);
+            border: 1px solid rgba(255, 149, 0, 0.25);
+            border-radius: 16px;
+            padding: 12px 20px;
+            margin-bottom: 16px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            font-size: 13px;
+            color: #f0d080;
+            text-align: center;
+        }
+
+        body.dark .offline-queue-banner {
+            background: rgba(255, 149, 0, 0.06);
+            border-color: rgba(255, 149, 0, 0.15);
+            color: #f0d080;
+        }
+
+        .offline-queue-banner strong {
+            color: #ffd700;
+        }
+
+        .offline-queue-banner .count {
+            background: rgba(255, 215, 0, 0.15);
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 600;
+            margin: 0 4px;
+        }
+
         /* ----- модалки ----- */
         .modal-overlay {
             position: fixed;
@@ -1629,10 +1662,16 @@
             </div>
         </div>
 
+        <!-- ОФЛАЙН ОЧЕРЕДЬ (баннер) -->
+        <div class="offline-queue-banner" id="offlineQueueBanner">
+            📦 <strong>Офлайн-очередь:</strong> <span class="count" id="queueCount">0</span> голосов ожидают синхронизации
+            <button class="btn btn-sm" id="syncQueueBtn" style="margin-left:12px; padding:4px 16px; font-size:12px; min-width:auto;">🔄 Отправить сейчас</button>
+        </div>
+
         <!-- ОФЛАЙН ПРЕДУПРЕЖДЕНИЕ -->
         <div style="padding: 14px 24px; margin-bottom: 20px; border-color: rgba(255,149,0,0.2); display: none; background: rgba(255,149,0,0.04); border-radius: 30px; backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1);" id="offlineWarning">
             ⚠️ Нет подключения к интернету. Данные сохраняются локально. <strong style="color:#f08a00;">Не закрывайте вкладку!</strong>
-            Когда интернет появится — нажмите <span style="color:#f08a00; font-weight:700;">«Синхронизировать»</span> внизу.
+            Когда интернет появится — голоса автоматически синхронизируются.
         </div>
 
         <!-- TOAST -->
@@ -1846,6 +1885,136 @@
         }
 
         // ============================================================
+        // УПРАВЛЕНИЕ ДАННЫМИ И ОФЛАЙН-ОЧЕРЕДЬЮ
+        // ============================================================
+        var offlineQueue = [];
+        var isProcessingQueue = false;
+
+        function loadOfflineQueue() {
+            try {
+                var saved = localStorage.getItem('offlineQueue');
+                if (saved) {
+                    offlineQueue = JSON.parse(saved);
+                }
+            } catch (e) {
+                offlineQueue = [];
+            }
+            updateQueueBanner();
+        }
+
+        function saveOfflineQueue() {
+            try {
+                localStorage.setItem('offlineQueue', JSON.stringify(offlineQueue));
+            } catch (e) {}
+            updateQueueBanner();
+        }
+
+        function addToOfflineQueue(voteData) {
+            offlineQueue.push({
+                id: Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                tab: currentTab,
+                data: voteData,
+                timestamp: Date.now()
+            });
+            saveOfflineQueue();
+            showToast('📦 Голос сохранён в офлайн-очереди. Будет синхронизирован при подключении к интернету.', 'warning');
+        }
+
+        function updateQueueBanner() {
+            var banner = document.getElementById('offlineQueueBanner');
+            var countEl = document.getElementById('queueCount');
+            if (offlineQueue.length > 0) {
+                banner.style.display = 'block';
+                countEl.textContent = offlineQueue.length;
+            } else {
+                banner.style.display = 'none';
+            }
+        }
+
+        async function processOfflineQueue() {
+            if (isProcessingQueue) return;
+            if (offlineQueue.length === 0) return;
+            if (!navigator.onLine) {
+                showToast('🌐 Нет интернета. Очередь будет обработана при подключении.', 'warning');
+                return;
+            }
+            if (!githubToken) {
+                showToast('⚠️ Подключитесь к GitHub для синхронизации офлайн-голосов.', 'warning');
+                return;
+            }
+
+            isProcessingQueue = true;
+            showToast('🔄 Синхронизация офлайн-очереди... (' + offlineQueue.length + ' голосов)', 'info');
+
+            var successCount = 0;
+            var failCount = 0;
+            var queueCopy = offlineQueue.slice();
+
+            for (var i = 0; i < queueCopy.length; i++) {
+                var item = queueCopy[i];
+                try {
+                    // Добавляем голос в нужную номинацию
+                    var targetTab = item.tab || 'national';
+                    if (!allData[targetTab]) {
+                        allData[targetTab] = { votes: [], history: [] };
+                    }
+                    allData[targetTab].votes.push(item.data);
+
+                    // Сохраняем в историю
+                    var now = new Date();
+                    var time = now.toTimeString().slice(0, 8);
+                    var date = getFormattedDate();
+                    if (!allData[targetTab].history) allData[targetTab].history = [];
+                    allData[targetTab].history.unshift({
+                        type: 'vote',
+                        name: item.data.name,
+                        score: item.data.score,
+                        comment: item.data.comment || '',
+                        time: time,
+                        date: date,
+                        synced: true
+                    });
+                    if (allData[targetTab].history.length > 50) {
+                        allData[targetTab].history = allData[targetTab].history.slice(0, 50);
+                    }
+
+                    successCount++;
+                    // Удаляем из очереди
+                    offlineQueue = offlineQueue.filter(function(q) { return q.id !== item.id; });
+                    saveOfflineQueue();
+
+                } catch (e) {
+                    failCount++;
+                    console.warn('Ошибка синхронизации голоса:', e);
+                }
+            }
+
+            // Сохраняем все данные локально
+            saveAllDataToLocalStorage();
+
+            // Отправляем на GitHub
+            if (successCount > 0) {
+                await saveToGitHub(currentTab);
+                // Обновляем отображение
+                render();
+                renderHistory();
+                renderLeader();
+                showToast('✅ Синхронизировано ' + successCount + ' голосов' + (failCount > 0 ? ' (' + failCount +
+                    ' ошибок)' : ''), 'info');
+            } else if (failCount > 0) {
+                showToast('⚠️ Не удалось синхронизировать ' + failCount + ' голосов', 'error');
+            }
+
+            isProcessingQueue = false;
+            updateQueueBanner();
+
+            // Если остались голоса в очереди, пробуем снова через 5 секунд
+            if (offlineQueue.length > 0) {
+                setTimeout(processOfflineQueue, 5000);
+            }
+        }
+
+        // ============================================================
         // УПРАВЛЕНИЕ ДАННЫМИ (СОХРАНЕНИЕ В LOCALSTORAGE)
         // ============================================================
         function saveAllDataToLocalStorage() {
@@ -1861,7 +2030,6 @@
                 var saved = localStorage.getItem('allData');
                 if (saved) {
                     var parsed = JSON.parse(saved);
-                    // Объединяем с существующими данными
                     for (var key in parsed) {
                         if (allData[key]) {
                             allData[key].votes = parsed[key].votes || [];
@@ -2085,7 +2253,6 @@
         var lastUpdateTime = {};
         var autoSyncInterval = null;
         var isConnecting = false;
-        var isInitialLoad = true;
 
         // DOM
         var tabsContainer = document.querySelector('.tabs');
@@ -2125,6 +2292,11 @@
         var podiumModal = document.getElementById('podiumModal');
         var podiumContainer = document.getElementById('podiumContainer');
         var closePodiumBtn = document.getElementById('closePodiumBtn');
+
+        // Кнопка синхронизации очереди
+        document.getElementById('syncQueueBtn').addEventListener('click', function() {
+            processOfflineQueue();
+        });
 
         // ===== ВКЛАДКИ =====
         tabsContainer.addEventListener('click', function(e) {
@@ -2542,7 +2714,6 @@
                     if (lastUpdateTime[tab] && Date.now() - lastUpdateTime[tab] < 3000) {
                         return;
                     }
-                    // Обновляем данные из GitHub, но сохраняем локальные, если они новее
                     if (jsonData.votes) {
                         allData[tab].votes = jsonData.votes;
                     }
@@ -2554,7 +2725,6 @@
                     renderLeader();
                     saveAllDataToLocalStorage();
                     setStatus('☁️ Синхронизировано', 'var(--text-light)');
-                    showToast('✅ Данные синхронизированы с GitHub', 'info');
                 }
             } catch (e) {
                 setStatus('📂 Из кэша', '#8a8a9a');
@@ -2643,13 +2813,27 @@
             if (isNaN(score) || score < 0 || score > 10) { showToast('Оценка должна быть от 0 до 10', 'warning');
                 scoreInput.focus(); return; }
 
-            var votes = allData[currentTab].votes;
-            votes.push({
+            var voteData = {
                 id: Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 name: name,
                 score: score,
                 comment: comment || ''
-            });
+            };
+
+            // Если нет интернета или нет GitHub токена — добавляем в очередь
+            if (!navigator.onLine || !githubToken) {
+                addToOfflineQueue(voteData);
+                nameInput.value = '';
+                scoreInput.value = '';
+                commentInputField.value = '';
+                nameInput.focus();
+                showToast('📦 Голос добавлен в офлайн-очередь (' + offlineQueue.length + ' голосов)', 'warning');
+                return;
+            }
+
+            // Если интернет есть — добавляем напрямую
+            var votes = allData[currentTab].votes;
+            votes.push(voteData);
             nameInput.value = '';
             scoreInput.value = '';
             commentInputField.value = '';
@@ -2727,10 +2911,10 @@
         async function syncData() {
             if (!githubToken) { showToast('Сначала подключитесь к GitHub', 'warning'); return; }
             showToast('🔄 Синхронизация...', 'info');
-            // Сначала сохраняем локальные данные
             saveAllDataToLocalStorage();
-            // Затем загружаем с GitHub
             await loadFromGitHub(currentTab);
+            // После загрузки с GitHub пробуем обработать очередь
+            await processOfflineQueue();
             showToast('✅ Синхронизация завершена', '');
         }
 
@@ -2769,13 +2953,14 @@
                 tokenBlock.style.display = 'none';
                 appContent.style.display = 'block';
 
-                // Загружаем локальные данные
                 loadAllDataFromLocalStorage();
 
-                // Загружаем с GitHub
                 await loadFromGitHub('national');
                 await loadFromGitHub('free');
                 await loadFromGitHub('evening');
+
+                // После загрузки с GitHub пробуем обработать очередь
+                await processOfflineQueue();
 
                 render();
                 renderHistory();
@@ -2786,6 +2971,10 @@
                 autoSyncInterval = setInterval(function() {
                     if (githubToken && navigator.onLine) {
                         loadFromGitHub(currentTab);
+                        // Проверяем очередь каждые 10 секунд
+                        if (offlineQueue.length > 0) {
+                            processOfflineQueue();
+                        }
                     }
                 }, 10000);
 
@@ -2834,6 +3023,7 @@
         function init() {
             loadColors();
             renderPalettes();
+            loadOfflineQueue();
 
             var savedToken = loadToken();
             if (savedToken) {
@@ -2847,20 +3037,39 @@
             function updateOnlineStatus() {
                 if (!navigator.onLine) {
                     offlineWarning.style.display = 'block';
+                    // Показываем баннер очереди если есть голоса
+                    if (offlineQueue.length > 0) {
+                        document.getElementById('offlineQueueBanner').style.display = 'block';
+                    }
                 } else {
                     offlineWarning.style.display = 'none';
+                    // При появлении интернета пытаемся синхронизировать
+                    if (githubToken) {
+                        saveAllDataToLocalStorage();
+                        loadFromGitHub(currentTab);
+                        if (offlineQueue.length > 0) {
+                            setTimeout(processOfflineQueue, 2000);
+                        }
+                    }
                 }
             }
+
             window.addEventListener('online', function() {
                 updateOnlineStatus();
-                // При появлении интернета пытаемся синхронизировать
-                if (githubToken) {
-                    saveAllDataToLocalStorage();
-                    loadFromGitHub(currentTab);
+                // При появлении интернета пробуем обработать очередь
+                if (githubToken && offlineQueue.length > 0) {
+                    setTimeout(processOfflineQueue, 2000);
                 }
             });
             window.addEventListener('offline', updateOnlineStatus);
             updateOnlineStatus();
+
+            // Периодически проверяем очередь (каждые 30 секунд)
+            setInterval(function() {
+                if (navigator.onLine && githubToken && offlineQueue.length > 0) {
+                    processOfflineQueue();
+                }
+            }, 30000);
         }
 
         // Обработчики
