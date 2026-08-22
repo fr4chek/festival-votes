@@ -5,9 +5,23 @@
       "name": "Егор",
       "score": 5,
       "comment": ""
+    },
+    {
+      "id": "1787410801574_776v7c",
+      "name": "Саша",
+      "score": 5,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Саша",
+      "score": 5,
+      "comment": "",
+      "time": "18:00:01",
+      "date": "22.08.2026"
+    },
     {
       "type": "vote",
       "name": "Егор",
