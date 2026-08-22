@@ -17,9 +17,39 @@
       "name": "ЕГор",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1787408144872_9q077p",
+      "name": "Брат мой Атец",
+      "score": 10,
+      "comment": ""
+    },
+    {
+      "id": "1787408159421_pqna56",
+      "name": "МАт",
+      "score": 5,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "МАт",
+      "score": 5,
+      "comment": "",
+      "time": "17:16:52",
+      "date": "22.08.2026",
+      "synced": true
+    },
+    {
+      "type": "vote",
+      "name": "Брат мой Атец",
+      "score": 10,
+      "comment": "",
+      "time": "17:16:52",
+      "date": "22.08.2026",
+      "synced": true
+    },
     {
       "type": "vote",
       "name": "ЕГор",
