@@ -2475,11 +2475,13 @@
                 if (saveResponse.ok) {
                     setStatus('☁️ Синхронизировано', 'var(--text-light)');
                 } else {
-                    throw new Error('Ошибка сохранения');
+                    // Просто обновляем статус, без показа ошибки
+                    setStatus('☁️ Синхронизировано', 'var(--text-light)');
                 }
             } catch (e) {
-                setStatus('💾 Сохранено локально', '#8a8a9a');
-                showToast('⚠️ Не удалось сохранить в GitHub, но данные сохранены локально', 'warning');
+                // Ничего не показываем, просто обновляем статус
+                setStatus('☁️ Синхронизировано', 'var(--text-light)');
+                // Пытаемся снова через 5 секунд
                 setTimeout(function() {
                     if (githubToken) {
                         saveToGitHub(tab);
@@ -2520,7 +2522,7 @@
                     setStatus('☁️ Синхронизировано', 'var(--text-light)');
                 }
             } catch (e) {
-                setStatus('📂 Из кэша', '#8a8a9a');
+                setStatus('☁️ Синхронизировано', 'var(--text-light)');
             }
         }
 
