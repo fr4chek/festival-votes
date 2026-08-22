@@ -1,4 +1,20 @@
 {
-  "votes": [],
-  "history": []
+  "votes": [
+    {
+      "id": "1787409920412_w8dt3u",
+      "name": "Егор",
+      "score": 10,
+      "comment": "иавава"
+    }
+  ],
+  "history": [
+    {
+      "type": "vote",
+      "name": "Егор",
+      "score": 10,
+      "comment": "иавава",
+      "time": "17:45:20",
+      "date": "22.08.2026"
+    }
+  ]
 }
