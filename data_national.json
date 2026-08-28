@@ -5,9 +5,23 @@
       "name": "Donald Trump",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1787953668391_k0wsfn",
+      "name": "Всё работает",
+      "score": 10,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Всё работает",
+      "score": 10,
+      "comment": "",
+      "time": "00:47:48",
+      "date": "29.08.2026"
+    },
     {
       "type": "delete",
       "name": "Проверка",
