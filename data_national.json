@@ -5,9 +5,23 @@
       "name": "Donald Trump",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1787953652695_mag1do",
+      "name": "Проверка",
+      "score": 10,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Проверка",
+      "score": 10,
+      "comment": "",
+      "time": "00:47:32",
+      "date": "29.08.2026"
+    },
     {
       "type": "delete",
       "name": "епныираекырыавшгецн7ркгмуы7а564",
