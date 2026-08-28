@@ -1,4 +1,20 @@
 {
-  "votes": [],
-  "history": []
+  "votes": [
+    {
+      "id": "1787953686344_owokto",
+      "name": "Вроде норм",
+      "score": 10,
+      "comment": ""
+    }
+  ],
+  "history": [
+    {
+      "type": "vote",
+      "name": "Вроде норм",
+      "score": 10,
+      "comment": "",
+      "time": "00:48:06",
+      "date": "29.08.2026"
+    }
+  ]
 }
