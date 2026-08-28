@@ -1,4 +1,20 @@
 {
-  "votes": [],
-  "history": []
+  "votes": [
+    {
+      "id": "1787953693738_fgae7p",
+      "name": "Давсё норм",
+      "score": 10,
+      "comment": ""
+    }
+  ],
+  "history": [
+    {
+      "type": "vote",
+      "name": "Давсё норм",
+      "score": 10,
+      "comment": "",
+      "time": "00:48:13",
+      "date": "29.08.2026"
+    }
+  ]
 }
