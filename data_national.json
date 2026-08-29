@@ -11,9 +11,23 @@
       "name": "Всё работает",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1788004543993_ebcy1w",
+      "name": "Проверка",
+      "score": 10,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Проверка",
+      "score": 10,
+      "comment": "",
+      "time": "14:55:43",
+      "date": "29.08.2026"
+    },
     {
       "type": "vote",
       "name": "Всё работает",
