@@ -2262,6 +2262,7 @@
             showToast('🔄 Загрузка данных из GitHub...', 'info');
 
             try {
+                // Загружаем данные для всех номинаций
                 await loadFromGitHub('national');
                 await loadFromGitHub('free');
                 await loadFromGitHub('evening');
@@ -2272,6 +2273,7 @@
                 showToast('✅ Данные загружены из GitHub', 'info');
             } catch (e) {
                 showToast('⚠️ Не удалось загрузить данные из GitHub. Проверьте интернет.', 'error');
+                // Пробуем загрузить из localStorage как резерв
                 loadAllDataFromLocalStorage();
                 render();
                 renderHistory();
