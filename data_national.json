@@ -17,9 +17,23 @@
       "name": "Проверка",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1788005358575_zmbw7w",
+      "name": "Анна",
+      "score": 10,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Анна",
+      "score": 10,
+      "comment": "",
+      "time": "15:09:18",
+      "date": "29.08.2026"
+    },
     {
       "type": "vote",
       "name": "Проверка",
