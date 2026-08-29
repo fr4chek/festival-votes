@@ -29,15 +29,15 @@
       "name": "А почему я как гость добавляю",
       "score": 1,
       "comment": ""
-    },
-    {
-      "id": "1788005384183_zidx2n",
-      "name": "1",
-      "score": 10,
-      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "delete",
+      "name": "1",
+      "time": "15:21:50",
+      "date": "29.08.2026"
+    },
     {
       "type": "vote",
       "name": "1",
