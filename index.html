@@ -484,21 +484,8 @@
             border-color: rgba(255, 215, 0, 0.15);
         }
 
-        .viewer-badge {
-            display: none;
-            background: rgba(255, 215, 0, 0.12);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            border-radius: 20px;
-            padding: 4px 14px;
-            font-size: 12px;
-            color: #ffd700;
-            font-weight: 500;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-        }
-
-        .viewer-badge.show {
-            display: inline-block;
+        .viewer-hidden {
+            display: none !important;
         }
 
         /* ----- секции ----- */
@@ -1699,12 +1686,6 @@
             </div>
         </div>
 
-        <!-- ОФЛАЙН ПРЕДУПРЕЖДЕНИЕ -->
-        <div style="padding: 14px 24px; margin-bottom: 20px; border-color: rgba(255,149,0,0.2); display: none; background: rgba(255,149,0,0.04); border-radius: 30px; backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1);" id="offlineWarning">
-            ⚠️ Нет подключения к интернету. Данные сохраняются локально. <strong style="color:#f08a00;">Не закрывайте вкладку!</strong>
-            Когда интернет появится — голоса автоматически синхронизируются.
-        </div>
-
         <!-- TOAST -->
         <div id="toastContainer" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;max-width:90%;"></div>
 
@@ -1883,11 +1864,8 @@
         // ============================================================
         function sanitizeInput(input) {
             if (typeof input !== 'string') return '';
-            // Удаляем HTML-теги
             var text = input.replace(/<[^>]*>/g, '');
-            // Удаляем потенциально опасные символы
             text = text.replace(/[<>]/g, '');
-            // Ограничиваем длину
             if (text.length > 500) text = text.substring(0, 500);
             return text.trim();
         }
@@ -1896,7 +1874,6 @@
             if (typeof name !== 'string') return '';
             var text = name.replace(/<[^>]*>/g, '');
             text = text.replace(/[<>]/g, '');
-            // Разрешаем буквы, цифры, пробелы, дефис, точку, апостроф
             text = text.replace(/[^a-zA-Zа-яА-ЯёЁ0-9\s\-\.']/g, '');
             if (text.length > 50) text = text.substring(0, 50);
             return text.trim();
@@ -2226,7 +2203,6 @@
         var leaderScore = document.getElementById('leaderScore');
         var leaderEmpty = document.getElementById('leaderEmpty');
         var leaderContent = document.getElementById('leaderContent');
-        var offlineWarning = document.getElementById('offlineWarning');
         var viewerBadge = document.getElementById('viewerBadge');
         var addSection = document.getElementById('addSection');
         var deleteSection = document.getElementById('deleteSection');
@@ -2242,8 +2218,8 @@
         var podiumContainer = document.getElementById('podiumContainer');
         var closePodiumBtn = document.getElementById('closePodiumBtn');
 
-        // ===== РЕЖИМ ЗРИТЕЛЯ =====
-        viewerBtn.addEventListener('click', function() {
+        // ===== РЕЖИМ ЗРИТЕЛЯ (ЗАГРУЗКА ИЗ GITHUB) =====
+        viewerBtn.addEventListener('click', async function() {
             isViewerMode = true;
             githubToken = '';
             tokenBlock.style.display = 'none';
@@ -2253,12 +2229,29 @@
             addSection.style.display = 'none';
             deleteSection.style.display = 'none';
             actionsSection.style.display = 'none';
-            // Показываем только просмотр
-            loadAllDataFromLocalStorage();
-            render();
-            renderHistory();
-            renderLeader();
-            showToast('👀 Режим зрителя. Вы можете только просматривать данные.', 'info');
+
+            // Загружаем данные из GitHub
+            showToast('🔄 Загрузка данных из GitHub...', 'info');
+
+            try {
+                // Загружаем данные для всех номинаций
+                await loadFromGitHub('national');
+                await loadFromGitHub('free');
+                await loadFromGitHub('evening');
+
+                render();
+                renderHistory();
+                renderLeader();
+                showToast('✅ Данные загружены из GitHub', 'info');
+            } catch (e) {
+                showToast('⚠️ Не удалось загрузить данные из GitHub. Проверьте интернет.', 'error');
+                // Пробуем загрузить из localStorage как резерв
+                loadAllDataFromLocalStorage();
+                render();
+                renderHistory();
+                renderLeader();
+                showToast('📂 Данные загружены из локального кэша', 'warning');
+            }
         });
 
         // ===== ВКЛАДКИ =====
@@ -2669,12 +2662,13 @@
         }
 
         async function loadFromGitHub(tab) {
-            if (!githubToken) return;
             var filePath = getDataFilePath(tab);
             try {
                 var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
-                var response = await fetch(url, { headers: { 'Authorization': 'token ' + githubToken,
-                        'Accept': 'application/vnd.github.v3+json' } });
+                var response = await fetch(url, {
+                    headers: githubToken ? { 'Authorization': 'token ' + githubToken,
+                        'Accept': 'application/vnd.github.v3+json' } : { 'Accept': 'application/vnd.github.v3+json' }
+                });
                 if (response.status === 404) {
                     allData[tab] = { votes: [], history: [] };
                     render();
@@ -2687,23 +2681,45 @@
                 var content = base64ToUtf8(data.content);
                 var jsonData = JSON.parse(content);
                 if (jsonData) {
-                    if (lastUpdateTime[tab] && Date.now() - lastUpdateTime[tab] < 3000) {
-                        return;
+                    if (!githubToken && isViewerMode) {
+                        // Для зрителей обновляем данные
+                        if (jsonData.votes) {
+                            allData[tab].votes = jsonData.votes;
+                        }
+                        if (jsonData.history) {
+                            allData[tab].history = jsonData.history;
+                        }
+                        render();
+                        renderHistory();
+                        renderLeader();
+                        saveAllDataToLocalStorage();
+                        setStatus('☁️ Данные загружены', 'var(--text-light)');
+                    } else if (githubToken) {
+                        if (lastUpdateTime[tab] && Date.now() - lastUpdateTime[tab] < 3000) {
+                            return;
+                        }
+                        if (jsonData.votes) {
+                            allData[tab].votes = jsonData.votes;
+                        }
+                        if (jsonData.history) {
+                            allData[tab].history = jsonData.history;
+                        }
+                        render();
+                        renderHistory();
+                        renderLeader();
+                        saveAllDataToLocalStorage();
+                        setStatus('☁️ Синхронизировано', 'var(--text-light)');
                     }
-                    if (jsonData.votes) {
-                        allData[tab].votes = jsonData.votes;
-                    }
-                    if (jsonData.history) {
-                        allData[tab].history = jsonData.history;
-                    }
-                    render();
-                    renderHistory();
-                    renderLeader();
-                    saveAllDataToLocalStorage();
-                    setStatus('☁️ Синхронизировано', 'var(--text-light)');
                 }
             } catch (e) {
                 setStatus('📂 Из кэша', '#8a8a9a');
+                // При ошибке загрузки пробуем использовать локальные данные
+                if (isViewerMode) {
+                    loadAllDataFromLocalStorage();
+                    render();
+                    renderHistory();
+                    renderLeader();
+                }
             }
         }
 
@@ -3013,13 +3029,7 @@
 
             function updateOnlineStatus() {
                 if (!navigator.onLine) {
-                    offlineWarning.style.display = 'block';
-                } else {
-                    offlineWarning.style.display = 'none';
-                    if (githubToken && !isViewerMode) {
-                        saveAllDataToLocalStorage();
-                        loadFromGitHub(currentTab);
-                    }
+                    // Показываем предупреждение, если нет интернета
                 }
             }
 
