@@ -422,21 +422,30 @@
             backdrop-filter: blur(20px) saturate(180%);
             -webkit-backdrop-filter: blur(20px) saturate(180%);
             border: 1px solid rgba(255, 255, 255, 0.04);
-            color: #1c2a2a;
+            color: #ffffff !important;
             transition: all 0.3s ease;
             outline: none;
             font-family: 'SF Pro Text', sans-serif;
         }
 
         body.dark .token-input input {
-            background: rgba(255, 255, 255, 0.03);
-            color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.04);
         }
 
         .token-input input:focus {
             border-color: var(--accent-color, #0abab5);
             box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.08);
+        }
+
+        .token-input input::placeholder {
+            color: rgba(255, 255, 255, 0.4) !important;
+            font-family: 'SF Pro Text', sans-serif;
+        }
+
+        body.dark .token-input input::placeholder {
+            color: rgba(255, 255, 255, 0.3) !important;
         }
 
         .token-input .hint {
@@ -636,7 +645,7 @@
             color: var(--text-dark);
         }
 
-        /* ----- форма ----- */
+        /* ----- форма (ВСЕ ПОЛЯ ВВОДА С БЕЛЫМ ТЕКСТОМ) ----- */
         .input-row {
             display: flex;
             flex-wrap: wrap;
@@ -671,7 +680,7 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.04);
-            color: #1c2a2a;
+            color: #ffffff !important;
             transition: all 0.3s ease;
             outline: none;
             width: 100%;
@@ -680,9 +689,9 @@
         }
 
         body.dark .input-group input {
-            background: rgba(255, 255, 255, 0.03);
-            color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.04);
         }
 
         .input-group input:focus {
@@ -691,14 +700,12 @@
         }
 
         .input-group input::placeholder {
-            color: var(--text-light);
-            opacity: 0.6;
+            color: rgba(255, 255, 255, 0.4) !important;
             font-family: 'SF Pro Text', sans-serif;
         }
 
         body.dark .input-group input::placeholder {
-            color: var(--text-dark);
-            opacity: 0.6;
+            color: rgba(255, 255, 255, 0.3) !important;
         }
 
         .comment-input {
@@ -709,7 +716,7 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.03);
-            color: #1c2a2a;
+            color: #ffffff !important;
             width: 100%;
             outline: none;
             transition: all 0.3s ease;
@@ -719,9 +726,9 @@
         }
 
         body.dark .comment-input {
-            background: rgba(255, 255, 255, 0.02);
-            color: #ffffff;
-            border-color: rgba(255, 255, 255, 0.015);
+            background: rgba(255, 255, 255, 0.03);
+            color: #ffffff !important;
+            border-color: rgba(255, 255, 255, 0.03);
         }
 
         .comment-input:focus {
@@ -730,14 +737,12 @@
         }
 
         .comment-input::placeholder {
-            color: var(--text-light);
-            opacity: 0.5;
+            color: rgba(255, 255, 255, 0.4) !important;
             font-family: 'SF Pro Text', sans-serif;
         }
 
         body.dark .comment-input::placeholder {
-            color: var(--text-dark);
-            opacity: 0.5;
+            color: rgba(255, 255, 255, 0.3) !important;
         }
 
         /* ----- вкладки ----- */
@@ -1122,6 +1127,23 @@
             border-color: rgba(255, 59, 48, 0.3);
         }
 
+        /* ----- УДАЛЕНИЕ — поле ввода с белым текстом ----- */
+        #deleteName {
+            color: #ffffff !important;
+        }
+
+        #deleteName::placeholder {
+            color: rgba(255, 255, 255, 0.4) !important;
+        }
+
+        body.dark #deleteName {
+            color: #ffffff !important;
+        }
+
+        body.dark #deleteName::placeholder {
+            color: rgba(255, 255, 255, 0.3) !important;
+        }
+
         /* ----- футер ----- */
         .footer {
             display: flex;
@@ -1258,7 +1280,7 @@
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.04);
-            color: #1c2a2a;
+            color: #ffffff !important;
             outline: none;
             margin-bottom: 16px;
             font-family: 'SF Pro Text', sans-serif;
@@ -1266,13 +1288,21 @@
 
         body.dark .modal-box input {
             background: rgba(255, 255, 255, 0.03);
-            color: #ffffff;
+            color: #ffffff !important;
             border-color: rgba(255, 255, 255, 0.02);
         }
 
         .modal-box input:focus {
             border-color: var(--accent-color, #0abab5);
             box-shadow: 0 0 0 4px rgba(10, 186, 181, 0.06);
+        }
+
+        .modal-box input::placeholder {
+            color: rgba(255, 255, 255, 0.4) !important;
+        }
+
+        body.dark .modal-box input::placeholder {
+            color: rgba(255, 255, 255, 0.3) !important;
         }
 
         .modal-box .btn-row {
@@ -1729,7 +1759,7 @@
                 <button class="tab-btn" data-tab="evening">🌙 Вечерний</button>
             </div>
 
-            <!-- ФОРМА ДОБАВЛЕНИЯ (скрывается для зрителей) -->
+            <!-- ФОРМА ДОБАВЛЕНИЯ -->
             <div class="section-glass" id="addSection">
                 <div class="input-row">
                     <div class="input-group">
@@ -1750,11 +1780,11 @@
                 </div>
             </div>
 
-            <!-- УДАЛЕНИЕ (скрывается для зрителей) -->
+            <!-- УДАЛЕНИЕ -->
             <div class="section-glass" id="deleteSection" style="border-color: rgba(255,59,48,0.06);">
                 <label class="delete-section-label">🗑️ Удалить участника</label>
                 <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
-                    <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.06); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.03); color:#1c2a2a; outline:none; min-width:120px; font-family:'SF Pro Text', sans-serif;" maxlength="50">
+                    <input type="text" id="deleteName" placeholder="Введите имя" style="flex:1; padding:14px 20px; border-radius:980px; font-size:15px; background:rgba(255,255,255,0.06); backdrop-filter:blur(10px); border:1px solid rgba(255,255,255,0.03); outline:none; min-width:120px; font-family:'SF Pro Text', sans-serif;" maxlength="50">
                     <button class="btn btn-sm btn-delete" id="deleteBtn" style="min-width:auto;">✕ Удалить</button>
                 </div>
             </div>
@@ -1789,7 +1819,7 @@
                 </div>
             </div>
 
-            <!-- ДЕЙСТВИЯ (скрываются для зрителей) -->
+            <!-- ДЕЙСТВИЯ -->
             <div class="actions" id="actionsSection">
                 <button class="btn" id="calcBtn">🏆 Победитель</button>
                 <button class="btn" id="syncBtn">🔄 Синхронизировать</button>
@@ -2225,16 +2255,13 @@
             tokenBlock.style.display = 'none';
             appContent.style.display = 'block';
             viewerBadge.classList.add('show');
-            // Скрываем управляющие элементы
             addSection.style.display = 'none';
             deleteSection.style.display = 'none';
             actionsSection.style.display = 'none';
 
-            // Загружаем данные из GitHub
             showToast('🔄 Загрузка данных из GitHub...', 'info');
 
             try {
-                // Загружаем данные для всех номинаций
                 await loadFromGitHub('national');
                 await loadFromGitHub('free');
                 await loadFromGitHub('evening');
@@ -2245,7 +2272,6 @@
                 showToast('✅ Данные загружены из GitHub', 'info');
             } catch (e) {
                 showToast('⚠️ Не удалось загрузить данные из GitHub. Проверьте интернет.', 'error');
-                // Пробуем загрузить из localStorage как резерв
                 loadAllDataFromLocalStorage();
                 render();
                 renderHistory();
@@ -2682,7 +2708,6 @@
                 var jsonData = JSON.parse(content);
                 if (jsonData) {
                     if (!githubToken && isViewerMode) {
-                        // Для зрителей обновляем данные
                         if (jsonData.votes) {
                             allData[tab].votes = jsonData.votes;
                         }
@@ -2713,7 +2738,6 @@
                 }
             } catch (e) {
                 setStatus('📂 Из кэша', '#8a8a9a');
-                // При ошибке загрузки пробуем использовать локальные данные
                 if (isViewerMode) {
                     loadAllDataFromLocalStorage();
                     render();
@@ -2944,7 +2968,6 @@
                 appContent.style.display = 'block';
                 viewerBadge.classList.remove('show');
                 isViewerMode = false;
-                // Показываем управляющие элементы
                 addSection.style.display = 'block';
                 deleteSection.style.display = 'block';
                 actionsSection.style.display = 'block';
