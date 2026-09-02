@@ -11,9 +11,23 @@
       "name": "1",
       "score": 5,
       "comment": ""
+    },
+    {
+      "id": "1788364293774_llfend",
+      "name": "2",
+      "score": 8,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "2",
+      "score": 8,
+      "comment": "",
+      "time": "18:51:33",
+      "date": "02.09.2026"
+    },
     {
       "type": "vote",
       "name": "1",
