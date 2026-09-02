@@ -11,9 +11,23 @@
       "name": "1",
       "score": 3,
       "comment": ""
+    },
+    {
+      "id": "1788364339024_kdxf44",
+      "name": "2",
+      "score": 5,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "2",
+      "score": 5,
+      "comment": "",
+      "time": "18:52:19",
+      "date": "02.09.2026"
+    },
     {
       "type": "vote",
       "name": "1",
