@@ -5,9 +5,23 @@
       "name": "Вроде норм",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1788364267444_2iokta",
+      "name": "1",
+      "score": 5,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "1",
+      "score": 5,
+      "comment": "",
+      "time": "18:51:07",
+      "date": "02.09.2026"
+    },
     {
       "type": "vote",
       "name": "Вроде норм",
