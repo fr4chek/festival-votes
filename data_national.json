@@ -23,9 +23,23 @@
       "name": "Анна",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1788364225981_e8rptb",
+      "name": "1",
+      "score": 10,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "1",
+      "score": 10,
+      "comment": "",
+      "time": "18:50:25",
+      "date": "02.09.2026"
+    },
     {
       "type": "delete",
       "name": "А почему я как гость добавляю",
