@@ -29,9 +29,23 @@
       "name": "1",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1788364252245_0q1m6l",
+      "name": "2",
+      "score": 10,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "2",
+      "score": 10,
+      "comment": "",
+      "time": "18:50:52",
+      "date": "02.09.2026"
+    },
     {
       "type": "vote",
       "name": "1",
