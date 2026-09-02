@@ -5,9 +5,23 @@
       "name": "Давсё норм",
       "score": 10,
       "comment": ""
+    },
+    {
+      "id": "1788364335341_tek7tr",
+      "name": "1",
+      "score": 3,
+      "comment": ""
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "1",
+      "score": 3,
+      "comment": "",
+      "time": "18:52:15",
+      "date": "02.09.2026"
+    },
     {
       "type": "vote",
       "name": "Давсё норм",
