@@ -17,9 +17,25 @@
       "name": "2",
       "score": 5,
       "comment": ""
+    },
+    {
+      "id": "1788808838521_5fygw9",
+      "name": "Анна",
+      "score": 9,
+      "comment": "",
+      "jury": "admin"
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "Анна",
+      "score": 9,
+      "comment": "",
+      "time": "22:20:38",
+      "date": "07.09.2026",
+      "jury": "admin"
+    },
     {
       "type": "vote",
       "name": "2",
