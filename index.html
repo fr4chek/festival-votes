@@ -430,27 +430,6 @@
             border-color: rgba(52, 199, 89, 0.15);
         }
 
-        .btn-admin {
-            background: rgba(255, 215, 0, 0.12);
-            border: 1px solid rgba(255, 215, 0, 0.15);
-            color: #ffd700;
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-        }
-        .btn-admin:hover {
-            background: rgba(255, 215, 0, 0.2);
-            border-color: rgba(255, 215, 0, 0.25);
-        }
-        body.dark .btn-admin {
-            background: rgba(255, 215, 0, 0.06);
-            border-color: rgba(255, 215, 0, 0.08);
-            color: #ffd700;
-        }
-        body.dark .btn-admin:hover {
-            background: rgba(255, 215, 0, 0.12);
-            border-color: rgba(255, 215, 0, 0.15);
-        }
-
         .btn-leader {
             background: rgba(255, 215, 0, 0.15);
             border: 1px solid rgba(255, 215, 0, 0.2);
@@ -1783,7 +1762,7 @@
 
         <div id="toastContainer" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;max-width:90%;"></div>
 
-        <!-- СТАТУС (скрыт) -->
+        <!-- СТАТУС -->
         <div id="statusBar" class="status-bar"></div>
 
         <!-- БЛОК ВХОДА -->
@@ -1796,9 +1775,9 @@
                 <button class="btn btn-leader" id="leaderLoginBtn">👑 Войти как руководитель</button>
             </div>
             <div style="margin-top:16px; border-top:1px solid rgba(255,255,255,0.06); padding-top:14px;">
-                <div class="hint" style="margin-bottom:8px;">🔗 Для администратора с синхронизацией GitHub</div>
+                <div class="hint" style="margin-bottom:8px;">🔗 Для синхронизации с GitHub (все роли)</div>
                 <input type="password" id="githubTokenInput" placeholder="Введите GitHub токен (ghp_...)" style="width:100%; padding:14px 20px; border-radius:980px; font-size:16px; background:rgba(255,255,255,0.12); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.04); color:#ffffff !important; outline:none; font-family:'SF Pro Text', sans-serif;">
-                <button class="btn" id="githubConnectBtn" style="margin-top:8px; width:100%;">🔗 Подключить GitHub (админ)</button>
+                <button class="btn" id="githubConnectBtn" style="margin-top:8px; width:100%;">🔗 Подключить GitHub</button>
             </div>
         </div>
 
@@ -1886,7 +1865,7 @@
                 </table>
             </div>
 
-            <!-- СВОДНАЯ ТАБЛИЦА -->
+            <!-- СВОДНАЯ ТАБЛИЦА (только для руководителя) -->
             <div id="summarySection" style="display: none;">
                 <div class="section-glass" style="border-color: rgba(255,215,0,0.15);">
                     <div class="section-title" style="color: #ffd700;">📊 Сводная статистика (все жюри)</div>
@@ -1908,7 +1887,7 @@
                 </div>
             </div>
 
-            <!-- ИСТОРИЯ -->
+            <!-- ИСТОРИЯ (только для руководителя) -->
             <div id="historySection" style="display: none;">
                 <div class="section-glass">
                     <div class="section-title">📋 История голосований (все жюри)</div>
@@ -2323,7 +2302,6 @@
                 document.getElementById('historySection').style.display = 'none';
                 document.getElementById('juryHistorySection').style.display = 'block';
                 loadAllDataFromLocalStorage();
-                // Подгружаем данные с GitHub если есть токен
                 if (githubToken) {
                     loadFromGitHub(currentNomination, currentStyle);
                 }
@@ -2385,7 +2363,6 @@
                 document.getElementById('historySection').style.display = 'none';
                 document.getElementById('juryHistorySection').style.display = 'block';
                 loadAllDataFromLocalStorage();
-                // Загружаем данные с GitHub если есть токен
                 if (githubToken) {
                     loadFromGitHub(currentNomination, currentStyle);
                 }
@@ -2467,7 +2444,7 @@
             }
         });
 
-        // ===== ПОДКЛЮЧЕНИЕ GITHUB (админ) =====
+        // ===== ПОДКЛЮЧЕНИЕ GITHUB (ДЛЯ ВСЕХ РОЛЕЙ) =====
         var githubToken = '';
 
         document.getElementById('githubConnectBtn').addEventListener('click', async function() {
@@ -2475,6 +2452,7 @@
             if (!token) { showToast('Введите GitHub токен', 'warning'); return; }
             if (!token.startsWith('ghp_')) { showToast('Токен должен начинаться с "ghp_"', 'warning'); return; }
             githubToken = token;
+
             try {
                 var testResponse = await fetch('https://api.github.com/user', {
                     headers: { 'Authorization': 'token ' + githubToken }
@@ -2485,41 +2463,52 @@
                     githubToken = '';
                     return;
                 }
-                // Автоматически входим как админ
-                isAdminMode = true;
-                isJuryMode = false;
-                userRole = 'admin';
-                saveSessionState();
-                document.getElementById('tokenBlock').style.display = 'none';
-                document.getElementById('appContent').style.display = 'block';
-                document.getElementById('roleBadge').textContent = '👑 Руководитель (GitHub)';
-                document.getElementById('roleBadge').className = 'role-badge show admin';
-                document.getElementById('addSection').style.display = 'block';
-                document.getElementById('deleteSection').style.display = 'block';
-                document.getElementById('actionsSection').style.display = 'flex';
-                document.getElementById('summarySection').style.display = 'block';
-                document.getElementById('historySection').style.display = 'block';
-                document.getElementById('juryHistorySection').style.display = 'none';
-                loadAllDataFromLocalStorage();
-                // Загружаем все данные
-                for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
-                    for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
-                        await loadFromGitHub(NOMINATIONS[nomIdx], STYLES[styleIdx]);
+
+                showToast('✅ GitHub подключён! Загружаем данные...', 'info');
+
+                // Если пользователь уже авторизован как жюри или админ — просто обновляем токен
+                if (isJuryMode || isAdminMode) {
+                    // Обновляем токен в сессии
+                    saveSessionState();
+                    // Загружаем данные для текущей роли
+                    if (isAdminMode) {
+                        for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
+                            for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
+                                await loadFromGitHub(NOMINATIONS[nomIdx], STYLES[styleIdx]);
+                            }
+                        }
+                        renderSummary();
+                        renderHistory();
+                    } else if (isJuryMode) {
+                        await loadFromGitHub(currentNomination, currentStyle);
+                        renderJuryHistory();
                     }
+                    renderAll();
+                    renderLeader();
+                    showToast('✅ Данные синхронизированы с GitHub!', 'info');
+                } else {
+                    // Если пользователь не авторизован — предлагаем выбрать роль
+                    showToast('⚠️ Сначала войдите как жюри или руководитель', 'warning');
+                    githubToken = '';
                 }
-                renderAll();
-                renderSummary();
-                renderHistory();
-                renderLeader();
-                showToast('✅ GitHub подключён! Вы вошли как администратор.', 'info');
+
+                // Настраиваем автосинхронизацию
                 if (autoSyncInterval) clearInterval(autoSyncInterval);
                 autoSyncInterval = setInterval(function() {
                     if (githubToken && navigator.onLine) {
-                        loadFromGitHub(currentNomination, currentStyle);
-                        if (isAdminMode) { renderSummary();
-                            renderHistory(); }
+                        if (isAdminMode) {
+                            loadFromGitHub(currentNomination, currentStyle);
+                            renderSummary();
+                            renderHistory();
+                        } else if (isJuryMode) {
+                            loadFromGitHub(currentNomination, currentStyle);
+                            renderJuryHistory();
+                        }
+                        renderAll();
+                        renderLeader();
                     }
                 }, 15000);
+
             } catch (e) {
                 showToast('❌ Ошибка: ' + e.message, 'error');
                 githubToken = '';
@@ -2812,9 +2801,11 @@
             }
         }
 
-        // ===== СВОДНАЯ ТАБЛИЦА =====
+        // ===== СВОДНАЯ ТАБЛИЦА (только для руководителя) =====
         function renderSummary() {
             if (!isAdminMode) return;
+
+            // Собираем всех участников из всех номинаций и стилей
             var allParticipants = {};
             NOMINATIONS.forEach(function(nom) {
                 STYLES.forEach(function(style) {
@@ -2827,31 +2818,39 @@
                     });
                 });
             });
+
             var names = Object.keys(allParticipants).sort();
             if (names.length === 0) {
                 summaryBody.innerHTML = '<tr><td colspan="6" class="empty-message">Нет данных для сводки</td></tr>';
                 return;
             }
+
             var html = '';
             names.forEach(function(name) {
                 var data = allParticipants[name];
                 var totalSum = 0,
                     totalCount = 0;
+
                 html += '<tr>';
                 html += '<td><strong>' + escapeHtml(name) + '</strong></td>';
+
+                // Для каждой номинации показываем средний балл по всем стилям
                 NOMINATIONS.forEach(function(nom) {
+                    var nomScores = [];
                     STYLES.forEach(function(style) {
                         var key = nom + '_' + style;
                         var scores = data[key] || [];
-                        var sum = 0;
-                        scores.forEach(function(s) { sum += s; });
-                        var avg = scores.length > 0 ? sum / scores.length : 0;
-                        totalSum += sum;
-                        totalCount += scores.length;
-                        html += '<td>' + (scores.length > 0 ? avg.toFixed(2) : '—') + ' (' + scores.length +
-                            ')' + '</td>';
+                        scores.forEach(function(s) { nomScores.push(s); });
                     });
+                    var sum = 0;
+                    nomScores.forEach(function(s) { sum += s; });
+                    var avg = nomScores.length > 0 ? sum / nomScores.length : 0;
+                    totalSum += sum;
+                    totalCount += nomScores.length;
+                    html += '<td>' + (nomScores.length > 0 ? avg.toFixed(2) : '—') + ' (' + nomScores.length +
+                        ')' + '</td>';
                 });
+
                 var overallAvg = totalCount > 0 ? totalSum / totalCount : 0;
                 html += '<td class="total-score">' + overallAvg.toFixed(2) + '</td>';
                 html += '<td><button class="btn btn-sm btn-details" data-name="' + escapeHtml(name) +
@@ -2859,6 +2858,7 @@
                 html += '</tr>';
             });
             summaryBody.innerHTML = html;
+
             document.querySelectorAll('.btn-details').forEach(function(btn) {
                 btn.addEventListener('click', function() {
                     var name = this.dataset.name;
@@ -2877,7 +2877,7 @@
             return labels[style] || style;
         }
 
-        // ===== ДЕТАЛИ УЧАСТНИКА =====
+        // ===== ДЕТАЛИ УЧАСТНИКА (только для руководителя) =====
         function showParticipantDetails(name) {
             if (!isAdminMode) return;
             detailsParticipantName.textContent = '👤 ' + name;
@@ -2886,6 +2886,7 @@
             var totalSum = 0,
                 totalCount = 0;
             var cardsHtml = '';
+
             NOMINATIONS.forEach(function(nom) {
                 STYLES.forEach(function(style) {
                     var votes = allData[nom][style].votes || [];
@@ -2906,9 +2907,11 @@
                         `<div class="details-card"><div class="nomination">${getNominationLabel(nom)} ${getStyleLabel(style)}</div><div class="score-value">${scores.length > 0 ? avg.toFixed(2) : '—'}</div><div class="votes-count">${scores.length} оценок</div></div>`;
                 });
             });
+
             detailsGrid.innerHTML = cardsHtml;
             var overall = totalCount > 0 ? totalSum / totalCount : 0;
             detailsTotal.textContent = '🏆 Общий средний балл: ' + overall.toFixed(2) + ' (' + totalCount + ' оценок)';
+
             if (allScores.length === 0) {
                 detailsScoresList.innerHTML = '<div style="color: rgba(255,255,255,0.3); text-align:center;">Нет оценок</div>';
             } else {
@@ -3375,6 +3378,8 @@
                     if (githubToken && navigator.onLine) {
                         loadFromGitHub(currentNomination, currentStyle);
                         if (isJuryMode) { renderJuryHistory(); }
+                        renderAll();
+                        renderLeader();
                     }
                 }, 15000);
             }
