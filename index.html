@@ -55,12 +55,38 @@
             font-style: normal;
         }
 
-        html, body, .container, .btn, input, textarea, select, button,
-        .header, .status-bar, .token-input, .section-glass, .stat-card,
-        .leader-card, .tab-btn, table, th, td, .history-item, .modal-box,
-        .color-option, .podium-item, .footer, .footer-bottom, .color-picker-label,
-        .theme-toggle, .hint, .save-status, #winnerDisplay, #statusDisplay,
-        .palette-title, .color-name {
+        html,
+        body,
+        .container,
+        .btn,
+        input,
+        textarea,
+        select,
+        button,
+        .header,
+        .status-bar,
+        .token-input,
+        .section-glass,
+        .stat-card,
+        .leader-card,
+        .tab-btn,
+        table,
+        th,
+        td,
+        .history-item,
+        .modal-box,
+        .color-option,
+        .podium-item,
+        .footer,
+        .footer-bottom,
+        .color-picker-label,
+        .theme-toggle,
+        .hint,
+        .save-status,
+        #winnerDisplay,
+        #statusDisplay,
+        .palette-title,
+        .color-name {
             font-family: -apple-system, 'SF Pro Display', 'SF Pro Text', 'Helvetica Neue', sans-serif;
         }
 
@@ -271,6 +297,11 @@
             border: 1px solid rgba(255, 215, 0, 0.2);
             color: #ffd700;
         }
+        .role-badge.leader {
+            background: rgba(0, 122, 255, 0.15);
+            border: 1px solid rgba(0, 122, 255, 0.2);
+            color: #007aff;
+        }
 
         .color-picker-wrapper {
             display: flex;
@@ -398,13 +429,14 @@
             color: var(--text-dark);
             opacity: 0.6;
         }
-        .token-buttons {
+
+        .role-selector {
             display: flex;
             gap: 10px;
             margin-top: 12px;
             flex-wrap: wrap;
         }
-        .token-buttons .btn {
+        .role-selector .btn {
             flex: 1;
             min-width: 100px;
         }
@@ -431,20 +463,43 @@
         }
 
         .btn-leader {
-            background: rgba(255, 215, 0, 0.15);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            color: #ffd700;
+            background: rgba(0, 122, 255, 0.12);
+            border: 1px solid rgba(0, 122, 255, 0.15);
+            color: #007aff;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
         }
         .btn-leader:hover {
-            background: rgba(255, 215, 0, 0.25);
-            border-color: rgba(255, 215, 0, 0.3);
+            background: rgba(0, 122, 255, 0.2);
+            border-color: rgba(0, 122, 255, 0.25);
         }
         body.dark .btn-leader {
+            background: rgba(0, 122, 255, 0.06);
+            border-color: rgba(0, 122, 255, 0.08);
+            color: #007aff;
+        }
+        body.dark .btn-leader:hover {
+            background: rgba(0, 122, 255, 0.12);
+            border-color: rgba(0, 122, 255, 0.15);
+        }
+
+        .btn-admin {
+            background: rgba(255, 215, 0, 0.12);
+            border: 1px solid rgba(255, 215, 0, 0.15);
+            color: #ffd700;
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+        .btn-admin:hover {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: rgba(255, 215, 0, 0.25);
+        }
+        body.dark .btn-admin {
             background: rgba(255, 215, 0, 0.06);
             border-color: rgba(255, 215, 0, 0.08);
             color: #ffd700;
         }
-        body.dark .btn-leader:hover {
+        body.dark .btn-admin:hover {
             background: rgba(255, 215, 0, 0.12);
             border-color: rgba(255, 215, 0, 0.15);
         }
@@ -1644,7 +1699,7 @@
             .summary-table-wrap table {
                 min-width: 400px;
             }
-            .token-buttons .btn {
+            .role-selector .btn {
                 min-width: 80px;
                 font-size: 13px;
                 padding: 10px 16px;
@@ -1718,10 +1773,10 @@
             .details-grid {
                 grid-template-columns: 1fr;
             }
-            .token-buttons {
+            .role-selector {
                 flex-direction: column;
             }
-            .token-buttons .btn {
+            .role-selector .btn {
                 width: 100%;
                 min-width: auto;
             }
@@ -1768,16 +1823,27 @@
         <!-- БЛОК ВХОДА -->
         <div class="token-input" id="tokenBlock">
             <label>🔑 Вход в систему</label>
-            <input type="password" id="passwordInput" placeholder="Введите пароль" autocomplete="off">
-            <div class="hint">Введите пароль для входа как жюри или руководитель</div>
-            <div class="token-buttons">
-                <button class="btn btn-jury" id="juryLoginBtn">👤 Войти как жюри</button>
-                <button class="btn btn-leader" id="leaderLoginBtn">👑 Войти как руководитель</button>
+
+            <!-- Шаг 1: GitHub токен -->
+            <div id="stepToken">
+                <input type="password" id="githubTokenInput" placeholder="Введите GitHub токен (ghp_...)" autocomplete="off">
+                <button class="btn" id="githubConnectBtn" style="width:100%; margin-top:8px;">🔗 Подключить GitHub</button>
+                <div class="hint" style="margin-top:8px;">Сначала подключите GitHub для синхронизации данных</div>
             </div>
-            <div style="margin-top:16px; border-top:1px solid rgba(255,255,255,0.06); padding-top:14px;">
-                <div class="hint" style="margin-bottom:8px;">🔗 Для синхронизации с GitHub (все роли)</div>
-                <input type="password" id="githubTokenInput" placeholder="Введите GitHub токен (ghp_...)" style="width:100%; padding:14px 20px; border-radius:980px; font-size:16px; background:rgba(255,255,255,0.12); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.04); color:#ffffff !important; outline:none; font-family:'SF Pro Text', sans-serif;">
-                <button class="btn" id="githubConnectBtn" style="margin-top:8px; width:100%;">🔗 Подключить GitHub</button>
+
+            <!-- Шаг 2: Выбор роли (появляется после подключения токена) -->
+            <div id="stepRole" style="display:none; margin-top:16px; border-top:1px solid rgba(255,255,255,0.06); padding-top:16px;">
+                <label style="font-weight:600; font-size:14px; display:block; margin-bottom:8px;">👤 Выберите роль</label>
+                <div class="role-selector">
+                    <button class="btn btn-jury" id="roleJuryBtn">👤 Жюри</button>
+                    <button class="btn btn-leader" id="roleLeaderBtn">👔 Руководитель</button>
+                    <button class="btn btn-admin" id="roleAdminBtn">👑 Администратор</button>
+                </div>
+                <div id="rolePasswordBlock" style="display:none; margin-top:12px;">
+                    <input type="password" id="rolePasswordInput" placeholder="Введите пароль для роли" style="width:100%; padding:14px 20px; border-radius:980px; font-size:16px; background:rgba(255,255,255,0.12); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.04); color:#ffffff !important; outline:none; font-family:'SF Pro Text', sans-serif;">
+                    <button class="btn" id="rolePasswordConfirmBtn" style="width:100%; margin-top:8px;">✅ Подтвердить</button>
+                    <div class="hint" id="rolePasswordHint" style="margin-top:6px;"></div>
+                </div>
             </div>
         </div>
 
@@ -1836,7 +1902,7 @@
                 </div>
             </div>
 
-            <!-- УДАЛЕНИЕ -->
+            <!-- УДАЛЕНИЕ (только для админа) -->
             <div class="section-glass" id="deleteSection" style="border-color: rgba(255,59,48,0.06); display:none;">
                 <label class="delete-section-label">🗑️ Удалить участника</label>
                 <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
@@ -1865,7 +1931,7 @@
                 </table>
             </div>
 
-            <!-- СВОДНАЯ ТАБЛИЦА (только для руководителя) -->
+            <!-- СВОДНАЯ ТАБЛИЦА (только для руководителя и админа) -->
             <div id="summarySection" style="display: none;">
                 <div class="section-glass" style="border-color: rgba(255,215,0,0.15);">
                     <div class="section-title" style="color: #ffd700;">📊 Сводная статистика (все жюри)</div>
@@ -1887,7 +1953,7 @@
                 </div>
             </div>
 
-            <!-- ИСТОРИЯ (только для руководителя) -->
+            <!-- ИСТОРИЯ (только для руководителя и админа) -->
             <div id="historySection" style="display: none;">
                 <div class="section-glass">
                     <div class="section-title">📋 История голосований (все жюри)</div>
@@ -2257,6 +2323,7 @@
                 localStorage.setItem('session', JSON.stringify({
                     isJuryMode: isJuryMode,
                     isAdminMode: isAdminMode,
+                    isLeaderMode: isLeaderMode,
                     juryName: juryName,
                     userRole: userRole,
                     githubToken: githubToken
@@ -2272,13 +2339,22 @@
                     if (data.isJuryMode) {
                         isJuryMode = true;
                         isAdminMode = false;
+                        isLeaderMode = false;
                         juryName = data.juryName || 'Жюри';
                         userRole = 'jury';
                         githubToken = data.githubToken || '';
                         return 'jury';
+                    } else if (data.isLeaderMode) {
+                        isLeaderMode = true;
+                        isJuryMode = false;
+                        isAdminMode = false;
+                        userRole = 'leader';
+                        githubToken = data.githubToken || '';
+                        return 'leader';
                     } else if (data.isAdminMode) {
                         isAdminMode = true;
                         isJuryMode = false;
+                        isLeaderMode = false;
                         userRole = 'admin';
                         githubToken = data.githubToken || '';
                         return 'admin';
@@ -2297,7 +2373,7 @@
                 document.getElementById('roleBadge').className = 'role-badge show jury';
                 document.getElementById('addSection').style.display = 'block';
                 document.getElementById('deleteSection').style.display = 'none';
-                document.getElementById('actionsSection').style.display = 'none';
+                document.getElementById('actionsSection').style.display = 'block';
                 document.getElementById('summarySection').style.display = 'none';
                 document.getElementById('historySection').style.display = 'none';
                 document.getElementById('juryHistorySection').style.display = 'block';
@@ -2310,14 +2386,14 @@
                 renderLeader();
                 showToast('👤 Добро пожаловать, ' + juryName + '!', 'info');
                 return true;
-            } else if (session === 'admin') {
+            } else if (session === 'leader') {
                 document.getElementById('tokenBlock').style.display = 'none';
                 document.getElementById('appContent').style.display = 'block';
-                document.getElementById('roleBadge').textContent = '👑 Руководитель';
-                document.getElementById('roleBadge').className = 'role-badge show admin';
+                document.getElementById('roleBadge').textContent = '👔 Руководитель';
+                document.getElementById('roleBadge').className = 'role-badge show leader';
                 document.getElementById('addSection').style.display = 'block';
-                document.getElementById('deleteSection').style.display = 'block';
-                document.getElementById('actionsSection').style.display = 'flex';
+                document.getElementById('deleteSection').style.display = 'none';
+                document.getElementById('actionsSection').style.display = 'block';
                 document.getElementById('summarySection').style.display = 'block';
                 document.getElementById('historySection').style.display = 'block';
                 document.getElementById('juryHistorySection').style.display = 'none';
@@ -2333,194 +2409,51 @@
                 renderSummary();
                 renderHistory();
                 renderLeader();
-                showToast('👑 Добро пожаловать, руководитель!', 'info');
+                showToast('👔 Добро пожаловать, руководитель!', 'info');
+                return true;
+            } else if (session === 'admin') {
+                document.getElementById('tokenBlock').style.display = 'none';
+                document.getElementById('appContent').style.display = 'block';
+                document.getElementById('roleBadge').textContent = '👑 Администратор';
+                document.getElementById('roleBadge').className = 'role-badge show admin';
+                document.getElementById('addSection').style.display = 'block';
+                document.getElementById('deleteSection').style.display = 'block';
+                document.getElementById('actionsSection').style.display = 'block';
+                document.getElementById('summarySection').style.display = 'block';
+                document.getElementById('historySection').style.display = 'block';
+                document.getElementById('juryHistorySection').style.display = 'none';
+                loadAllDataFromLocalStorage();
+                if (githubToken) {
+                    for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
+                        for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
+                            loadFromGitHub(NOMINATIONS[nomIdx], STYLES[styleIdx]);
+                        }
+                    }
+                }
+                renderAll();
+                renderSummary();
+                renderHistory();
+                renderLeader();
+                showToast('👑 Добро пожаловать, администратор!', 'info');
                 return true;
             }
             return false;
         }
 
         // ===== ПАРОЛИ =====
-        const JURY_PASSWORD = 'GGWP';
-        const ADMIN_PASSWORD = 'GLHF';
+        const PASSWORDS = {
+            jury: 'GGWP',
+            leader: 'GLHF',
+            admin: 'EGOR'
+        };
 
-        // ===== ФУНКЦИИ ВХОДА =====
-        function completeJuryLogin() {
-            var name = prompt('Введите ваше имя (как жюри):');
-            if (name && name.trim()) {
-                juryName = sanitizeName(name.trim());
-                isJuryMode = true;
-                isAdminMode = false;
-                userRole = 'jury';
-                saveSessionState();
-                document.getElementById('tokenBlock').style.display = 'none';
-                document.getElementById('appContent').style.display = 'block';
-                document.getElementById('roleBadge').textContent = '👤 Жюри: ' + juryName;
-                document.getElementById('roleBadge').className = 'role-badge show jury';
-                document.getElementById('addSection').style.display = 'block';
-                document.getElementById('deleteSection').style.display = 'none';
-                document.getElementById('actionsSection').style.display = 'none';
-                document.getElementById('summarySection').style.display = 'none';
-                document.getElementById('historySection').style.display = 'none';
-                document.getElementById('juryHistorySection').style.display = 'block';
-                loadAllDataFromLocalStorage();
-                if (githubToken) {
-                    loadFromGitHub(currentNomination, currentStyle);
-                }
-                renderAll();
-                renderJuryHistory();
-                renderLeader();
-                showToast('👤 Вы вошли как жюри: ' + juryName, 'info');
-            } else {
-                showToast('❌ Имя не может быть пустым', 'error');
-            }
-        }
-
-        function completeAdminLogin() {
-            isAdminMode = true;
-            isJuryMode = false;
-            userRole = 'admin';
-            saveSessionState();
-            document.getElementById('tokenBlock').style.display = 'none';
-            document.getElementById('appContent').style.display = 'block';
-            document.getElementById('roleBadge').textContent = '👑 Руководитель';
-            document.getElementById('roleBadge').className = 'role-badge show admin';
-            document.getElementById('addSection').style.display = 'block';
-            document.getElementById('deleteSection').style.display = 'block';
-            document.getElementById('actionsSection').style.display = 'flex';
-            document.getElementById('summarySection').style.display = 'block';
-            document.getElementById('historySection').style.display = 'block';
-            document.getElementById('juryHistorySection').style.display = 'none';
-            loadAllDataFromLocalStorage();
-            if (githubToken) {
-                for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
-                    for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
-                        loadFromGitHub(NOMINATIONS[nomIdx], STYLES[styleIdx]);
-                    }
-                }
-            }
-            renderAll();
-            renderSummary();
-            renderHistory();
-            renderLeader();
-            showToast('👑 Вы вошли как руководитель.', 'info');
-        }
-
-        // ===== ОБРАБОТЧИКИ ВХОДА =====
-        document.getElementById('juryLoginBtn').addEventListener('click', function() {
-            var pass = document.getElementById('passwordInput').value.trim();
-            if (pass === JURY_PASSWORD) {
-                completeJuryLogin();
-            } else {
-                showToast('❌ Неверный пароль для жюри!', 'error');
-                document.getElementById('passwordInput').value = '';
-                document.getElementById('passwordInput').focus();
-            }
-        });
-
-        document.getElementById('leaderLoginBtn').addEventListener('click', function() {
-            var pass = document.getElementById('passwordInput').value.trim();
-            if (pass === ADMIN_PASSWORD) {
-                completeAdminLogin();
-            } else {
-                showToast('❌ Неверный пароль для руководителя!', 'error');
-                document.getElementById('passwordInput').value = '';
-                document.getElementById('passwordInput').focus();
-            }
-        });
-
-        document.getElementById('passwordInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                var pass = this.value.trim();
-                if (pass === JURY_PASSWORD) {
-                    document.getElementById('juryLoginBtn').click();
-                } else if (pass === ADMIN_PASSWORD) {
-                    document.getElementById('leaderLoginBtn').click();
-                } else {
-                    showToast('❌ Неверный пароль!', 'error');
-                    this.value = '';
-                    this.focus();
-                }
-            }
-        });
-
-        // ===== ПОДКЛЮЧЕНИЕ GITHUB (ДЛЯ ВСЕХ РОЛЕЙ) =====
+        // ===== ПЕРЕМЕННЫЕ РОЛЕЙ =====
         var githubToken = '';
-
-        document.getElementById('githubConnectBtn').addEventListener('click', async function() {
-            var token = document.getElementById('githubTokenInput').value.trim();
-            if (!token) { showToast('Введите GitHub токен', 'warning'); return; }
-            if (!token.startsWith('ghp_')) { showToast('Токен должен начинаться с "ghp_"', 'warning'); return; }
-            githubToken = token;
-
-            try {
-                var testResponse = await fetch('https://api.github.com/user', {
-                    headers: { 'Authorization': 'token ' + githubToken }
-                });
-                if (!testResponse.ok) {
-                    if (testResponse.status === 401) showToast('❌ Неверный токен!', 'error');
-                    else showToast('❌ Ошибка: ' + testResponse.status, 'error');
-                    githubToken = '';
-                    return;
-                }
-
-                showToast('✅ GitHub подключён! Загружаем данные...', 'info');
-
-                // Если пользователь уже авторизован как жюри или админ — просто обновляем токен
-                if (isJuryMode || isAdminMode) {
-                    // Обновляем токен в сессии
-                    saveSessionState();
-                    // Загружаем данные для текущей роли
-                    if (isAdminMode) {
-                        for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
-                            for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
-                                await loadFromGitHub(NOMINATIONS[nomIdx], STYLES[styleIdx]);
-                            }
-                        }
-                        renderSummary();
-                        renderHistory();
-                    } else if (isJuryMode) {
-                        await loadFromGitHub(currentNomination, currentStyle);
-                        renderJuryHistory();
-                    }
-                    renderAll();
-                    renderLeader();
-                    showToast('✅ Данные синхронизированы с GitHub!', 'info');
-                } else {
-                    // Если пользователь не авторизован — предлагаем выбрать роль
-                    showToast('⚠️ Сначала войдите как жюри или руководитель', 'warning');
-                    githubToken = '';
-                }
-
-                // Настраиваем автосинхронизацию
-                if (autoSyncInterval) clearInterval(autoSyncInterval);
-                autoSyncInterval = setInterval(function() {
-                    if (githubToken && navigator.onLine) {
-                        if (isAdminMode) {
-                            loadFromGitHub(currentNomination, currentStyle);
-                            renderSummary();
-                            renderHistory();
-                        } else if (isJuryMode) {
-                            loadFromGitHub(currentNomination, currentStyle);
-                            renderJuryHistory();
-                        }
-                        renderAll();
-                        renderLeader();
-                    }
-                }, 15000);
-
-            } catch (e) {
-                showToast('❌ Ошибка: ' + e.message, 'error');
-                githubToken = '';
-            }
-        });
-
-        document.getElementById('githubTokenInput').addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') {
-                e.preventDefault();
-                document.getElementById('githubConnectBtn').click();
-            }
-        });
+        var isJuryMode = false;
+        var isLeaderMode = false;
+        var isAdminMode = false;
+        var juryName = '';
+        var userRole = '';
 
         // ===== ОСНОВНОЙ КОД =====
         var REPO_OWNER = 'fr4chek';
@@ -2537,10 +2470,6 @@
             });
         });
         var autoSyncInterval = null;
-        var userRole = 'jury';
-        var isJuryMode = false;
-        var isAdminMode = false;
-        var juryName = '';
 
         function getCurrentData() {
             return allData[currentNomination][currentStyle];
@@ -2602,6 +2531,205 @@
         var detailsScoresList = document.getElementById('detailsScoresList');
         var closeDetailsBtn = document.getElementById('closeDetailsBtn');
 
+        // ===== ЛОГИКА ВХОДА =====
+
+        // Шаг 1: Подключение GitHub
+        document.getElementById('githubConnectBtn').addEventListener('click', async function() {
+            var token = document.getElementById('githubTokenInput').value.trim();
+            if (!token) { showToast('Введите GitHub токен', 'warning'); return; }
+            if (!token.startsWith('ghp_')) { showToast('Токен должен начинаться с "ghp_"', 'warning'); return; }
+
+            try {
+                var testResponse = await fetch('https://api.github.com/user', {
+                    headers: { 'Authorization': 'token ' + token }
+                });
+                if (!testResponse.ok) {
+                    if (testResponse.status === 401) showToast('❌ Неверный токен!', 'error');
+                    else showToast('❌ Ошибка: ' + testResponse.status, 'error');
+                    return;
+                }
+
+                githubToken = token;
+                showToast('✅ GitHub подключён! Выберите роль.', 'info');
+                document.getElementById('stepToken').style.display = 'none';
+                document.getElementById('stepRole').style.display = 'block';
+
+                // Скрываем блок пароля
+                document.getElementById('rolePasswordBlock').style.display = 'none';
+
+            } catch (e) {
+                showToast('❌ Ошибка: ' + e.message, 'error');
+            }
+        });
+
+        document.getElementById('githubTokenInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('githubConnectBtn').click();
+            }
+        });
+
+        // Шаг 2: Выбор роли
+        var selectedRole = '';
+
+        document.getElementById('roleJuryBtn').addEventListener('click', function() {
+            selectedRole = 'jury';
+            showRolePassword('jury');
+        });
+
+        document.getElementById('roleLeaderBtn').addEventListener('click', function() {
+            selectedRole = 'leader';
+            showRolePassword('leader');
+        });
+
+        document.getElementById('roleAdminBtn').addEventListener('click', function() {
+            selectedRole = 'admin';
+            showRolePassword('admin');
+        });
+
+        function showRolePassword(role) {
+            var block = document.getElementById('rolePasswordBlock');
+            block.style.display = 'block';
+            var input = document.getElementById('rolePasswordInput');
+            input.value = '';
+            input.focus();
+            var hint = document.getElementById('rolePasswordHint');
+            var roleNames = {
+                jury: 'Жюри (пароль: GGWP)',
+                leader: 'Руководитель (пароль: GLHF)',
+                admin: 'Администратор (пароль: EGOR)'
+            };
+            hint.textContent = 'Введите пароль для роли: ' + roleNames[role];
+            hint.style.color = 'rgba(255,255,255,0.6)';
+        }
+
+        document.getElementById('rolePasswordConfirmBtn').addEventListener('click', function() {
+            var pass = document.getElementById('rolePasswordInput').value.trim();
+            if (!selectedRole) { showToast('Сначала выберите роль', 'warning'); return; }
+            if (pass === PASSWORDS[selectedRole]) {
+                // Вход с ролью
+                if (selectedRole === 'jury') {
+                    var name = prompt('Введите ваше имя (как жюри):');
+                    if (name && name.trim()) {
+                        juryName = sanitizeName(name.trim());
+                        isJuryMode = true;
+                        isAdminMode = false;
+                        isLeaderMode = false;
+                        userRole = 'jury';
+                        enterApp();
+                    } else {
+                        showToast('❌ Имя не может быть пустым', 'error');
+                    }
+                } else if (selectedRole === 'leader') {
+                    isLeaderMode = true;
+                    isJuryMode = false;
+                    isAdminMode = false;
+                    userRole = 'leader';
+                    enterApp();
+                } else if (selectedRole === 'admin') {
+                    isAdminMode = true;
+                    isJuryMode = false;
+                    isLeaderMode = false;
+                    userRole = 'admin';
+                    enterApp();
+                }
+            } else {
+                showToast('❌ Неверный пароль для роли ' + selectedRole, 'error');
+                document.getElementById('rolePasswordInput').value = '';
+                document.getElementById('rolePasswordInput').focus();
+            }
+        });
+
+        document.getElementById('rolePasswordInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('rolePasswordConfirmBtn').click();
+            }
+        });
+
+        function enterApp() {
+            saveSessionState();
+            document.getElementById('tokenBlock').style.display = 'none';
+            document.getElementById('appContent').style.display = 'block';
+
+            var roleLabels = {
+                jury: '👤 Жюри: ' + juryName,
+                leader: '👔 Руководитель',
+                admin: '👑 Администратор'
+            };
+            var roleClasses = {
+                jury: 'jury',
+                leader: 'leader',
+                admin: 'admin'
+            };
+
+            document.getElementById('roleBadge').textContent = roleLabels[userRole];
+            document.getElementById('roleBadge').className = 'role-badge show ' + roleClasses[userRole];
+
+            // Настройка UI под роль
+            if (userRole === 'jury') {
+                document.getElementById('addSection').style.display = 'block';
+                document.getElementById('deleteSection').style.display = 'none';
+                document.getElementById('actionsSection').style.display = 'block';
+                document.getElementById('summarySection').style.display = 'none';
+                document.getElementById('historySection').style.display = 'none';
+                document.getElementById('juryHistorySection').style.display = 'block';
+            } else if (userRole === 'leader') {
+                document.getElementById('addSection').style.display = 'block';
+                document.getElementById('deleteSection').style.display = 'none';
+                document.getElementById('actionsSection').style.display = 'block';
+                document.getElementById('summarySection').style.display = 'block';
+                document.getElementById('historySection').style.display = 'block';
+                document.getElementById('juryHistorySection').style.display = 'none';
+            } else if (userRole === 'admin') {
+                document.getElementById('addSection').style.display = 'block';
+                document.getElementById('deleteSection').style.display = 'block';
+                document.getElementById('actionsSection').style.display = 'block';
+                document.getElementById('summarySection').style.display = 'block';
+                document.getElementById('historySection').style.display = 'block';
+                document.getElementById('juryHistorySection').style.display = 'none';
+            }
+
+            loadAllDataFromLocalStorage();
+
+            // Загружаем данные с GitHub
+            if (githubToken) {
+                if (userRole === 'jury') {
+                    loadFromGitHub(currentNomination, currentStyle);
+                } else {
+                    for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
+                        for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
+                            loadFromGitHub(NOMINATIONS[nomIdx], STYLES[styleIdx]);
+                        }
+                    }
+                }
+            }
+
+            renderAll();
+            if (userRole === 'jury') renderJuryHistory();
+            else renderHistory();
+            renderLeader();
+
+            // Настраиваем автосинхронизацию
+            if (autoSyncInterval) clearInterval(autoSyncInterval);
+            autoSyncInterval = setInterval(function() {
+                if (githubToken && navigator.onLine) {
+                    if (userRole === 'jury') {
+                        loadFromGitHub(currentNomination, currentStyle);
+                        renderJuryHistory();
+                    } else {
+                        loadFromGitHub(currentNomination, currentStyle);
+                        renderSummary();
+                        renderHistory();
+                    }
+                    renderAll();
+                    renderLeader();
+                }
+            }, 15000);
+
+            showToast('✅ Добро пожаловать, ' + roleLabels[userRole] + '!', 'info');
+        }
+
         // ===== ВКЛАДКИ НОМИНАЦИЙ =====
         nominationTabs.addEventListener('click', function(e) {
             var btn = e.target.closest('.nomination-tab');
@@ -2612,8 +2740,8 @@
             btn.classList.add('active');
             currentNomination = nom;
             renderAll();
-            if (isAdminMode) { renderSummary();
-                renderHistory(); } else if (isJuryMode) { renderJuryHistory(); }
+            if (userRole === 'jury') renderJuryHistory();
+            else renderHistory();
             renderLeader();
         });
 
@@ -2627,14 +2755,17 @@
             btn.classList.add('active');
             currentStyle = style;
             renderAll();
-            if (isAdminMode) { renderSummary();
-                renderHistory(); } else if (isJuryMode) { renderJuryHistory(); }
+            if (userRole === 'jury') renderJuryHistory();
+            else renderHistory();
             renderLeader();
         });
 
         // ===== УДАЛЕНИЕ =====
         deleteBtn.addEventListener('click', function() {
-            if (isJuryMode) { showToast('👤 Жюри не может удалять участников', 'warning'); return; }
+            if (userRole === 'jury' || userRole === 'leader') {
+                showToast('⛔ Удалять могут только администраторы', 'warning');
+                return;
+            }
             var name = deleteName.value.trim();
             if (!name) { showToast('Введите номер участника для удаления', 'warning'); return; }
             var votes = getCurrentVotes();
@@ -2673,11 +2804,11 @@
                 comment: comment || '',
                 time: time,
                 date: date,
-                jury: isJuryMode ? juryName : (isAdminMode ? 'admin' : 'unknown')
+                jury: userRole === 'jury' ? juryName : userRole
             });
             if (currentData.history.length > 50) currentData.history = currentData.history.slice(0, 50);
-            if (isAdminMode) renderHistory();
-            else if (isJuryMode) renderJuryHistory();
+            if (userRole !== 'jury') renderHistory();
+            else renderJuryHistory();
             saveAllDataToLocalStorage();
             if (githubToken) saveToGitHub(currentNomination, currentStyle);
         }
@@ -2688,10 +2819,9 @@
             var date = getFormattedDate();
             var currentData = getCurrentData();
             if (!currentData.history) currentData.history = [];
-            currentData.history.unshift({ type: 'delete', name: name, time: time, date: date, jury: isAdminMode ? 'admin' :
-                    'system' });
+            currentData.history.unshift({ type: 'delete', name: name, time: time, date: date, jury: userRole });
             if (currentData.history.length > 50) currentData.history = currentData.history.slice(0, 50);
-            if (isAdminMode) renderHistory();
+            if (userRole !== 'jury') renderHistory();
             saveAllDataToLocalStorage();
             if (githubToken) saveToGitHub(currentNomination, currentStyle);
         }
@@ -2709,7 +2839,8 @@
                 var deleteClass = isDelete ? 'delete' : '';
                 html += '<div class="history-item ' + deleteClass + '">';
                 if (isDelete) {
-                    html += '<span class="name">🗑️ Удалён: ' + escapeHtml(item.name) + ' (админ)</span>';
+                    html += '<span class="name">🗑️ Удалён: ' + escapeHtml(item.name) + ' (' + escapeHtml(item.jury) +
+                        ')</span>';
                     html += '<span class="comment-text"></span><span class="score"></span>';
                 } else {
                     var juryLabel = item.jury ? ' (' + escapeHtml(item.jury) + ')' : '';
@@ -2801,11 +2932,10 @@
             }
         }
 
-        // ===== СВОДНАЯ ТАБЛИЦА (только для руководителя) =====
+        // ===== СВОДНАЯ ТАБЛИЦА =====
         function renderSummary() {
-            if (!isAdminMode) return;
+            if (userRole === 'jury') return;
 
-            // Собираем всех участников из всех номинаций и стилей
             var allParticipants = {};
             NOMINATIONS.forEach(function(nom) {
                 STYLES.forEach(function(style) {
@@ -2834,7 +2964,6 @@
                 html += '<tr>';
                 html += '<td><strong>' + escapeHtml(name) + '</strong></td>';
 
-                // Для каждой номинации показываем средний балл по всем стилям
                 NOMINATIONS.forEach(function(nom) {
                     var nomScores = [];
                     STYLES.forEach(function(style) {
@@ -2877,9 +3006,10 @@
             return labels[style] || style;
         }
 
-        // ===== ДЕТАЛИ УЧАСТНИКА (только для руководителя) =====
+        // ===== ДЕТАЛИ УЧАСТНИКА =====
         function showParticipantDetails(name) {
-            if (!isAdminMode) return;
+            if (userRole === 'jury') { showToast('⛔ Только для руководителей и администраторов', 'warning'); return; }
+
             detailsParticipantName.textContent = '👤 ' + name;
             detailsGrid.innerHTML = '';
             var allScores = [];
@@ -2932,7 +3062,10 @@
 
         // ===== ОЧИСТКА =====
         clearBtn.addEventListener('click', function() {
-            if (isJuryMode) { showToast('👤 Жюри не может очищать данные', 'warning'); return; }
+            if (userRole === 'jury' || userRole === 'leader') {
+                showToast('⛔ Очищать могут только администраторы', 'warning');
+                return;
+            }
             var votes = getCurrentVotes();
             if (votes.length === 0) { showToast('В текущей номинации нет данных для очистки', 'warning'); return; }
             captchaInput.value = '';
@@ -2941,8 +3074,11 @@
             setTimeout(function() { captchaInput.focus(); }, 300);
         });
         confirmClearBtn.addEventListener('click', function() {
-            if (isJuryMode) { showToast('👤 Жюри не может очищать данные', 'warning');
-                clearModal.classList.remove('active'); return; }
+            if (userRole === 'jury' || userRole === 'leader') {
+                showToast('⛔ Очищать могут только администраторы', 'warning');
+                clearModal.classList.remove('active');
+                return;
+            }
             var answer = captchaInput.value.trim();
             if (answer === '4') {
                 clearModal.classList.remove('active');
@@ -2951,8 +3087,8 @@
                 currentData.history = [];
                 winnerName = null;
                 renderAll();
-                if (isAdminMode) { renderSummary();
-                    renderHistory(); } else if (isJuryMode) { renderJuryHistory(); }
+                if (userRole !== 'jury') { renderSummary();
+                    renderHistory(); } else { renderJuryHistory(); }
                 renderLeader();
                 lastUpdateTime[currentNomination][currentStyle] = Date.now();
                 saveAllDataToLocalStorage();
@@ -3080,7 +3216,7 @@
             }
 
             renderAll();
-            if (isJuryMode) renderJuryHistory();
+            if (userRole === 'jury') renderJuryHistory();
             renderLeader();
             podiumModal.classList.add('active');
         }
@@ -3151,10 +3287,10 @@
                         'Accept': 'application/vnd.github.v3+json' } });
                 if (response.status === 404) {
                     allData[nomination][style] = { votes: [], history: [] };
-                    if (isAdminMode) { renderAll();
+                    if (userRole !== 'jury') { renderAll();
                         renderSummary();
                         renderHistory();
-                        renderLeader(); } else if (isJuryMode) { renderAll();
+                        renderLeader(); } else { renderAll();
                         renderJuryHistory();
                         renderLeader(); }
                     return;
@@ -3168,10 +3304,10 @@
                             nomination][style] < 3000) return;
                     if (jsonData.votes) allData[nomination][style].votes = jsonData.votes;
                     if (jsonData.history) allData[nomination][style].history = jsonData.history;
-                    if (isAdminMode) { renderAll();
+                    if (userRole !== 'jury') { renderAll();
                         renderSummary();
                         renderHistory();
-                        renderLeader(); } else if (isJuryMode) { renderAll();
+                        renderLeader(); } else { renderAll();
                         renderJuryHistory();
                         renderLeader(); }
                     saveAllDataToLocalStorage();
@@ -3184,7 +3320,8 @@
             var votes = getCurrentVotes();
             var participants = getUniqueParticipants(votes);
             var displayVotes = votes;
-            if (isJuryMode) {
+
+            if (userRole === 'jury') {
                 // Жюри видит только свои голоса
                 displayVotes = votes.filter(function(v) { return v.jury === juryName; });
             }
@@ -3194,7 +3331,7 @@
 
             if (displayParticipants.length === 0) {
                 tableBody.innerHTML = '<tr><td colspan="5" class="empty-message">Нет данных</td></tr>';
-                if (isJuryMode) winnerDisplay.textContent = '👑 Победитель: не определен (жюри видит только свои оценки)';
+                if (userRole === 'jury') winnerDisplay.textContent = '👑 Победитель: не определен (жюри видит только свои оценки)';
                 else winnerDisplay.textContent = '👑 Победитель: не определен';
                 statAvg.textContent = '—';
                 return;
@@ -3257,10 +3394,8 @@
         }
 
         async function addVote() {
-            if (isJuryMode || isAdminMode) {
-                // Разрешаем голосовать и жюри, и руководителю
-            } else {
-                showToast('Сначала войдите как жюри или руководитель', 'warning');
+            if (!userRole) {
+                showToast('Сначала войдите в систему', 'warning');
                 return;
             }
 
@@ -3273,10 +3408,10 @@
             if (isNaN(score) || score < 0 || score > 10) { showToast('Оценка должна быть от 0 до 10', 'warning');
                 scoreInput.focus(); return; }
 
-            // ===== ПРОВЕРКА НА ДУБЛЬ (одно жюри не может голосовать дважды за одного участника в одной номинации+стиле) =====
+            // ===== ПРОВЕРКА НА ДУБЛЬ =====
             var currentData = getCurrentData();
             var existingVote = null;
-            var voterName = isJuryMode ? juryName : (isAdminMode ? 'admin' : 'unknown');
+            var voterName = userRole === 'jury' ? juryName : userRole;
             for (var i = 0; i < currentData.votes.length; i++) {
                 if (currentData.votes[i].name === name && currentData.votes[i].jury === voterName) {
                     existingVote = currentData.votes[i];
@@ -3308,8 +3443,8 @@
             commentInputField.value = '';
             nameInput.focus();
             renderAll();
-            if (isJuryMode) renderJuryHistory();
-            else if (isAdminMode) renderHistory();
+            if (userRole === 'jury') renderJuryHistory();
+            else renderHistory();
             renderLeader();
             addHistory(name, score, comment);
             lastUpdateTime[currentNomination][currentStyle] = Date.now();
@@ -3353,35 +3488,9 @@
             if (!restored) {
                 document.getElementById('tokenBlock').style.display = 'block';
                 document.getElementById('appContent').style.display = 'none';
-            }
-
-            // Если есть сохранённый токен, подгружаем данные
-            if (githubToken && isAdminMode) {
-                for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
-                    for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
-                        loadFromGitHub(NOMINATIONS[nomIdx], STYLES[styleIdx]);
-                    }
-                }
-                if (autoSyncInterval) clearInterval(autoSyncInterval);
-                autoSyncInterval = setInterval(function() {
-                    if (githubToken && navigator.onLine) {
-                        loadFromGitHub(currentNomination, currentStyle);
-                        if (isAdminMode) { renderSummary();
-                            renderHistory(); }
-                    }
-                }, 15000);
-            } else if (githubToken && isJuryMode) {
-                // Жюри тоже подгружает данные с GitHub
-                loadFromGitHub(currentNomination, currentStyle);
-                if (autoSyncInterval) clearInterval(autoSyncInterval);
-                autoSyncInterval = setInterval(function() {
-                    if (githubToken && navigator.onLine) {
-                        loadFromGitHub(currentNomination, currentStyle);
-                        if (isJuryMode) { renderJuryHistory(); }
-                        renderAll();
-                        renderLeader();
-                    }
-                }, 15000);
+                document.getElementById('stepToken').style.display = 'block';
+                document.getElementById('stepRole').style.display = 'none';
+                document.getElementById('rolePasswordBlock').style.display = 'none';
             }
         }
 
@@ -3389,12 +3498,12 @@
         addBtn.addEventListener('click', addVote);
         calcBtn.addEventListener('click', showWinnerModal);
         syncBtn.addEventListener('click', function() {
-            if (!githubToken) { showToast('Сначала подключите GitHub через токен', 'warning'); return; }
+            if (!githubToken) { showToast('❌ GitHub не подключён! Введите токен на странице входа.', 'warning'); return; }
             showToast('🔄 Синхронизация...', 'info');
             saveAllDataToLocalStorage();
             loadFromGitHub(currentNomination, currentStyle);
-            if (isAdminMode) { renderSummary();
-                renderHistory(); } else if (isJuryMode) { renderJuryHistory(); }
+            if (userRole !== 'jury') { renderSummary();
+                renderHistory(); } else { renderJuryHistory(); }
             renderAll();
             renderLeader();
             showToast('✅ Синхронизация завершена', '');
@@ -3412,9 +3521,8 @@
         console.log('📁 Репозиторий:', REPO_OWNER + '/' + REPO_NAME);
         console.log('📋 Номинации:', NOMINATIONS.join(', '));
         console.log('🎵 Стили:', STYLES.join(', '));
-        console.log('🔑 Пароль для жюри: GGWP');
-        console.log('👑 Пароль для руководителя: GLHF');
-        console.log('🛡️ Защита от дублей: одно жюри = одна оценка на участника в номинации');
+        console.log('🔑 Пароли: Жюри=GGWP, Руководитель=GLHF, Админ=EGOR');
+        console.log('🛡️ Защита от дублей: одна оценка на участника в номинации');
     </script>
 </body>
 </html>
