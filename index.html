@@ -2772,10 +2772,11 @@
             else renderHistory();
             renderLeader();
 
-            // Настраиваем автосинхронизацию
+            // ===== АВТОСИНХРОНИЗАЦИЯ КАЖДЫЕ 10 СЕКУНД =====
             if (autoSyncInterval) clearInterval(autoSyncInterval);
             autoSyncInterval = setInterval(function() {
                 if (githubToken && navigator.onLine) {
+                    // Загружаем свежие данные из GitHub
                     if (userRole === 'jury') {
                         loadFromGitHub(currentNomination, currentStyle);
                         renderJuryHistory();
@@ -2787,7 +2788,7 @@
                     renderAll();
                     renderLeader();
                 }
-            }, 15000);
+            }, 10000);
 
             showToast('✅ Добро пожаловать, ' + roleLabels[userRole] + '!', 'info');
         }
@@ -3504,14 +3505,29 @@
             scoreInput.value = '';
             commentInputField.value = '';
             nameInput.focus();
+
+            // Сохраняем в локальное хранилище
+            saveAllDataToLocalStorage();
+
+            // Сохраняем в GitHub (асинхронно, без ожидания)
+            if (githubToken) {
+                saveToGitHub(currentNomination, currentStyle).then(() => {
+                    // После сохранения обновляем UI
+                    renderAll();
+                    if (userRole === 'jury') renderJuryHistory();
+                    else renderHistory();
+                    renderLeader();
+                }).catch(() => {});
+            }
+
+            // Сразу обновляем UI (оптимистичное обновление)
             renderAll();
             if (userRole === 'jury') renderJuryHistory();
             else renderHistory();
             renderLeader();
-            addHistory(name, score, comment);
+
             lastUpdateTime[currentNomination][currentStyle] = Date.now();
-            saveAllDataToLocalStorage();
-            if (githubToken) await saveToGitHub(currentNomination, currentStyle);
+
             showToast('✅ ' + name + ' +' + score.toFixed(1) + (comment ? ' 💬 ' + comment : ''), '');
         }
 
@@ -3586,6 +3602,7 @@
         console.log('🎵 Стили:', STYLES.join(', '));
         console.log('🔑 Пароли: Жюри=GGWP, Руководитель=GLHF, Админ=EGOR');
         console.log('🛡️ Защита от дублей: одна оценка на участника в номинации');
+        console.log('🔄 Автосинхронизация: каждые 10 секунд (без уведомлений)');
         console.log('🚪 Кнопка выхода: есть, данные сохраняются');
     </script>
 </body>
