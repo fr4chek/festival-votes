@@ -392,9 +392,11 @@
             color: var(--text-light);
             margin-top: 10px;
             font-family: 'SF Pro Text', sans-serif;
+            opacity: 0.7;
         }
         body.dark .token-input .hint {
             color: var(--text-dark);
+            opacity: 0.6;
         }
         .token-buttons {
             display: flex;
@@ -445,6 +447,25 @@
             color: #ffd700;
         }
         body.dark .btn-admin:hover {
+            background: rgba(255, 215, 0, 0.12);
+            border-color: rgba(255, 215, 0, 0.15);
+        }
+
+        .btn-leader {
+            background: rgba(255, 215, 0, 0.15);
+            border: 1px solid rgba(255, 215, 0, 0.2);
+            color: #ffd700;
+        }
+        .btn-leader:hover {
+            background: rgba(255, 215, 0, 0.25);
+            border-color: rgba(255, 215, 0, 0.3);
+        }
+        body.dark .btn-leader {
+            background: rgba(255, 215, 0, 0.06);
+            border-color: rgba(255, 215, 0, 0.08);
+            color: #ffd700;
+        }
+        body.dark .btn-leader:hover {
             background: rgba(255, 215, 0, 0.12);
             border-color: rgba(255, 215, 0, 0.15);
         }
@@ -665,7 +686,7 @@
             color: rgba(255, 255, 255, 0.3) !important;
         }
 
-        /* Вкладки номинаций (мальчики, девочки, женщины, ОВЗ) */
+        /* Вкладки номинаций */
         .nomination-tabs {
             display: flex;
             gap: 4px;
@@ -728,7 +749,7 @@
             background: rgba(255, 255, 255, 0.02);
         }
 
-        /* Вкладки стилей (национальный, свободный, вечерний) */
+        /* Вкладки стилей */
         .style-tabs {
             display: flex;
             gap: 4px;
@@ -1533,25 +1554,6 @@
             }
         }
 
-        .btn-leader {
-            background: rgba(255, 215, 0, 0.15);
-            border: 1px solid rgba(255, 215, 0, 0.2);
-            color: #ffd700;
-        }
-        .btn-leader:hover {
-            background: rgba(255, 215, 0, 0.25);
-            border-color: rgba(255, 215, 0, 0.3);
-        }
-        body.dark .btn-leader {
-            background: rgba(255, 215, 0, 0.06);
-            border-color: rgba(255, 215, 0, 0.08);
-            color: #ffd700;
-        }
-        body.dark .btn-leader:hover {
-            background: rgba(255, 215, 0, 0.12);
-            border-color: rgba(255, 215, 0, 0.15);
-        }
-
         @media (max-width: 700px) {
             .container {
                 padding: 0 4px;
@@ -1786,26 +1788,17 @@
 
         <!-- БЛОК ВХОДА -->
         <div class="token-input" id="tokenBlock">
-            <label>🔑 Введите пароль для жюри</label>
-            <input type="password" id="passwordInput" placeholder="Введите пароль (GGWP)" autocomplete="off">
-            <div class="hint">Введите пароль <strong>GGWP</strong> для входа как жюри, или нажмите "Войти как руководитель".</div>
+            <label>🔑 Вход в систему</label>
+            <input type="password" id="passwordInput" placeholder="Введите пароль" autocomplete="off">
+            <div class="hint">Введите пароль для входа как жюри или руководитель</div>
             <div class="token-buttons">
                 <button class="btn btn-jury" id="juryLoginBtn">👤 Войти как жюри</button>
                 <button class="btn btn-leader" id="leaderLoginBtn">👑 Войти как руководитель</button>
             </div>
-        </div>
-
-        <!-- МОДАЛКА ВВОДА ПАРОЛЯ ДЛЯ РУКОВОДИТЕЛЯ -->
-        <div class="modal-overlay" id="adminPasswordModal">
-            <div class="modal-box">
-                <h2>👑 Вход для руководителя</h2>
-                <p>Введите пароль для доступа к полной статистике</p>
-                <input type="password" id="adminPasswordInput" placeholder="Введите пароль" autocomplete="off">
-                <div class="btn-row">
-                    <button class="btn btn-admin" id="adminPasswordConfirmBtn">✅ Войти</button>
-                    <button class="btn btn-secondary" id="adminPasswordCancelBtn">↩️ Отмена</button>
-                </div>
-                <div class="error-msg" id="adminPasswordError">❌ Неверный пароль! Попробуйте ещё раз.</div>
+            <div style="margin-top:16px; border-top:1px solid rgba(255,255,255,0.06); padding-top:14px;">
+                <div class="hint" style="margin-bottom:8px;">🔗 Для администратора с синхронизацией GitHub</div>
+                <input type="password" id="githubTokenInput" placeholder="Введите GitHub токен (ghp_...)" style="width:100%; padding:14px 20px; border-radius:980px; font-size:16px; background:rgba(255,255,255,0.12); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.04); color:#ffffff !important; outline:none; font-family:'SF Pro Text', sans-serif;">
+                <button class="btn" id="githubConnectBtn" style="margin-top:8px; width:100%;">🔗 Подключить GitHub (админ)</button>
             </div>
         </div>
 
@@ -1828,7 +1821,7 @@
                 </div>
             </div>
 
-            <!-- НОМИНАЦИИ (мальчики, девочки, женщины, ОВЗ) -->
+            <!-- НОМИНАЦИИ -->
             <div class="nomination-tabs" id="nominationTabs">
                 <button class="nomination-tab active" data-nomination="boys">👦 Мальчики</button>
                 <button class="nomination-tab" data-nomination="girls">👧 Девочки</button>
@@ -1836,7 +1829,7 @@
                 <button class="nomination-tab" data-nomination="ovz">♿ ОВЗ</button>
             </div>
 
-            <!-- ВКЛАДКИ СТИЛЕЙ (национальный, свободный, вечерний) -->
+            <!-- ВКЛАДКИ СТИЛЕЙ -->
             <div class="style-tabs" id="styleTabs">
                 <button class="style-tab active" data-style="national">🎵 Национальный</button>
                 <button class="style-tab" data-style="free">🎸 Свободный</button>
@@ -1864,7 +1857,7 @@
                 </div>
             </div>
 
-            <!-- УДАЛЕНИЕ (только для руководителя) -->
+            <!-- УДАЛЕНИЕ -->
             <div class="section-glass" id="deleteSection" style="border-color: rgba(255,59,48,0.06); display:none;">
                 <label class="delete-section-label">🗑️ Удалить участника</label>
                 <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
@@ -1885,7 +1878,7 @@
                 </div>
             </div>
 
-            <!-- ТАБЛИЦА (для жюри — только свои оценки) -->
+            <!-- ТАБЛИЦА -->
             <div class="table-wrap" style="margin-bottom:20px; padding:0;">
                 <table>
                     <thead><tr><th>Номер</th><th>Средний балл</th><th>Кол-во</th><th>Ваши оценки</th><th>Комментарии</th></tr></thead>
@@ -1893,7 +1886,7 @@
                 </table>
             </div>
 
-            <!-- СВОДНАЯ ТАБЛИЦА ДЛЯ РУКОВОДИТЕЛЯ -->
+            <!-- СВОДНАЯ ТАБЛИЦА -->
             <div id="summarySection" style="display: none;">
                 <div class="section-glass" style="border-color: rgba(255,215,0,0.15);">
                     <div class="section-title" style="color: #ffd700;">📊 Сводная статистика (все жюри)</div>
@@ -1915,7 +1908,7 @@
                 </div>
             </div>
 
-            <!-- ИСТОРИЯ (только для руководителя) -->
+            <!-- ИСТОРИЯ -->
             <div id="historySection" style="display: none;">
                 <div class="section-glass">
                     <div class="section-title">📋 История голосований (все жюри)</div>
@@ -1927,7 +1920,7 @@
                 </div>
             </div>
 
-            <!-- ИСТОРИЯ (для жюри — только свои оценки) -->
+            <!-- ИСТОРИЯ ЖЮРИ -->
             <div id="juryHistorySection">
                 <div class="section-glass">
                     <div class="section-title">📋 Мои голоса</div>
@@ -1996,7 +1989,7 @@
         </div>
     </div>
 
-    <!-- МОДАЛКА ПОБЕДИТЕЛЯ (с деталями) -->
+    <!-- МОДАЛКА ПОБЕДИТЕЛЯ -->
     <div class="modal-overlay" id="podiumModal">
         <div class="modal-box">
             <h2>🏆 Победитель!</h2>
@@ -2008,7 +2001,7 @@
         </div>
     </div>
 
-    <!-- МОДАЛКА ДЕТАЛЕЙ УЧАСТНИКА (только для руководителя) -->
+    <!-- МОДАЛКА ДЕТАЛЕЙ -->
     <div class="modal-overlay" id="detailsModal">
         <div class="modal-box">
             <h2 id="detailsParticipantName">👤 Участник</h2>
@@ -2260,7 +2253,7 @@
             renderLeader();
             lastUpdateTime[currentNomination][currentStyle] = Date.now();
             saveAllDataToLocalStorage();
-            saveToGitHub(currentNomination, currentStyle);
+            if (githubToken) saveToGitHub(currentNomination, currentStyle);
             deleteName.value = '';
             showToast('🗑️ Удалён: ' + name, 'error');
             deleteConfirmModal.classList.remove('active');
@@ -2279,55 +2272,45 @@
             }
         });
 
-        // ===== МОДАЛКА ПАРОЛЯ ДЛЯ РУКОВОДИТЕЛЯ =====
-        var adminPasswordModal = document.getElementById('adminPasswordModal');
-        var adminPasswordInput = document.getElementById('adminPasswordInput');
-        var adminPasswordConfirmBtn = document.getElementById('adminPasswordConfirmBtn');
-        var adminPasswordCancelBtn = document.getElementById('adminPasswordCancelBtn');
-        var adminPasswordError = document.getElementById('adminPasswordError');
-        const ADMIN_PASSWORD = 'GLHF';
-
-        function showAdminPasswordModal() {
-            adminPasswordInput.value = '';
-            adminPasswordError.classList.remove('show');
-            adminPasswordModal.classList.add('active');
-            setTimeout(function() { adminPasswordInput.focus(); }, 300);
+        // ===== СОХРАНЕНИЕ СОСТОЯНИЯ ВХОДА =====
+        function saveSessionState() {
+            try {
+                localStorage.setItem('session', JSON.stringify({
+                    isJuryMode: isJuryMode,
+                    isAdminMode: isAdminMode,
+                    juryName: juryName,
+                    userRole: userRole,
+                    githubToken: githubToken
+                }));
+            } catch (e) {}
         }
-        adminPasswordConfirmBtn.addEventListener('click', function() {
-            var pass = adminPasswordInput.value.trim();
-            if (pass === ADMIN_PASSWORD) {
-                adminPasswordModal.classList.remove('active');
-                completeAdminLogin();
-            } else {
-                adminPasswordError.classList.add('show');
-                adminPasswordInput.value = '';
-                adminPasswordInput.focus();
-                setTimeout(function() { adminPasswordError.classList.remove('show'); }, 3000);
-            }
-        });
-        adminPasswordCancelBtn.addEventListener('click', function() {
-            adminPasswordModal.classList.remove('active');
-        });
-        adminPasswordInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') { e.preventDefault();
-                adminPasswordConfirmBtn.click(); }
-            if (e.key === 'Escape') { e.preventDefault();
-                adminPasswordCancelBtn.click(); }
-        });
-        adminPasswordModal.addEventListener('click', function(e) {
-            if (e.target === this) adminPasswordModal.classList.remove('active');
-        });
 
-        // ===== ФУНКЦИИ ВХОДА =====
-        const JURY_PASSWORD = 'GGWP';
+        function loadSessionState() {
+            try {
+                var saved = localStorage.getItem('session');
+                if (saved) {
+                    var data = JSON.parse(saved);
+                    if (data.isJuryMode) {
+                        isJuryMode = true;
+                        isAdminMode = false;
+                        juryName = data.juryName || 'Жюри';
+                        userRole = 'jury';
+                        return 'jury';
+                    } else if (data.isAdminMode) {
+                        isAdminMode = true;
+                        isJuryMode = false;
+                        userRole = 'admin';
+                        githubToken = data.githubToken || '';
+                        return 'admin';
+                    }
+                }
+            } catch (e) {}
+            return null;
+        }
 
-        function completeJuryLogin() {
-            var name = prompt('Введите ваше имя (как жюри):');
-            if (name && name.trim()) {
-                juryName = sanitizeName(name.trim());
-                isJuryMode = true;
-                isAdminMode = false;
-                userRole = 'jury';
+        function restoreSession() {
+            var session = loadSessionState();
+            if (session === 'jury') {
                 document.getElementById('tokenBlock').style.display = 'none';
                 document.getElementById('appContent').style.display = 'block';
                 document.getElementById('roleBadge').textContent = '👤 Жюри: ' + juryName;
@@ -2342,7 +2325,61 @@
                 renderAll();
                 renderJuryHistory();
                 renderLeader();
-                showToast('👤 Вы вошли как жюри: ' + juryName + '. Вы видите только свои оценки.', 'info');
+                showToast('👤 Добро пожаловать, ' + juryName + '!', 'info');
+                return true;
+            } else if (session === 'admin') {
+                document.getElementById('tokenBlock').style.display = 'none';
+                document.getElementById('appContent').style.display = 'block';
+                document.getElementById('roleBadge').textContent = '👑 Руководитель';
+                document.getElementById('roleBadge').className = 'role-badge show admin';
+                document.getElementById('addSection').style.display = 'block';
+                document.getElementById('deleteSection').style.display = 'block';
+                document.getElementById('actionsSection').style.display = 'flex';
+                document.getElementById('summarySection').style.display = 'block';
+                document.getElementById('historySection').style.display = 'block';
+                document.getElementById('juryHistorySection').style.display = 'none';
+                loadAllDataFromLocalStorage();
+                if (githubToken) {
+                    loadFromGitHub(currentNomination, currentStyle);
+                }
+                renderAll();
+                renderSummary();
+                renderHistory();
+                renderLeader();
+                showToast('👑 Добро пожаловать, руководитель!', 'info');
+                return true;
+            }
+            return false;
+        }
+
+        // ===== ПАРОЛИ =====
+        const JURY_PASSWORD = 'GGWP';
+        const ADMIN_PASSWORD = 'GLHF';
+
+        // ===== ФУНКЦИИ ВХОДА =====
+        function completeJuryLogin() {
+            var name = prompt('Введите ваше имя (как жюри):');
+            if (name && name.trim()) {
+                juryName = sanitizeName(name.trim());
+                isJuryMode = true;
+                isAdminMode = false;
+                userRole = 'jury';
+                saveSessionState();
+                document.getElementById('tokenBlock').style.display = 'none';
+                document.getElementById('appContent').style.display = 'block';
+                document.getElementById('roleBadge').textContent = '👤 Жюри: ' + juryName;
+                document.getElementById('roleBadge').className = 'role-badge show jury';
+                document.getElementById('addSection').style.display = 'block';
+                document.getElementById('deleteSection').style.display = 'none';
+                document.getElementById('actionsSection').style.display = 'none';
+                document.getElementById('summarySection').style.display = 'none';
+                document.getElementById('historySection').style.display = 'none';
+                document.getElementById('juryHistorySection').style.display = 'block';
+                loadAllDataFromLocalStorage();
+                renderAll();
+                renderJuryHistory();
+                renderLeader();
+                showToast('👤 Вы вошли как жюри: ' + juryName, 'info');
             } else {
                 showToast('❌ Имя не может быть пустым', 'error');
             }
@@ -2352,6 +2389,7 @@
             isAdminMode = true;
             isJuryMode = false;
             userRole = 'admin';
+            saveSessionState();
             document.getElementById('tokenBlock').style.display = 'none';
             document.getElementById('appContent').style.display = 'block';
             document.getElementById('roleBadge').textContent = '👑 Руководитель';
@@ -2367,7 +2405,7 @@
             renderSummary();
             renderHistory();
             renderLeader();
-            showToast('👑 Вы вошли как руководитель. Доступна полная статистика.', 'info');
+            showToast('👑 Вы вошли как руководитель.', 'info');
         }
 
         // ===== ОБРАБОТЧИКИ ВХОДА =====
@@ -2376,20 +2414,103 @@
             if (pass === JURY_PASSWORD) {
                 completeJuryLogin();
             } else {
-                showToast('❌ Неверный пароль для жюри! Попробуйте GGWP', 'error');
+                showToast('❌ Неверный пароль!', 'error');
                 document.getElementById('passwordInput').value = '';
                 document.getElementById('passwordInput').focus();
             }
         });
 
         document.getElementById('leaderLoginBtn').addEventListener('click', function() {
-            showAdminPasswordModal();
+            var pass = document.getElementById('passwordInput').value.trim();
+            if (pass === ADMIN_PASSWORD) {
+                completeAdminLogin();
+            } else {
+                showToast('❌ Неверный пароль для руководителя!', 'error');
+                document.getElementById('passwordInput').value = '';
+                document.getElementById('passwordInput').focus();
+            }
         });
 
         document.getElementById('passwordInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                document.getElementById('juryLoginBtn').click();
+                // Пробуем как жюри, если не получилось — как руководитель
+                var pass = this.value.trim();
+                if (pass === JURY_PASSWORD) {
+                    document.getElementById('juryLoginBtn').click();
+                } else if (pass === ADMIN_PASSWORD) {
+                    document.getElementById('leaderLoginBtn').click();
+                } else {
+                    showToast('❌ Неверный пароль!', 'error');
+                    this.value = '';
+                    this.focus();
+                }
+            }
+        });
+
+        // ===== ПОДКЛЮЧЕНИЕ GITHUB (админ) =====
+        var githubToken = '';
+
+        document.getElementById('githubConnectBtn').addEventListener('click', async function() {
+            var token = document.getElementById('githubTokenInput').value.trim();
+            if (!token) { showToast('Введите GitHub токен', 'warning'); return; }
+            if (!token.startsWith('ghp_')) { showToast('Токен должен начинаться с "ghp_"', 'warning'); return; }
+            githubToken = token;
+            try {
+                var testResponse = await fetch('https://api.github.com/user', {
+                    headers: { 'Authorization': 'token ' + githubToken }
+                });
+                if (!testResponse.ok) {
+                    if (testResponse.status === 401) showToast('❌ Неверный токен!', 'error');
+                    else showToast('❌ Ошибка: ' + testResponse.status, 'error');
+                    githubToken = '';
+                    return;
+                }
+                // Автоматически входим как админ
+                isAdminMode = true;
+                isJuryMode = false;
+                userRole = 'admin';
+                saveSessionState();
+                document.getElementById('tokenBlock').style.display = 'none';
+                document.getElementById('appContent').style.display = 'block';
+                document.getElementById('roleBadge').textContent = '👑 Руководитель (GitHub)';
+                document.getElementById('roleBadge').className = 'role-badge show admin';
+                document.getElementById('addSection').style.display = 'block';
+                document.getElementById('deleteSection').style.display = 'block';
+                document.getElementById('actionsSection').style.display = 'flex';
+                document.getElementById('summarySection').style.display = 'block';
+                document.getElementById('historySection').style.display = 'block';
+                document.getElementById('juryHistorySection').style.display = 'none';
+                loadAllDataFromLocalStorage();
+                // Загружаем все данные
+                for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
+                    for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
+                        await loadFromGitHub(NOMINATIONS[nomIdx], STYLES[styleIdx]);
+                    }
+                }
+                renderAll();
+                renderSummary();
+                renderHistory();
+                renderLeader();
+                showToast('✅ GitHub подключён! Вы вошли как администратор.', 'info');
+                if (autoSyncInterval) clearInterval(autoSyncInterval);
+                autoSyncInterval = setInterval(function() {
+                    if (githubToken && navigator.onLine) {
+                        loadFromGitHub(currentNomination, currentStyle);
+                        if (isAdminMode) { renderSummary();
+                            renderHistory(); }
+                    }
+                }, 15000);
+            } catch (e) {
+                showToast('❌ Ошибка: ' + e.message, 'error');
+                githubToken = '';
+            }
+        });
+
+        document.getElementById('githubTokenInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                document.getElementById('githubConnectBtn').click();
             }
         });
 
@@ -2399,8 +2520,6 @@
 
         var currentNomination = 'boys';
         var currentStyle = 'national';
-
-        var githubToken = '';
         var winnerName = null;
         var lastUpdateTime = {};
         NOMINATIONS.forEach(function(nom) {
@@ -2552,7 +2671,7 @@
             if (isAdminMode) renderHistory();
             else if (isJuryMode) renderJuryHistory();
             saveAllDataToLocalStorage();
-            if (githubToken && navigator.onLine) saveToGitHub(currentNomination, currentStyle);
+            if (githubToken) saveToGitHub(currentNomination, currentStyle);
         }
 
         function addHistoryDelete(name) {
@@ -2566,7 +2685,7 @@
             if (currentData.history.length > 50) currentData.history = currentData.history.slice(0, 50);
             if (isAdminMode) renderHistory();
             saveAllDataToLocalStorage();
-            if (githubToken && navigator.onLine) saveToGitHub(currentNomination, currentStyle);
+            if (githubToken) saveToGitHub(currentNomination, currentStyle);
         }
 
         function renderHistory() {
@@ -2815,7 +2934,7 @@
                 renderLeader();
                 lastUpdateTime[currentNomination][currentStyle] = Date.now();
                 saveAllDataToLocalStorage();
-                if (githubToken && navigator.onLine) saveToGitHub(currentNomination, currentStyle);
+                if (githubToken) saveToGitHub(currentNomination, currentStyle);
                 showToast('🗑️ Всё очищено в номинации "' + getNominationLabel(currentNomination) + ' ' + getStyleLabel(
                     currentStyle) + '"', 'error');
             } else {
@@ -3152,7 +3271,7 @@
             addHistory(name, score, comment);
             lastUpdateTime[currentNomination][currentStyle] = Date.now();
             saveAllDataToLocalStorage();
-            if (githubToken && navigator.onLine) await saveToGitHub(currentNomination, currentStyle);
+            if (githubToken) await saveToGitHub(currentNomination, currentStyle);
             showToast('✅ ' + name + ' +' + score.toFixed(1) + (comment ? ' 💬 ' + comment : ''), '');
         }
 
@@ -3184,16 +3303,38 @@
             loadColors();
             renderPalettes();
             loadAllDataFromLocalStorage();
-            // Показываем блок входа, контент скрыт
-            document.getElementById('tokenBlock').style.display = 'block';
-            document.getElementById('appContent').style.display = 'none';
+
+            // Пробуем восстановить сессию
+            var restored = restoreSession();
+
+            if (!restored) {
+                document.getElementById('tokenBlock').style.display = 'block';
+                document.getElementById('appContent').style.display = 'none';
+            }
+
+            // Если есть сохранённый токен, подгружаем данные
+            if (githubToken && isAdminMode) {
+                for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
+                    for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
+                        loadFromGitHub(NOMINATIONS[nomIdx], STYLES[styleIdx]);
+                    }
+                }
+                if (autoSyncInterval) clearInterval(autoSyncInterval);
+                autoSyncInterval = setInterval(function() {
+                    if (githubToken && navigator.onLine) {
+                        loadFromGitHub(currentNomination, currentStyle);
+                        if (isAdminMode) { renderSummary();
+                            renderHistory(); }
+                    }
+                }, 15000);
+            }
         }
 
         // Обработчики
         addBtn.addEventListener('click', addVote);
         calcBtn.addEventListener('click', showWinnerModal);
         syncBtn.addEventListener('click', function() {
-            if (!githubToken) { showToast('Сначала подключитесь к GitHub (введите токен)', 'warning'); return; }
+            if (!githubToken) { showToast('Сначала подключите GitHub через токен', 'warning'); return; }
             showToast('🔄 Синхронизация...', 'info');
             saveAllDataToLocalStorage();
             loadFromGitHub(currentNomination, currentStyle);
@@ -3208,64 +3349,6 @@
                 commentInputField.focus(); } });
         commentInputField.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault();
                 addVote(); } });
-
-        // Добавляем поле для GitHub токена (для админа с синхронизацией)
-        // Скрытое поле для токена, если нужно
-        // Но для простоты добавим кнопку входа с токеном через prompt если нужно
-        // Можно добавить скрытый ввод, но для чистоты добавим в блок входа
-        var tokenInputField = document.createElement('input');
-        tokenInputField.type = 'password';
-        tokenInputField.id = 'githubTokenInput';
-        tokenInputField.placeholder = 'Введите GitHub токен (ghp_...)';
-        tokenInputField.style.cssText =
-            'width:100%; padding:14px 20px; border-radius:980px; font-size:16px; background:rgba(255,255,255,0.12); backdrop-filter:blur(20px); border:1px solid rgba(255,255,255,0.04); color:#ffffff !important; outline:none; margin-top:8px; font-family:"SF Pro Text", sans-serif;';
-        var tokenBlock = document.getElementById('tokenBlock');
-        var hint = tokenBlock.querySelector('.hint');
-        var tokenBtn = document.createElement('button');
-        tokenBtn.className = 'btn';
-        tokenBtn.textContent = '🔗 Подключить GitHub (админ)';
-        tokenBtn.style.marginTop = '8px';
-        tokenBtn.id = 'githubConnectBtn';
-        tokenBlock.appendChild(tokenInputField);
-        tokenBlock.appendChild(tokenBtn);
-
-        document.getElementById('githubConnectBtn').addEventListener('click', async function() {
-            var token = tokenInputField.value.trim();
-            if (!token) { showToast('Введите GitHub токен', 'warning'); return; }
-            if (!token.startsWith('ghp_')) { showToast('Токен должен начинаться с "ghp_"', 'warning'); return; }
-            githubToken = token;
-            try {
-                var testResponse = await fetch('https://api.github.com/user', {
-                    headers: { 'Authorization': 'token ' + githubToken }
-                });
-                if (!testResponse.ok) {
-                    if (testResponse.status === 401) showToast('❌ Неверный токен!', 'error');
-                    else showToast('❌ Ошибка: ' + testResponse.status, 'error');
-                    githubToken = '';
-                    return;
-                }
-                showToast('✅ GitHub подключён!', 'info');
-                // Загружаем все данные
-                for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
-                    for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
-                        await loadFromGitHub(NOMINATIONS[nomIdx], STYLES[styleIdx]);
-                    }
-                }
-                if (isAdminMode) { renderSummary();
-                    renderHistory(); }
-                if (autoSyncInterval) clearInterval(autoSyncInterval);
-                autoSyncInterval = setInterval(function() {
-                    if (githubToken && navigator.onLine) {
-                        loadFromGitHub(currentNomination, currentStyle);
-                        if (isAdminMode) { renderSummary();
-                            renderHistory(); } else if (isJuryMode) { renderJuryHistory(); }
-                    }
-                }, 15000);
-            } catch (e) {
-                showToast('❌ Ошибка: ' + e.message, 'error');
-                githubToken = '';
-            }
-        });
 
         init();
         console.log('✅ Apple-style программа загружена!');
