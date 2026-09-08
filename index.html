@@ -2295,6 +2295,7 @@
                         isAdminMode = false;
                         juryName = data.juryName || 'Жюри';
                         userRole = 'jury';
+                        githubToken = data.githubToken || '';
                         return 'jury';
                     } else if (data.isAdminMode) {
                         isAdminMode = true;
@@ -2322,6 +2323,10 @@
                 document.getElementById('historySection').style.display = 'none';
                 document.getElementById('juryHistorySection').style.display = 'block';
                 loadAllDataFromLocalStorage();
+                // Подгружаем данные с GitHub если есть токен
+                if (githubToken) {
+                    loadFromGitHub(currentNomination, currentStyle);
+                }
                 renderAll();
                 renderJuryHistory();
                 renderLeader();
@@ -2340,7 +2345,11 @@
                 document.getElementById('juryHistorySection').style.display = 'none';
                 loadAllDataFromLocalStorage();
                 if (githubToken) {
-                    loadFromGitHub(currentNomination, currentStyle);
+                    for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
+                        for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
+                            loadFromGitHub(NOMINATIONS[nomIdx], STYLES[styleIdx]);
+                        }
+                    }
                 }
                 renderAll();
                 renderSummary();
@@ -2376,6 +2385,10 @@
                 document.getElementById('historySection').style.display = 'none';
                 document.getElementById('juryHistorySection').style.display = 'block';
                 loadAllDataFromLocalStorage();
+                // Загружаем данные с GitHub если есть токен
+                if (githubToken) {
+                    loadFromGitHub(currentNomination, currentStyle);
+                }
                 renderAll();
                 renderJuryHistory();
                 renderLeader();
@@ -2401,6 +2414,13 @@
             document.getElementById('historySection').style.display = 'block';
             document.getElementById('juryHistorySection').style.display = 'none';
             loadAllDataFromLocalStorage();
+            if (githubToken) {
+                for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
+                    for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
+                        loadFromGitHub(NOMINATIONS[nomIdx], STYLES[styleIdx]);
+                    }
+                }
+            }
             renderAll();
             renderSummary();
             renderHistory();
@@ -2414,7 +2434,7 @@
             if (pass === JURY_PASSWORD) {
                 completeJuryLogin();
             } else {
-                showToast('❌ Неверный пароль!', 'error');
+                showToast('❌ Неверный пароль для жюри!', 'error');
                 document.getElementById('passwordInput').value = '';
                 document.getElementById('passwordInput').focus();
             }
@@ -2434,7 +2454,6 @@
         document.getElementById('passwordInput').addEventListener('keydown', function(e) {
             if (e.key === 'Enter') {
                 e.preventDefault();
-                // Пробуем как жюри, если не получилось — как руководитель
                 var pass = this.value.trim();
                 if (pass === JURY_PASSWORD) {
                     document.getElementById('juryLoginBtn').click();
@@ -3163,6 +3182,7 @@
             var participants = getUniqueParticipants(votes);
             var displayVotes = votes;
             if (isJuryMode) {
+                // Жюри видит только свои голоса
                 displayVotes = votes.filter(function(v) { return v.jury === juryName; });
             }
             var displayParticipants = getUniqueParticipants(displayVotes);
@@ -3250,15 +3270,35 @@
             if (isNaN(score) || score < 0 || score > 10) { showToast('Оценка должна быть от 0 до 10', 'warning');
                 scoreInput.focus(); return; }
 
+            // ===== ПРОВЕРКА НА ДУБЛЬ (одно жюри не может голосовать дважды за одного участника в одной номинации+стиле) =====
+            var currentData = getCurrentData();
+            var existingVote = null;
+            var voterName = isJuryMode ? juryName : (isAdminMode ? 'admin' : 'unknown');
+            for (var i = 0; i < currentData.votes.length; i++) {
+                if (currentData.votes[i].name === name && currentData.votes[i].jury === voterName) {
+                    existingVote = currentData.votes[i];
+                    break;
+                }
+            }
+
+            if (existingVote) {
+                showToast('❌ Вы уже поставили оценку участнику ' + name + ' (' + existingVote.score.toFixed(1) +
+                    ' баллов). Дублировать нельзя!', 'warning');
+                nameInput.value = '';
+                scoreInput.value = '';
+                commentInputField.value = '';
+                nameInput.focus();
+                return;
+            }
+
             var voteData = {
                 id: Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 name: name,
                 score: score,
                 comment: comment || '',
-                jury: isJuryMode ? juryName : (isAdminMode ? 'admin' : 'unknown')
+                jury: voterName
             };
 
-            var currentData = getCurrentData();
             currentData.votes.push(voteData);
             nameInput.value = '';
             scoreInput.value = '';
@@ -3327,6 +3367,16 @@
                             renderHistory(); }
                     }
                 }, 15000);
+            } else if (githubToken && isJuryMode) {
+                // Жюри тоже подгружает данные с GitHub
+                loadFromGitHub(currentNomination, currentStyle);
+                if (autoSyncInterval) clearInterval(autoSyncInterval);
+                autoSyncInterval = setInterval(function() {
+                    if (githubToken && navigator.onLine) {
+                        loadFromGitHub(currentNomination, currentStyle);
+                        if (isJuryMode) { renderJuryHistory(); }
+                    }
+                }, 15000);
             }
         }
 
@@ -3340,6 +3390,8 @@
             loadFromGitHub(currentNomination, currentStyle);
             if (isAdminMode) { renderSummary();
                 renderHistory(); } else if (isJuryMode) { renderJuryHistory(); }
+            renderAll();
+            renderLeader();
             showToast('✅ Синхронизация завершена', '');
         });
 
@@ -3357,6 +3409,7 @@
         console.log('🎵 Стили:', STYLES.join(', '));
         console.log('🔑 Пароль для жюри: GGWP');
         console.log('👑 Пароль для руководителя: GLHF');
+        console.log('🛡️ Защита от дублей: одно жюри = одна оценка на участника в номинации');
     </script>
 </body>
 </html>
