@@ -13,9 +13,25 @@
       "score": 10,
       "comment": "",
       "jury": "Егор"
+    },
+    {
+      "id": "1789136489568_8gd93b",
+      "name": "2",
+      "score": 8,
+      "comment": "",
+      "jury": "Дима"
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "2",
+      "score": 8,
+      "comment": "",
+      "time": "17:21:29",
+      "date": "11.09.2026",
+      "jury": "Дима"
+    },
     {
       "type": "vote",
       "name": "4",
