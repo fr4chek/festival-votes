@@ -954,173 +954,6 @@
             color: var(--text-dark);
         }
 
-        .history-wrap {
-            overflow-x: auto;
-            overflow-y: visible;
-            -webkit-overflow-scrolling: touch;
-            border-radius: 16px;
-            border: 1px solid rgba(255, 255, 255, 0.03);
-            background: rgba(255, 255, 255, 0.02);
-            padding: 4px 0;
-            font-family: 'SF Pro Text', sans-serif;
-        }
-        .history-wrap::-webkit-scrollbar {
-            height: 4px;
-        }
-        .history-wrap::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.02);
-            border-radius: 4px;
-        }
-        .history-wrap::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-        body.dark .history-wrap::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.04);
-        }
-        body.dark .history-wrap {
-            border-color: rgba(255, 255, 255, 0.01);
-            background: rgba(255, 255, 255, 0.01);
-        }
-        .history-list {
-            display: flex;
-            flex-direction: column;
-            min-width: 500px;
-            max-height: 200px;
-            overflow-y: auto;
-            padding-right: 4px;
-        }
-        .history-list::-webkit-scrollbar {
-            width: 4px;
-        }
-        .history-list::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-        body.dark .history-list::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.04);
-        }
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 10px 14px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
-            font-size: 14px;
-            color: var(--text-light);
-            flex-shrink: 0;
-            gap: 16px;
-            font-family: 'SF Pro Text', sans-serif;
-        }
-        body.dark .history-item {
-            color: var(--text-dark);
-            border-bottom-color: rgba(255, 255, 255, 0.015);
-        }
-        .history-item:last-child {
-            border-bottom: none;
-        }
-        .history-item .name {
-            font-weight: 500;
-            flex: 0 0 120px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-family: 'SF Pro Display', sans-serif;
-        }
-        .history-item .comment-text {
-            font-size: 12px;
-            color: var(--text-light);
-            flex: 0 0 120px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-family: 'SF Pro Text', sans-serif;
-        }
-        body.dark .history-item .comment-text {
-            color: var(--text-dark);
-        }
-        .history-item .score {
-            font-weight: 600;
-            color: #34c759;
-            flex: 0 0 60px;
-            text-align: right;
-            font-family: 'SF Pro Display', sans-serif;
-        }
-        body.dark .history-item .score {
-            color: #34c759;
-        }
-        .history-item .time {
-            font-size: 12px;
-            color: var(--text-light);
-            flex: 0 0 65px;
-            text-align: right;
-            font-family: 'SF Pro Text', sans-serif;
-        }
-        body.dark .history-item .time {
-            color: var(--text-dark);
-        }
-        .history-item .date {
-            font-size: 12px;
-            color: var(--text-light);
-            flex: 0 0 80px;
-            text-align: right;
-            font-family: 'SF Pro Text', sans-serif;
-        }
-        body.dark .history-item .date {
-            color: var(--text-dark);
-        }
-        .history-item.delete .name {
-            color: #ff3b30;
-        }
-        .history-item.delete .score {
-            color: #ff3b30;
-        }
-        .history-empty {
-            text-align: center;
-            color: var(--text-light);
-            padding: 20px;
-            font-style: italic;
-            font-size: 14px;
-            font-family: 'SF Pro Text', sans-serif;
-        }
-        body.dark .history-empty {
-            color: var(--text-dark);
-        }
-
-        .delete-section-label {
-            font-size: 14px;
-            color: #ff3b30;
-            font-weight: 500;
-            font-family: 'SF Pro Text', sans-serif;
-        }
-        body.dark .delete-section-label {
-            color: #ff6b6b;
-        }
-        .section-glass .btn-delete {
-            background: rgba(255, 59, 48, 0.15);
-            border: 1px solid rgba(255, 59, 48, 0.2);
-            color: #ff3b30;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            font-family: 'SF Pro Text', sans-serif;
-        }
-        .section-glass .btn-delete:hover {
-            background: rgba(255, 59, 48, 0.25);
-            border-color: rgba(255, 59, 48, 0.3);
-        }
-        #deleteName {
-            color: #ffffff !important;
-        }
-        #deleteName::placeholder {
-            color: rgba(255, 255, 255, 0.4) !important;
-        }
-        body.dark #deleteName {
-            color: #ffffff !important;
-        }
-        body.dark #deleteName::placeholder {
-            color: rgba(255, 255, 255, 0.3) !important;
-        }
-
         .footer {
             display: flex;
             justify-content: center;
@@ -1588,6 +1421,143 @@
             }
         }
 
+        /* ===== МОДАЛКА ИСТОРИИ ===== */
+        .history-modal-box {
+            max-width: 900px !important;
+            max-height: 85vh !important;
+            padding: 32px 28px !important;
+        }
+        .history-modal-box h2 {
+            margin-bottom: 16px;
+        }
+        .history-filters {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        .history-filter-btn {
+            padding: 8px 16px;
+            border-radius: 980px;
+            font-weight: 600;
+            font-size: 13px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--text-light);
+            transition: all 0.3s ease;
+            font-family: 'SF Pro Text', sans-serif;
+        }
+        body.dark .history-filter-btn {
+            color: var(--text-dark);
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.02);
+        }
+        .history-filter-btn.active {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: rgba(255, 215, 0, 0.3);
+            color: #ffd700;
+        }
+        .history-modal-list {
+            max-height: 55vh;
+            overflow-y: auto;
+            text-align: left;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 4px;
+        }
+        body.dark .history-modal-list {
+            border-color: rgba(255, 255, 255, 0.02);
+            background: rgba(255, 255, 255, 0.01);
+        }
+        .history-modal-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 13px;
+            color: var(--text-light);
+            gap: 12px;
+            font-family: 'SF Pro Text', sans-serif;
+            flex-wrap: wrap;
+        }
+        body.dark .history-modal-item {
+            color: var(--text-dark);
+            border-bottom-color: rgba(255, 255, 255, 0.015);
+        }
+        .history-modal-item:last-child {
+            border-bottom: none;
+        }
+        .history-modal-item .hm-jury {
+            font-weight: 600;
+            color: #34c759;
+            flex: 0 0 100px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-family: 'SF Pro Display', sans-serif;
+        }
+        .history-modal-item .hm-nom {
+            flex: 0 0 120px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #ffd700;
+        }
+        .history-modal-item .hm-name {
+            flex: 0 0 70px;
+            font-weight: 500;
+        }
+        .history-modal-item .hm-score {
+            flex: 0 0 50px;
+            text-align: center;
+            font-weight: 700;
+            color: #34c759;
+        }
+        .history-modal-item .hm-time {
+            flex: 0 0 120px;
+            text-align: right;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+        body.dark .history-modal-item .hm-time {
+            color: rgba(255, 255, 255, 0.3);
+        }
+        .history-modal-empty {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-light);
+            font-style: italic;
+            font-family: 'SF Pro Text', sans-serif;
+        }
+        body.dark .history-modal-empty {
+            color: var(--text-dark);
+        }
+        .btn-history {
+            background: rgba(0, 122, 255, 0.15);
+            border: 1px solid rgba(0, 122, 255, 0.2);
+            color: #007aff;
+            min-width: auto;
+            padding: 8px 18px;
+            display: none;
+        }
+        .btn-history:hover {
+            background: rgba(0, 122, 255, 0.25);
+            border-color: rgba(0, 122, 255, 0.3);
+        }
+        body.dark .btn-history {
+            background: rgba(0, 122, 255, 0.08);
+            border-color: rgba(0, 122, 255, 0.12);
+            color: #007aff;
+        }
+        body.dark .btn-history:hover {
+            background: rgba(0, 122, 255, 0.15);
+            border-color: rgba(0, 122, 255, 0.2);
+        }
+
         @media (max-width: 700px) {
             .container {
                 padding: 0 4px;
@@ -1651,6 +1621,30 @@
                 padding: 28px 20px;
                 max-width: 100%;
             }
+            .history-modal-box {
+                max-width: 100% !important;
+                padding: 24px 16px !important;
+            }
+            .history-modal-item .hm-jury {
+                flex: 0 0 70px;
+                font-size: 11px;
+            }
+            .history-modal-item .hm-nom {
+                flex: 0 0 80px;
+                font-size: 11px;
+            }
+            .history-modal-item .hm-name {
+                flex: 0 0 50px;
+                font-size: 11px;
+            }
+            .history-modal-item .hm-score {
+                flex: 0 0 40px;
+                font-size: 11px;
+            }
+            .history-modal-item .hm-time {
+                flex: 0 0 90px;
+                font-size: 10px;
+            }
             .header {
                 padding: 16px 20px;
             }
@@ -1705,6 +1699,11 @@
                 padding: 10px 16px;
             }
             .btn-logout {
+                min-width: auto !important;
+                padding: 8px 14px !important;
+                font-size: 12px !important;
+            }
+            .btn-history {
                 min-width: auto !important;
                 padding: 8px 14px !important;
                 font-size: 12px !important;
@@ -1799,6 +1798,15 @@
                 padding: 6px 12px !important;
                 font-size: 11px !important;
             }
+            .btn-history {
+                min-width: auto !important;
+                padding: 6px 12px !important;
+                font-size: 11px !important;
+            }
+            .history-modal-item {
+                font-size: 11px;
+                padding: 8px 10px;
+            }
         }
     </style>
 </head>
@@ -1813,6 +1821,9 @@
                 </div>
             </div>
             <div class="header-right">
+                <button class="btn btn-sm btn-history" id="historyBtn" style="display:none;">
+                    📋 История
+                </button>
                 <button class="btn btn-sm btn-logout" id="logoutBtn" style="background:rgba(255,59,48,0.15); border-color:rgba(255,59,48,0.2); color:#ff3b30; min-width:auto; padding:8px 18px; display:none;">
                     🚪 Выйти
                 </button>
@@ -1844,7 +1855,7 @@
                 <div class="hint" style="margin-top:8px;">Сначала подключите GitHub для синхронизации данных</div>
             </div>
 
-            <!-- Шаг 2: Выбор роли (появляется после подключения токена) -->
+            <!-- Шаг 2: Выбор роли -->
             <div id="stepRole" style="display:none; margin-top:16px; border-top:1px solid rgba(255,255,255,0.06); padding-top:16px;">
                 <label style="font-weight:600; font-size:14px; display:block; margin-bottom:8px;">👤 Выберите роль</label>
                 <div class="role-selector">
@@ -1966,18 +1977,6 @@
                 </div>
             </div>
 
-            <!-- ИСТОРИЯ (только для руководителя и админа) -->
-            <div id="historySection" style="display: none;">
-                <div class="section-glass">
-                    <div class="section-title">📋 История голосований (все жюри)</div>
-                    <div class="history-wrap">
-                        <div class="history-list" id="historyList">
-                            <div class="history-empty">История пуста</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- ИСТОРИЯ ЖЮРИ -->
             <div id="juryHistorySection">
                 <div class="section-glass">
@@ -2069,6 +2068,27 @@
             <div class="details-scores-list" id="detailsScoresList"></div>
             <div class="btn-row" style="margin-top: 16px;">
                 <button class="btn" id="closeDetailsBtn">✅ Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА ИСТОРИИ (общая) -->
+    <div class="modal-overlay" id="historyModal">
+        <div class="modal-box history-modal-box">
+            <h2>📋 История голосований</h2>
+            <p>Все голоса жюри по всем номинациям и стилям</p>
+            <div class="history-filters" id="historyFilters">
+                <button class="history-filter-btn active" data-filter="all">Все</button>
+                <button class="history-filter-btn" data-filter="boys">👦 Мальчики</button>
+                <button class="history-filter-btn" data-filter="girls">👧 Девочки</button>
+                <button class="history-filter-btn" data-filter="women">👩 Женщины</button>
+                <button class="history-filter-btn" data-filter="ovz">♿ ОВЗ</button>
+            </div>
+            <div class="history-modal-list" id="historyModalList">
+                <div class="history-modal-empty">История пуста</div>
+            </div>
+            <div class="btn-row" style="margin-top: 16px;">
+                <button class="btn" id="closeHistoryBtn">✅ Закрыть</button>
             </div>
         </div>
     </div>
@@ -2307,7 +2327,6 @@
             if (winnerName === name) winnerName = null;
             renderAll();
             addHistoryDelete(name);
-            renderHistory();
             renderLeader();
             lastUpdateTime[currentNomination][currentStyle] = Date.now();
             saveAllDataToLocalStorage();
@@ -2389,8 +2408,8 @@
                 document.getElementById('deleteSection').style.display = 'none';
                 document.getElementById('actionsSection').style.display = 'block';
                 document.getElementById('summarySection').style.display = 'none';
-                document.getElementById('historySection').style.display = 'none';
                 document.getElementById('juryHistorySection').style.display = 'block';
+                document.getElementById('historyBtn').style.display = 'none';
                 loadAllDataFromLocalStorage();
                 if (githubToken) {
                     loadFromGitHub(currentNomination, currentStyle);
@@ -2410,8 +2429,8 @@
                 document.getElementById('deleteSection').style.display = 'none';
                 document.getElementById('actionsSection').style.display = 'block';
                 document.getElementById('summarySection').style.display = 'block';
-                document.getElementById('historySection').style.display = 'block';
                 document.getElementById('juryHistorySection').style.display = 'none';
+                document.getElementById('historyBtn').style.display = 'inline-flex';
                 loadAllDataFromLocalStorage();
                 if (githubToken) {
                     for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
@@ -2422,7 +2441,6 @@
                 }
                 renderAll();
                 renderSummary();
-                renderHistory();
                 renderLeader();
                 showToast('👔 Добро пожаловать, руководитель!', 'info');
                 return true;
@@ -2436,8 +2454,8 @@
                 document.getElementById('deleteSection').style.display = 'block';
                 document.getElementById('actionsSection').style.display = 'block';
                 document.getElementById('summarySection').style.display = 'block';
-                document.getElementById('historySection').style.display = 'block';
                 document.getElementById('juryHistorySection').style.display = 'none';
+                document.getElementById('historyBtn').style.display = 'inline-flex';
                 loadAllDataFromLocalStorage();
                 if (githubToken) {
                     for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
@@ -2448,7 +2466,6 @@
                 }
                 renderAll();
                 renderSummary();
-                renderHistory();
                 renderLeader();
                 showToast('👑 Добро пожаловать, администратор!', 'info');
                 return true;
@@ -2486,6 +2503,7 @@
             });
         });
         var autoSyncInterval = null;
+        var currentHistoryFilter = 'all';
 
         function getCurrentData() {
             return allData[currentNomination][currentStyle];
@@ -2519,7 +2537,6 @@
         var deleteBtn = document.getElementById('deleteBtn');
         var deleteName = document.getElementById('deleteName');
         var clearBtn = document.getElementById('clearBtn');
-        var historyList = document.getElementById('historyList');
         var juryHistoryList = document.getElementById('juryHistoryList');
         var leaderNames = document.getElementById('leaderNames');
         var leaderScore = document.getElementById('leaderScore');
@@ -2547,48 +2564,139 @@
         var detailsScoresList = document.getElementById('detailsScoresList');
         var closeDetailsBtn = document.getElementById('closeDetailsBtn');
 
+        var historyModal = document.getElementById('historyModal');
+        var historyModalList = document.getElementById('historyModalList');
+        var closeHistoryBtn = document.getElementById('closeHistoryBtn');
+        var historyFilters = document.getElementById('historyFilters');
+
         // ===== КНОПКА ВЫХОДА =====
         document.getElementById('logoutBtn').addEventListener('click', function() {
             if (confirm('Вы уверены, что хотите выйти?')) {
-                // Останавливаем автосинхронизацию
                 if (autoSyncInterval) {
                     clearInterval(autoSyncInterval);
                     autoSyncInterval = null;
                 }
 
-                // Сбрасываем состояние
                 isJuryMode = false;
                 isLeaderMode = false;
                 isAdminMode = false;
                 userRole = '';
                 juryName = '';
 
-                // Удаляем сессию из localStorage
                 try {
                     localStorage.removeItem('session');
                 } catch (e) {}
 
-                // Показываем блок входа, скрываем контент
                 document.getElementById('tokenBlock').style.display = 'block';
                 document.getElementById('appContent').style.display = 'none';
 
-                // Сбрасываем UI блока входа
                 document.getElementById('stepToken').style.display = 'block';
                 document.getElementById('stepRole').style.display = 'none';
                 document.getElementById('rolePasswordBlock').style.display = 'none';
                 document.getElementById('githubTokenInput').value = '';
                 document.getElementById('rolePasswordInput').value = '';
 
-                // Скрываем бейдж роли
                 document.getElementById('roleBadge').className = 'role-badge';
                 document.getElementById('roleBadge').textContent = '👤 Роль';
 
-                // Скрываем кнопку выхода
                 document.getElementById('logoutBtn').style.display = 'none';
+                document.getElementById('historyBtn').style.display = 'none';
 
                 showToast('👋 Вы вышли из системы', 'info');
             }
         });
+
+        // ===== КНОПКА ИСТОРИИ =====
+        document.getElementById('historyBtn').addEventListener('click', function() {
+            currentHistoryFilter = 'all';
+            document.querySelectorAll('.history-filter-btn').forEach(function(b) {
+                b.classList.toggle('active', b.dataset.filter === 'all');
+            });
+            renderHistoryModal();
+            historyModal.classList.add('active');
+        });
+
+        document.getElementById('closeHistoryBtn').addEventListener('click', function() {
+            historyModal.classList.remove('active');
+        });
+
+        historyModal.addEventListener('click', function(e) {
+            if (e.target === this) historyModal.classList.remove('active');
+        });
+
+        // Фильтры истории
+        historyFilters.addEventListener('click', function(e) {
+            var btn = e.target.closest('.history-filter-btn');
+            if (!btn) return;
+            currentHistoryFilter = btn.dataset.filter;
+            document.querySelectorAll('.history-filter-btn').forEach(function(b) {
+                b.classList.toggle('active', b.dataset.filter === currentHistoryFilter);
+            });
+            renderHistoryModal();
+        });
+
+        function renderHistoryModal() {
+            // Собираем всю историю из всех номинаций и стилей
+            var allHistory = [];
+            NOMINATIONS.forEach(function(nom) {
+                STYLES.forEach(function(style) {
+                    var history = allData[nom][style].history || [];
+                    history.forEach(function(item) {
+                        allHistory.push({
+                            nomination: nom,
+                            style: style,
+                            type: item.type,
+                            name: item.name,
+                            score: item.score,
+                            comment: item.comment,
+                            time: item.time,
+                            date: item.date,
+                            jury: item.jury
+                        });
+                    });
+                });
+            });
+
+            // Фильтруем
+            if (currentHistoryFilter !== 'all') {
+                allHistory = allHistory.filter(function(item) {
+                    return item.nomination === currentHistoryFilter;
+                });
+            }
+
+            // Сортируем по дате и времени (сначала новые)
+            allHistory.sort(function(a, b) {
+                var dateA = a.date.split('.').reverse().join('');
+                var dateB = b.date.split('.').reverse().join('');
+                if (dateA !== dateB) return dateB.localeCompare(dateA);
+                return b.time.localeCompare(a.time);
+            });
+
+            if (allHistory.length === 0) {
+                historyModalList.innerHTML = '<div class="history-modal-empty">История пуста</div>';
+                return;
+            }
+
+            var html = '';
+            allHistory.forEach(function(item) {
+                var isDelete = item.type === 'delete';
+                var nomLabel = getNominationShort(item.nomination);
+                var styleLabel = getStyleLabel(item.style);
+                html += '<div class="history-modal-item" style="' + (isDelete ? 'opacity:0.7;' : '') + '">';
+                html += '<span class="hm-jury" style="' + (isDelete ? 'color:#ff3b30;' : '') + '">' +
+                    (isDelete ? '🗑️ ' : '') + escapeHtml(item.jury || '—') + '</span>';
+                html += '<span class="hm-nom">' + nomLabel + ' · ' + styleLabel + '</span>';
+                html += '<span class="hm-name">' + escapeHtml(item.name) + '</span>';
+                if (isDelete) {
+                    html += '<span class="hm-score" style="color:#ff3b30;">—</span>';
+                } else {
+                    html += '<span class="hm-score">' + item.score.toFixed(1) + '</span>';
+                }
+                html += '<span class="hm-time">' + escapeHtml(item.date) + ' ' + escapeHtml(item.time) + '</span>';
+                html += '</div>';
+            });
+            historyModalList.innerHTML = html;
+        }
 
         // ===== ЛОГИКА ВХОДА =====
 
@@ -2613,7 +2721,6 @@
                 document.getElementById('stepToken').style.display = 'none';
                 document.getElementById('stepRole').style.display = 'block';
 
-                // Скрываем блок пароля
                 document.getElementById('rolePasswordBlock').style.display = 'none';
 
             } catch (e) {
@@ -2653,10 +2760,11 @@
             input.value = '';
             input.focus();
             var hint = document.getElementById('rolePasswordHint');
+            // ===== УБРАЛИ ПАРОЛЬ ИЗ ПОДСКАЗКИ =====
             var roleNames = {
-                jury: 'Жюри (пароль: GGWP)',
-                leader: 'Руководитель (пароль: GLHF)',
-                admin: 'Администратор (пароль: EGOR)'
+                jury: 'Жюри',
+                leader: 'Руководитель',
+                admin: 'Администратор'
             };
             hint.textContent = 'Введите пароль для роли: ' + roleNames[role];
             hint.style.color = 'rgba(255,255,255,0.6)';
@@ -2666,7 +2774,6 @@
             var pass = document.getElementById('rolePasswordInput').value.trim();
             if (!selectedRole) { showToast('Сначала выберите роль', 'warning'); return; }
             if (pass === PASSWORDS[selectedRole]) {
-                // Вход с ролью
                 if (selectedRole === 'jury') {
                     var name = prompt('Введите ваше имя (как жюри):');
                     if (name && name.trim()) {
@@ -2711,7 +2818,6 @@
             document.getElementById('tokenBlock').style.display = 'none';
             document.getElementById('appContent').style.display = 'block';
 
-            // ПОКАЗЫВАЕМ КНОПКУ ВЫХОДА
             document.getElementById('logoutBtn').style.display = 'inline-flex';
 
             var roleLabels = {
@@ -2734,27 +2840,26 @@
                 document.getElementById('deleteSection').style.display = 'none';
                 document.getElementById('actionsSection').style.display = 'block';
                 document.getElementById('summarySection').style.display = 'none';
-                document.getElementById('historySection').style.display = 'none';
                 document.getElementById('juryHistorySection').style.display = 'block';
+                document.getElementById('historyBtn').style.display = 'none';
             } else if (userRole === 'leader') {
                 document.getElementById('addSection').style.display = 'block';
                 document.getElementById('deleteSection').style.display = 'none';
                 document.getElementById('actionsSection').style.display = 'block';
                 document.getElementById('summarySection').style.display = 'block';
-                document.getElementById('historySection').style.display = 'block';
                 document.getElementById('juryHistorySection').style.display = 'none';
+                document.getElementById('historyBtn').style.display = 'inline-flex';
             } else if (userRole === 'admin') {
                 document.getElementById('addSection').style.display = 'block';
                 document.getElementById('deleteSection').style.display = 'block';
                 document.getElementById('actionsSection').style.display = 'block';
                 document.getElementById('summarySection').style.display = 'block';
-                document.getElementById('historySection').style.display = 'block';
                 document.getElementById('juryHistorySection').style.display = 'none';
+                document.getElementById('historyBtn').style.display = 'inline-flex';
             }
 
             loadAllDataFromLocalStorage();
 
-            // Загружаем данные с GitHub
             if (githubToken) {
                 if (userRole === 'jury') {
                     loadFromGitHub(currentNomination, currentStyle);
@@ -2769,21 +2874,17 @@
 
             renderAll();
             if (userRole === 'jury') renderJuryHistory();
-            else renderHistory();
             renderLeader();
 
-            // ===== АВТОСИНХРОНИЗАЦИЯ КАЖДЫЕ 10 СЕКУНД =====
             if (autoSyncInterval) clearInterval(autoSyncInterval);
             autoSyncInterval = setInterval(function() {
                 if (githubToken && navigator.onLine) {
-                    // Загружаем свежие данные из GitHub
                     if (userRole === 'jury') {
                         loadFromGitHub(currentNomination, currentStyle);
                         renderJuryHistory();
                     } else {
                         loadFromGitHub(currentNomination, currentStyle);
                         renderSummary();
-                        renderHistory();
                     }
                     renderAll();
                     renderLeader();
@@ -2804,7 +2905,6 @@
             currentNomination = nom;
             renderAll();
             if (userRole === 'jury') renderJuryHistory();
-            else renderHistory();
             renderLeader();
         });
 
@@ -2819,7 +2919,6 @@
             currentStyle = style;
             renderAll();
             if (userRole === 'jury') renderJuryHistory();
-            else renderHistory();
             renderLeader();
         });
 
@@ -2869,9 +2968,8 @@
                 date: date,
                 jury: userRole === 'jury' ? juryName : userRole
             });
-            if (currentData.history.length > 50) currentData.history = currentData.history.slice(0, 50);
-            if (userRole !== 'jury') renderHistory();
-            else renderJuryHistory();
+            if (currentData.history.length > 100) currentData.history = currentData.history.slice(0, 100);
+            if (userRole === 'jury') renderJuryHistory();
             saveAllDataToLocalStorage();
             if (githubToken) saveToGitHub(currentNomination, currentStyle);
         }
@@ -2883,40 +2981,9 @@
             var currentData = getCurrentData();
             if (!currentData.history) currentData.history = [];
             currentData.history.unshift({ type: 'delete', name: name, time: time, date: date, jury: userRole });
-            if (currentData.history.length > 50) currentData.history = currentData.history.slice(0, 50);
-            if (userRole !== 'jury') renderHistory();
+            if (currentData.history.length > 100) currentData.history = currentData.history.slice(0, 100);
             saveAllDataToLocalStorage();
             if (githubToken) saveToGitHub(currentNomination, currentStyle);
-        }
-
-        function renderHistory() {
-            var history = getCurrentHistory();
-            if (history.length === 0) {
-                historyList.innerHTML = '<div class="history-empty">История пуста</div>';
-                return;
-            }
-            var html = '';
-            for (var i = 0; i < history.length; i++) {
-                var item = history[i];
-                var isDelete = item.type === 'delete';
-                var deleteClass = isDelete ? 'delete' : '';
-                html += '<div class="history-item ' + deleteClass + '">';
-                if (isDelete) {
-                    html += '<span class="name">🗑️ Удалён: ' + escapeHtml(item.name) + ' (' + escapeHtml(item.jury) +
-                        ')</span>';
-                    html += '<span class="comment-text"></span><span class="score"></span>';
-                } else {
-                    var juryLabel = item.jury ? ' (' + escapeHtml(item.jury) + ')' : '';
-                    html += '<span class="name">' + escapeHtml(item.name) + juryLabel + '</span>';
-                    if (item.comment) html += '<span class="comment-text">" ' + escapeHtml(item.comment) + '"</span>';
-                    else html += '<span class="comment-text"></span>';
-                    html += '<span class="score">+' + item.score.toFixed(1) + '</span>';
-                }
-                html += '<span class="time">' + escapeHtml(item.time) + '</span>';
-                html += '<span class="date">' + escapeHtml(item.date) + '</span>';
-                html += '</div>';
-            }
-            historyList.innerHTML = html;
         }
 
         function renderJuryHistory() {
@@ -3064,6 +3131,11 @@
             return labels[nom] || nom;
         }
 
+        function getNominationShort(nom) {
+            var labels = { 'boys': '👦 Мал.', 'girls': '👧 Дев.', 'women': '👩 Жен.', 'ovz': '♿ ОВЗ' };
+            return labels[nom] || nom;
+        }
+
         function getStyleLabel(style) {
             var labels = { 'national': 'Нац.', 'free': 'Своб.', 'evening': 'Веч.' };
             return labels[style] || style;
@@ -3150,8 +3222,7 @@
                 currentData.history = [];
                 winnerName = null;
                 renderAll();
-                if (userRole !== 'jury') { renderSummary();
-                    renderHistory(); } else { renderJuryHistory(); }
+                if (userRole !== 'jury') { renderSummary(); } else { renderJuryHistory(); }
                 renderLeader();
                 lastUpdateTime[currentNomination][currentStyle] = Date.now();
                 saveAllDataToLocalStorage();
@@ -3352,7 +3423,6 @@
                     allData[nomination][style] = { votes: [], history: [] };
                     if (userRole !== 'jury') { renderAll();
                         renderSummary();
-                        renderHistory();
                         renderLeader(); } else { renderAll();
                         renderJuryHistory();
                         renderLeader(); }
@@ -3369,7 +3439,6 @@
                     if (jsonData.history) allData[nomination][style].history = jsonData.history;
                     if (userRole !== 'jury') { renderAll();
                         renderSummary();
-                        renderHistory();
                         renderLeader(); } else { renderAll();
                         renderJuryHistory();
                         renderLeader(); }
@@ -3385,7 +3454,6 @@
             var displayVotes = votes;
 
             if (userRole === 'jury') {
-                // Жюри видит только свои голоса
                 displayVotes = votes.filter(function(v) { return v.jury === juryName; });
             }
             var displayParticipants = getUniqueParticipants(displayVotes);
@@ -3471,7 +3539,6 @@
             if (isNaN(score) || score < 0 || score > 10) { showToast('Оценка должна быть от 0 до 10', 'warning');
                 scoreInput.focus(); return; }
 
-            // ===== ПРОВЕРКА НА ДУБЛЬ =====
             var currentData = getCurrentData();
             var existingVote = null;
             var voterName = userRole === 'jury' ? juryName : userRole;
@@ -3506,27 +3573,22 @@
             commentInputField.value = '';
             nameInput.focus();
 
-            // Сохраняем в локальное хранилище
             saveAllDataToLocalStorage();
 
-            // Сохраняем в GitHub (асинхронно, без ожидания)
             if (githubToken) {
                 saveToGitHub(currentNomination, currentStyle).then(() => {
-                    // После сохранения обновляем UI
                     renderAll();
                     if (userRole === 'jury') renderJuryHistory();
-                    else renderHistory();
                     renderLeader();
                 }).catch(() => {});
             }
 
-            // Сразу обновляем UI (оптимистичное обновление)
             renderAll();
             if (userRole === 'jury') renderJuryHistory();
-            else renderHistory();
             renderLeader();
 
             lastUpdateTime[currentNomination][currentStyle] = Date.now();
+            addHistory(name, score, comment);
 
             showToast('✅ ' + name + ' +' + score.toFixed(1) + (comment ? ' 💬 ' + comment : ''), '');
         }
@@ -3560,7 +3622,6 @@
             renderPalettes();
             loadAllDataFromLocalStorage();
 
-            // Пробуем восстановить сессию
             var restored = restoreSession();
 
             if (!restored) {
@@ -3570,10 +3631,10 @@
                 document.getElementById('stepRole').style.display = 'none';
                 document.getElementById('rolePasswordBlock').style.display = 'none';
                 document.getElementById('logoutBtn').style.display = 'none';
+                document.getElementById('historyBtn').style.display = 'none';
             }
         }
 
-        // Обработчики
         addBtn.addEventListener('click', addVote);
         calcBtn.addEventListener('click', showWinnerModal);
         syncBtn.addEventListener('click', function() {
@@ -3581,8 +3642,7 @@
             showToast('🔄 Синхронизация...', 'info');
             saveAllDataToLocalStorage();
             loadFromGitHub(currentNomination, currentStyle);
-            if (userRole !== 'jury') { renderSummary();
-                renderHistory(); } else { renderJuryHistory(); }
+            if (userRole !== 'jury') { renderSummary(); } else { renderJuryHistory(); }
             renderAll();
             renderLeader();
             showToast('✅ Синхронизация завершена', '');
@@ -3604,6 +3664,7 @@
         console.log('🛡️ Защита от дублей: одна оценка на участника в номинации');
         console.log('🔄 Автосинхронизация: каждые 10 секунд (без уведомлений)');
         console.log('🚪 Кнопка выхода: есть, данные сохраняются');
+        console.log('📋 Кнопка истории: есть, для админа и руководителя');
     </script>
 </body>
 </html>
