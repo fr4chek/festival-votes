@@ -1,22 +1,4 @@
 {
-  "votes": [
-    {
-      "id": "1789136735400_1mp8k5",
-      "name": "1",
-      "score": 9,
-      "comment": "",
-      "jury": "Дима"
-    }
-  ],
-  "history": [
-    {
-      "type": "vote",
-      "name": "1",
-      "score": 9,
-      "comment": "",
-      "time": "17:25:35",
-      "date": "11.09.2026",
-      "jury": "Дима"
-    }
-  ]
+  "votes": [],
+  "history": []
 }
