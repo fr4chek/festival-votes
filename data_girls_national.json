@@ -1,0 +1,22 @@
+{
+  "votes": [
+    {
+      "id": "1789136496796_nz0h7r",
+      "name": "8",
+      "score": 1,
+      "comment": "",
+      "jury": "Дима"
+    }
+  ],
+  "history": [
+    {
+      "type": "vote",
+      "name": "8",
+      "score": 1,
+      "comment": "",
+      "time": "17:21:36",
+      "date": "11.09.2026",
+      "jury": "Дима"
+    }
+  ]
+}
