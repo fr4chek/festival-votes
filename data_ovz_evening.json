@@ -1,22 +1,4 @@
 {
-  "votes": [
-    {
-      "id": "1789136503128_lzm89m",
-      "name": "6",
-      "score": 7,
-      "comment": "",
-      "jury": "Дима"
-    }
-  ],
-  "history": [
-    {
-      "type": "vote",
-      "name": "6",
-      "score": 7,
-      "comment": "",
-      "time": "17:21:43",
-      "date": "11.09.2026",
-      "jury": "Дима"
-    }
-  ]
+  "votes": [],
+  "history": []
 }
