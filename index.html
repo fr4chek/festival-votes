@@ -1536,6 +1536,16 @@
         body.dark .history-modal-empty {
             color: var(--text-dark);
         }
+        .history-loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-light);
+            font-style: italic;
+            font-family: 'SF Pro Text', sans-serif;
+        }
+        body.dark .history-loading {
+            color: var(--text-dark);
+        }
         .btn-history {
             background: rgba(0, 122, 255, 0.15);
             border: 1px solid rgba(0, 122, 255, 0.2);
@@ -1590,32 +1600,6 @@
             }
             .leader-card .names {
                 font-size: 24px;
-            }
-            .history-item .date {
-                flex: 0 0 60px;
-                font-size: 11px;
-            }
-            .history-item .time {
-                flex: 0 0 55px;
-                font-size: 11px;
-            }
-            .history-item .score {
-                flex: 0 0 50px;
-            }
-            .history-item .comment-text {
-                flex: 0 0 60px;
-            }
-            .history-item .name {
-                flex: 0 0 80px;
-            }
-            .history-list {
-                min-width: 400px;
-            }
-            .podium-step {
-                width: 70px;
-            }
-            .podium-item {
-                min-width: 60px;
             }
             .modal-box {
                 padding: 28px 20px;
@@ -1743,39 +1727,9 @@
             td {
                 padding: 8px 6px;
             }
-            .history-list {
-                min-width: 350px;
-            }
-            .history-item .name {
-                flex: 0 0 70px;
-                font-size: 12px;
-            }
-            .history-item .comment-text {
-                flex: 0 0 50px;
-                font-size: 10px;
-            }
-            .history-item .score {
-                flex: 0 0 45px;
-                font-size: 12px;
-            }
-            .history-item .time {
-                flex: 0 0 50px;
-                font-size: 10px;
-            }
-            .history-item .date {
-                flex: 0 0 55px;
-                font-size: 10px;
-            }
-            .summary-table-wrap table {
-                min-width: 320px;
+            .history-modal-item {
                 font-size: 11px;
-            }
-            .summary-table-wrap th,
-            .summary-table-wrap td {
-                padding: 6px 4px;
-            }
-            .details-grid {
-                grid-template-columns: 1fr;
+                padding: 8px 10px;
             }
             .role-selector {
                 flex-direction: column;
@@ -1802,10 +1756,6 @@
                 min-width: auto !important;
                 padding: 6px 12px !important;
                 font-size: 11px !important;
-            }
-            .history-modal-item {
-                font-size: 11px;
-                padding: 8px 10px;
             }
         }
     </style>
@@ -1841,21 +1791,18 @@
 
         <div id="toastContainer" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:99999;display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;max-width:90%;"></div>
 
-        <!-- СТАТУС -->
         <div id="statusBar" class="status-bar"></div>
 
         <!-- БЛОК ВХОДА -->
         <div class="token-input" id="tokenBlock">
             <label>🔑 Вход в систему</label>
 
-            <!-- Шаг 1: GitHub токен -->
             <div id="stepToken">
                 <input type="password" id="githubTokenInput" placeholder="Введите GitHub токен (ghp_...)" autocomplete="off">
                 <button class="btn" id="githubConnectBtn" style="width:100%; margin-top:8px;">🔗 Подключить GitHub</button>
                 <div class="hint" style="margin-top:8px;">Сначала подключите GitHub для синхронизации данных</div>
             </div>
 
-            <!-- Шаг 2: Выбор роли -->
             <div id="stepRole" style="display:none; margin-top:16px; border-top:1px solid rgba(255,255,255,0.06); padding-top:16px;">
                 <label style="font-weight:600; font-size:14px; display:block; margin-bottom:8px;">👤 Выберите роль</label>
                 <div class="role-selector">
@@ -1873,14 +1820,12 @@
 
         <!-- ОСНОВНОЙ КОНТЕНТ -->
         <div id="appContent" style="display: none;">
-            <!-- СТАТИСТИКА -->
             <div class="stats-grid" style="margin-bottom: 20px;">
                 <div class="stat-card"><div class="num" id="statParticipants">0</div><div class="label">👤 Участников</div></div>
                 <div class="stat-card"><div class="num" id="statVotes">0</div><div class="label">📊 Оценок</div></div>
                 <div class="stat-card"><div class="num" id="statAvg">—</div><div class="label">🏆 Средний балл лидера</div></div>
             </div>
 
-            <!-- ЛИДЕР -->
             <div class="leader-card" id="leaderCard">
                 <div class="label">👑 Текущий лидер</div>
                 <div class="empty" id="leaderEmpty">Нет данных</div>
@@ -1890,7 +1835,6 @@
                 </div>
             </div>
 
-            <!-- НОМИНАЦИИ -->
             <div class="nomination-tabs" id="nominationTabs">
                 <button class="nomination-tab active" data-nomination="boys">👦 Мальчики</button>
                 <button class="nomination-tab" data-nomination="girls">👧 Девочки</button>
@@ -1898,14 +1842,12 @@
                 <button class="nomination-tab" data-nomination="ovz">♿ ОВЗ</button>
             </div>
 
-            <!-- ВКЛАДКИ СТИЛЕЙ -->
             <div class="style-tabs" id="styleTabs">
                 <button class="style-tab active" data-style="national">🎵 Национальный</button>
                 <button class="style-tab" data-style="free">🎸 Свободный</button>
                 <button class="style-tab" data-style="evening">🌙 Вечерний</button>
             </div>
 
-            <!-- ФОРМА ДОБАВЛЕНИЯ -->
             <div class="section-glass" id="addSection">
                 <div class="input-row">
                     <div class="input-group">
@@ -1926,7 +1868,6 @@
                 </div>
             </div>
 
-            <!-- УДАЛЕНИЕ (только для админа) -->
             <div class="section-glass" id="deleteSection" style="border-color: rgba(255,59,48,0.06); display:none;">
                 <label class="delete-section-label">🗑️ Удалить участника</label>
                 <div style="display:flex; gap:10px; margin-top:8px; flex-wrap:wrap;">
@@ -1935,7 +1876,6 @@
                 </div>
             </div>
 
-            <!-- МОДАЛКА ПОДТВЕРЖДЕНИЯ УДАЛЕНИЯ -->
             <div class="modal-overlay" id="deleteConfirmModal">
                 <div class="modal-box">
                     <h2>⚠️ Подтверждение удаления</h2>
@@ -1947,7 +1887,6 @@
                 </div>
             </div>
 
-            <!-- ТАБЛИЦА -->
             <div class="table-wrap" style="margin-bottom:20px; padding:0;">
                 <table>
                     <thead><tr><th>Номер</th><th>Средний балл</th><th>Кол-во</th><th>Ваши оценки</th><th>Комментарии</th></tr></thead>
@@ -1955,7 +1894,6 @@
                 </table>
             </div>
 
-            <!-- СВОДНАЯ ТАБЛИЦА (только для руководителя и админа) -->
             <div id="summarySection" style="display: none;">
                 <div class="section-glass" style="border-color: rgba(255,215,0,0.15);">
                     <div class="section-title" style="color: #ffd700;">📊 Сводная статистика (все жюри)</div>
@@ -1977,7 +1915,6 @@
                 </div>
             </div>
 
-            <!-- ИСТОРИЯ ЖЮРИ -->
             <div id="juryHistorySection">
                 <div class="section-glass">
                     <div class="section-title">📋 Мои голоса</div>
@@ -1989,14 +1926,12 @@
                 </div>
             </div>
 
-            <!-- ДЕЙСТВИЯ -->
             <div class="actions" id="actionsSection">
                 <button class="btn" id="calcBtn">🏆 Показать победителя</button>
                 <button class="btn" id="syncBtn">🔄 Синхронизировать</button>
                 <button class="btn" id="clearBtn">🗑️ Очистить всё</button>
             </div>
 
-            <!-- ФУТЕР -->
             <div class="footer">
                 <span id="winnerDisplay">👑 Победитель: не определен</span>
                 <span>🔄 Автосинхронизация</span>
@@ -2072,11 +2007,11 @@
         </div>
     </div>
 
-    <!-- МОДАЛКА ИСТОРИИ (общая) -->
+    <!-- МОДАЛКА ИСТОРИИ -->
     <div class="modal-overlay" id="historyModal">
         <div class="modal-box history-modal-box">
             <h2>📋 История голосований</h2>
-            <p>Все голоса жюри по всем номинациям и стилям</p>
+            <p>Все голоса жюри, руководителя и администратора</p>
             <div class="history-filters" id="historyFilters">
                 <button class="history-filter-btn active" data-filter="all">Все</button>
                 <button class="history-filter-btn" data-filter="boys">👦 Мальчики</button>
@@ -2606,15 +2541,58 @@
             }
         });
 
-        // ===== КНОПКА ИСТОРИИ =====
-        document.getElementById('historyBtn').addEventListener('click', function() {
+        // ===== КНОПКА ИСТОРИИ (с принудительной подгрузкой ВСЕХ данных) =====
+        document.getElementById('historyBtn').addEventListener('click', async function() {
             currentHistoryFilter = 'all';
             document.querySelectorAll('.history-filter-btn').forEach(function(b) {
                 b.classList.toggle('active', b.dataset.filter === 'all');
             });
-            renderHistoryModal();
+
+            // Показываем модалку с лоадером
+            historyModalList.innerHTML = '<div class="history-loading">🔄 Загрузка истории со всех устройств...</div>';
             historyModal.classList.add('active');
+
+            // ===== ПРИНУДИТЕЛЬНО ЗАГРУЖАЕМ ВСЕ 12 ФАЙЛОВ ИЗ GITHUB =====
+            if (githubToken) {
+                var promises = [];
+                for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
+                    for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
+                        promises.push(loadFromGitHubSilent(NOMINATIONS[nomIdx], STYLES[styleIdx]));
+                    }
+                }
+                try {
+                    await Promise.all(promises);
+                } catch (e) {
+                    console.log('Ошибка загрузки истории:', e);
+                }
+            }
+
+            renderHistoryModal();
         });
+
+        // Загрузка без обновления UI (только данные)
+        async function loadFromGitHubSilent(nomination, style) {
+            if (!githubToken) return;
+            var filePath = getDataFilePath(nomination, style);
+            try {
+                var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
+                var response = await fetch(url, { headers: { 'Authorization': 'token ' + githubToken,
+                        'Accept': 'application/vnd.github.v3+json' } });
+                if (response.status === 404) {
+                    return;
+                }
+                if (!response.ok) return;
+                var data = await response.json();
+                var content = base64ToUtf8(data.content);
+                var jsonData = JSON.parse(content);
+                if (jsonData) {
+                    if (jsonData.votes) allData[nomination][style].votes = jsonData.votes;
+                    if (jsonData.history) allData[nomination][style].history = jsonData.history;
+                }
+            } catch (e) {
+                console.log('Ошибка загрузки ' + nomination + '_' + style + ':', e);
+            }
+        }
 
         document.getElementById('closeHistoryBtn').addEventListener('click', function() {
             historyModal.classList.remove('active');
@@ -2624,7 +2602,6 @@
             if (e.target === this) historyModal.classList.remove('active');
         });
 
-        // Фильтры истории
         historyFilters.addEventListener('click', function(e) {
             var btn = e.target.closest('.history-filter-btn');
             if (!btn) return;
@@ -2636,7 +2613,6 @@
         });
 
         function renderHistoryModal() {
-            // Собираем всю историю из всех номинаций и стилей
             var allHistory = [];
             NOMINATIONS.forEach(function(nom) {
                 STYLES.forEach(function(style) {
@@ -2657,14 +2633,12 @@
                 });
             });
 
-            // Фильтруем
             if (currentHistoryFilter !== 'all') {
                 allHistory = allHistory.filter(function(item) {
                     return item.nomination === currentHistoryFilter;
                 });
             }
 
-            // Сортируем по дате и времени (сначала новые)
             allHistory.sort(function(a, b) {
                 var dateA = a.date.split('.').reverse().join('');
                 var dateB = b.date.split('.').reverse().join('');
@@ -2700,7 +2674,6 @@
 
         // ===== ЛОГИКА ВХОДА =====
 
-        // Шаг 1: Подключение GitHub
         document.getElementById('githubConnectBtn').addEventListener('click', async function() {
             var token = document.getElementById('githubTokenInput').value.trim();
             if (!token) { showToast('Введите GitHub токен', 'warning'); return; }
@@ -2735,7 +2708,6 @@
             }
         });
 
-        // Шаг 2: Выбор роли
         var selectedRole = '';
 
         document.getElementById('roleJuryBtn').addEventListener('click', function() {
@@ -2760,7 +2732,6 @@
             input.value = '';
             input.focus();
             var hint = document.getElementById('rolePasswordHint');
-            // ===== УБРАЛИ ПАРОЛЬ ИЗ ПОДСКАЗКИ =====
             var roleNames = {
                 jury: 'Жюри',
                 leader: 'Руководитель',
@@ -2834,7 +2805,6 @@
             document.getElementById('roleBadge').textContent = roleLabels[userRole];
             document.getElementById('roleBadge').className = 'role-badge show ' + roleClasses[userRole];
 
-            // Настройка UI под роль
             if (userRole === 'jury') {
                 document.getElementById('addSection').style.display = 'block';
                 document.getElementById('deleteSection').style.display = 'none';
@@ -3663,8 +3633,7 @@
         console.log('🔑 Пароли: Жюри=GGWP, Руководитель=GLHF, Админ=EGOR');
         console.log('🛡️ Защита от дублей: одна оценка на участника в номинации');
         console.log('🔄 Автосинхронизация: каждые 10 секунд (без уведомлений)');
-        console.log('🚪 Кнопка выхода: есть, данные сохраняются');
-        console.log('📋 Кнопка истории: есть, для админа и руководителя');
+        console.log('📋 История: только для админа и руководителя, загружает ВСЕ данные с GitHub');
     </script>
 </body>
 </html>
