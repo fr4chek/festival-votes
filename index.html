@@ -954,6 +954,141 @@
             color: var(--text-dark);
         }
 
+        /* ===== ИСТОРИЯ (МОИ ГОЛОСА) — АДАПТИВНАЯ ===== */
+        .history-wrap {
+            overflow-x: hidden;
+            overflow-y: visible;
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.03);
+            background: rgba(255, 255, 255, 0.02);
+            padding: 4px 0;
+            font-family: 'SF Pro Text', sans-serif;
+        }
+        body.dark .history-wrap {
+            border-color: rgba(255, 255, 255, 0.01);
+            background: rgba(255, 255, 255, 0.01);
+        }
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            max-height: 300px;
+            overflow-y: auto;
+            padding: 0 4px;
+        }
+        .history-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .history-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+        body.dark .history-list::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.04);
+        }
+        .history-item {
+            display: grid;
+            grid-template-columns: 1fr auto auto;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 14px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+            font-size: 14px;
+            color: var(--text-light);
+            font-family: 'SF Pro Text', sans-serif;
+            word-break: break-word;
+        }
+        body.dark .history-item {
+            color: var(--text-dark);
+            border-bottom-color: rgba(255, 255, 255, 0.015);
+        }
+        .history-item:last-child {
+            border-bottom: none;
+        }
+        .history-item .name {
+            font-weight: 600;
+            font-family: 'SF Pro Display', sans-serif;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .history-item .score {
+            font-weight: 700;
+            color: #34c759;
+            font-family: 'SF Pro Display', sans-serif;
+            white-space: nowrap;
+        }
+        body.dark .history-item .score {
+            color: #34c759;
+        }
+        .history-item .time {
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.5);
+            white-space: nowrap;
+            font-family: 'SF Pro Text', sans-serif;
+            text-align: right;
+        }
+        body.dark .history-item .time {
+            color: rgba(255, 255, 255, 0.35);
+        }
+        .history-item .comment-text {
+            grid-column: 1 / -1;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.55);
+            font-style: italic;
+            white-space: normal;
+            word-break: break-word;
+            font-family: 'SF Pro Text', sans-serif;
+            margin-top: 2px;
+        }
+        body.dark .history-item .comment-text {
+            color: rgba(255, 255, 255, 0.4);
+        }
+        .history-empty {
+            text-align: center;
+            color: var(--text-light);
+            padding: 20px;
+            font-style: italic;
+            font-size: 14px;
+            font-family: 'SF Pro Text', sans-serif;
+        }
+        body.dark .history-empty {
+            color: var(--text-dark);
+        }
+
+        .delete-section-label {
+            font-size: 14px;
+            color: #ff3b30;
+            font-weight: 500;
+            font-family: 'SF Pro Text', sans-serif;
+        }
+        body.dark .delete-section-label {
+            color: #ff6b6b;
+        }
+        .section-glass .btn-delete {
+            background: rgba(255, 59, 48, 0.15);
+            border: 1px solid rgba(255, 59, 48, 0.2);
+            color: #ff3b30;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            font-family: 'SF Pro Text', sans-serif;
+        }
+        .section-glass .btn-delete:hover {
+            background: rgba(255, 59, 48, 0.25);
+            border-color: rgba(255, 59, 48, 0.3);
+        }
+        #deleteName {
+            color: #ffffff !important;
+        }
+        #deleteName::placeholder {
+            color: rgba(255, 255, 255, 0.4) !important;
+        }
+        body.dark #deleteName {
+            color: #ffffff !important;
+        }
+        body.dark #deleteName::placeholder {
+            color: rgba(255, 255, 255, 0.3) !important;
+        }
+
         .footer {
             display: flex;
             justify-content: center;
@@ -1473,16 +1608,15 @@
             background: rgba(255, 255, 255, 0.01);
         }
         .history-modal-item {
-            display: flex;
-            justify-content: space-between;
+            display: grid;
+            grid-template-columns: 100px 120px 1fr 50px 120px;
             align-items: center;
             padding: 10px 14px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.03);
             font-size: 13px;
             color: var(--text-light);
-            gap: 12px;
+            gap: 8px;
             font-family: 'SF Pro Text', sans-serif;
-            flex-wrap: wrap;
         }
         body.dark .history-modal-item {
             color: var(--text-dark);
@@ -1494,34 +1628,30 @@
         .history-modal-item .hm-jury {
             font-weight: 600;
             color: #34c759;
-            flex: 0 0 100px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             font-family: 'SF Pro Display', sans-serif;
         }
         .history-modal-item .hm-nom {
-            flex: 0 0 120px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             color: #ffd700;
         }
         .history-modal-item .hm-name {
-            flex: 0 0 70px;
             font-weight: 500;
         }
         .history-modal-item .hm-score {
-            flex: 0 0 50px;
             text-align: center;
             font-weight: 700;
             color: #34c759;
         }
         .history-modal-item .hm-time {
-            flex: 0 0 120px;
             text-align: right;
             font-size: 12px;
             color: rgba(255, 255, 255, 0.5);
+            white-space: nowrap;
         }
         body.dark .history-modal-item .hm-time {
             color: rgba(255, 255, 255, 0.3);
@@ -1609,25 +1739,36 @@
                 max-width: 100% !important;
                 padding: 24px 16px !important;
             }
+            .history-modal-item {
+                grid-template-columns: 1fr 1fr;
+                grid-template-areas:
+                    "jury time"
+                    "nom score"
+                    "name name";
+                gap: 4px;
+                font-size: 12px;
+                padding: 10px 12px;
+            }
             .history-modal-item .hm-jury {
-                flex: 0 0 70px;
+                grid-area: jury;
+                font-size: 12px;
+            }
+            .history-modal-item .hm-time {
+                grid-area: time;
                 font-size: 11px;
             }
             .history-modal-item .hm-nom {
-                flex: 0 0 80px;
-                font-size: 11px;
-            }
-            .history-modal-item .hm-name {
-                flex: 0 0 50px;
+                grid-area: nom;
                 font-size: 11px;
             }
             .history-modal-item .hm-score {
-                flex: 0 0 40px;
-                font-size: 11px;
+                grid-area: score;
+                font-size: 13px;
+                text-align: right;
             }
-            .history-modal-item .hm-time {
-                flex: 0 0 90px;
-                font-size: 10px;
+            .history-modal-item .hm-name {
+                grid-area: name;
+                font-size: 12px;
             }
             .header {
                 padding: 16px 20px;
@@ -1727,9 +1868,16 @@
             td {
                 padding: 8px 6px;
             }
-            .history-modal-item {
+            .summary-table-wrap table {
+                min-width: 320px;
                 font-size: 11px;
-                padding: 8px 10px;
+            }
+            .summary-table-wrap th,
+            .summary-table-wrap td {
+                padding: 6px 4px;
+            }
+            .details-grid {
+                grid-template-columns: 1fr;
             }
             .role-selector {
                 flex-direction: column;
@@ -1756,6 +1904,34 @@
                 min-width: auto !important;
                 padding: 6px 12px !important;
                 font-size: 11px !important;
+            }
+            /* ===== МОИ ГОЛОСА — компактная мобильная версия ===== */
+            .history-item {
+                grid-template-columns: 1fr auto;
+                grid-template-areas:
+                    "name time"
+                    "score score"
+                    "comment comment";
+                gap: 4px;
+                padding: 10px 12px;
+                font-size: 13px;
+            }
+            .history-item .name {
+                grid-area: name;
+                font-size: 13px;
+            }
+            .history-item .time {
+                grid-area: time;
+                font-size: 11px;
+            }
+            .history-item .score {
+                grid-area: score;
+                text-align: left;
+                font-size: 14px;
+            }
+            .history-item .comment-text {
+                grid-area: comment;
+                font-size: 11px;
             }
         }
     </style>
@@ -2541,18 +2717,16 @@
             }
         });
 
-        // ===== КНОПКА ИСТОРИИ (с принудительной подгрузкой ВСЕХ данных) =====
+        // ===== КНОПКА ИСТОРИИ =====
         document.getElementById('historyBtn').addEventListener('click', async function() {
             currentHistoryFilter = 'all';
             document.querySelectorAll('.history-filter-btn').forEach(function(b) {
                 b.classList.toggle('active', b.dataset.filter === 'all');
             });
 
-            // Показываем модалку с лоадером
             historyModalList.innerHTML = '<div class="history-loading">🔄 Загрузка истории со всех устройств...</div>';
             historyModal.classList.add('active');
 
-            // ===== ПРИНУДИТЕЛЬНО ЗАГРУЖАЕМ ВСЕ 12 ФАЙЛОВ ИЗ GITHUB =====
             if (githubToken) {
                 var promises = [];
                 for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
@@ -2570,7 +2744,6 @@
             renderHistoryModal();
         });
 
-        // Загрузка без обновления UI (только данные)
         async function loadFromGitHubSilent(nomination, style) {
             if (!githubToken) return;
             var filePath = getDataFilePath(nomination, style);
@@ -2967,12 +3140,12 @@
             for (var i = 0; i < juryHistory.length; i++) {
                 var item = juryHistory[i];
                 html += '<div class="history-item">';
-                html += '<span class="name">' + escapeHtml(item.name) + '</span>';
-                if (item.comment) html += '<span class="comment-text">" ' + escapeHtml(item.comment) + '"</span>';
-                else html += '<span class="comment-text"></span>';
+                html += '<span class="name">Участник ' + escapeHtml(item.name) + '</span>';
+                if (item.comment) {
+                    html += '<span class="comment-text">💬 ' + escapeHtml(item.comment) + '</span>';
+                }
                 html += '<span class="score">+' + item.score.toFixed(1) + '</span>';
-                html += '<span class="time">' + escapeHtml(item.time) + '</span>';
-                html += '<span class="date">' + escapeHtml(item.date) + '</span>';
+                html += '<span class="time">' + escapeHtml(item.date) + ' · ' + escapeHtml(item.time) + '</span>';
                 html += '</div>';
             }
             juryHistoryList.innerHTML = html;
