@@ -2002,6 +2002,7 @@
                 <div class="stat-card"><div class="num" id="statAvg">—</div><div class="label">🏆 Средний балл лидера</div></div>
             </div>
 
+            <!-- ЛИДЕР (скрыт для жюри) -->
             <div class="leader-card" id="leaderCard">
                 <div class="label">👑 Текущий лидер</div>
                 <div class="empty" id="leaderEmpty">Нет данных</div>
@@ -2200,6 +2201,20 @@
             </div>
             <div class="btn-row" style="margin-top: 16px;">
                 <button class="btn" id="closeHistoryBtn">✅ Закрыть</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- МОДАЛКА ИЗМЕНЕНИЯ ОЦЕНКИ -->
+    <div class="modal-overlay" id="changeScoreModal">
+        <div class="modal-box">
+            <h2>⚠️ Изменить оценку?</h2>
+            <p>Вы уже ставили оценку участнику <strong id="changeScoreName" style="color:#FFD700;"></strong>.</p>
+            <p style="font-size:16px;">Текущая оценка: <strong id="changeScoreOld" style="color:#ff3b30;"></strong></p>
+            <p style="font-size:16px;">Новая оценка: <strong id="changeScoreNew" style="color:#34c759;"></strong></p>
+            <div class="btn-row">
+                <button class="btn btn-admin" id="confirmChangeScoreBtn">✅ Изменить</button>
+                <button class="btn btn-secondary" id="cancelChangeScoreBtn">↩️ Отмена</button>
             </div>
         </div>
     </div>
@@ -2460,6 +2475,71 @@
             }
         });
 
+        // ===== МОДАЛКА ИЗМЕНЕНИЯ ОЦЕНКИ =====
+        var changeScoreModal = document.getElementById('changeScoreModal');
+        var changeScoreName = document.getElementById('changeScoreName');
+        var changeScoreOld = document.getElementById('changeScoreOld');
+        var changeScoreNew = document.getElementById('changeScoreNew');
+        var confirmChangeScoreBtn = document.getElementById('confirmChangeScoreBtn');
+        var cancelChangeScoreBtn = document.getElementById('cancelChangeScoreBtn');
+        var pendingChangeVote = null; // { existingVote, newVoteData }
+
+        function showChangeScoreConfirm(name, oldScore, newScore, existingVote, newVoteData) {
+            pendingChangeVote = { existingVote: existingVote, newVoteData: newVoteData };
+            changeScoreName.textContent = name;
+            changeScoreOld.textContent = oldScore.toFixed(1);
+            changeScoreNew.textContent = newScore.toFixed(1);
+            changeScoreModal.classList.add('active');
+        }
+
+        confirmChangeScoreBtn.addEventListener('click', function() {
+            if (!pendingChangeVote) return;
+            var currentData = getCurrentData();
+            var existingVote = pendingChangeVote.existingVote;
+            var newVoteData = pendingChangeVote.newVoteData;
+
+            // Находим индекс старого голоса и заменяем его
+            for (var i = 0; i < currentData.votes.length; i++) {
+                if (currentData.votes[i].id === existingVote.id) {
+                    // Сохраняем старую оценку в историю
+                    addHistoryChange(existingVote.name, existingVote.score, newVoteData.score, newVoteData.comment);
+                    currentData.votes[i] = newVoteData;
+                    break;
+                }
+            }
+
+            saveAllDataToLocalStorage();
+            if (githubToken) {
+                saveToGitHub(currentNomination, currentStyle);
+            }
+
+            renderAll();
+            if (userRole === 'jury') renderJuryHistory();
+            renderLeader();
+
+            nameInput.value = '';
+            scoreInput.value = '';
+            commentInputField.value = '';
+
+            changeScoreModal.classList.remove('active');
+            pendingChangeVote = null;
+
+            showToast('✅ Оценка изменена: ' + newVoteData.name + ' → ' + newVoteData.score.toFixed(1), '');
+        });
+
+        cancelChangeScoreBtn.addEventListener('click', function() {
+            changeScoreModal.classList.remove('active');
+            pendingChangeVote = null;
+            showToast('↩️ Изменение отменено', 'info');
+        });
+
+        changeScoreModal.addEventListener('click', function(e) {
+            if (e.target === this) {
+                changeScoreModal.classList.remove('active');
+                pendingChangeVote = null;
+            }
+        });
+
         // ===== СОХРАНЕНИЕ СОСТОЯНИЯ ВХОДА =====
         function saveSessionState() {
             try {
@@ -2517,10 +2597,11 @@
                 document.getElementById('roleBadge').className = 'role-badge show jury';
                 document.getElementById('addSection').style.display = 'block';
                 document.getElementById('deleteSection').style.display = 'none';
-                document.getElementById('actionsSection').style.display = 'block';
+                document.getElementById('actionsSection').style.display = 'none';
                 document.getElementById('summarySection').style.display = 'none';
                 document.getElementById('juryHistorySection').style.display = 'block';
                 document.getElementById('historyBtn').style.display = 'none';
+                document.getElementById('leaderCard').style.display = 'none';
                 loadAllDataFromLocalStorage();
                 if (githubToken) {
                     loadFromGitHub(currentNomination, currentStyle);
@@ -2542,6 +2623,7 @@
                 document.getElementById('summarySection').style.display = 'block';
                 document.getElementById('juryHistorySection').style.display = 'none';
                 document.getElementById('historyBtn').style.display = 'inline-flex';
+                document.getElementById('leaderCard').style.display = 'block';
                 loadAllDataFromLocalStorage();
                 if (githubToken) {
                     for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
@@ -2567,6 +2649,7 @@
                 document.getElementById('summarySection').style.display = 'block';
                 document.getElementById('juryHistorySection').style.display = 'none';
                 document.getElementById('historyBtn').style.display = 'inline-flex';
+                document.getElementById('leaderCard').style.display = 'block';
                 loadAllDataFromLocalStorage();
                 if (githubToken) {
                     for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
@@ -2653,6 +2736,7 @@
         var leaderScore = document.getElementById('leaderScore');
         var leaderEmpty = document.getElementById('leaderEmpty');
         var leaderContent = document.getElementById('leaderContent');
+        var leaderCard = document.getElementById('leaderCard');
         var roleBadge = document.getElementById('roleBadge');
 
         var clearModal = document.getElementById('clearModal');
@@ -2827,15 +2911,18 @@
             var html = '';
             allHistory.forEach(function(item) {
                 var isDelete = item.type === 'delete';
+                var isChange = item.type === 'change';
                 var nomLabel = getNominationShort(item.nomination);
                 var styleLabel = getStyleLabel(item.style);
                 html += '<div class="history-modal-item" style="' + (isDelete ? 'opacity:0.7;' : '') + '">';
                 html += '<span class="hm-jury" style="' + (isDelete ? 'color:#ff3b30;' : '') + '">' +
-                    (isDelete ? '🗑️ ' : '') + escapeHtml(item.jury || '—') + '</span>';
+                    (isDelete ? '🗑️ ' : (isChange ? '✏️ ' : '')) + escapeHtml(item.jury || '—') + '</span>';
                 html += '<span class="hm-nom">' + nomLabel + ' · ' + styleLabel + '</span>';
                 html += '<span class="hm-name">' + escapeHtml(item.name) + '</span>';
                 if (isDelete) {
                     html += '<span class="hm-score" style="color:#ff3b30;">—</span>';
+                } else if (isChange) {
+                    html += '<span class="hm-score" style="color:#ffd700;">' + item.oldScore.toFixed(1) + '→' + item.score.toFixed(1) + '</span>';
                 } else {
                     html += '<span class="hm-score">' + item.score.toFixed(1) + '</span>';
                 }
@@ -2981,10 +3068,11 @@
             if (userRole === 'jury') {
                 document.getElementById('addSection').style.display = 'block';
                 document.getElementById('deleteSection').style.display = 'none';
-                document.getElementById('actionsSection').style.display = 'block';
+                document.getElementById('actionsSection').style.display = 'none';
                 document.getElementById('summarySection').style.display = 'none';
                 document.getElementById('juryHistorySection').style.display = 'block';
                 document.getElementById('historyBtn').style.display = 'none';
+                document.getElementById('leaderCard').style.display = 'none';
             } else if (userRole === 'leader') {
                 document.getElementById('addSection').style.display = 'block';
                 document.getElementById('deleteSection').style.display = 'none';
@@ -2992,6 +3080,7 @@
                 document.getElementById('summarySection').style.display = 'block';
                 document.getElementById('juryHistorySection').style.display = 'none';
                 document.getElementById('historyBtn').style.display = 'inline-flex';
+                document.getElementById('leaderCard').style.display = 'block';
             } else if (userRole === 'admin') {
                 document.getElementById('addSection').style.display = 'block';
                 document.getElementById('deleteSection').style.display = 'block';
@@ -2999,6 +3088,7 @@
                 document.getElementById('summarySection').style.display = 'block';
                 document.getElementById('juryHistorySection').style.display = 'none';
                 document.getElementById('historyBtn').style.display = 'inline-flex';
+                document.getElementById('leaderCard').style.display = 'block';
             }
 
             loadAllDataFromLocalStorage();
@@ -3117,6 +3207,28 @@
             if (githubToken) saveToGitHub(currentNomination, currentStyle);
         }
 
+        function addHistoryChange(name, oldScore, newScore, comment) {
+            var now = new Date();
+            var time = now.toTimeString().slice(0, 8);
+            var date = getFormattedDate();
+            var currentData = getCurrentData();
+            if (!currentData.history) currentData.history = [];
+            currentData.history.unshift({
+                type: 'change',
+                name: name,
+                oldScore: oldScore,
+                score: newScore,
+                comment: comment || '',
+                time: time,
+                date: date,
+                jury: userRole === 'jury' ? juryName : userRole
+            });
+            if (currentData.history.length > 100) currentData.history = currentData.history.slice(0, 100);
+            if (userRole === 'jury') renderJuryHistory();
+            saveAllDataToLocalStorage();
+            if (githubToken) saveToGitHub(currentNomination, currentStyle);
+        }
+
         function addHistoryDelete(name) {
             var now = new Date();
             var time = now.toTimeString().slice(0, 8);
@@ -3131,7 +3243,7 @@
 
         function renderJuryHistory() {
             var history = getCurrentHistory();
-            var juryHistory = history.filter(function(item) { return item.jury === juryName && item.type === 'vote'; });
+            var juryHistory = history.filter(function(item) { return item.jury === juryName && (item.type === 'vote' || item.type === 'change'); });
             if (juryHistory.length === 0) {
                 juryHistoryList.innerHTML = '<div class="history-empty">Вы ещё не голосовали</div>';
                 return;
@@ -3140,11 +3252,15 @@
             for (var i = 0; i < juryHistory.length; i++) {
                 var item = juryHistory[i];
                 html += '<div class="history-item">';
-                html += '<span class="name">Участник ' + escapeHtml(item.name) + '</span>';
+                html += '<span class="name">Участник ' + escapeHtml(item.name) + (item.type === 'change' ? ' ✏️' : '') + '</span>';
                 if (item.comment) {
                     html += '<span class="comment-text">💬 ' + escapeHtml(item.comment) + '</span>';
                 }
-                html += '<span class="score">+' + item.score.toFixed(1) + '</span>';
+                if (item.type === 'change') {
+                    html += '<span class="score">' + item.oldScore.toFixed(1) + ' → ' + item.score.toFixed(1) + '</span>';
+                } else {
+                    html += '<span class="score">+' + item.score.toFixed(1) + '</span>';
+                }
                 html += '<span class="time">' + escapeHtml(item.date) + ' · ' + escapeHtml(item.time) + '</span>';
                 html += '</div>';
             }
@@ -3153,6 +3269,9 @@
 
         // ===== ЛИДЕР =====
         function renderLeader() {
+            if (userRole === 'jury') {
+                return;
+            }
             var votes = getCurrentVotes();
             var participants = getUniqueParticipants(votes);
             if (participants.length === 0) {
@@ -3340,8 +3459,8 @@
 
         // ===== ОЧИСТКА =====
         clearBtn.addEventListener('click', function() {
-            if (userRole === 'jury' || userRole === 'leader') {
-                showToast('⛔ Очищать могут только администраторы', 'warning');
+            if (userRole === 'jury') {
+                showToast('⛔ Очищать могут только руководители и администраторы', 'warning');
                 return;
             }
             var votes = getCurrentVotes();
@@ -3352,8 +3471,8 @@
             setTimeout(function() { captchaInput.focus(); }, 300);
         });
         confirmClearBtn.addEventListener('click', function() {
-            if (userRole === 'jury' || userRole === 'leader') {
-                showToast('⛔ Очищать могут только администраторы', 'warning');
+            if (userRole === 'jury') {
+                showToast('⛔ Очищать могут только руководители и администраторы', 'warning');
                 clearModal.classList.remove('active');
                 return;
             }
@@ -3396,6 +3515,11 @@
                 'active'); });
 
         function showWinnerModal() {
+            if (userRole === 'jury') {
+                showToast('⛔ Подсчёт победителя доступен только руководителю и администратору', 'warning');
+                return;
+            }
+
             var votes = getCurrentVotes();
             var participants = getUniqueParticipants(votes);
             if (participants.length === 0) { showToast('Нет данных для отображения', 'warning'); return; }
@@ -3667,6 +3791,7 @@
             }
         }
 
+        // ===== ДОБАВЛЕНИЕ/ИЗМЕНЕНИЕ ОЦЕНКИ =====
         async function addVote() {
             if (!userRole) {
                 showToast('Сначала войдите в систему', 'warning');
@@ -3692,16 +3817,20 @@
                 }
             }
 
+            // ===== ЕСЛИ ОЦЕНКА УЖЕ ЕСТЬ — ПРЕДЛАГАЕМ ИЗМЕНИТЬ =====
             if (existingVote) {
-                showToast('❌ Вы уже поставили оценку участнику ' + name + ' (' + existingVote.score.toFixed(1) +
-                    ' баллов). Дублировать нельзя!', 'warning');
-                nameInput.value = '';
-                scoreInput.value = '';
-                commentInputField.value = '';
-                nameInput.focus();
+                var newVoteData = {
+                    id: existingVote.id,
+                    name: name,
+                    score: score,
+                    comment: comment || '',
+                    jury: voterName
+                };
+                showChangeScoreConfirm(name, existingVote.score, score, existingVote, newVoteData);
                 return;
             }
 
+            // ===== НОВЫЙ ГОЛОС =====
             var voteData = {
                 id: Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 name: name,
@@ -3804,9 +3933,11 @@
         console.log('📋 Номинации:', NOMINATIONS.join(', '));
         console.log('🎵 Стили:', STYLES.join(', '));
         console.log('🔑 Пароли: Жюри=GGWP, Руководитель=GLHF, Админ=EGOR');
-        console.log('🛡️ Защита от дублей: одна оценка на участника в номинации');
-        console.log('🔄 Автосинхронизация: каждые 10 секунд (без уведомлений)');
-        console.log('📋 История: только для админа и руководителя, загружает ВСЕ данные с GitHub');
+        console.log('✏️ Жюри может изменять свои оценки (без удаления участника)');
+        console.log('🔄 Автосинхронизация: каждые 10 секунд');
+        console.log('👑 Текущий лидер: скрыт от жюри');
+        console.log('🏆 Победитель: только для руководителя и админа');
+        console.log('🗑️ Очистка: только для руководителя и админа');
     </script>
 </body>
 </html>
