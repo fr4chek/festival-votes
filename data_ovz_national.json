@@ -3,12 +3,22 @@
     {
       "id": "1789235904190_c2gd9n",
       "name": "777",
-      "score": 1,
+      "score": 2,
       "comment": "",
       "jury": "admin"
     }
   ],
   "history": [
+    {
+      "type": "change",
+      "name": "777",
+      "oldScore": 1,
+      "score": 2,
+      "comment": "",
+      "time": "20:58:46",
+      "date": "12.09.2026",
+      "jury": "admin"
+    },
     {
       "type": "vote",
       "name": "777",
