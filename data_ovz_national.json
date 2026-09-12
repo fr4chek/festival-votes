@@ -1,0 +1,22 @@
+{
+  "votes": [
+    {
+      "id": "1789235904190_c2gd9n",
+      "name": "777",
+      "score": 1,
+      "comment": "",
+      "jury": "admin"
+    }
+  ],
+  "history": [
+    {
+      "type": "vote",
+      "name": "777",
+      "score": 1,
+      "comment": "",
+      "time": "20:58:24",
+      "date": "12.09.2026",
+      "jury": "admin"
+    }
+  ]
+}
