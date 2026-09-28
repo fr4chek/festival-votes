@@ -1698,6 +1698,78 @@
             border-color: rgba(0, 122, 255, 0.2);
         }
 
+        /* ===== МОДАЛКА ВЫБОРА ОЧИСТКИ ===== */
+        .clear-options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .clear-option-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            padding: 18px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--text-light);
+            transition: all 0.3s ease;
+            font-family: 'SF Pro Text', sans-serif;
+            text-align: center;
+        }
+        body.dark .clear-option-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.03);
+            color: var(--text-dark);
+        }
+        .clear-option-btn:hover {
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        body.dark .clear-option-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .clear-option-btn .co-emoji {
+            font-size: 28px;
+            line-height: 1;
+        }
+        .clear-option-btn .co-title {
+            font-weight: 700;
+            font-size: 16px;
+            margin-top: 4px;
+        }
+        .clear-option-btn .co-desc {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 2px;
+        }
+        .clear-option-btn.danger {
+            background: rgba(255, 59, 48, 0.08);
+            border-color: rgba(255, 59, 48, 0.15);
+        }
+        .clear-option-btn.danger:hover {
+            background: rgba(255, 59, 48, 0.15);
+            border-color: rgba(255, 59, 48, 0.25);
+        }
+        .clear-option-btn.danger .co-title {
+            color: #ff3b30;
+        }
+        .clear-option-btn.warning {
+            background: rgba(255, 149, 0, 0.08);
+            border-color: rgba(255, 149, 0, 0.15);
+        }
+        .clear-option-btn.warning:hover {
+            background: rgba(255, 149, 0, 0.15);
+            border-color: rgba(255, 149, 0, 0.25);
+        }
+        .clear-option-btn.warning .co-title {
+            color: #ff9500;
+        }
+
         @media (max-width: 700px) {
             .container {
                 padding: 0 4px;
@@ -2142,19 +2214,43 @@
         </div>
     </div>
 
-    <!-- МОДАЛКА ОЧИСТКИ -->
+    <!-- ===== МОДАЛКА ОЧИСТКИ С ВЫБОРОМ ===== -->
     <div class="modal-overlay" id="clearModal">
         <div class="modal-box">
             <h2>⚠️ Очистка данных</h2>
-            <p>Вы уверены, что хотите удалить ВСЕ данные в текущей номинации?</p>
-            <p>Для подтверждения решите пример:</p>
-            <div class="question">2 + 2 = ?</div>
-            <input type="number" id="captchaInput" placeholder="Введите ответ" autocomplete="off">
-            <div class="btn-row">
-                <button class="btn btn-danger" id="confirmClearBtn">🗑️ Очистить</button>
-                <button class="btn btn-secondary" id="cancelClearBtn">↩️ Отменить удаление</button>
+            <p>Выберите, что именно нужно очистить:</p>
+
+            <!-- Шаг 1: Выбор варианта очистки -->
+            <div id="clearChoiceStep">
+                <div class="clear-options">
+                    <div class="clear-option-btn warning" id="clearCurrentCategoryBtn">
+                        <span class="co-emoji">📂</span>
+                        <span class="co-title">Очистить категорию</span>
+                        <span class="co-desc" id="clearCurrentDesc">Только «Мальчики · Национальный»</span>
+                    </div>
+                    <div class="clear-option-btn danger" id="clearAllDataBtn">
+                        <span class="co-emoji">💥</span>
+                        <span class="co-title">Очистить АБСОЛЮТНО всё</span>
+                        <span class="co-desc">Все номинации и стили (12 файлов)</span>
+                    </div>
+                </div>
+                <div class="btn-row" style="margin-top: 12px;">
+                    <button class="btn btn-secondary" id="cancelClearChoiceBtn">↩️ Отмена</button>
+                </div>
             </div>
-            <div class="error-msg" id="captchaError">❌ Неправильный ответ! Попробуйте ещё раз.</div>
+
+            <!-- Шаг 2: Капча -->
+            <div id="clearCaptchaStep" style="display:none;">
+                <p id="clearCaptchaTitle">Вы уверены, что хотите очистить данные?</p>
+                <p>Для подтверждения решите пример:</p>
+                <div class="question" id="clearCaptchaQuestion">2 + 2 = ?</div>
+                <input type="number" id="captchaInput" placeholder="Введите ответ" autocomplete="off">
+                <div class="btn-row">
+                    <button class="btn btn-danger" id="confirmClearBtn">🗑️ Очистить</button>
+                    <button class="btn btn-secondary" id="backToChoiceBtn">↩️ Назад</button>
+                </div>
+                <div class="error-msg" id="captchaError">❌ Неправильный ответ! Попробуйте ещё раз.</div>
+            </div>
         </div>
     </div>
 
@@ -2482,7 +2578,7 @@
         var changeScoreNew = document.getElementById('changeScoreNew');
         var confirmChangeScoreBtn = document.getElementById('confirmChangeScoreBtn');
         var cancelChangeScoreBtn = document.getElementById('cancelChangeScoreBtn');
-        var pendingChangeVote = null; // { existingVote, newVoteData }
+        var pendingChangeVote = null;
 
         function showChangeScoreConfirm(name, oldScore, newScore, existingVote, newVoteData) {
             pendingChangeVote = { existingVote: existingVote, newVoteData: newVoteData };
@@ -2498,10 +2594,8 @@
             var existingVote = pendingChangeVote.existingVote;
             var newVoteData = pendingChangeVote.newVoteData;
 
-            // Находим индекс старого голоса и заменяем его
             for (var i = 0; i < currentData.votes.length; i++) {
                 if (currentData.votes[i].id === existingVote.id) {
-                    // Сохраняем старую оценку в историю
                     addHistoryChange(existingVote.name, existingVote.score, newVoteData.score, newVoteData.comment);
                     currentData.votes[i] = newVoteData;
                     break;
@@ -2881,6 +2975,7 @@
                             type: item.type,
                             name: item.name,
                             score: item.score,
+                            oldScore: item.oldScore,
                             comment: item.comment,
                             time: item.time,
                             date: item.date,
@@ -3457,19 +3552,72 @@
         closeDetailsBtn.addEventListener('click', function() { detailsModal.classList.remove('active'); });
         detailsModal.addEventListener('click', function(e) { if (e.target === this) detailsModal.classList.remove('active'); });
 
-        // ===== ОЧИСТКА =====
+        // ===== ОЧИСТКА (С ВЫБОРОМ) =====
+        var clearChoiceStep = document.getElementById('clearChoiceStep');
+        var clearCaptchaStep = document.getElementById('clearCaptchaStep');
+        var clearCurrentCategoryBtn = document.getElementById('clearCurrentCategoryBtn');
+        var clearAllDataBtn = document.getElementById('clearAllDataBtn');
+        var cancelClearChoiceBtn = document.getElementById('cancelClearChoiceBtn');
+        var backToChoiceBtn = document.getElementById('backToChoiceBtn');
+        var clearCaptchaTitle = document.getElementById('clearCaptchaTitle');
+        var clearCurrentDesc = document.getElementById('clearCurrentDesc');
+        var clearMode = ''; // 'current' или 'all'
+
         clearBtn.addEventListener('click', function() {
             if (userRole === 'jury') {
                 showToast('⛔ Очищать могут только руководители и администраторы', 'warning');
                 return;
             }
-            var votes = getCurrentVotes();
-            if (votes.length === 0) { showToast('В текущей номинации нет данных для очистки', 'warning'); return; }
+            // Обновляем описание текущей категории
+            clearCurrentDesc.textContent = 'Только «' + getNominationLabel(currentNomination) + ' · ' + getStyleLabel(currentStyle) + '»';
+
+            // Сбрасываем на первый шаг
+            clearChoiceStep.style.display = 'block';
+            clearCaptchaStep.style.display = 'none';
+            clearMode = '';
+            clearModal.classList.add('active');
+        });
+
+        // Выбор: очистить только текущую категорию
+        clearCurrentCategoryBtn.addEventListener('click', function() {
+            clearMode = 'current';
+            clearCaptchaTitle.textContent = 'Очистить «' + getNominationLabel(currentNomination) + ' · ' + getStyleLabel(currentStyle) + '»?';
+            clearChoiceStep.style.display = 'none';
+            clearCaptchaStep.style.display = 'block';
             captchaInput.value = '';
             captchaError.classList.remove('show');
-            clearModal.classList.add('active');
             setTimeout(function() { captchaInput.focus(); }, 300);
         });
+
+        // Выбор: очистить АБСОЛЮТНО всё
+        clearAllDataBtn.addEventListener('click', function() {
+            clearMode = 'all';
+            clearCaptchaTitle.textContent = '⚠️ Очистить ВСЁ? Все номинации и стили будут удалены!';
+            clearChoiceStep.style.display = 'none';
+            clearCaptchaStep.style.display = 'block';
+            captchaInput.value = '';
+            captchaError.classList.remove('show');
+            setTimeout(function() { captchaInput.focus(); }, 300);
+        });
+
+        // Назад к выбору
+        backToChoiceBtn.addEventListener('click', function() {
+            clearChoiceStep.style.display = 'block';
+            clearCaptchaStep.style.display = 'none';
+            clearMode = '';
+            captchaInput.value = '';
+            captchaError.classList.remove('show');
+        });
+
+        // Отмена
+        cancelClearChoiceBtn.addEventListener('click', function() {
+            clearModal.classList.remove('active');
+            clearChoiceStep.style.display = 'block';
+            clearCaptchaStep.style.display = 'none';
+            clearMode = '';
+        });
+
+        // Подтверждение очистки
         confirmClearBtn.addEventListener('click', function() {
             if (userRole === 'jury') {
                 showToast('⛔ Очищать могут только руководители и администраторы', 'warning');
@@ -3477,37 +3625,77 @@
                 return;
             }
             var answer = captchaInput.value.trim();
-            if (answer === '4') {
-                clearModal.classList.remove('active');
-                var currentData = getCurrentData();
-                currentData.votes = [];
-                currentData.history = [];
-                winnerName = null;
-                renderAll();
-                if (userRole !== 'jury') { renderSummary(); } else { renderJuryHistory(); }
-                renderLeader();
-                lastUpdateTime[currentNomination][currentStyle] = Date.now();
-                saveAllDataToLocalStorage();
-                if (githubToken) saveToGitHub(currentNomination, currentStyle);
-                showToast('🗑️ Всё очищено в номинации "' + getNominationLabel(currentNomination) + ' ' + getStyleLabel(
-                    currentStyle) + '"', 'error');
-            } else {
+            if (answer !== '4') {
                 captchaError.classList.add('show');
                 captchaInput.value = '';
                 captchaInput.focus();
                 setTimeout(function() { captchaError.classList.remove('show'); }, 3000);
+                return;
             }
-        });
-        cancelClearBtn.addEventListener('click', function() { clearModal.classList.remove('active');
+
+            clearModal.classList.remove('active');
+            clearChoiceStep.style.display = 'block';
+            clearCaptchaStep.style.display = 'none';
+
+            if (clearMode === 'current') {
+                // Очищаем только текущую номинацию+стиль
+                var currentData = getCurrentData();
+                currentData.votes = [];
+                currentData.history = [];
+                winnerName = null;
+                lastUpdateTime[currentNomination][currentStyle] = Date.now();
+                saveAllDataToLocalStorage();
+                if (githubToken) saveToGitHub(currentNomination, currentStyle);
+                renderAll();
+                if (userRole !== 'jury') renderSummary();
+                renderLeader();
+                showToast('🗑️ Очищено: «' + getNominationLabel(currentNomination) + ' · ' + getStyleLabel(currentStyle) + '»', 'error');
+            } else if (clearMode === 'all') {
+                // Очищаем ВСЁ
+                NOMINATIONS.forEach(function(nom) {
+                    STYLES.forEach(function(style) {
+                        allData[nom][style].votes = [];
+                        allData[nom][style].history = [];
+                        lastUpdateTime[nom][style] = Date.now();
+                    });
+                });
+                winnerName = null;
+                saveAllDataToLocalStorage();
+
+                // Сохраняем все файлы в GitHub (пустые)
+                if (githubToken) {
+                    NOMINATIONS.forEach(function(nom) {
+                        STYLES.forEach(function(style) {
+                            saveToGitHub(nom, style);
+                        });
+                    });
+                }
+
+                renderAll();
+                if (userRole !== 'jury') renderSummary();
+                renderLeader();
+                showToast('💥 ОЧИЩЕНО АБСОЛЮТНО ВСЁ!', 'error');
+            }
+
+            clearMode = '';
             captchaInput.value = '';
-            captchaError.classList.remove('show'); });
+        });
+
         captchaInput.addEventListener('keydown', function(e) {
             if (e.key === 'Enter') { e.preventDefault();
                 confirmClearBtn.click(); }
             if (e.key === 'Escape') { e.preventDefault();
-                cancelClearBtn.click(); }
+                if (clearMode) { backToChoiceBtn.click(); } else { cancelClearChoiceBtn.click(); } }
         });
-        clearModal.addEventListener('click', function(e) { if (e.target === clearModal) cancelClearBtn.click(); });
+
+        clearModal.addEventListener('click', function(e) {
+            if (e.target === clearModal) {
+                clearModal.classList.remove('active');
+                clearChoiceStep.style.display = 'block';
+                clearCaptchaStep.style.display = 'none';
+                clearMode = '';
+            }
+        });
 
         // ===== ПОБЕДИТЕЛЬ =====
         closePodiumBtn.addEventListener('click', function() { podiumModal.classList.remove('active'); });
@@ -3791,7 +3979,6 @@
             }
         }
 
-        // ===== ДОБАВЛЕНИЕ/ИЗМЕНЕНИЕ ОЦЕНКИ =====
         async function addVote() {
             if (!userRole) {
                 showToast('Сначала войдите в систему', 'warning');
@@ -3817,7 +4004,6 @@
                 }
             }
 
-            // ===== ЕСЛИ ОЦЕНКА УЖЕ ЕСТЬ — ПРЕДЛАГАЕМ ИЗМЕНИТЬ =====
             if (existingVote) {
                 var newVoteData = {
                     id: existingVote.id,
@@ -3830,7 +4016,6 @@
                 return;
             }
 
-            // ===== НОВЫЙ ГОЛОС =====
             var voteData = {
                 id: Date.now() + '_' + Math.random().toString(36).substr(2, 6),
                 name: name,
@@ -3933,11 +4118,8 @@
         console.log('📋 Номинации:', NOMINATIONS.join(', '));
         console.log('🎵 Стили:', STYLES.join(', '));
         console.log('🔑 Пароли: Жюри=GGWP, Руководитель=GLHF, Админ=EGOR');
-        console.log('✏️ Жюри может изменять свои оценки (без удаления участника)');
-        console.log('🔄 Автосинхронизация: каждые 10 секунд');
-        console.log('👑 Текущий лидер: скрыт от жюри');
-        console.log('🏆 Победитель: только для руководителя и админа');
-        console.log('🗑️ Очистка: только для руководителя и админа');
+        console.log('✏️ Жюри может изменять свои оценки');
+        console.log('🗑️ Очистка: категория или всё');
     </script>
 </body>
 </html>
