@@ -17,6 +17,16 @@
   ],
   "history": [
     {
+      "type": "change",
+      "name": "1",
+      "oldScore": 5,
+      "score": 5,
+      "comment": "",
+      "time": "18:59:48",
+      "date": "28.09.2026",
+      "jury": "Александра Бутенко"
+    },
+    {
       "type": "vote",
       "name": "5",
       "score": 6,
