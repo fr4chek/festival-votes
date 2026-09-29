@@ -8,5 +8,15 @@
       "jury": "Дмитрий Ф"
     }
   ],
-  "history": []
+  "history": [
+    {
+      "type": "vote",
+      "name": "777",
+      "score": 10,
+      "comment": "",
+      "time": "15:36:50",
+      "date": "29.09.2026",
+      "jury": "Дмитрий Ф"
+    }
+  ]
 }
