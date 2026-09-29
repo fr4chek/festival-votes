@@ -1770,6 +1770,82 @@
             color: #ff9500;
         }
 
+        /* ===== МОДАЛКА ДЕЙСТВИЙ С ОЦЕНКОЙ (3 кнопки) ===== */
+        .score-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin: 16px 0;
+        }
+        .score-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 16px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--text-light);
+            transition: all 0.3s ease;
+            font-family: 'SF Pro Text', sans-serif;
+            text-align: left;
+            width: 100%;
+        }
+        body.dark .score-action-btn {
+            background: rgba(255, 255, 255, 0.02);
+            border-color: rgba(255, 255, 255, 0.03);
+            color: var(--text-dark);
+        }
+        .score-action-btn:hover {
+            transform: scale(1.02);
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.15);
+        }
+        body.dark .score-action-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .score-action-btn .sa-emoji {
+            font-size: 26px;
+            line-height: 1;
+            flex-shrink: 0;
+        }
+        .score-action-btn .sa-text {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .score-action-btn .sa-title {
+            font-weight: 700;
+            font-size: 15px;
+        }
+        .score-action-btn .sa-desc {
+            font-size: 12px;
+            opacity: 0.7;
+        }
+        .score-action-btn.add {
+            background: rgba(52, 199, 89, 0.08);
+            border-color: rgba(52, 199, 89, 0.15);
+        }
+        .score-action-btn.add:hover {
+            background: rgba(52, 199, 89, 0.15);
+            border-color: rgba(52, 199, 89, 0.25);
+        }
+        .score-action-btn.add .sa-title {
+            color: #34c759;
+        }
+        .score-action-btn.change {
+            background: rgba(255, 149, 0, 0.08);
+            border-color: rgba(255, 149, 0, 0.15);
+        }
+        .score-action-btn.change:hover {
+            background: rgba(255, 149, 0, 0.15);
+            border-color: rgba(255, 149, 0, 0.25);
+        }
+        .score-action-btn.change .sa-title {
+            color: #ff9500;
+        }
+
         @media (max-width: 700px) {
             .container {
                 padding: 0 4px;
@@ -2220,7 +2296,6 @@
             <h2>⚠️ Очистка данных</h2>
             <p>Выберите, что именно нужно очистить:</p>
 
-            <!-- Шаг 1: Выбор варианта очистки -->
             <div id="clearChoiceStep">
                 <div class="clear-options">
                     <div class="clear-option-btn warning" id="clearCurrentCategoryBtn">
@@ -2239,7 +2314,6 @@
                 </div>
             </div>
 
-            <!-- Шаг 2: Капча -->
             <div id="clearCaptchaStep" style="display:none;">
                 <p id="clearCaptchaTitle">Вы уверены, что хотите очистить данные?</p>
                 <p>Для подтверждения решите пример:</p>
@@ -2301,16 +2375,34 @@
         </div>
     </div>
 
-    <!-- МОДАЛКА ИЗМЕНЕНИЯ ОЦЕНКИ -->
+    <!-- ===== МОДАЛКА ДЕЙСТВИЙ С ОЦЕНКОЙ (3 кнопки) ===== -->
     <div class="modal-overlay" id="changeScoreModal">
         <div class="modal-box">
-            <h2>⚠️ Изменить оценку?</h2>
+            <h2>⚠️ Оценка уже существует</h2>
             <p>Вы уже ставили оценку участнику <strong id="changeScoreName" style="color:#FFD700;"></strong>.</p>
-            <p style="font-size:16px;">Текущая оценка: <strong id="changeScoreOld" style="color:#ff3b30;"></strong></p>
-            <p style="font-size:16px;">Новая оценка: <strong id="changeScoreNew" style="color:#34c759;"></strong></p>
+            <p style="font-size:16px; margin-bottom:8px;">Текущая оценка: <strong id="changeScoreOld" style="color:#ff3b30;"></strong></p>
+            <p style="font-size:16px; margin-bottom:8px;">Новая оценка: <strong id="changeScoreNew" style="color:#34c759;"></strong></p>
+            <p style="font-size:13px; opacity:0.7;">Что вы хотите сделать?</p>
+
+            <div class="score-actions">
+                <button class="score-action-btn add" id="addNewScoreBtn">
+                    <span class="sa-emoji">➕</span>
+                    <span class="sa-text">
+                        <span class="sa-title">Добавить ещё одну</span>
+                        <span class="sa-desc">Оставить старую и добавить новую оценку</span>
+                    </span>
+                </button>
+                <button class="score-action-btn change" id="replaceScoreBtn">
+                    <span class="sa-emoji">✏️</span>
+                    <span class="sa-text">
+                        <span class="sa-title">Заменить старую</span>
+                        <span class="sa-desc">Удалить старую и поставить новую</span>
+                    </span>
+                </button>
+            </div>
+
             <div class="btn-row">
-                <button class="btn btn-admin" id="confirmChangeScoreBtn">✅ Изменить</button>
-                <button class="btn btn-secondary" id="cancelChangeScoreBtn">↩️ Отмена</button>
+                <button class="btn btn-secondary" id="cancelChangeScoreBtn">↩️ Вернуться назад</button>
             </div>
         </div>
     </div>
@@ -2571,28 +2663,79 @@
             }
         });
 
-        // ===== МОДАЛКА ИЗМЕНЕНИЯ ОЦЕНКИ =====
+        // ===== МОДАЛКА ДЕЙСТВИЙ С ОЦЕНКОЙ (3 кнопки) =====
         var changeScoreModal = document.getElementById('changeScoreModal');
         var changeScoreName = document.getElementById('changeScoreName');
         var changeScoreOld = document.getElementById('changeScoreOld');
         var changeScoreNew = document.getElementById('changeScoreNew');
-        var confirmChangeScoreBtn = document.getElementById('confirmChangeScoreBtn');
+        var addNewScoreBtn = document.getElementById('addNewScoreBtn');
+        var replaceScoreBtn = document.getElementById('replaceScoreBtn');
         var cancelChangeScoreBtn = document.getElementById('cancelChangeScoreBtn');
-        var pendingChangeVote = null;
+        var pendingScoreAction = null;
 
-        function showChangeScoreConfirm(name, oldScore, newScore, existingVote, newVoteData) {
-            pendingChangeVote = { existingVote: existingVote, newVoteData: newVoteData };
+        function showScoreActionsModal(name, oldScore, newScore, existingVote, newVoteData, comment, score) {
+            pendingScoreAction = {
+                existingVote: existingVote,
+                newVoteData: newVoteData,
+                name: name,
+                score: score,
+                comment: comment
+            };
             changeScoreName.textContent = name;
             changeScoreOld.textContent = oldScore.toFixed(1);
             changeScoreNew.textContent = newScore.toFixed(1);
             changeScoreModal.classList.add('active');
         }
 
-        confirmChangeScoreBtn.addEventListener('click', function() {
-            if (!pendingChangeVote) return;
+        // Кнопка "Добавить ещё одну"
+        addNewScoreBtn.addEventListener('click', async function() {
+            if (!pendingScoreAction) return;
+
+            var name = pendingScoreAction.name;
+            var score = pendingScoreAction.score;
+            var comment = pendingScoreAction.comment;
+            var voterName = userRole === 'jury' ? juryName : userRole;
+
+            // Создаём НОВЫЙ голос (не заменяем)
+            var voteData = {
+                id: Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                name: name,
+                score: score,
+                comment: comment || '',
+                jury: voterName
+            };
+
             var currentData = getCurrentData();
-            var existingVote = pendingChangeVote.existingVote;
-            var newVoteData = pendingChangeVote.newVoteData;
+            currentData.votes.push(voteData);
+
+            nameInput.value = '';
+            scoreInput.value = '';
+            commentInputField.value = '';
+            nameInput.focus();
+
+            saveAllDataToLocalStorage();
+            if (githubToken) await saveToGitHub(currentNomination, currentStyle);
+
+            renderAll();
+            if (userRole === 'jury') renderJuryHistory();
+            renderLeader();
+
+            lastUpdateTime[currentNomination][currentStyle] = Date.now();
+            addHistory(name, score, comment);
+
+            changeScoreModal.classList.remove('active');
+            pendingScoreAction = null;
+
+            showToast('✅ Добавлена оценка: ' + name + ' +' + score.toFixed(1), '');
+        });
+
+        // Кнопка "Заменить старую"
+        replaceScoreBtn.addEventListener('click', async function() {
+            if (!pendingScoreAction) return;
+
+            var existingVote = pendingScoreAction.existingVote;
+            var newVoteData = pendingScoreAction.newVoteData;
+            var currentData = getCurrentData();
 
             for (var i = 0; i < currentData.votes.length; i++) {
                 if (currentData.votes[i].id === existingVote.id) {
@@ -2603,9 +2746,7 @@
             }
 
             saveAllDataToLocalStorage();
-            if (githubToken) {
-                saveToGitHub(currentNomination, currentStyle);
-            }
+            if (githubToken) await saveToGitHub(currentNomination, currentStyle);
 
             renderAll();
             if (userRole === 'jury') renderJuryHistory();
@@ -2616,21 +2757,22 @@
             commentInputField.value = '';
 
             changeScoreModal.classList.remove('active');
-            pendingChangeVote = null;
+            pendingScoreAction = null;
 
-            showToast('✅ Оценка изменена: ' + newVoteData.name + ' → ' + newVoteData.score.toFixed(1), '');
+            showToast('✏️ Оценка заменена: ' + newVoteData.name + ' → ' + newVoteData.score.toFixed(1), '');
         });
 
+        // Кнопка "Вернуться назад"
         cancelChangeScoreBtn.addEventListener('click', function() {
             changeScoreModal.classList.remove('active');
-            pendingChangeVote = null;
-            showToast('↩️ Изменение отменено', 'info');
+            pendingScoreAction = null;
+            showToast('↩️ Отменено', 'info');
         });
 
         changeScoreModal.addEventListener('click', function(e) {
             if (e.target === this) {
                 changeScoreModal.classList.remove('active');
-                pendingChangeVote = null;
+                pendingScoreAction = null;
             }
         });
 
@@ -2778,7 +2920,7 @@
         var isAdminMode = false;
         var juryName = '';
         var userRole = '';
-        var isClearing = false; // блокировка автосинхронизации во время очистки
+        var isClearing = false;
 
         // ===== ОСНОВНОЙ КОД =====
         var REPO_OWNER = 'fr4chek';
@@ -2866,7 +3008,6 @@
         function startAutoSync() {
             if (autoSyncInterval) clearInterval(autoSyncInterval);
             autoSyncInterval = setInterval(function() {
-                // НЕ синхронизируем, если идёт очистка
                 if (isClearing) return;
                 if (githubToken && navigator.onLine) {
                     if (userRole === 'jury') {
@@ -3563,7 +3704,7 @@
         closeDetailsBtn.addEventListener('click', function() { detailsModal.classList.remove('active'); });
         detailsModal.addEventListener('click', function(e) { if (e.target === this) detailsModal.classList.remove('active'); });
 
-        // ===== ОЧИСТКА (С ВЫБОРОМ + БЛОКИРОВКА АВТОСИНХРОНИЗАЦИИ) =====
+        // ===== ОЧИСТКА (С ВЫБОРОМ) =====
         var clearChoiceStep = document.getElementById('clearChoiceStep');
         var clearCaptchaStep = document.getElementById('clearCaptchaStep');
         var clearCurrentCategoryBtn = document.getElementById('clearCurrentCategoryBtn');
@@ -3621,7 +3762,6 @@
             clearMode = '';
         });
 
-        // ===== ПОДТВЕРЖДЕНИЕ ОЧИСТКИ (АСИНХРОННОЕ С ОЖИДАНИЕМ GITHUB) =====
         confirmClearBtn.addEventListener('click', async function() {
             if (userRole === 'jury') {
                 showToast('⛔ Очищать могут только руководители и администраторы', 'warning');
@@ -3641,14 +3781,15 @@
             clearChoiceStep.style.display = 'block';
             clearCaptchaStep.style.display = 'none';
 
-            // ===== БЛОКИРУЕМ АВТОСИНХРОНИЗАЦИЮ =====
             isClearing = true;
+            if (autoSyncInterval) {
+                clearInterval(autoSyncInterval);
+                autoSyncInterval = null;
+            }
 
-            // Показываем загрузку
             showToast('🗑️ Очистка...', 'info');
 
             if (clearMode === 'current') {
-                // Очищаем только текущую номинацию+стиль
                 var currentData = getCurrentData();
                 currentData.votes = [];
                 currentData.history = [];
@@ -3656,11 +3797,9 @@
                 lastUpdateTime[currentNomination][currentStyle] = Date.now();
                 saveAllDataToLocalStorage();
 
-                // ЖДЁМ сохранения в GitHub
                 if (githubToken) {
                     await saveToGitHub(currentNomination, currentStyle);
-                    // Дополнительная пауза для защиты от race condition
-                    await new Promise(function(resolve) { setTimeout(resolve, 500); });
+                    await new Promise(function(resolve) { setTimeout(resolve, 1500); });
                 }
 
                 renderAll();
@@ -3668,7 +3807,6 @@
                 renderLeader();
                 showToast('🗑️ Очищено: «' + getNominationLabel(currentNomination) + ' · ' + getStyleLabel(currentStyle) + '»', 'error');
             } else if (clearMode === 'all') {
-                // Очищаем ВСЁ
                 NOMINATIONS.forEach(function(nom) {
                     STYLES.forEach(function(style) {
                         allData[nom][style].votes = [];
@@ -3679,7 +3817,6 @@
                 winnerName = null;
                 saveAllDataToLocalStorage();
 
-                // ЖДЁМ сохранения всех файлов в GitHub
                 if (githubToken) {
                     var promises = [];
                     NOMINATIONS.forEach(function(nom) {
@@ -3688,8 +3825,7 @@
                         });
                     });
                     await Promise.all(promises);
-                    // Дополнительная пауза для защиты от race condition
-                    await new Promise(function(resolve) { setTimeout(resolve, 500); });
+                    await new Promise(function(resolve) { setTimeout(resolve, 2000); });
                 }
 
                 renderAll();
@@ -3701,10 +3837,10 @@
             clearMode = '';
             captchaInput.value = '';
 
-            // ===== РАЗБЛОКИРУЕМ АВТОСИНХРОНИЗАЦИЮ ЧЕРЕЗ 3 СЕКУНДЫ =====
             setTimeout(function() {
                 isClearing = false;
-            }, 3000);
+                startAutoSync();
+            }, 5000);
         });
 
         captchaInput.addEventListener('keydown', function(e) {
@@ -3869,33 +4005,47 @@
         }
 
         async function saveToGitHub(nomination, style) {
-            if (!githubToken) return;
+            if (!githubToken) return false;
             var filePath = getDataFilePath(nomination, style);
-            var dataToSave = { votes: allData[nomination][style].votes || [], history: allData[nomination][style]
-                    .history || [] };
+            var dataToSave = {
+                votes: allData[nomination][style].votes || [],
+                history: allData[nomination][style].history || [],
+                lastModified: Date.now()
+            };
             try {
                 var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
                 var loadResponse = await fetch(url, { headers: { 'Authorization': 'token ' + githubToken,
                         'Accept': 'application/vnd.github.v3+json' } });
                 var remoteSha = null;
-                if (loadResponse.ok) { var loadData = await loadResponse.json();
-                    remoteSha = loadData.sha; }
+                if (loadResponse.ok) {
+                    var loadData = await loadResponse.json();
+                    remoteSha = loadData.sha;
+                }
                 var content = utf8ToBase64(JSON.stringify(dataToSave, null, 2));
-                var body = { message: 'Очистка данных', content: content };
+                var body = { message: 'Обновление данных', content: content };
                 if (remoteSha) body.sha = remoteSha;
-                await fetch(url, {
+                var saveResponse = await fetch(url, {
                     method: 'PUT',
                     headers: { 'Authorization': 'token ' + githubToken, 'Content-Type': 'application/json',
                         'Accept': 'application/vnd.github.v3+json' },
                     body: JSON.stringify(body)
                 });
-                setStatus('☁️ Синхронизировано', 'var(--text-light)');
-            } catch (e) { setStatus('☁️ Синхронизировано', 'var(--text-light)'); }
+                if (saveResponse.ok) {
+                    setStatus('☁️ Синхронизировано', 'var(--text-light)');
+                    return true;
+                } else {
+                    setStatus('⚠️ Ошибка сохранения', '#ff9500');
+                    return false;
+                }
+            } catch (e) {
+                setStatus('⚠️ Ошибка', '#ff3b30');
+                return false;
+            }
         }
 
         async function loadFromGitHub(nomination, style) {
             if (!githubToken) return;
-            if (isClearing) return; // не загружаем во время очистки
+            if (isClearing) return;
             var filePath = getDataFilePath(nomination, style);
             try {
                 var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
@@ -3903,27 +4053,26 @@
                         'Accept': 'application/vnd.github.v3+json' } });
                 if (response.status === 404) {
                     allData[nomination][style] = { votes: [], history: [] };
-                    if (userRole !== 'jury') { renderAll();
-                        renderSummary();
-                        renderLeader(); } else { renderAll();
-                        renderJuryHistory();
-                        renderLeader(); }
+                    if (userRole !== 'jury') { renderAll(); renderSummary(); renderLeader(); }
+                    else { renderAll(); renderJuryHistory(); renderLeader(); }
                     return;
                 }
                 if (!response.ok) throw new Error('Ошибка загрузки');
                 var data = await response.json();
                 var content = base64ToUtf8(data.content);
                 var jsonData = JSON.parse(content);
+
+                var remoteModified = jsonData.lastModified || 0;
+                var localModified = lastUpdateTime[nomination][style] || 0;
+                if (localModified > remoteModified + 1000) {
+                    return;
+                }
+
                 if (jsonData) {
-                    if (lastUpdateTime[nomination] && lastUpdateTime[nomination][style] && Date.now() - lastUpdateTime[
-                            nomination][style] < 5000) return;
                     if (jsonData.votes) allData[nomination][style].votes = jsonData.votes;
                     if (jsonData.history) allData[nomination][style].history = jsonData.history;
-                    if (userRole !== 'jury') { renderAll();
-                        renderSummary();
-                        renderLeader(); } else { renderAll();
-                        renderJuryHistory();
-                        renderLeader(); }
+                    if (userRole !== 'jury') { renderAll(); renderSummary(); renderLeader(); }
+                    else { renderAll(); renderJuryHistory(); renderLeader(); }
                     saveAllDataToLocalStorage();
                     setStatus('☁️ Синхронизировано', 'var(--text-light)');
                 }
@@ -4039,7 +4188,7 @@
                     comment: comment || '',
                     jury: voterName
                 };
-                showChangeScoreConfirm(name, existingVote.score, score, existingVote, newVoteData);
+                showScoreActionsModal(name, existingVote.score, score, existingVote, newVoteData, comment, score);
                 return;
             }
 
@@ -4141,8 +4290,7 @@
         console.log('📋 Номинации:', NOMINATIONS.join(', '));
         console.log('🎵 Стили:', STYLES.join(', '));
         console.log('🔑 Пароли: Жюри=GGWP, Руководитель=GLHF, Админ=EGOR');
-        console.log('✏️ Жюри может изменять свои оценки');
-        console.log('🗑️ Очистка: категория или всё (с ожиданием GitHub)');
+        console.log('➕✏️ При дубле: добавить новую или заменить старую');
     </script>
 </body>
 </html>
