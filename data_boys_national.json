@@ -33,6 +33,15 @@
     {
       "type": "vote",
       "name": "777",
+      "score": 8,
+      "comment": "",
+      "time": "15:38:05",
+      "date": "29.09.2026",
+      "jury": "Дмитрий Ф"
+    },
+    {
+      "type": "vote",
+      "name": "777",
       "score": 9,
       "comment": "",
       "time": "15:37:57",
@@ -49,5 +58,5 @@
       "jury": "Дмитрий Ф"
     }
   ],
-  "lastModified": 1790685484092
+  "lastModified": 1790685485039
 }
