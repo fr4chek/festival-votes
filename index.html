@@ -2306,7 +2306,7 @@
                     <div class="clear-option-btn danger" id="clearAllDataBtn">
                         <span class="co-emoji">💥</span>
                         <span class="co-title">Очистить АБСОЛЮТНО всё</span>
-                        <span class="co-desc">Все номинации и стили (12 файлов)</span>
+                        <span class="co-desc">Удалить все 12 файлов из GitHub</span>
                     </div>
                 </div>
                 <div class="btn-row" style="margin-top: 12px;">
@@ -3758,7 +3758,7 @@
             clearMode = '';
         });
 
-        // ===== ИСПРАВЛЕННАЯ ОЧИСТКА =====
+        // ===== ИСПРАВЛЕННАЯ ОЧИСТКА (УДАЛЕНИЕ ФАЙЛОВ) =====
         confirmClearBtn.addEventListener('click', async function() {
             if (userRole === 'jury') {
                 showToast('⛔ Очищать могут только руководители и администраторы', 'warning');
@@ -3809,7 +3809,7 @@
                 if (userRole !== 'jury') renderSummary();
                 renderLeader();
             } else if (clearMode === 'all') {
-                // ===== ОЧИЩАЕМ ВСЁ ЛОКАЛЬНО =====
+                // ОЧИЩАЕМ ВСЁ ЛОКАЛЬНО
                 NOMINATIONS.forEach(function(nom) {
                     STYLES.forEach(function(style) {
                         allData[nom][style].votes = [];
@@ -3819,8 +3819,11 @@
                 });
                 winnerName = null;
                 saveAllDataToLocalStorage();
+                renderAll();
+                if (userRole !== 'jury') renderSummary();
+                renderLeader();
 
-                // ===== ПОСЛЕДОВАТЕЛЬНО СОХРАНЯЕМ ВСЕ 12 ФАЙЛОВ =====
+                // УДАЛЯЕМ ВСЕ 12 ФАЙЛОВ ИЗ GITHUB
                 if (githubToken) {
                     var successCount = 0;
                     var failCount = 0;
@@ -3837,23 +3840,18 @@
                                 failCount++;
                             }
 
-                            // Задержка между запросами, чтобы не ловить rate limit
-                            await new Promise(function(resolve) { setTimeout(resolve, 300); });
+                            await new Promise(function(resolve) { setTimeout(resolve, 400); });
                         }
                     }
 
                     if (failCount === 0) {
-                        showToast('💥 ОЧИЩЕНО АБСОЛЮТНО ВСЁ! (' + successCount + '/12 файлов)', 'error');
+                        showToast('💥 ВСЁ УДАЛЕНО из GitHub! (' + successCount + '/12 файлов)', 'error');
                     } else {
-                        showToast('⚠️ Очищено ' + successCount + ' из 12. Не сохранилось: ' + failCount, 'warning');
+                        showToast('⚠️ Удалено ' + successCount + ' из 12. Ошибок: ' + failCount, 'warning');
                     }
                 } else {
                     showToast('💥 Очищено локально (GitHub не подключён)', 'info');
                 }
-
-                renderAll();
-                if (userRole !== 'jury') renderSummary();
-                renderLeader();
             }
 
             clearMode = '';
@@ -4026,7 +4024,7 @@
             return 'data_' + nomination + '_' + style + '.json';
         }
 
-        // ===== ИСПРАВЛЕННАЯ СОХРАНЕНИЕ В GITHUB =====
+        // ===== ИСПРАВЛЕННОЕ СОХРАНЕНИЕ В GITHUB (УДАЛЯЕТ ФАЙЛ, ЕСЛИ ПУСТО) =====
         async function saveToGitHub(nomination, style) {
             if (!githubToken) return false;
             var filePath = getDataFilePath(nomination, style);
@@ -4038,7 +4036,7 @@
             try {
                 var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
 
-                // 1. Получаем текущий SHA (если файл существует)
+                // 1. Получаем текущий SHA
                 var remoteSha = null;
                 var loadResponse = await fetch(url, {
                     headers: {
@@ -4051,7 +4049,32 @@
                     remoteSha = loadData.sha;
                 }
 
-                // 2. Сохраняем новый контент
+                // 2. Если данных нет и файл существует — УДАЛЯЕМ файл
+                var isEmpty = (dataToSave.votes.length === 0 && dataToSave.history.length === 0);
+                if (isEmpty && remoteSha) {
+                    var deleteResponse = await fetch(url, {
+                        method: 'DELETE',
+                        headers: {
+                            'Authorization': 'token ' + githubToken,
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/vnd.github.v3+json'
+                        },
+                        body: JSON.stringify({
+                            message: 'Удаление данных (очистка)',
+                            sha: remoteSha
+                        })
+                    });
+                    if (deleteResponse.ok) {
+                        console.log('✅ Файл удалён из GitHub:', filePath);
+                        return true;
+                    } else {
+                        var errText = await deleteResponse.text();
+                        console.error('❌ Ошибка удаления ' + filePath + ':', deleteResponse.status, errText);
+                        return false;
+                    }
+                }
+
+                // 3. Иначе — сохраняем новый контент
                 var content = utf8ToBase64(JSON.stringify(dataToSave, null, 2));
                 var body = { message: 'Обновление данных', content: content };
                 if (remoteSha) body.sha = remoteSha;
@@ -4069,8 +4092,8 @@
                 if (saveResponse.ok) {
                     return true;
                 } else {
-                    var errText = await saveResponse.text();
-                    console.error('Save error ' + filePath + ':', saveResponse.status, errText);
+                    var errText2 = await saveResponse.text();
+                    console.error('Save error ' + filePath + ':', saveResponse.status, errText2);
                     return false;
                 }
             } catch (e) {
@@ -4326,6 +4349,7 @@
         console.log('📋 Номинации:', NOMINATIONS.join(', '));
         console.log('🎵 Стили:', STYLES.join(', '));
         console.log('🔑 Пароли: Жюри=GGWP, Руководитель=GLHF, Админ=EGOR');
+        console.log('🗑️ Очистка теперь УДАЛЯЕТ файлы из GitHub');
     </script>
 </body>
 </html>
