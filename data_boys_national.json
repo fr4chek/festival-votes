@@ -8,6 +8,16 @@
       "jury": "Дмитрий Ф"
     }
   ],
-  "history": [],
-  "lastModified": 1790685433361
+  "history": [
+    {
+      "type": "vote",
+      "name": "777",
+      "score": 10,
+      "comment": "",
+      "time": "15:37:14",
+      "date": "29.09.2026",
+      "jury": "Дмитрий Ф"
+    }
+  ],
+  "lastModified": 1790685434358
 }
