@@ -1,4 +1,13 @@
 {
-  "votes": [],
-  "history": []
+  "votes": [
+    {
+      "id": "1790685433360_50cqtd",
+      "name": "777",
+      "score": 10,
+      "comment": "",
+      "jury": "Дмитрий Ф"
+    }
+  ],
+  "history": [],
+  "lastModified": 1790685433361
 }
