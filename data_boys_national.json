@@ -13,9 +13,25 @@
       "score": 9,
       "comment": "",
       "jury": "Дмитрий Ф"
+    },
+    {
+      "id": "1790685477020_3njorp",
+      "name": "777",
+      "score": 9,
+      "comment": "",
+      "jury": "Дмитрий Ф"
     }
   ],
   "history": [
+    {
+      "type": "vote",
+      "name": "777",
+      "score": 9,
+      "comment": "",
+      "time": "15:37:57",
+      "date": "29.09.2026",
+      "jury": "Дмитрий Ф"
+    },
     {
       "type": "vote",
       "name": "777",
@@ -26,5 +42,5 @@
       "jury": "Дмитрий Ф"
     }
   ],
-  "lastModified": 1790685475949
+  "lastModified": 1790685477214
 }
