@@ -2703,6 +2703,7 @@
                 renderAll();
                 renderJuryHistory();
                 renderLeader();
+                startAutoSync();
                 showToast('👤 Добро пожаловать, ' + juryName + '!', 'info');
                 return true;
             } else if (session === 'leader') {
@@ -2729,6 +2730,7 @@
                 renderAll();
                 renderSummary();
                 renderLeader();
+                startAutoSync();
                 showToast('👔 Добро пожаловать, руководитель!', 'info');
                 return true;
             } else if (session === 'admin') {
@@ -2755,6 +2757,7 @@
                 renderAll();
                 renderSummary();
                 renderLeader();
+                startAutoSync();
                 showToast('👑 Добро пожаловать, администратор!', 'info');
                 return true;
             }
@@ -2775,6 +2778,7 @@
         var isAdminMode = false;
         var juryName = '';
         var userRole = '';
+        var isClearing = false; // блокировка автосинхронизации во время очистки
 
         // ===== ОСНОВНОЙ КОД =====
         var REPO_OWNER = 'fr4chek';
@@ -2857,6 +2861,26 @@
         var historyModalList = document.getElementById('historyModalList');
         var closeHistoryBtn = document.getElementById('closeHistoryBtn');
         var historyFilters = document.getElementById('historyFilters');
+
+        // ===== АВТОСИНХРОНИЗАЦИЯ =====
+        function startAutoSync() {
+            if (autoSyncInterval) clearInterval(autoSyncInterval);
+            autoSyncInterval = setInterval(function() {
+                // НЕ синхронизируем, если идёт очистка
+                if (isClearing) return;
+                if (githubToken && navigator.onLine) {
+                    if (userRole === 'jury') {
+                        loadFromGitHub(currentNomination, currentStyle);
+                        renderJuryHistory();
+                    } else {
+                        loadFromGitHub(currentNomination, currentStyle);
+                        renderSummary();
+                    }
+                    renderAll();
+                    renderLeader();
+                }
+            }, 10000);
+        }
 
         // ===== КНОПКА ВЫХОДА =====
         document.getElementById('logoutBtn').addEventListener('click', function() {
@@ -3204,20 +3228,7 @@
             if (userRole === 'jury') renderJuryHistory();
             renderLeader();
 
-            if (autoSyncInterval) clearInterval(autoSyncInterval);
-            autoSyncInterval = setInterval(function() {
-                if (githubToken && navigator.onLine) {
-                    if (userRole === 'jury') {
-                        loadFromGitHub(currentNomination, currentStyle);
-                        renderJuryHistory();
-                    } else {
-                        loadFromGitHub(currentNomination, currentStyle);
-                        renderSummary();
-                    }
-                    renderAll();
-                    renderLeader();
-                }
-            }, 10000);
+            startAutoSync();
 
             showToast('✅ Добро пожаловать, ' + roleLabels[userRole] + '!', 'info');
         }
@@ -3552,7 +3563,7 @@
         closeDetailsBtn.addEventListener('click', function() { detailsModal.classList.remove('active'); });
         detailsModal.addEventListener('click', function(e) { if (e.target === this) detailsModal.classList.remove('active'); });
 
-        // ===== ОЧИСТКА (С ВЫБОРОМ) =====
+        // ===== ОЧИСТКА (С ВЫБОРОМ + БЛОКИРОВКА АВТОСИНХРОНИЗАЦИИ) =====
         var clearChoiceStep = document.getElementById('clearChoiceStep');
         var clearCaptchaStep = document.getElementById('clearCaptchaStep');
         var clearCurrentCategoryBtn = document.getElementById('clearCurrentCategoryBtn');
@@ -3561,24 +3572,20 @@
         var backToChoiceBtn = document.getElementById('backToChoiceBtn');
         var clearCaptchaTitle = document.getElementById('clearCaptchaTitle');
         var clearCurrentDesc = document.getElementById('clearCurrentDesc');
-        var clearMode = ''; // 'current' или 'all'
+        var clearMode = '';
 
         clearBtn.addEventListener('click', function() {
             if (userRole === 'jury') {
                 showToast('⛔ Очищать могут только руководители и администраторы', 'warning');
                 return;
             }
-            // Обновляем описание текущей категории
             clearCurrentDesc.textContent = 'Только «' + getNominationLabel(currentNomination) + ' · ' + getStyleLabel(currentStyle) + '»';
-
-            // Сбрасываем на первый шаг
             clearChoiceStep.style.display = 'block';
             clearCaptchaStep.style.display = 'none';
             clearMode = '';
             clearModal.classList.add('active');
         });
 
-        // Выбор: очистить только текущую категорию
         clearCurrentCategoryBtn.addEventListener('click', function() {
             clearMode = 'current';
             clearCaptchaTitle.textContent = 'Очистить «' + getNominationLabel(currentNomination) + ' · ' + getStyleLabel(currentStyle) + '»?';
@@ -3589,7 +3596,6 @@
             setTimeout(function() { captchaInput.focus(); }, 300);
         });
 
-        // Выбор: очистить АБСОЛЮТНО всё
         clearAllDataBtn.addEventListener('click', function() {
             clearMode = 'all';
             clearCaptchaTitle.textContent = '⚠️ Очистить ВСЁ? Все номинации и стили будут удалены!';
@@ -3600,7 +3606,6 @@
             setTimeout(function() { captchaInput.focus(); }, 300);
         });
 
-        // Назад к выбору
         backToChoiceBtn.addEventListener('click', function() {
             clearChoiceStep.style.display = 'block';
             clearCaptchaStep.style.display = 'none';
@@ -3609,7 +3614,6 @@
             captchaError.classList.remove('show');
         });
 
-        // Отмена
         cancelClearChoiceBtn.addEventListener('click', function() {
             clearModal.classList.remove('active');
             clearChoiceStep.style.display = 'block';
@@ -3617,8 +3621,8 @@
             clearMode = '';
         });
 
-        // Подтверждение очистки
-        confirmClearBtn.addEventListener('click', function() {
+        // ===== ПОДТВЕРЖДЕНИЕ ОЧИСТКИ (АСИНХРОННОЕ С ОЖИДАНИЕМ GITHUB) =====
+        confirmClearBtn.addEventListener('click', async function() {
             if (userRole === 'jury') {
                 showToast('⛔ Очищать могут только руководители и администраторы', 'warning');
                 clearModal.classList.remove('active');
@@ -3637,6 +3641,12 @@
             clearChoiceStep.style.display = 'block';
             clearCaptchaStep.style.display = 'none';
 
+            // ===== БЛОКИРУЕМ АВТОСИНХРОНИЗАЦИЮ =====
+            isClearing = true;
+
+            // Показываем загрузку
+            showToast('🗑️ Очистка...', 'info');
+
             if (clearMode === 'current') {
                 // Очищаем только текущую номинацию+стиль
                 var currentData = getCurrentData();
@@ -3645,7 +3655,14 @@
                 winnerName = null;
                 lastUpdateTime[currentNomination][currentStyle] = Date.now();
                 saveAllDataToLocalStorage();
-                if (githubToken) saveToGitHub(currentNomination, currentStyle);
+
+                // ЖДЁМ сохранения в GitHub
+                if (githubToken) {
+                    await saveToGitHub(currentNomination, currentStyle);
+                    // Дополнительная пауза для защиты от race condition
+                    await new Promise(function(resolve) { setTimeout(resolve, 500); });
+                }
+
                 renderAll();
                 if (userRole !== 'jury') renderSummary();
                 renderLeader();
@@ -3662,13 +3679,17 @@
                 winnerName = null;
                 saveAllDataToLocalStorage();
 
-                // Сохраняем все файлы в GitHub (пустые)
+                // ЖДЁМ сохранения всех файлов в GitHub
                 if (githubToken) {
+                    var promises = [];
                     NOMINATIONS.forEach(function(nom) {
                         STYLES.forEach(function(style) {
-                            saveToGitHub(nom, style);
+                            promises.push(saveToGitHub(nom, style));
                         });
                     });
+                    await Promise.all(promises);
+                    // Дополнительная пауза для защиты от race condition
+                    await new Promise(function(resolve) { setTimeout(resolve, 500); });
                 }
 
                 renderAll();
@@ -3679,6 +3700,11 @@
 
             clearMode = '';
             captchaInput.value = '';
+
+            // ===== РАЗБЛОКИРУЕМ АВТОСИНХРОНИЗАЦИЮ ЧЕРЕЗ 3 СЕКУНДЫ =====
+            setTimeout(function() {
+                isClearing = false;
+            }, 3000);
         });
 
         captchaInput.addEventListener('keydown', function(e) {
@@ -3855,7 +3881,7 @@
                 if (loadResponse.ok) { var loadData = await loadResponse.json();
                     remoteSha = loadData.sha; }
                 var content = utf8ToBase64(JSON.stringify(dataToSave, null, 2));
-                var body = { message: 'Обновление данных', content: content };
+                var body = { message: 'Очистка данных', content: content };
                 if (remoteSha) body.sha = remoteSha;
                 await fetch(url, {
                     method: 'PUT',
@@ -3869,6 +3895,7 @@
 
         async function loadFromGitHub(nomination, style) {
             if (!githubToken) return;
+            if (isClearing) return; // не загружаем во время очистки
             var filePath = getDataFilePath(nomination, style);
             try {
                 var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
@@ -3889,7 +3916,7 @@
                 var jsonData = JSON.parse(content);
                 if (jsonData) {
                     if (lastUpdateTime[nomination] && lastUpdateTime[nomination][style] && Date.now() - lastUpdateTime[
-                            nomination][style] < 3000) return;
+                            nomination][style] < 5000) return;
                     if (jsonData.votes) allData[nomination][style].votes = jsonData.votes;
                     if (jsonData.history) allData[nomination][style].history = jsonData.history;
                     if (userRole !== 'jury') { renderAll();
@@ -4033,11 +4060,7 @@
             saveAllDataToLocalStorage();
 
             if (githubToken) {
-                saveToGitHub(currentNomination, currentStyle).then(() => {
-                    renderAll();
-                    if (userRole === 'jury') renderJuryHistory();
-                    renderLeader();
-                }).catch(() => {});
+                await saveToGitHub(currentNomination, currentStyle);
             }
 
             renderAll();
@@ -4119,7 +4142,7 @@
         console.log('🎵 Стили:', STYLES.join(', '));
         console.log('🔑 Пароли: Жюри=GGWP, Руководитель=GLHF, Админ=EGOR');
         console.log('✏️ Жюри может изменять свои оценки');
-        console.log('🗑️ Очистка: категория или всё');
+        console.log('🗑️ Очистка: категория или всё (с ожиданием GitHub)');
     </script>
 </body>
 </html>
