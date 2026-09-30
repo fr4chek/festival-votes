@@ -8,6 +8,16 @@
       "jury": "admin"
     }
   ],
-  "history": [],
-  "lastModified": 1790781331371
+  "history": [
+    {
+      "type": "vote",
+      "name": "jcfyhyhdfjj",
+      "score": 10,
+      "comment": "",
+      "time": "18:15:32",
+      "date": "30.09.2026",
+      "jury": "admin"
+    }
+  ],
+  "lastModified": 1790781332409
 }
