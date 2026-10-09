@@ -1,5 +1,13 @@
 {
-  "votes": [],
+  "votes": [
+    {
+      "id": "1791541432769_0ekf1c",
+      "name": "29",
+      "score": 8,
+      "comment": "",
+      "jury": "Александра Бутенко"
+    }
+  ],
   "history": [],
-  "lastModified": 1791541119375
+  "lastModified": 1791541432772
 }
