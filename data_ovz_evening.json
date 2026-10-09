@@ -1,5 +1,13 @@
 {
-  "votes": [],
+  "votes": [
+    {
+      "id": "1791541438919_nzhcyb",
+      "name": "29",
+      "score": 5,
+      "comment": "",
+      "jury": "Александра Бутенко"
+    }
+  ],
   "history": [
     {
       "type": "vote",
@@ -11,5 +19,5 @@
       "jury": "Александра Бутенко"
     }
   ],
-  "lastModified": 1791541433869
+  "lastModified": 1791541438921
 }
