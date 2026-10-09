@@ -8,6 +8,16 @@
       "jury": "Александра Бутенко"
     }
   ],
-  "history": [],
-  "lastModified": 1791541165286
+  "history": [
+    {
+      "type": "vote",
+      "name": "29",
+      "score": 6,
+      "comment": "",
+      "time": "13:19:27",
+      "date": "09.10.2026",
+      "jury": "Александра Бутенко"
+    }
+  ],
+  "lastModified": 1791541167116
 }
