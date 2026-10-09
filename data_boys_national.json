@@ -6,18 +6,25 @@
       "score": 10,
       "comment": "",
       "jury": "Инна Помазкова"
+    },
+    {
+      "id": "1791540824665_p9v5nx",
+      "name": "2",
+      "score": 3,
+      "comment": "",
+      "jury": "Александра Бутенко"
     }
   ],
   "history": [
     {
       "type": "vote",
-      "name": "1",
-      "score": 10,
+      "name": "2",
+      "score": 3,
       "comment": "",
-      "time": "13:13:31",
+      "time": "13:13:45",
       "date": "09.10.2026",
-      "jury": "Инна Помазкова"
+      "jury": "Александра Бутенко"
     }
   ],
-  "lastModified": 1791540811791
+  "lastModified": 1791540825064
 }
