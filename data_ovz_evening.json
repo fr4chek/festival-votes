@@ -1,5 +1,15 @@
 {
   "votes": [],
-  "history": [],
-  "lastModified": 1791541122955
+  "history": [
+    {
+      "type": "vote",
+      "name": "29",
+      "score": 8,
+      "comment": "",
+      "time": "13:23:53",
+      "date": "09.10.2026",
+      "jury": "Александра Бутенко"
+    }
+  ],
+  "lastModified": 1791541433869
 }
