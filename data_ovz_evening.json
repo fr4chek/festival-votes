@@ -18,6 +18,15 @@
   "history": [
     {
       "type": "vote",
+      "name": "7",
+      "score": 7,
+      "comment": "",
+      "time": "10:48:27",
+      "date": "15.10.2026",
+      "jury": "Денис"
+    },
+    {
+      "type": "vote",
       "name": "29",
       "score": 5,
       "comment": "",
@@ -35,5 +44,5 @@
       "jury": "Александра Бутенко"
     }
   ],
-  "lastModified": 1792050505177
+  "lastModified": 1792050507545
 }
