@@ -18,6 +18,15 @@
   "history": [
     {
       "type": "vote",
+      "name": "4",
+      "score": 10,
+      "comment": "",
+      "time": "11:20:09",
+      "date": "15.10.2026",
+      "jury": "leader"
+    },
+    {
+      "type": "vote",
       "name": "выыывыы",
       "score": 5,
       "comment": "",
@@ -35,5 +44,5 @@
       "jury": "leader"
     }
   ],
-  "lastModified": 1792052407343
+  "lastModified": 1792052409652
 }
