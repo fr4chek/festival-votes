@@ -1,5 +1,13 @@
 {
-  "votes": [],
+  "votes": [
+    {
+      "id": "1792052366934_t4ky6m",
+      "name": "рпвплоывыорвры",
+      "score": 5,
+      "comment": "",
+      "jury": "leader"
+    }
+  ],
   "history": [
     {
       "type": "vote",
@@ -11,5 +19,5 @@
       "jury": "leader"
     }
   ],
-  "lastModified": 1792052362261
+  "lastModified": 1792052366936
 }
