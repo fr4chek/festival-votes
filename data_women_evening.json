@@ -8,6 +8,16 @@
       "jury": "Денис"
     }
   ],
-  "history": [],
-  "lastModified": 1792049389292
+  "history": [
+    {
+      "type": "vote",
+      "name": "23",
+      "score": 5,
+      "comment": "",
+      "time": "10:29:50",
+      "date": "15.10.2026",
+      "jury": "Денис"
+    }
+  ],
+  "lastModified": 1792049390981
 }
