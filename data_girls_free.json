@@ -1,13 +1,15 @@
 {
-  "votes": [
+  "votes": [],
+  "history": [
     {
-      "id": "1792052379431_knlyrd",
+      "type": "vote",
       "name": "ыввыввывыв",
       "score": 6,
       "comment": "",
+      "time": "11:19:43",
+      "date": "15.10.2026",
       "jury": "leader"
     }
   ],
-  "history": [],
-  "lastModified": 1792052379434
+  "lastModified": 1792052383746
 }
