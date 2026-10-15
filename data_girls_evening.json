@@ -1,32 +1,5 @@
 {
-  "votes": [
-    {
-      "id": "1792052366934_t4ky6m",
-      "name": "рпвплоывыорвры",
-      "score": 5,
-      "comment": "",
-      "jury": "leader"
-    }
-  ],
-  "history": [
-    {
-      "type": "vote",
-      "name": "рпвплоывыорвры",
-      "score": 5,
-      "comment": "",
-      "time": "11:19:29",
-      "date": "15.10.2026",
-      "jury": "leader"
-    },
-    {
-      "type": "vote",
-      "name": "12112121111",
-      "score": 1,
-      "comment": "",
-      "time": "11:19:22",
-      "date": "15.10.2026",
-      "jury": "leader"
-    }
-  ],
-  "lastModified": 1792052369512
+  "votes": [],
+  "history": [],
+  "lastModified": 1792052920724
 }
