@@ -4110,11 +4110,17 @@
                     if (githubToken) {
                         var successCount = 0;
                         var failCount = 0;
+                        // Общий timestamp для всех 12 файлов, чтобы не было рассинхрона
+                        var wipeTimestamp = Date.now();
 
                         for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
                             for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
                                 var nom = NOMINATIONS[nomIdx];
                                 var style = STYLES[styleIdx];
+
+                                // Гарантированно обновляем локальный timestamp,
+                                // чтобы точно записать пустую структуру поверх чужой
+                                lastUpdateTime[nom][style] = wipeTimestamp;
 
                                 var ok2 = await saveToGitHub(nom, style);
                                 if (ok2) {
@@ -4128,9 +4134,10 @@
                         }
 
                         if (failCount === 0) {
-                            showToast('💥 ВСЁ УДАЛЕНО из GitHub! (' + successCount + '/12 файлов)', 'error');
+                            showToast('💥 ВСЁ ОЧИЩЕНО у всех ролей! (' + successCount + '/12 файлов)',
+                            'error');
                         } else {
-                            showToast('⚠️ Удалено ' + successCount + ' из 12. Ошибок: ' + failCount,
+                            showToast('⚠️ Очищено ' + successCount + ' из 12. Ошибок: ' + failCount,
                                 'warning');
                         }
                     } else {
@@ -4340,28 +4347,12 @@
                     remoteSha = loadData.sha;
                 }
 
+                // Раньше тут было удаление файла при пустых данных.
+                // Теперь всегда пишем файл (даже пустой), чтобы у всех клиентов
+                // lastModified обновился и они тоже очистили локальные данные.
                 var isEmpty = (dataToSave.votes.length === 0 && dataToSave.history.length === 0);
-                if (isEmpty && remoteSha) {
-                    var deleteResponse = await githubFetch(url, {
-                        method: 'DELETE',
-                        headers: {
-                            'Authorization': 'token ' + githubToken,
-                            'Content-Type': 'application/json',
-                            'Accept': 'application/vnd.github.v3+json'
-                        },
-                        body: JSON.stringify({
-                            message: 'Удаление данных (очистка)',
-                            sha: remoteSha
-                        })
-                    });
-                    if (deleteResponse.ok) {
-                        console.log('✅ Файл удалён из GitHub:', filePath);
-                        return true;
-                    } else {
-                        var errText = await deleteResponse.text();
-                        console.error('❌ Ошибка удаления ' + filePath + ':', deleteResponse.status, errText);
-                        return false;
-                    }
+                if (isEmpty) {
+                    console.log('📝 Запись пустой структуры в GitHub:', filePath);
                 }
 
                 var content = utf8ToBase64(JSON.stringify(dataToSave, null, 2));
@@ -4402,7 +4393,12 @@
                 var response = await githubFetch(url, { headers: { 'Authorization': 'token ' + githubToken,
                         'Accept': 'application/vnd.github.v3+json' } });
                 if (response.status === 404) {
+                    // Файл на GitHub отсутствует. Считаем это состоянием "пусто"
+                    // и синхронизируем локально, чтобы старые данные из localStorage
+                    // не воскрешались при следующей загрузке.
                     allData[nomination][style] = { votes: [], history: [] };
+                    lastUpdateTime[nomination][style] = Date.now();
+                    saveAllDataToLocalStorage();
                     if (userRole !== 'jury') { renderAll(); renderSummary(); renderLeader(); } else {
                         renderAll();
                         renderJuryHistory();
@@ -4417,7 +4413,10 @@
 
                 var remoteModified = jsonData.lastModified || 0;
                 var localModified = lastUpdateTime[nomination][style] || 0;
-                if (localModified > remoteModified + 1000) {
+                // Разрешаем небольшую погрешность в 500мс, но не более.
+                // Это предотвращает гонку "я сохранил — тут же прочитал своё же",
+                // но не блокирует очистку от других клиентов.
+                if (localModified > remoteModified + 500) {
                     return;
                 }
 
@@ -4671,7 +4670,7 @@
         console.log('📋 Номинации:', NOMINATIONS.join(', '));
         console.log('🎵 Стили:', STYLES.join(', '));
         console.log('🔑 Пароли: Жюри=GGWP, Руководитель=GLHF, Админ=EGOR');
-        console.log('🗑️ Очистка удаляет файлы из GitHub');
+        console.log('🗑️ Очистка "всё" — синхронизирует пустые данные всем ролям');
         console.log('🛡️ Защита: XSS-escape, rate limiter, withLock, validation');
     </script>
 </body>
