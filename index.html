@@ -2407,12 +2407,43 @@
         </div>
     </div>
 
+    <!-- ===== МОДАЛКА ВВОДА ИМЕНИ ЖЮРИ ===== -->
+    <div class="modal-overlay" id="juryNameModal">
+        <div class="modal-box">
+            <h2>👤 Ваше имя</h2>
+            <p>Как вас показывать в истории голосований?</p>
+            <input type="text" id="juryNameInput" placeholder="Иван Петров" maxlength="40" autocomplete="off">
+            <div class="error-msg" id="juryNameError">❌ Имя должно быть от 2 до 40 символов</div>
+            <div class="btn-row" style="margin-top:16px;">
+                <button class="btn" id="juryNameConfirm">✅ Войти</button>
+                <button class="btn btn-secondary" id="juryNameCancel">↩️ Назад</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // ===== ЗАЩИТА ОТ XSS =====
+        'use strict';
+
+        // ===== ЗАЩИТА ОТ XSS (УСИЛЕННАЯ) =====
+        function escapeHtml(text) {
+            if (text === null || text === undefined) return '';
+            return String(text)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;')
+                .replace(/\//g, '&#x2F;');
+        }
+
+        function escapeAttr(text) {
+            return escapeHtml(text);
+        }
+
         function sanitizeName(name) {
             if (typeof name !== 'string') return '';
             var text = name.replace(/<[^>]*>/g, '');
-            text = text.replace(/[<>]/g, '');
+            text = text.replace(/[<>"'`]/g, '');
             text = text.replace(/[^a-zA-Zа-яА-ЯёЁ0-9\s\-\.']/g, '');
             if (text.length > 50) text = text.substring(0, 50);
             return text.trim();
@@ -2426,11 +2457,35 @@
             return text.trim();
         }
 
-        function escapeHtml(text) {
-            if (!text) return '';
-            var div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+        // ===== БЕЗОПАСНАЯ ВСТАВКА HTML =====
+        function setSafeHtml(element, html) {
+            element.textContent = '';
+            var template = document.createElement('template');
+            template.innerHTML = html;
+            var allowed = ['DIV', 'SPAN', 'TR', 'TD', 'TH', 'TABLE', 'THEAD', 'TBODY',
+                'BUTTON', 'STRONG', 'BR', 'EM', 'SMALL', 'B', 'I'
+            ];
+            var walker = document.createTreeWalker(template.content, NodeFilter.SHOW_ELEMENT);
+            var toRemove = [];
+            while (walker.nextNode()) {
+                var node = walker.currentNode;
+                if (allowed.indexOf(node.tagName) === -1) {
+                    toRemove.push(node);
+                } else {
+                    var attrs = Array.prototype.slice.call(node.attributes);
+                    attrs.forEach(function(attr) {
+                        var name = attr.name.toLowerCase();
+                        var val = String(attr.value || '');
+                        if (name.indexOf('on') === 0 || name === 'srcdoc' ||
+                            (name === 'href' && /^\s*javascript:/i.test(val)) ||
+                            (name === 'src' && /^\s*javascript:/i.test(val))) {
+                            node.removeAttribute(attr.name);
+                        }
+                    });
+                }
+            }
+            toRemove.forEach(function(n) { if (n.parentNode) n.parentNode.removeChild(n); });
+            element.appendChild(template.content);
         }
 
         // ===== TOAST =====
@@ -2451,6 +2506,145 @@
             toast.textContent = message;
             container.appendChild(toast);
             setTimeout(function() { if (toast.parentNode) toast.remove(); }, 4000);
+        }
+
+        // ===== УТИЛИТЫ =====
+        function debounce(fn, ms) {
+            var t = null;
+            return function() {
+                var args = arguments, ctx = this;
+                if (t) clearTimeout(t);
+                t = setTimeout(function() { fn.apply(ctx, args); }, ms);
+            };
+        }
+
+        function withLock(btn, fn, lockMs) {
+            lockMs = lockMs || 1500;
+            if (btn.dataset.locked === '1') return;
+            btn.dataset.locked = '1';
+            var oldOpacity = btn.style.opacity;
+            var oldPE = btn.style.pointerEvents;
+            btn.style.opacity = '0.6';
+            btn.style.pointerEvents = 'none';
+            var done = function() {
+                btn.dataset.locked = '0';
+                btn.style.opacity = oldOpacity;
+                btn.style.pointerEvents = oldPE;
+            };
+            Promise.resolve()
+                .then(fn)
+                .catch(function(e) { console.error(e); })
+                .finally(function() { setTimeout(done, lockMs); });
+        }
+
+        // ===== ЗАЩИТА ОТ ЗЛОУПОТРЕБЛЕНИЙ =====
+        var abuseGuard = {
+            errors: 0,
+            resetAt: Date.now() + 60000,
+            check: function() {
+                if (Date.now() > this.resetAt) {
+                    this.errors = 0;
+                    this.resetAt = Date.now() + 60000;
+                }
+                this.errors++;
+                if (this.errors > 50) {
+                    showToast('⚠️ Слишком много ошибок. Подождите минуту.', 'error');
+                    return false;
+                }
+                return true;
+            }
+        };
+
+        // ===== RATE LIMITER ДЛЯ GITHUB =====
+        var githubRateLimiter = {
+            queue: [],
+            active: 0,
+            maxConcurrent: 2,
+            minIntervalMs: 1200,
+            lastRequestAt: 0,
+            backoffUntil: 0,
+            consecutiveErrors: 0,
+
+            execute: function(fn) {
+                var self = this;
+                return new Promise(function(resolve, reject) {
+                    self.queue.push({ fn: fn, resolve: resolve, reject: reject });
+                    self._tick();
+                });
+            },
+
+            _tick: async function() {
+                var self = this;
+                if (self.active >= self.maxConcurrent) return;
+                if (self.queue.length === 0) return;
+
+                var now = Date.now();
+                if (now < self.backoffUntil) {
+                    setTimeout(function() { self._tick(); }, self.backoffUntil - now + 50);
+                    return;
+                }
+                var sinceLast = now - self.lastRequestAt;
+                if (sinceLast < self.minIntervalMs) {
+                    setTimeout(function() { self._tick(); }, self.minIntervalMs - sinceLast + 20);
+                    return;
+                }
+
+                var task = self.queue.shift();
+                self.active++;
+                self.lastRequestAt = Date.now();
+
+                try {
+                    var result = await task.fn();
+                    self.consecutiveErrors = 0;
+                    task.resolve(result);
+                } catch (e) {
+                    self.consecutiveErrors++;
+                    var backoff = Math.min(60000, Math.pow(2, self.consecutiveErrors) * 1000);
+                    self.backoffUntil = Date.now() + backoff;
+                    console.warn('GitHub rate limit backoff:', backoff + 'ms');
+                    task.reject(e);
+                } finally {
+                    self.active--;
+                    setTimeout(function() { self._tick(); }, 50);
+                }
+            },
+
+            reset: function() {
+                this.queue = [];
+                this.active = 0;
+                this.backoffUntil = 0;
+                this.consecutiveErrors = 0;
+            }
+        };
+
+        async function githubFetch(url, options) {
+            return githubRateLimiter.execute(async function() {
+                var resp = await fetch(url, options);
+                if (resp.status === 429 || resp.status === 403) {
+                    var retryAfter = resp.headers.get('Retry-After');
+                    var wait = retryAfter ? parseInt(retryAfter, 10) * 1000 : 10000;
+                    githubRateLimiter.backoffUntil = Date.now() + wait;
+                    throw new Error('Rate limited: ' + resp.status);
+                }
+                return resp;
+            });
+        }
+
+        // ===== ВАЛИДАЦИЯ ДАННЫХ ИЗ GITHUB =====
+        var MAX_VOTES_PER_CATEGORY = 5000;
+
+        function validateVote(v) {
+            if (!v || typeof v !== 'object') return false;
+            if (typeof v.name !== 'string' || v.name.length === 0 || v.name.length > 50) return false;
+            if (typeof v.score !== 'number' || v.score < 0 || v.score > 10 || !isFinite(v.score)) return false;
+            if (v.jury && (typeof v.jury !== 'string' || v.jury.length > 60)) return false;
+            if (v.comment && (typeof v.comment !== 'string' || v.comment.length > 200)) return false;
+            return true;
+        }
+
+        function sanitizeRemoteVotes(votes) {
+            if (!Array.isArray(votes)) return [];
+            return votes.filter(validateVote).slice(0, MAX_VOTES_PER_CATEGORY);
         }
 
         // ===== ДАННЫЕ =====
@@ -2477,8 +2671,8 @@
                         if (allData[nom]) {
                             for (var style in parsed[nom]) {
                                 if (allData[nom][style]) {
-                                    allData[nom][style].votes = parsed[nom][style].votes || [];
-                                    allData[nom][style].history = parsed[nom][style].history || [];
+                                    allData[nom][style].votes = sanitizeRemoteVotes(parsed[nom][style].votes || []);
+                                    allData[nom][style].history = (parsed[nom][style].history || []).slice(0, 100);
                                 }
                             }
                         }
@@ -2629,26 +2823,28 @@
             deleteConfirmModal.classList.add('active');
         }
         confirmDeleteBtn.addEventListener('click', function() {
-            if (!pendingDeleteName) return;
-            var name = pendingDeleteName;
-            var votes = getCurrentVotes();
-            var newVotes = [];
-            for (var j = 0; j < votes.length; j++) {
-                if (votes[j].name !== name) { newVotes.push(votes[j]); }
-            }
-            var currentData = getCurrentData();
-            currentData.votes = newVotes;
-            if (winnerName === name) winnerName = null;
-            renderAll();
-            addHistoryDelete(name);
-            renderLeader();
-            lastUpdateTime[currentNomination][currentStyle] = Date.now();
-            saveAllDataToLocalStorage();
-            if (githubToken) saveToGitHub(currentNomination, currentStyle);
-            deleteName.value = '';
-            showToast('🗑️ Удалён: ' + name, 'error');
-            deleteConfirmModal.classList.remove('active');
-            pendingDeleteName = '';
+            withLock(confirmDeleteBtn, async function() {
+                if (!pendingDeleteName) return;
+                var name = pendingDeleteName;
+                var votes = getCurrentVotes();
+                var newVotes = [];
+                for (var j = 0; j < votes.length; j++) {
+                    if (votes[j].name !== name) { newVotes.push(votes[j]); }
+                }
+                var currentData = getCurrentData();
+                currentData.votes = newVotes;
+                if (winnerName === name) winnerName = null;
+                renderAll();
+                addHistoryDelete(name);
+                renderLeader();
+                lastUpdateTime[currentNomination][currentStyle] = Date.now();
+                saveAllDataToLocalStorage();
+                if (githubToken) await saveToGitHub(currentNomination, currentStyle);
+                deleteName.value = '';
+                showToast('🗑️ Удалён: ' + name, 'error');
+                deleteConfirmModal.classList.remove('active');
+                pendingDeleteName = '';
+            });
         });
         cancelDeleteBtn.addEventListener('click', function() {
             deleteConfirmModal.classList.remove('active');
@@ -2687,76 +2883,88 @@
             changeScoreModal.classList.add('active');
         }
 
-        addNewScoreBtn.addEventListener('click', async function() {
-            if (!pendingScoreAction) return;
+        addNewScoreBtn.addEventListener('click', function() {
+            withLock(addNewScoreBtn, async function() {
+                if (!pendingScoreAction) return;
 
-            var name = pendingScoreAction.name;
-            var score = pendingScoreAction.score;
-            var comment = pendingScoreAction.comment;
-            var voterName = userRole === 'jury' ? juryName : userRole;
+                var name = pendingScoreAction.name;
+                var score = pendingScoreAction.score;
+                var comment = pendingScoreAction.comment;
+                var voterName = userRole === 'jury' ? juryName : userRole;
 
-            var voteData = {
-                id: Date.now() + '_' + Math.random().toString(36).substr(2, 6),
-                name: name,
-                score: score,
-                comment: comment || '',
-                jury: voterName
-            };
+                var currentData = getCurrentData();
+                if (currentData.votes.length >= MAX_VOTES_PER_CATEGORY) {
+                    showToast('⚠️ Достигнут лимит оценок в категории', 'warning');
+                    changeScoreModal.classList.remove('active');
+                    pendingScoreAction = null;
+                    return;
+                }
 
-            var currentData = getCurrentData();
-            currentData.votes.push(voteData);
+                var voteData = {
+                    id: Date.now() + '_' + Math.random().toString(36).substr(2, 6),
+                    name: name,
+                    score: score,
+                    comment: comment || '',
+                    jury: voterName
+                };
 
-            nameInput.value = '';
-            scoreInput.value = '';
-            commentInputField.value = '';
-            nameInput.focus();
+                currentData.votes.push(voteData);
 
-            saveAllDataToLocalStorage();
-            if (githubToken) await saveToGitHub(currentNomination, currentStyle);
+                nameInput.value = '';
+                scoreInput.value = '';
+                commentInputField.value = '';
+                nameInput.focus();
 
-            renderAll();
-            if (userRole === 'jury') renderJuryHistory();
-            renderLeader();
+                saveAllDataToLocalStorage();
+                if (githubToken) await saveToGitHub(currentNomination, currentStyle);
 
-            lastUpdateTime[currentNomination][currentStyle] = Date.now();
-            addHistory(name, score, comment);
+                renderAll();
+                if (userRole === 'jury') renderJuryHistory();
+                renderLeader();
 
-            changeScoreModal.classList.remove('active');
-            pendingScoreAction = null;
+                lastUpdateTime[currentNomination][currentStyle] = Date.now();
+                addHistory(name, score, comment);
 
-            showToast('✅ Добавлена оценка: ' + name + ' +' + score.toFixed(1), '');
+                changeScoreModal.classList.remove('active');
+                pendingScoreAction = null;
+
+                showToast('✅ Добавлена оценка: ' + name + ' +' + score.toFixed(1), '');
+            });
         });
 
-        replaceScoreBtn.addEventListener('click', async function() {
-            if (!pendingScoreAction) return;
+        replaceScoreBtn.addEventListener('click', function() {
+            withLock(replaceScoreBtn, async function() {
+                if (!pendingScoreAction) return;
 
-            var existingVote = pendingScoreAction.existingVote;
-            var newVoteData = pendingScoreAction.newVoteData;
-            var currentData = getCurrentData();
+                var existingVote = pendingScoreAction.existingVote;
+                var newVoteData = pendingScoreAction.newVoteData;
+                var currentData = getCurrentData();
 
-            for (var i = 0; i < currentData.votes.length; i++) {
-                if (currentData.votes[i].id === existingVote.id) {
-                    addHistoryChange(existingVote.name, existingVote.score, newVoteData.score, newVoteData.comment);
-                    currentData.votes[i] = newVoteData;
-                    break;
+                for (var i = 0; i < currentData.votes.length; i++) {
+                    if (currentData.votes[i].id === existingVote.id) {
+                        addHistoryChange(existingVote.name, existingVote.score, newVoteData.score, newVoteData
+                            .comment);
+                        currentData.votes[i] = newVoteData;
+                        break;
+                    }
                 }
-            }
 
-            saveAllDataToLocalStorage();
-            if (githubToken) await saveToGitHub(currentNomination, currentStyle);
+                saveAllDataToLocalStorage();
+                if (githubToken) await saveToGitHub(currentNomination, currentStyle);
 
-            renderAll();
-            if (userRole === 'jury') renderJuryHistory();
-            renderLeader();
+                renderAll();
+                if (userRole === 'jury') renderJuryHistory();
+                renderLeader();
 
-            nameInput.value = '';
-            scoreInput.value = '';
-            commentInputField.value = '';
+                nameInput.value = '';
+                scoreInput.value = '';
+                commentInputField.value = '';
 
-            changeScoreModal.classList.remove('active');
-            pendingScoreAction = null;
+                changeScoreModal.classList.remove('active');
+                pendingScoreAction = null;
 
-            showToast('✏️ Оценка заменена: ' + newVoteData.name + ' → ' + newVoteData.score.toFixed(1), '');
+                showToast('✏️ Оценка заменена: ' + newVoteData.name + ' → ' + newVoteData.score.toFixed(1), '');
+            });
         });
 
         cancelChangeScoreBtn.addEventListener('click', function() {
@@ -2771,6 +2979,44 @@
                 pendingScoreAction = null;
             }
         });
+
+        // ===== МОДАЛКА ИМЕНИ ЖЮРИ =====
+        var juryNameModal = document.getElementById('juryNameModal');
+        var juryNameInput = document.getElementById('juryNameInput');
+        var juryNameError = document.getElementById('juryNameError');
+
+        function askJuryName() {
+            return new Promise(function(resolve) {
+                juryNameInput.value = '';
+                juryNameError.classList.remove('show');
+                juryNameModal.classList.add('active');
+                setTimeout(function() { juryNameInput.focus(); }, 200);
+
+                function cleanup() {
+                    juryNameModal.classList.remove('active');
+                    document.getElementById('juryNameConfirm').removeEventListener('click', onOk);
+                    document.getElementById('juryNameCancel').removeEventListener('click', onCancel);
+                    juryNameInput.removeEventListener('keydown', onKey);
+                }
+                function onOk() {
+                    var v = sanitizeName(juryNameInput.value.trim());
+                    if (v.length < 2 || v.length > 40) {
+                        juryNameError.classList.add('show');
+                        return;
+                    }
+                    cleanup();
+                    resolve(v);
+                }
+                function onCancel() { cleanup(); resolve(null); }
+                function onKey(e) {
+                    if (e.key === 'Enter') { e.preventDefault(); onOk(); }
+                    if (e.key === 'Escape') { e.preventDefault(); onCancel(); }
+                }
+                document.getElementById('juryNameConfirm').addEventListener('click', onOk);
+                document.getElementById('juryNameCancel').addEventListener('click', onCancel);
+                juryNameInput.addEventListener('keydown', onKey);
+            });
+        }
 
         // ===== СОХРАНЕНИЕ СОСТОЯНИЯ ВХОДА =====
         function saveSessionState() {
@@ -3026,6 +3272,7 @@
                     clearInterval(autoSyncInterval);
                     autoSyncInterval = null;
                 }
+                githubRateLimiter.reset();
 
                 isJuryMode = false;
                 isLeaderMode = false;
@@ -3057,38 +3304,42 @@
         });
 
         // ===== КНОПКА ИСТОРИИ =====
-        document.getElementById('historyBtn').addEventListener('click', async function() {
-            currentHistoryFilter = 'all';
-            document.querySelectorAll('.history-filter-btn').forEach(function(b) {
-                b.classList.toggle('active', b.dataset.filter === 'all');
-            });
+        document.getElementById('historyBtn').addEventListener('click', function() {
+            withLock(document.getElementById('historyBtn'), async function() {
+                currentHistoryFilter = 'all';
+                document.querySelectorAll('.history-filter-btn').forEach(function(b) {
+                    b.classList.toggle('active', b.dataset.filter === 'all');
+                });
 
-            historyModalList.innerHTML = '<div class="history-loading">🔄 Загрузка истории со всех устройств...</div>';
-            historyModal.classList.add('active');
+                historyModalList.innerHTML =
+                    '<div class="history-loading">🔄 Загрузка истории со всех устройств...</div>';
+                historyModal.classList.add('active');
 
-            if (githubToken) {
-                var promises = [];
-                for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
-                    for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
-                        promises.push(loadFromGitHubSilent(NOMINATIONS[nomIdx], STYLES[styleIdx]));
+                if (githubToken) {
+                    var promises = [];
+                    for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
+                        for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
+                            promises.push(loadFromGitHubSilent(NOMINATIONS[nomIdx], STYLES[styleIdx]));
+                        }
+                    }
+                    try {
+                        await Promise.all(promises);
+                    } catch (e) {
+                        console.log('Ошибка загрузки истории:', e);
                     }
                 }
-                try {
-                    await Promise.all(promises);
-                } catch (e) {
-                    console.log('Ошибка загрузки истории:', e);
-                }
-            }
 
-            renderHistoryModal();
+                renderHistoryModal();
+            });
         });
 
         async function loadFromGitHubSilent(nomination, style) {
             if (!githubToken) return;
             var filePath = getDataFilePath(nomination, style);
             try {
-                var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
-                var response = await fetch(url, { headers: { 'Authorization': 'token ' + githubToken,
+                var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' +
+                    filePath;
+                var response = await githubFetch(url, { headers: { 'Authorization': 'token ' + githubToken,
                         'Accept': 'application/vnd.github.v3+json' } });
                 if (response.status === 404) {
                     return;
@@ -3098,8 +3349,9 @@
                 var content = base64ToUtf8(data.content);
                 var jsonData = JSON.parse(content);
                 if (jsonData) {
-                    if (jsonData.votes) allData[nomination][style].votes = jsonData.votes;
-                    if (jsonData.history) allData[nomination][style].history = jsonData.history;
+                    if (jsonData.votes) allData[nomination][style].votes = sanitizeRemoteVotes(jsonData.votes);
+                    if (jsonData.history) allData[nomination][style].history = (jsonData.history || []).slice(0,
+                        100);
                 }
             } catch (e) {
                 console.log('Ошибка загрузки ' + nomination + '_' + style + ':', e);
@@ -3178,43 +3430,50 @@
                 if (isDelete) {
                     html += '<span class="hm-score" style="color:#ff3b30;">—</span>';
                 } else if (isChange) {
-                    html += '<span class="hm-score" style="color:#ffd700;">' + item.oldScore.toFixed(1) + '→' + item.score.toFixed(1) + '</span>';
+                    html += '<span class="hm-score" style="color:#ffd700;">' + item.oldScore.toFixed(1) + '→' +
+                        item.score.toFixed(1) + '</span>';
                 } else {
                     html += '<span class="hm-score">' + item.score.toFixed(1) + '</span>';
                 }
                 html += '<span class="hm-time">' + escapeHtml(item.date) + ' ' + escapeHtml(item.time) + '</span>';
                 html += '</div>';
             });
-            historyModalList.innerHTML = html;
+            setSafeHtml(historyModalList, html);
         }
 
         // ===== ЛОГИКА ВХОДА =====
 
-        document.getElementById('githubConnectBtn').addEventListener('click', async function() {
-            var token = document.getElementById('githubTokenInput').value.trim();
-            if (!token) { showToast('Введите GitHub токен', 'warning'); return; }
-            if (!token.startsWith('ghp_')) { showToast('Токен должен начинаться с "ghp_"', 'warning'); return; }
-
-            try {
-                var testResponse = await fetch('https://api.github.com/user', {
-                    headers: { 'Authorization': 'token ' + token }
-                });
-                if (!testResponse.ok) {
-                    if (testResponse.status === 401) showToast('❌ Неверный токен!', 'error');
-                    else showToast('❌ Ошибка: ' + testResponse.status, 'error');
+        document.getElementById('githubConnectBtn').addEventListener('click', function() {
+            withLock(document.getElementById('githubConnectBtn'), async function() {
+                var token = document.getElementById('githubTokenInput').value.trim();
+                if (!token) { showToast('Введите GitHub токен', 'warning'); return; }
+                if (!token.startsWith('ghp_') && !token.startsWith('github_pat_')) {
+                    showToast('Токен должен начинаться с "ghp_" или "github_pat_"', 'warning');
                     return;
                 }
 
-                githubToken = token;
-                showToast('✅ GitHub подключён! Выберите роль.', 'info');
-                document.getElementById('stepToken').style.display = 'none';
-                document.getElementById('stepRole').style.display = 'block';
+                try {
+                    var testResponse = await githubFetch('https://api.github.com/user', {
+                        headers: { 'Authorization': 'token ' + token }
+                    });
+                    if (!testResponse.ok) {
+                        if (testResponse.status === 401) showToast('❌ Неверный токен!', 'error');
+                        else showToast('❌ Ошибка: ' + testResponse.status, 'error');
+                        return;
+                    }
 
-                document.getElementById('rolePasswordBlock').style.display = 'none';
+                    githubToken = token;
+                    showToast('✅ GitHub подключён! Выберите роль.', 'info');
+                    document.getElementById('stepToken').style.display = 'none';
+                    document.getElementById('stepRole').style.display = 'block';
 
-            } catch (e) {
-                showToast('❌ Ошибка: ' + e.message, 'error');
-            }
+                    document.getElementById('rolePasswordBlock').style.display = 'none';
+
+                } catch (e) {
+                    if (!abuseGuard.check()) return;
+                    showToast('❌ Ошибка: ' + e.message, 'error');
+                }
+            });
         });
 
         document.getElementById('githubTokenInput').addEventListener('keydown', function(e) {
@@ -3258,21 +3517,27 @@
         }
 
         document.getElementById('rolePasswordConfirmBtn').addEventListener('click', function() {
-            var pass = document.getElementById('rolePasswordInput').value.trim();
-            if (!selectedRole) { showToast('Сначала выберите роль', 'warning'); return; }
-            if (pass === PASSWORDS[selectedRole]) {
+            withLock(document.getElementById('rolePasswordConfirmBtn'), async function() {
+                var pass = document.getElementById('rolePasswordInput').value.trim();
+                if (!selectedRole) { showToast('Сначала выберите роль', 'warning'); return; }
+                if (pass !== PASSWORDS[selectedRole]) {
+                    showToast('❌ Неверный пароль для роли ' + selectedRole, 'error');
+                    document.getElementById('rolePasswordInput').value = '';
+                    document.getElementById('rolePasswordInput').focus();
+                    return;
+                }
                 if (selectedRole === 'jury') {
-                    var name = prompt('Введите ваше имя (как жюри):');
-                    if (name && name.trim()) {
-                        juryName = sanitizeName(name.trim());
-                        isJuryMode = true;
-                        isAdminMode = false;
-                        isLeaderMode = false;
-                        userRole = 'jury';
-                        enterApp();
-                    } else {
-                        showToast('❌ Имя не может быть пустым', 'error');
+                    var name = await askJuryName();
+                    if (!name) {
+                        showToast('❌ Имя не введено', 'warning');
+                        return;
                     }
+                    juryName = name;
+                    isJuryMode = true;
+                    isAdminMode = false;
+                    isLeaderMode = false;
+                    userRole = 'jury';
+                    enterApp();
                 } else if (selectedRole === 'leader') {
                     isLeaderMode = true;
                     isJuryMode = false;
@@ -3286,11 +3551,7 @@
                     userRole = 'admin';
                     enterApp();
                 }
-            } else {
-                showToast('❌ Неверный пароль для роли ' + selectedRole, 'error');
-                document.getElementById('rolePasswordInput').value = '';
-                document.getElementById('rolePasswordInput').focus();
-            }
+            });
         });
 
         document.getElementById('rolePasswordInput').addEventListener('keydown', function(e) {
@@ -3400,24 +3661,31 @@
 
         // ===== УДАЛЕНИЕ =====
         deleteBtn.addEventListener('click', function() {
-            if (userRole === 'jury' || userRole === 'leader') {
-                showToast('⛔ Удалять могут только администраторы', 'warning');
-                return;
-            }
-            var name = deleteName.value.trim();
-            if (!name) { showToast('Введите номер участника для удаления', 'warning'); return; }
-            var votes = getCurrentVotes();
-            var found = false;
-            for (var i = 0; i < votes.length; i++) {
-                if (votes[i].name === name) { found = true; break; }
-            }
-            if (!found) { showToast('Участник "' + name + '" не найден', 'warning');
-                deleteName.value = ''; return; }
-            showDeleteConfirm(name);
+            withLock(deleteBtn, function() {
+                if (userRole === 'jury' || userRole === 'leader') {
+                    showToast('⛔ Удалять могут только администраторы', 'warning');
+                    return;
+                }
+                var name = deleteName.value.trim();
+                if (!name) { showToast('Введите номер участника для удаления', 'warning'); return; }
+                var votes = getCurrentVotes();
+                var found = false;
+                for (var i = 0; i < votes.length; i++) {
+                    if (votes[i].name === name) { found = true; break; }
+                }
+                if (!found) {
+                    showToast('Участник "' + name + '" не найден', 'warning');
+                    deleteName.value = '';
+                    return;
+                }
+                showDeleteConfirm(name);
+            });
         });
         deleteName.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') { e.preventDefault();
-                deleteBtn.click(); }
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                deleteBtn.click();
+            }
         });
 
         // ===== ИСТОРИЯ =====
@@ -3486,7 +3754,9 @@
 
         function renderJuryHistory() {
             var history = getCurrentHistory();
-            var juryHistory = history.filter(function(item) { return item.jury === juryName && (item.type === 'vote' || item.type === 'change'); });
+            var juryHistory = history.filter(function(item) {
+                return item.jury === juryName && (item.type === 'vote' || item.type === 'change');
+            });
             if (juryHistory.length === 0) {
                 juryHistoryList.innerHTML = '<div class="history-empty">Вы ещё не голосовали</div>';
                 return;
@@ -3495,19 +3765,21 @@
             for (var i = 0; i < juryHistory.length; i++) {
                 var item = juryHistory[i];
                 html += '<div class="history-item">';
-                html += '<span class="name">Участник ' + escapeHtml(item.name) + (item.type === 'change' ? ' ✏️' : '') + '</span>';
+                html += '<span class="name">Участник ' + escapeHtml(item.name) + (item.type === 'change' ? ' ✏️' :
+                    '') + '</span>';
                 if (item.comment) {
                     html += '<span class="comment-text">💬 ' + escapeHtml(item.comment) + '</span>';
                 }
                 if (item.type === 'change') {
-                    html += '<span class="score">' + item.oldScore.toFixed(1) + ' → ' + item.score.toFixed(1) + '</span>';
+                    html += '<span class="score">' + item.oldScore.toFixed(1) + ' → ' + item.score.toFixed(1) +
+                        '</span>';
                 } else {
                     html += '<span class="score">+' + item.score.toFixed(1) + '</span>';
                 }
                 html += '<span class="time">' + escapeHtml(item.date) + ' · ' + escapeHtml(item.time) + '</span>';
                 html += '</div>';
             }
-            juryHistoryList.innerHTML = html;
+            setSafeHtml(juryHistoryList, html);
         }
 
         // ===== ЛИДЕР =====
@@ -3586,7 +3858,8 @@
 
             var names = Object.keys(allParticipants).sort();
             if (names.length === 0) {
-                summaryBody.innerHTML = '<tr><td colspan="6" class="empty-message">Нет данных для сводки</td></tr>';
+                summaryBody.innerHTML =
+                '<tr><td colspan="6" class="empty-message">Нет данных для сводки</td></tr>';
                 return;
             }
 
@@ -3617,11 +3890,11 @@
 
                 var overallAvg = totalCount > 0 ? totalSum / totalCount : 0;
                 html += '<td class="total-score">' + overallAvg.toFixed(2) + '</td>';
-                html += '<td><button class="btn btn-sm btn-details" data-name="' + escapeHtml(name) +
+                html += '<td><button class="btn btn-sm btn-details" data-name="' + escapeAttr(name) +
                     '">📊 Детали</button></td>';
                 html += '</tr>';
             });
-            summaryBody.innerHTML = html;
+            setSafeHtml(summaryBody, html);
 
             document.querySelectorAll('.btn-details').forEach(function(btn) {
                 btn.addEventListener('click', function() {
@@ -3648,7 +3921,10 @@
 
         // ===== ДЕТАЛИ УЧАСТНИКА =====
         function showParticipantDetails(name) {
-            if (userRole === 'jury') { showToast('⛔ Только для руководителей и администраторов', 'warning'); return; }
+            if (userRole === 'jury') {
+                showToast('⛔ Только для руководителей и администраторов', 'warning');
+                return;
+            }
 
             detailsParticipantName.textContent = '👤 ' + name;
             detailsGrid.innerHTML = '';
@@ -3678,12 +3954,14 @@
                 });
             });
 
-            detailsGrid.innerHTML = cardsHtml;
+            setSafeHtml(detailsGrid, cardsHtml);
             var overall = totalCount > 0 ? totalSum / totalCount : 0;
-            detailsTotal.textContent = '🏆 Общий средний балл: ' + overall.toFixed(2) + ' (' + totalCount + ' оценок)';
+            detailsTotal.textContent = '🏆 Общий средний балл: ' + overall.toFixed(2) + ' (' + totalCount +
+            ' оценок)';
 
             if (allScores.length === 0) {
-                detailsScoresList.innerHTML = '<div style="color: rgba(255,255,255,0.3); text-align:center;">Нет оценок</div>';
+                detailsScoresList.innerHTML =
+                    '<div style="color: rgba(255,255,255,0.3); text-align:center;">Нет оценок</div>';
             } else {
                 var html = '';
                 allScores.forEach(function(item) {
@@ -3692,15 +3970,16 @@
                     html +=
                         `<div class="score-item"><span>${getNominationLabel(item.nomination)} ${getStyleLabel(item.style)} — ${juryLabel}</span><span class="jury-score">${item.score.toFixed(1)}${commentLabel}</span></div>`;
                 });
-                detailsScoresList.innerHTML = html;
+                setSafeHtml(detailsScoresList, html);
             }
             detailsModal.classList.add('active');
         }
 
         closeDetailsBtn.addEventListener('click', function() { detailsModal.classList.remove('active'); });
-        detailsModal.addEventListener('click', function(e) { if (e.target === this) detailsModal.classList.remove('active'); });
+        detailsModal.addEventListener('click', function(e) { if (e.target === this) detailsModal.classList.remove(
+                'active'); });
 
-        // ===== ОЧИСТКА (ИСПРАВЛЕННАЯ) =====
+        // ===== ОЧИСТКА =====
         var clearChoiceStep = document.getElementById('clearChoiceStep');
         var clearCaptchaStep = document.getElementById('clearCaptchaStep');
         var clearCurrentCategoryBtn = document.getElementById('clearCurrentCategoryBtn');
@@ -3712,20 +3991,24 @@
         var clearMode = '';
 
         clearBtn.addEventListener('click', function() {
-            if (userRole === 'jury') {
-                showToast('⛔ Очищать могут только руководители и администраторы', 'warning');
-                return;
-            }
-            clearCurrentDesc.textContent = 'Только «' + getNominationLabel(currentNomination) + ' · ' + getStyleLabel(currentStyle) + '»';
-            clearChoiceStep.style.display = 'block';
-            clearCaptchaStep.style.display = 'none';
-            clearMode = '';
-            clearModal.classList.add('active');
+            withLock(clearBtn, function() {
+                if (userRole === 'jury') {
+                    showToast('⛔ Очищать могут только руководители и администраторы', 'warning');
+                    return;
+                }
+                clearCurrentDesc.textContent = 'Только «' + getNominationLabel(currentNomination) + ' · ' +
+                    getStyleLabel(currentStyle) + '»';
+                clearChoiceStep.style.display = 'block';
+                clearCaptchaStep.style.display = 'none';
+                clearMode = '';
+                clearModal.classList.add('active');
+            });
         });
 
         clearCurrentCategoryBtn.addEventListener('click', function() {
             clearMode = 'current';
-            clearCaptchaTitle.textContent = 'Очистить «' + getNominationLabel(currentNomination) + ' · ' + getStyleLabel(currentStyle) + '»?';
+            clearCaptchaTitle.textContent = 'Очистить «' + getNominationLabel(currentNomination) + ' · ' +
+                getStyleLabel(currentStyle) + '»?';
             clearChoiceStep.style.display = 'none';
             clearCaptchaStep.style.display = 'block';
             captchaInput.value = '';
@@ -3758,116 +4041,121 @@
             clearMode = '';
         });
 
-        // ===== ИСПРАВЛЕННАЯ ОЧИСТКА (УДАЛЕНИЕ ФАЙЛОВ) =====
-        confirmClearBtn.addEventListener('click', async function() {
-            if (userRole === 'jury') {
-                showToast('⛔ Очищать могут только руководители и администраторы', 'warning');
+        confirmClearBtn.addEventListener('click', function() {
+            withLock(confirmClearBtn, async function() {
+                if (userRole === 'jury') {
+                    showToast('⛔ Очищать могут только руководители и администраторы', 'warning');
+                    clearModal.classList.remove('active');
+                    return;
+                }
+                var answer = captchaInput.value.trim();
+                if (answer !== '4') {
+                    captchaError.classList.add('show');
+                    captchaInput.value = '';
+                    captchaInput.focus();
+                    setTimeout(function() { captchaError.classList.remove('show'); }, 3000);
+                    return;
+                }
+
                 clearModal.classList.remove('active');
-                return;
-            }
-            var answer = captchaInput.value.trim();
-            if (answer !== '4') {
-                captchaError.classList.add('show');
-                captchaInput.value = '';
-                captchaInput.focus();
-                setTimeout(function() { captchaError.classList.remove('show'); }, 3000);
-                return;
-            }
+                clearChoiceStep.style.display = 'block';
+                clearCaptchaStep.style.display = 'none';
 
-            clearModal.classList.remove('active');
-            clearChoiceStep.style.display = 'block';
-            clearCaptchaStep.style.display = 'none';
-
-            isClearing = true;
-            if (autoSyncInterval) {
-                clearInterval(autoSyncInterval);
-                autoSyncInterval = null;
-            }
-
-            showToast('🗑️ Очистка...', 'info');
-
-            if (clearMode === 'current') {
-                var currentData = getCurrentData();
-                currentData.votes = [];
-                currentData.history = [];
-                winnerName = null;
-                lastUpdateTime[currentNomination][currentStyle] = Date.now();
-                saveAllDataToLocalStorage();
-
-                if (githubToken) {
-                    var ok = await saveToGitHub(currentNomination, currentStyle);
-                    if (ok) {
-                        showToast('🗑️ Очищено: «' + getNominationLabel(currentNomination) + ' · ' + getStyleLabel(currentStyle) + '»', 'error');
-                    } else {
-                        showToast('⚠️ Локально очищено, но GitHub не сохранил', 'warning');
-                    }
-                } else {
-                    showToast('🗑️ Очищено локально (GitHub не подключён)', 'info');
+                isClearing = true;
+                if (autoSyncInterval) {
+                    clearInterval(autoSyncInterval);
+                    autoSyncInterval = null;
                 }
+                githubRateLimiter.reset();
 
-                renderAll();
-                if (userRole !== 'jury') renderSummary();
-                renderLeader();
-            } else if (clearMode === 'all') {
-                // ОЧИЩАЕМ ВСЁ ЛОКАЛЬНО
-                NOMINATIONS.forEach(function(nom) {
-                    STYLES.forEach(function(style) {
-                        allData[nom][style].votes = [];
-                        allData[nom][style].history = [];
-                        lastUpdateTime[nom][style] = Date.now();
-                    });
-                });
-                winnerName = null;
-                saveAllDataToLocalStorage();
-                renderAll();
-                if (userRole !== 'jury') renderSummary();
-                renderLeader();
+                showToast('🗑️ Очистка...', 'info');
 
-                // УДАЛЯЕМ ВСЕ 12 ФАЙЛОВ ИЗ GITHUB
-                if (githubToken) {
-                    var successCount = 0;
-                    var failCount = 0;
+                if (clearMode === 'current') {
+                    var currentData = getCurrentData();
+                    currentData.votes = [];
+                    currentData.history = [];
+                    winnerName = null;
+                    lastUpdateTime[currentNomination][currentStyle] = Date.now();
+                    saveAllDataToLocalStorage();
 
-                    for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
-                        for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
-                            var nom = NOMINATIONS[nomIdx];
-                            var style = STYLES[styleIdx];
-
-                            var ok = await saveToGitHub(nom, style);
-                            if (ok) {
-                                successCount++;
-                            } else {
-                                failCount++;
-                            }
-
-                            await new Promise(function(resolve) { setTimeout(resolve, 400); });
+                    if (githubToken) {
+                        var ok = await saveToGitHub(currentNomination, currentStyle);
+                        if (ok) {
+                            showToast('🗑️ Очищено: «' + getNominationLabel(currentNomination) + ' · ' +
+                                getStyleLabel(currentStyle) + '»', 'error');
+                        } else {
+                            showToast('⚠️ Локально очищено, но GitHub не сохранил', 'warning');
                         }
-                    }
-
-                    if (failCount === 0) {
-                        showToast('💥 ВСЁ УДАЛЕНО из GitHub! (' + successCount + '/12 файлов)', 'error');
                     } else {
-                        showToast('⚠️ Удалено ' + successCount + ' из 12. Ошибок: ' + failCount, 'warning');
+                        showToast('🗑️ Очищено локально (GitHub не подключён)', 'info');
                     }
-                } else {
-                    showToast('💥 Очищено локально (GitHub не подключён)', 'info');
+
+                    renderAll();
+                    if (userRole !== 'jury') renderSummary();
+                    renderLeader();
+                } else if (clearMode === 'all') {
+                    NOMINATIONS.forEach(function(nom) {
+                        STYLES.forEach(function(style) {
+                            allData[nom][style].votes = [];
+                            allData[nom][style].history = [];
+                            lastUpdateTime[nom][style] = Date.now();
+                        });
+                    });
+                    winnerName = null;
+                    saveAllDataToLocalStorage();
+                    renderAll();
+                    if (userRole !== 'jury') renderSummary();
+                    renderLeader();
+
+                    if (githubToken) {
+                        var successCount = 0;
+                        var failCount = 0;
+
+                        for (var nomIdx = 0; nomIdx < NOMINATIONS.length; nomIdx++) {
+                            for (var styleIdx = 0; styleIdx < STYLES.length; styleIdx++) {
+                                var nom = NOMINATIONS[nomIdx];
+                                var style = STYLES[styleIdx];
+
+                                var ok2 = await saveToGitHub(nom, style);
+                                if (ok2) {
+                                    successCount++;
+                                } else {
+                                    failCount++;
+                                }
+
+                                await new Promise(function(resolve) { setTimeout(resolve, 400); });
+                            }
+                        }
+
+                        if (failCount === 0) {
+                            showToast('💥 ВСЁ УДАЛЕНО из GitHub! (' + successCount + '/12 файлов)', 'error');
+                        } else {
+                            showToast('⚠️ Удалено ' + successCount + ' из 12. Ошибок: ' + failCount,
+                                'warning');
+                        }
+                    } else {
+                        showToast('💥 Очищено локально (GitHub не подключён)', 'info');
+                    }
                 }
-            }
 
-            clearMode = '';
-            captchaInput.value = '';
+                clearMode = '';
+                captchaInput.value = '';
 
-            setTimeout(function() {
+                // Корректное завершение очистки — без race condition
                 isClearing = false;
                 startAutoSync();
-            }, 5000);
+            }, 3000);
         });
 
         captchaInput.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter') { e.preventDefault();
-                confirmClearBtn.click(); }
-            if (e.key === 'Escape') { e.preventDefault();
-                if (clearMode) { backToChoiceBtn.click(); } else { cancelClearChoiceBtn.click(); } }
+            if (e.key === 'Enter') {
+                e.preventDefault();
+                confirmClearBtn.click();
+            }
+            if (e.key === 'Escape') {
+                e.preventDefault();
+                if (clearMode) { backToChoiceBtn.click(); } else { cancelClearChoiceBtn.click(); }
+            }
         });
 
         clearModal.addEventListener('click', function(e) {
@@ -3881,8 +4169,8 @@
 
         // ===== ПОБЕДИТЕЛЬ =====
         closePodiumBtn.addEventListener('click', function() { podiumModal.classList.remove('active'); });
-        podiumModal.addEventListener('click', function(e) { if (e.target === podiumModal) podiumModal.classList.remove(
-                'active'); });
+        podiumModal.addEventListener('click', function(e) { if (e.target === podiumModal) podiumModal.classList
+                .remove('active'); });
 
         function showWinnerModal() {
             if (userRole === 'jury') {
@@ -3937,7 +4225,8 @@
 
             if (isTie) {
                 winnerResult.textContent = '🤝 Ничья!';
-                winnerDetails.textContent = tieNames.join(', ') + ' — ' + winnerData.overall.toFixed(2) + ' балла';
+                winnerDetails.textContent = tieNames.join(', ') + ' — ' + winnerData.overall.toFixed(2) +
+                ' балла';
                 winnerName = null;
                 winnerDisplay.textContent = '🤝 Ничья! (' + tieNames.join(', ') + ')';
             } else {
@@ -3947,12 +4236,14 @@
                     var styleLabel = getStyleLabel(style);
                     var data = winnerData.tabs[style];
                     detailsText +=
-                        styleLabel + ': ' + (data.count > 0 ? data.avg.toFixed(2) : '—') + ' (' + data.count +
+                        styleLabel + ': ' + (data.count > 0 ? data.avg.toFixed(2) : '—') + ' (' + data
+                        .count +
                         ' оценок)  ';
                 });
                 winnerDetails.textContent = detailsText;
                 winnerName = winner;
-                winnerDisplay.textContent = '👑 Победитель: ' + winner + ' (' + winnerData.overall.toFixed(2) + ')';
+                winnerDisplay.textContent = '👑 Победитель: ' + winner + ' (' + winnerData.overall.toFixed(2) +
+                    ')';
             }
 
             var podiumHtml = '';
@@ -3971,7 +4262,7 @@
                         <div class="place">${idx+1}-е место</div>
                     </div>`;
             });
-            podiumContainer.innerHTML = podiumHtml;
+            setSafeHtml(podiumContainer, podiumHtml);
 
             winnerDetailsBtn.onclick = function() {
                 if (isTie) {
@@ -4024,7 +4315,7 @@
             return 'data_' + nomination + '_' + style + '.json';
         }
 
-        // ===== ИСПРАВЛЕННОЕ СОХРАНЕНИЕ В GITHUB (УДАЛЯЕТ ФАЙЛ, ЕСЛИ ПУСТО) =====
+        // ===== СОХРАНЕНИЕ В GITHUB =====
         async function saveToGitHub(nomination, style) {
             if (!githubToken) return false;
             var filePath = getDataFilePath(nomination, style);
@@ -4034,11 +4325,11 @@
                 lastModified: Date.now()
             };
             try {
-                var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
+                var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' +
+                    filePath;
 
-                // 1. Получаем текущий SHA
                 var remoteSha = null;
-                var loadResponse = await fetch(url, {
+                var loadResponse = await githubFetch(url, {
                     headers: {
                         'Authorization': 'token ' + githubToken,
                         'Accept': 'application/vnd.github.v3+json'
@@ -4049,10 +4340,9 @@
                     remoteSha = loadData.sha;
                 }
 
-                // 2. Если данных нет и файл существует — УДАЛЯЕМ файл
                 var isEmpty = (dataToSave.votes.length === 0 && dataToSave.history.length === 0);
                 if (isEmpty && remoteSha) {
-                    var deleteResponse = await fetch(url, {
+                    var deleteResponse = await githubFetch(url, {
                         method: 'DELETE',
                         headers: {
                             'Authorization': 'token ' + githubToken,
@@ -4074,12 +4364,11 @@
                     }
                 }
 
-                // 3. Иначе — сохраняем новый контент
                 var content = utf8ToBase64(JSON.stringify(dataToSave, null, 2));
                 var body = { message: 'Обновление данных', content: content };
                 if (remoteSha) body.sha = remoteSha;
 
-                var saveResponse = await fetch(url, {
+                var saveResponse = await githubFetch(url, {
                     method: 'PUT',
                     headers: {
                         'Authorization': 'token ' + githubToken,
@@ -4097,6 +4386,7 @@
                     return false;
                 }
             } catch (e) {
+                if (!abuseGuard.check()) return false;
                 console.error('Save exception ' + filePath + ':', e);
                 return false;
             }
@@ -4107,13 +4397,17 @@
             if (isClearing) return;
             var filePath = getDataFilePath(nomination, style);
             try {
-                var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + filePath;
-                var response = await fetch(url, { headers: { 'Authorization': 'token ' + githubToken,
+                var url = 'https://api.github.com/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' +
+                    filePath;
+                var response = await githubFetch(url, { headers: { 'Authorization': 'token ' + githubToken,
                         'Accept': 'application/vnd.github.v3+json' } });
                 if (response.status === 404) {
                     allData[nomination][style] = { votes: [], history: [] };
-                    if (userRole !== 'jury') { renderAll(); renderSummary(); renderLeader(); }
-                    else { renderAll(); renderJuryHistory(); renderLeader(); }
+                    if (userRole !== 'jury') { renderAll(); renderSummary(); renderLeader(); } else {
+                        renderAll();
+                        renderJuryHistory();
+                        renderLeader();
+                    }
                     return;
                 }
                 if (!response.ok) throw new Error('Ошибка загрузки');
@@ -4128,10 +4422,14 @@
                 }
 
                 if (jsonData) {
-                    if (jsonData.votes) allData[nomination][style].votes = jsonData.votes;
-                    if (jsonData.history) allData[nomination][style].history = jsonData.history;
-                    if (userRole !== 'jury') { renderAll(); renderSummary(); renderLeader(); }
-                    else { renderAll(); renderJuryHistory(); renderLeader(); }
+                    if (jsonData.votes) allData[nomination][style].votes = sanitizeRemoteVotes(jsonData.votes);
+                    if (jsonData.history) allData[nomination][style].history = (jsonData.history || []).slice(
+                        0, 100);
+                    if (userRole !== 'jury') { renderAll(); renderSummary(); renderLeader(); } else {
+                        renderAll();
+                        renderJuryHistory();
+                        renderLeader();
+                    }
                     saveAllDataToLocalStorage();
                     setStatus('☁️ Синхронизировано', 'var(--text-light)');
                 }
@@ -4152,7 +4450,8 @@
 
             if (displayParticipants.length === 0) {
                 tableBody.innerHTML = '<tr><td colspan="5" class="empty-message">Нет данных</td></tr>';
-                if (userRole === 'jury') winnerDisplay.textContent = '👑 Победитель: не определен (жюри видит только свои оценки)';
+                if (userRole === 'jury') winnerDisplay.textContent =
+                    '👑 Победитель: не определен (жюри видит только свои оценки)';
                 else winnerDisplay.textContent = '👑 Победитель: не определен';
                 statAvg.textContent = '—';
                 return;
@@ -4180,11 +4479,11 @@
                     avg = count > 0 ? total / count : 0;
                 averages.push({ name: p, avg: avg, count: count });
                 var commentsText = allComments.join('; ');
-                html += '<tr><td><strong>' + escapeHtml(p) + '</strong></td><td class="total-cell">' + (count > 0 ? avg
-                    .toFixed(2) : '—') + '</td><td>' + count + '</td><td>' + scores.join(', ') +
+                html += '<tr><td><strong>' + escapeHtml(p) + '</strong></td><td class="total-cell">' + (count > 0 ?
+                    avg.toFixed(2) : '—') + '</td><td>' + count + '</td><td>' + scores.join(', ') +
                     '</td><td class="comment-cell">' + escapeHtml(commentsText) + '</td></tr>';
             }
-            tableBody.innerHTML = html;
+            setSafeHtml(tableBody, html);
 
             var sorted = averages.slice().sort(function(a, b) { return b.avg - a.avg; });
             statAvg.textContent = (sorted.length > 0 && sorted[0].count > 0) ? sorted[0].avg.toFixed(2) : '—';
@@ -4195,7 +4494,8 @@
                     if (averages[w].name === winnerName) { winner = averages[w]; break; }
                 }
                 if (winner && winner.count > 0) {
-                    winnerDisplay.textContent = '👑 Победитель: ' + winnerName + ' (' + winner.avg.toFixed(2) + ')';
+                    winnerDisplay.textContent = '👑 Победитель: ' + winnerName + ' (' + winner.avg.toFixed(2) +
+                        ')';
                 } else {
                     winnerDisplay.textContent = '👑 Победитель: не определен';
                 }
@@ -4224,12 +4524,23 @@
             var score = parseFloat(scoreInput.value);
             var comment = sanitizeComment(commentInputField.value);
 
-            if (!name) { showToast('Введите номер участника', 'warning');
-                nameInput.focus(); return; }
-            if (isNaN(score) || score < 0 || score > 10) { showToast('Оценка должна быть от 0 до 10', 'warning');
-                scoreInput.focus(); return; }
+            if (!name) {
+                showToast('Введите номер участника', 'warning');
+                nameInput.focus();
+                return;
+            }
+            if (isNaN(score) || score < 0 || score > 10) {
+                showToast('Оценка должна быть от 0 до 10', 'warning');
+                scoreInput.focus();
+                return;
+            }
 
             var currentData = getCurrentData();
+            if (currentData.votes.length >= MAX_VOTES_PER_CATEGORY) {
+                showToast('⚠️ Достигнут лимит оценок в категории', 'warning');
+                return;
+            }
+
             var existingVote = null;
             var voterName = userRole === 'jury' ? juryName : userRole;
             for (var i = 0; i < currentData.votes.length; i++) {
@@ -4247,7 +4558,8 @@
                     comment: comment || '',
                     jury: voterName
                 };
-                showScoreActionsModal(name, existingVote.score, score, existingVote, newVoteData, comment, score);
+                showScoreActionsModal(name, existingVote.score, score, existingVote, newVoteData, comment,
+                score);
                 return;
             }
 
@@ -4323,25 +4635,35 @@
             }
         }
 
-        addBtn.addEventListener('click', addVote);
-        calcBtn.addEventListener('click', showWinnerModal);
-        syncBtn.addEventListener('click', function() {
-            if (!githubToken) { showToast('❌ GitHub не подключён! Введите токен на странице входа.', 'warning'); return; }
+        addBtn.addEventListener('click', function() { withLock(addBtn, addVote); });
+        calcBtn.addEventListener('click', function() { withLock(calcBtn, showWinnerModal); });
+
+        var doSync = async function() {
+            if (!githubToken) {
+                showToast('❌ GitHub не подключён! Введите токен на странице входа.', 'warning');
+                return;
+            }
             showToast('🔄 Синхронизация...', 'info');
             saveAllDataToLocalStorage();
-            loadFromGitHub(currentNomination, currentStyle);
+            await loadFromGitHub(currentNomination, currentStyle);
             if (userRole !== 'jury') { renderSummary(); } else { renderJuryHistory(); }
             renderAll();
             renderLeader();
             showToast('✅ Синхронизация завершена', '');
+        };
+        syncBtn.addEventListener('click', function() {
+            withLock(syncBtn, debounce(doSync, 800));
         });
 
-        nameInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault();
-                scoreInput.focus(); } });
-        scoreInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault();
-                commentInputField.focus(); } });
-        commentInputField.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault();
-                addVote(); } });
+        nameInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); scoreInput.focus(); }
+        });
+        scoreInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); commentInputField.focus(); }
+        });
+        commentInputField.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') { e.preventDefault(); addVote(); }
+        });
 
         init();
         console.log('✅ Apple-style программа загружена!');
@@ -4349,7 +4671,8 @@
         console.log('📋 Номинации:', NOMINATIONS.join(', '));
         console.log('🎵 Стили:', STYLES.join(', '));
         console.log('🔑 Пароли: Жюри=GGWP, Руководитель=GLHF, Админ=EGOR');
-        console.log('🗑️ Очистка теперь УДАЛЯЕТ файлы из GitHub');
+        console.log('🗑️ Очистка удаляет файлы из GitHub');
+        console.log('🛡️ Защита: XSS-escape, rate limiter, withLock, validation');
     </script>
 </body>
 </html>
