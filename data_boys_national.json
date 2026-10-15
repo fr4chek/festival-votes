@@ -8,6 +8,16 @@
       "jury": "leader"
     }
   ],
-  "history": [],
-  "lastModified": 1792052338940
+  "history": [
+    {
+      "type": "vote",
+      "name": "12212",
+      "score": 10,
+      "comment": "",
+      "time": "11:19:04",
+      "date": "15.10.2026",
+      "jury": "leader"
+    }
+  ],
+  "lastModified": 1792052344264
 }
