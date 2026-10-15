@@ -1,5 +1,13 @@
 {
-  "votes": [],
+  "votes": [
+    {
+      "id": "1792052338936_9wbis5",
+      "name": "12212",
+      "score": 10,
+      "comment": "",
+      "jury": "leader"
+    }
+  ],
   "history": [],
-  "lastModified": 1792052025846
+  "lastModified": 1792052338940
 }
