@@ -11,6 +11,15 @@
   "history": [
     {
       "type": "vote",
+      "name": "рпвплоывыорвры",
+      "score": 5,
+      "comment": "",
+      "time": "11:19:29",
+      "date": "15.10.2026",
+      "jury": "leader"
+    },
+    {
+      "type": "vote",
       "name": "12112121111",
       "score": 1,
       "comment": "",
@@ -19,5 +28,5 @@
       "jury": "leader"
     }
   ],
-  "lastModified": 1792052366936
+  "lastModified": 1792052369512
 }
