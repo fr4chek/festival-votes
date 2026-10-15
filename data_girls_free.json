@@ -20,6 +20,13 @@
       "score": 9,
       "comment": "",
       "jury": "leader"
+    },
+    {
+      "id": "1792052425112_58u52y",
+      "name": "1",
+      "score": 1,
+      "comment": "",
+      "jury": "leader"
     }
   ],
   "history": [
@@ -60,5 +67,5 @@
       "jury": "leader"
     }
   ],
-  "lastModified": 1792052416983
+  "lastModified": 1792052425116
 }
