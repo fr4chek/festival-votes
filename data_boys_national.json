@@ -1,23 +1,5 @@
 {
-  "votes": [
-    {
-      "id": "1792052338936_9wbis5",
-      "name": "12212",
-      "score": 10,
-      "comment": "",
-      "jury": "leader"
-    }
-  ],
-  "history": [
-    {
-      "type": "vote",
-      "name": "12212",
-      "score": 10,
-      "comment": "",
-      "time": "11:19:04",
-      "date": "15.10.2026",
-      "jury": "leader"
-    }
-  ],
-  "lastModified": 1792052344264
+  "votes": [],
+  "history": [],
+  "lastModified": 1792052902131
 }
