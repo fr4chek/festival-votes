@@ -1,5 +1,13 @@
 {
-  "votes": [],
+  "votes": [
+    {
+      "id": "1792052386850_os9xe5",
+      "name": "выыывыы",
+      "score": 5,
+      "comment": "",
+      "jury": "leader"
+    }
+  ],
   "history": [
     {
       "type": "vote",
@@ -11,5 +19,5 @@
       "jury": "leader"
     }
   ],
-  "lastModified": 1792052383746
+  "lastModified": 1792052386852
 }
