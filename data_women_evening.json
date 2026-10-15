@@ -1,41 +1,13 @@
 {
   "votes": [
     {
-      "id": "1791541259233_c8w1gr",
-      "name": "29",
-      "score": 7,
+      "id": "1792049389290_nyt3yt",
+      "name": "23",
+      "score": 5,
       "comment": "",
-      "jury": "Александра Бутенко"
+      "jury": "Денис"
     }
   ],
-  "history": [
-    {
-      "type": "vote",
-      "name": "30",
-      "score": 9,
-      "comment": "",
-      "time": "13:24:34",
-      "date": "09.10.2026",
-      "jury": "Александра Бутенко"
-    },
-    {
-      "type": "vote",
-      "name": "29",
-      "score": 7,
-      "comment": "",
-      "time": "13:21:00",
-      "date": "09.10.2026",
-      "jury": "Александра Бутенко"
-    },
-    {
-      "type": "vote",
-      "name": "29",
-      "score": 3,
-      "comment": "",
-      "time": "13:20:51",
-      "date": "09.10.2026",
-      "jury": "Александра Бутенко"
-    }
-  ],
-  "lastModified": 1791541474305
+  "history": [],
+  "lastModified": 1792049389292
 }
